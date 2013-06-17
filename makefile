@@ -33,6 +33,7 @@ SRC = $(SRCDIR)/driver_display.c \
       $(SRCDIR)/driver_i2c.c \
       $(SRCDIR)/driver_power.c \
       $(SRCDIR)/driver_adc.c \
+      $(SRCDIR)/driver_rtc.c \
       $(SRCDIR)/pins.c \
       $(SRCDIR)/libstm32f2/stm32f2xx_adc.c       \
       $(SRCDIR)/libstm32f2/stm32f2xx_can.c       \

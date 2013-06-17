@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stm32f2xx_rtc.h>
 
 static const char hex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -25,12 +26,19 @@ void setup() {
   OLED.print((char*)"PMU enable... ");
   if(Battery.enableCharging()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
   
+  DateTime.begin();
+  if(!DateTime.isRunning()) {
+    // RTC has lost power, we need to set a new time
+    DateTime.setDateTime(13, 05, 03, 6, 20, 41, 00);
+  }
+  
 }
+
 
 void loop() {
   char text[32];
 
-  OLED.fillRect(0, 24, 128, 40, 0x5555);
+  OLED.fillRect(0, 24, 128, 56, 0x5555);
   OLED.setCursor(0, 24);
   
   OLED.print("USB connected: ");
@@ -46,6 +54,11 @@ void loop() {
   
   sprintf(text, "Sensor:  %u%%", (LightSensor.readRaw()*100)/4095);
   OLED.println(text);
+  
+  DateTime.update();
+  sprintf(text, "Time: %02u:%02u:%02u", DateTime.hour(), DateTime.minute(), DateTime.second());
+  OLED.println(text);
+
 
   // Delay in low speed mode
   CPU.setSpeed(CPU_LS);
@@ -68,7 +81,11 @@ void loop() {
     digitalWrite(BUZZER, LOW);
     while(digitalRead(BUTTON));
     digitalWrite(POWER, LOW);
-    while(1);
+    delay(500);
+    while(!digitalRead(BUTTON));
+    digitalWrite(POWER, HIGH);
+    setup();
+    return;
   }
   
 }

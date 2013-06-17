@@ -6,6 +6,7 @@ extern "C" {
   #include "pins.h"
   #include "driver_i2c.h"
   #include "driver_adc.h"
+  #include "driver_rtc.h"
   #include "driver_display.h"
   #include "driver_power.h"
 }
@@ -14,6 +15,7 @@ extern "C" {
 // This should eventually be moved to the makefile
 #include "driver_display.cpp"
 #include "driver_power.cpp"
+#include "driver_rtc.cpp"
 
 // System initialization
 void init() {
