@@ -1,0 +1,1366 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_hash.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.HASH_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	HASH_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	HASH_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_hash.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @file    stm32f2xx_hash.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          functionalities of the HASH / HMAC Processor (HASH) peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           - Initialization and Configuration functions
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           - Message Digest generation functions
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           - context swapping functions   
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           - DMA interface function       
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           - Interrupts and flags management       
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *  @verbatim
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                               
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          ===================================================================      
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                                   How to use this driver
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          ===================================================================
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          HASH operation : 
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          ----------------                   
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         1. Enable the HASH controller clock using 
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_HASH, ENABLE) function.
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         2. Initialise the HASH using HASH_Init() function. 
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *               
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         3 . Reset the HASH processor core, so that the HASH will be ready 
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             to compute he message digest of a new message by using 
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             HASH_Reset() function.
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         4. Enable the HASH controller using the HASH_Cmd() function. 
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         5. if using DMA for Data input transfer, Activate the DMA Request 
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            using HASH_DMACmd() function 
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                    
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         6. if DMA is not used for data transfer, use HASH_DataIn() function 
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            to enter data to IN FIFO.
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         7. Configure the Number of valid bits in last word of the message 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            using HASH_SetLastWordValidBitsNbr() function.
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         8. if the message length is not an exact multiple of 512 bits, 
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            then the function HASH_StartDigest() must be called to 
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            launch the computation of the final digest.     
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         9. Once computed, the digest can be read using HASH_GetDigest() 
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            function.         
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                   
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *        10. To control HASH events you can use one of the following 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *              two methods:
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *               a- Check on HASH flags using the HASH_GetFlagStatus() function.  
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *               b- Use HASH interrupts through the function HASH_ITConfig() at 
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                  initialization phase and HASH_GetITStatus() function into 
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                  interrupt routines in hashing phase.
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          After checking on a flag you should clear it using HASH_ClearFlag()
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          function. And after checking on an interrupt event you should 
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          clear it using HASH_ClearITPendingBit() function.     
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                     
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *        11. Save and restore hash processor context using 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            HASH_SaveContext() and HASH_RestoreContext() functions.     
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *              
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          HMAC operation : 
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          ----------------  
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          The HMAC algorithm is used for message authentication, by 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          irreversibly binding the message being processed to a key chosen 
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          by the user. 
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          For HMAC specifications, refer to "HMAC: keyed-hashing for message 
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          authentication, H. Krawczyk, M. Bellare, R. Canetti, February 1997"
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          Basically, the HMAC algorithm consists of two nested hash operations:
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          HMAC(message) = Hash[((key | pad) XOR 0x5C) | Hash(((key | pad) XOR 0x36) | message)]
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          where:
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          - "pad" is a sequence of zeroes needed to extend the key to the 
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                  length of the underlying hash function data block (that is 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                  512 bits for both the SHA-1 and MD5 hash algorithms)
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          - "|"   represents the concatenation operator 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         To compute the HMAC, four different phases are required:
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                    
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         1.  Initialise the HASH using HASH_Init() function to do HMAC 
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             operation. 
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *                
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         2.  The key (to be used for the inner hash function) is then given 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             to the core. This operation follows the same mechanism as the 
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             one used to send the message in the hash operation (that is, 
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             by HASH_DataIn() function and, finally, 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             HASH_StartDigest() function.
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         3.  Once the last word has been entered and computation has started, 
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             the hash processor elaborates the key. It is then ready to 
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             accept the message text using the same mechanism as the one 
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             used to send the message in the hash operation.
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *       
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         4.  After the first hash round, the hash processor returns "ready" 
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             to indicate that it is ready to receive the key to be used for 
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             the outer hash function (normally, this key is the same as the 
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             one used for the inner hash function). When the last word of 
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             the key is entered and computation starts, the HMAC result is 
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             made available using HASH_GetDigest() function.
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *               
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *              
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *  @endverbatim
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   ******************************************************************************
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @attention
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * You may not use this file except in compliance with the License.
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * You may obtain a copy of the License at:
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * Unless required by applicable law or agreed to in writing, software 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * See the License for the specific language governing permissions and
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * limitations under the License.
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   ******************************************************************************
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /* Includes ------------------------------------------------------------------*/
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** #include "stm32f2xx_hash.h"
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** #include "stm32f2xx_rcc.h"
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @defgroup HASH 
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief HASH driver modules
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */ 
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /* Private typedef -----------------------------------------------------------*/
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /* Private define ------------------------------------------------------------*/
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /* Private macro -------------------------------------------------------------*/
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /* Private variables ---------------------------------------------------------*/
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /* Private function prototypes -----------------------------------------------*/
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /* Private functions ---------------------------------------------------------*/ 
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @defgroup HASH_Private_Functions
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */ 
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @defgroup HASH_Group1 Initialization and Configuration functions
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *  @brief    Initialization and Configuration functions 
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @verbatim    
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       Initialization and Configuration functions
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================  
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   This section provides functions allowing to 
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    - Initialize the HASH peripheral
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    - Configure the HASH Processor 
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - MD5/SHA1, 
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - HASH/HMAC, 
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - datatype 
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - HMAC Key (if mode = HMAC)
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    - Reset the HASH Processor 
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @endverbatim
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Deinitializes the HASH peripheral registers to their default reset values
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  None
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_DeInit(void)
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+  27              		.loc 1 178 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Enable HASH reset state */
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_HASH, ENABLE);
+  31              		.loc 1 180 0
+  32 0000 2020     		movs	r0, #32
+  33 0002 0121     		movs	r1, #1
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+  34              		.loc 1 178 0
+  35 0004 08B5     		push	{r3, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 3, -8
+  39              		.cfi_offset 14, -4
+  40              		.loc 1 180 0
+  41 0006 FFF7FEFF 		bl	RCC_AHB2PeriphResetCmd
+  42              	.LVL0:
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Release HASH from reset state */
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_HASH, DISABLE);
+  43              		.loc 1 182 0
+  44 000a 2020     		movs	r0, #32
+  45 000c 0021     		movs	r1, #0
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+  46              		.loc 1 183 0
+  47 000e BDE80840 		pop	{r3, lr}
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_HASH, DISABLE);
+  48              		.loc 1 182 0
+  49 0012 FFF7FEBF 		b	RCC_AHB2PeriphResetCmd
+  50              	.LVL1:
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.HASH_Init,"ax",%progbits
+  55              		.align	1
+  56              		.global	HASH_Init
+  57              		.thumb
+  58              		.thumb_func
+  60              	HASH_Init:
+  61              	.LFB57:
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Initializes the HASH peripheral according to the specified parameters
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         in the HASH_InitStruct structure.
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   the hash processor is reset when calling this function so that the
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         HASH will be ready to compute the message digest of a new message.
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         There is no need to call HASH_Reset() function.           
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_InitStruct: pointer to a HASH_InitTypeDef structure that contains
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         the configuration information for the HASH peripheral.
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   The field HASH_HMACKeyType in HASH_InitTypeDef must be filled only 
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          if the algorithm mode is HMAC.       
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_Init(HASH_InitTypeDef* HASH_InitStruct)
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+  62              		.loc 1 198 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              	.LVL2:
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_ALGOSELECTION(HASH_InitStruct->HASH_AlgoSelection));
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_DATATYPE(HASH_InitStruct->HASH_DataType));
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_ALGOMODE(HASH_InitStruct->HASH_AlgoMode));
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Configure the Algorithm used, algorithm mode and the datatype */
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->CR &= ~ (HASH_CR_ALGO | HASH_CR_DATATYPE | HASH_CR_MODE);
+  67              		.loc 1 205 0
+  68 0000 0F4B     		ldr	r3, .L5
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+  69              		.loc 1 198 0
+  70 0002 10B5     		push	{r4, lr}
+  71              	.LCFI1:
+  72              		.cfi_def_cfa_offset 8
+  73              		.cfi_offset 4, -8
+  74              		.cfi_offset 14, -4
+  75              		.loc 1 205 0
+  76 0004 1A68     		ldr	r2, [r3, #0]
+  77 0006 22F0F001 		bic	r1, r2, #240
+  78 000a 1960     		str	r1, [r3, #0]
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->CR |= (HASH_InitStruct->HASH_AlgoSelection | \
+  79              		.loc 1 206 0
+  80 000c 1C68     		ldr	r4, [r3, #0]
+  81 000e 90E80600 		ldmia	r0, {r1, r2}
+  82 0012 0C43     		orrs	r4, r4, r1
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                HASH_InitStruct->HASH_DataType | \
+  83              		.loc 1 207 0
+  84 0014 8168     		ldr	r1, [r0, #8]
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                HASH_InitStruct->HASH_AlgoMode);
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* if algorithm mode is HMAC, set the Key */  
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if(HASH_InitStruct->HASH_AlgoMode == HASH_AlgoMode_HMAC) 
+  85              		.loc 1 211 0
+  86 0016 402A     		cmp	r2, #64
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                HASH_InitStruct->HASH_DataType | \
+  87              		.loc 1 207 0
+  88 0018 44EA0101 		orr	r1, r4, r1
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->CR |= (HASH_InitStruct->HASH_AlgoSelection | \
+  89              		.loc 1 206 0
+  90 001c 41EA0201 		orr	r1, r1, r2
+  91 0020 1960     		str	r1, [r3, #0]
+  92              		.loc 1 211 0
+  93 0022 08D1     		bne	.L3
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     assert_param(IS_HASH_HMAC_KEYTYPE(HASH_InitStruct->HASH_HMACKeyType));
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     HASH->CR &= ~HASH_CR_LKEY;
+  94              		.loc 1 214 0
+  95 0024 1A68     		ldr	r2, [r3, #0]
+  96 0026 22F48031 		bic	r1, r2, #65536
+  97 002a 1960     		str	r1, [r3, #0]
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     HASH->CR |= HASH_InitStruct->HASH_HMACKeyType;
+  98              		.loc 1 215 0
+  99 002c 1968     		ldr	r1, [r3, #0]
+ 100 002e C068     		ldr	r0, [r0, #12]
+ 101              	.LVL3:
+ 102 0030 41EA0002 		orr	r2, r1, r0
+ 103 0034 1A60     		str	r2, [r3, #0]
+ 104              	.L3:
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Reset the HASH processor core, so that the HASH will be ready to compute 
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      the message digest of a new message */
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->CR |= HASH_CR_INIT;  
+ 105              		.loc 1 220 0
+ 106 0036 1968     		ldr	r1, [r3, #0]
+ 107 0038 41F00400 		orr	r0, r1, #4
+ 108 003c 1860     		str	r0, [r3, #0]
+ 109 003e 10BD     		pop	{r4, pc}
+ 110              	.L6:
+ 111              		.align	2
+ 112              	.L5:
+ 113 0040 00040650 		.word	1342571520
+ 114              		.cfi_endproc
+ 115              	.LFE57:
+ 117              		.section	.text.HASH_StructInit,"ax",%progbits
+ 118              		.align	1
+ 119              		.global	HASH_StructInit
+ 120              		.thumb
+ 121              		.thumb_func
+ 123              	HASH_StructInit:
+ 124              	.LFB58:
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Fills each HASH_InitStruct member with its default value.
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_InitStruct : pointer to a HASH_InitTypeDef structure which will
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          be initialized.  
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *  @note  The default values set are : Processor mode is HASH, Algorithm selected is SHA1,
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          Data type selected is 32b and HMAC Key Type is short key.  
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_StructInit(HASH_InitTypeDef* HASH_InitStruct)
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 125              		.loc 1 232 0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129              		@ link register save eliminated.
+ 130              	.LVL4:
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Initialize the HASH_AlgoSelection member */
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_InitStruct->HASH_AlgoSelection = HASH_AlgoSelection_SHA1;
+ 131              		.loc 1 234 0
+ 132 0000 0023     		movs	r3, #0
+ 133 0002 0360     		str	r3, [r0, #0]
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Initialize the HASH_AlgoMode member */
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_InitStruct->HASH_AlgoMode = HASH_AlgoMode_HASH;
+ 134              		.loc 1 237 0
+ 135 0004 4360     		str	r3, [r0, #4]
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Initialize the HASH_DataType member */
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_InitStruct->HASH_DataType = HASH_DataType_32b;
+ 136              		.loc 1 240 0
+ 137 0006 8360     		str	r3, [r0, #8]
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Initialize the HASH_HMACKeyType member */
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_InitStruct->HASH_HMACKeyType = HASH_HMACKeyType_ShortKey;
+ 138              		.loc 1 243 0
+ 139 0008 C360     		str	r3, [r0, #12]
+ 140 000a 7047     		bx	lr
+ 141              		.cfi_endproc
+ 142              	.LFE58:
+ 144              		.section	.text.HASH_Reset,"ax",%progbits
+ 145              		.align	1
+ 146              		.global	HASH_Reset
+ 147              		.thumb
+ 148              		.thumb_func
+ 150              	HASH_Reset:
+ 151              	.LFB59:
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Resets the HASH processor core, so that the HASH will be ready
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         to compute the message digest of a new message.
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   Calling this function will clear the HASH_SR_DCIS (Digest calculation 
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         completion interrupt status) bit corresponding to HASH_IT_DCI 
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         interrupt and HASH_FLAG_DCIS flag. 
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  None
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_Reset(void)
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 152              		.loc 1 256 0
+ 153              		.cfi_startproc
+ 154              		@ args = 0, pretend = 0, frame = 0
+ 155              		@ frame_needed = 0, uses_anonymous_args = 0
+ 156              		@ link register save eliminated.
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Reset the HASH processor core */
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->CR |= HASH_CR_INIT;
+ 157              		.loc 1 258 0
+ 158 0000 024B     		ldr	r3, .L9
+ 159 0002 1A68     		ldr	r2, [r3, #0]
+ 160 0004 42F00400 		orr	r0, r2, #4
+ 161 0008 1860     		str	r0, [r3, #0]
+ 162 000a 7047     		bx	lr
+ 163              	.L10:
+ 164              		.align	2
+ 165              	.L9:
+ 166 000c 00040650 		.word	1342571520
+ 167              		.cfi_endproc
+ 168              	.LFE59:
+ 170              		.section	.text.HASH_SetLastWordValidBitsNbr,"ax",%progbits
+ 171              		.align	1
+ 172              		.global	HASH_SetLastWordValidBitsNbr
+ 173              		.thumb
+ 174              		.thumb_func
+ 176              	HASH_SetLastWordValidBitsNbr:
+ 177              	.LFB60:
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @}
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @defgroup HASH_Group2 Message Digest generation functions
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *  @brief    Message Digest generation functions
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @verbatim    
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       Message Digest generation functions
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================  
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   This section provides functions allowing the generation of message digest: 
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   - Push data in the IN FIFO : using HASH_DataIn()
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   - Get the number of words set in IN FIFO, use HASH_GetInFIFOWordsNbr()  
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   - set the last word valid bits number using HASH_SetLastWordValidBitsNbr() 
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   - start digest calculation : using HASH_StartDigest()
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   - Get the Digest message : using HASH_GetDigest()
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @endverbatim
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Configure the Number of valid bits in last word of the message
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  ValidNumber: Number of valid bits in last word of the message.
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           This parameter must be a number between 0 and 0x1F.
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             - 0x00: All 32 bits of the last data written are valid
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             - 0x01: Only bit [0] of the last data written is valid
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             - 0x02: Only bits[1:0] of the last data written are valid
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             - 0x03: Only bits[2:0] of the last data written are valid
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             - ...
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *             - 0x1F: Only bits[30:0] of the last data written are valid    
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   The Number of valid bits must be set before to start the message 
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         digest competition (in Hash and HMAC) and key treatment(in HMAC).    
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_SetLastWordValidBitsNbr(uint16_t ValidNumber)
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 178              		.loc 1 298 0
+ 179              		.cfi_startproc
+ 180              		@ args = 0, pretend = 0, frame = 0
+ 181              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182              		@ link register save eliminated.
+ 183              	.LVL5:
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_VALIDBITSNUMBER(ValidNumber));
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Configure the Number of valid bits in last word of the message */
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->STR &= ~(HASH_STR_NBW);
+ 184              		.loc 1 303 0
+ 185 0000 044B     		ldr	r3, .L12
+ 186 0002 9A68     		ldr	r2, [r3, #8]
+ 187 0004 22F01F01 		bic	r1, r2, #31
+ 188 0008 9960     		str	r1, [r3, #8]
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->STR |= ValidNumber;
+ 189              		.loc 1 304 0
+ 190 000a 9A68     		ldr	r2, [r3, #8]
+ 191 000c 1043     		orrs	r0, r0, r2
+ 192              	.LVL6:
+ 193 000e 9860     		str	r0, [r3, #8]
+ 194 0010 7047     		bx	lr
+ 195              	.L13:
+ 196 0012 00BF     		.align	2
+ 197              	.L12:
+ 198 0014 00040650 		.word	1342571520
+ 199              		.cfi_endproc
+ 200              	.LFE60:
+ 202              		.section	.text.HASH_DataIn,"ax",%progbits
+ 203              		.align	1
+ 204              		.global	HASH_DataIn
+ 205              		.thumb
+ 206              		.thumb_func
+ 208              	HASH_DataIn:
+ 209              	.LFB61:
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Writes data in the Data Input FIFO
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  Data: new data of the message to be processed.
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_DataIn(uint32_t Data)
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 210              		.loc 1 313 0
+ 211              		.cfi_startproc
+ 212              		@ args = 0, pretend = 0, frame = 0
+ 213              		@ frame_needed = 0, uses_anonymous_args = 0
+ 214              		@ link register save eliminated.
+ 215              	.LVL7:
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Write in the DIN register a new data */
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->DIN = Data;
+ 216              		.loc 1 315 0
+ 217 0000 014B     		ldr	r3, .L15
+ 218 0002 5860     		str	r0, [r3, #4]
+ 219 0004 7047     		bx	lr
+ 220              	.L16:
+ 221 0006 00BF     		.align	2
+ 222              	.L15:
+ 223 0008 00040650 		.word	1342571520
+ 224              		.cfi_endproc
+ 225              	.LFE61:
+ 227              		.section	.text.HASH_GetInFIFOWordsNbr,"ax",%progbits
+ 228              		.align	1
+ 229              		.global	HASH_GetInFIFOWordsNbr
+ 230              		.thumb
+ 231              		.thumb_func
+ 233              	HASH_GetInFIFOWordsNbr:
+ 234              	.LFB62:
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Returns the number of words already pushed into the IN FIFO.
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  None
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval The value of words already pushed into the IN FIFO.
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** uint8_t HASH_GetInFIFOWordsNbr(void)
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 235              		.loc 1 324 0
+ 236              		.cfi_startproc
+ 237              		@ args = 0, pretend = 0, frame = 0
+ 238              		@ frame_needed = 0, uses_anonymous_args = 0
+ 239              		@ link register save eliminated.
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Return the value of NBW bits */
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   return ((HASH->CR & HASH_CR_NBW) >> 8);
+ 240              		.loc 1 326 0
+ 241 0000 024B     		ldr	r3, .L18
+ 242 0002 1868     		ldr	r0, [r3, #0]
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 243              		.loc 1 327 0
+ 244 0004 C0F30320 		ubfx	r0, r0, #8, #4
+ 245 0008 7047     		bx	lr
+ 246              	.L19:
+ 247 000a 00BF     		.align	2
+ 248              	.L18:
+ 249 000c 00040650 		.word	1342571520
+ 250              		.cfi_endproc
+ 251              	.LFE62:
+ 253              		.section	.text.HASH_GetDigest,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	HASH_GetDigest
+ 256              		.thumb
+ 257              		.thumb_func
+ 259              	HASH_GetDigest:
+ 260              	.LFB63:
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Provides the message digest result.
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   In MD5 mode, Data[4] filed of HASH_MsgDigest structure is not used
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         and is read as zero.  
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_MessageDigest: pointer to a HASH_MsgDigest structure which will 
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         hold the message digest result 
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_GetDigest(HASH_MsgDigest* HASH_MessageDigest)
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 261              		.loc 1 338 0
+ 262              		.cfi_startproc
+ 263              		@ args = 0, pretend = 0, frame = 0
+ 264              		@ frame_needed = 0, uses_anonymous_args = 0
+ 265              		@ link register save eliminated.
+ 266              	.LVL8:
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Get the data field */
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_MessageDigest->Data[0] = HASH->HR[0];
+ 267              		.loc 1 340 0
+ 268 0000 054B     		ldr	r3, .L21
+ 269 0002 DA68     		ldr	r2, [r3, #12]
+ 270 0004 0260     		str	r2, [r0, #0]
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_MessageDigest->Data[1] = HASH->HR[1];
+ 271              		.loc 1 341 0
+ 272 0006 1969     		ldr	r1, [r3, #16]
+ 273 0008 4160     		str	r1, [r0, #4]
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_MessageDigest->Data[2] = HASH->HR[2];
+ 274              		.loc 1 342 0
+ 275 000a 5A69     		ldr	r2, [r3, #20]
+ 276 000c 8260     		str	r2, [r0, #8]
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_MessageDigest->Data[3] = HASH->HR[3];
+ 277              		.loc 1 343 0
+ 278 000e 9969     		ldr	r1, [r3, #24]
+ 279 0010 C160     		str	r1, [r0, #12]
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_MessageDigest->Data[4] = HASH->HR[4];
+ 280              		.loc 1 344 0
+ 281 0012 DB69     		ldr	r3, [r3, #28]
+ 282 0014 0361     		str	r3, [r0, #16]
+ 283 0016 7047     		bx	lr
+ 284              	.L22:
+ 285              		.align	2
+ 286              	.L21:
+ 287 0018 00040650 		.word	1342571520
+ 288              		.cfi_endproc
+ 289              	.LFE63:
+ 291              		.section	.text.HASH_StartDigest,"ax",%progbits
+ 292              		.align	1
+ 293              		.global	HASH_StartDigest
+ 294              		.thumb
+ 295              		.thumb_func
+ 297              	HASH_StartDigest:
+ 298              	.LFB64:
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Starts the message padding and calculation of the final message     
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  None
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_StartDigest(void)
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 299              		.loc 1 353 0
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 0
+ 302              		@ frame_needed = 0, uses_anonymous_args = 0
+ 303              		@ link register save eliminated.
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Start the Digest calculation */
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->STR |= HASH_STR_DCAL;
+ 304              		.loc 1 355 0
+ 305 0000 024B     		ldr	r3, .L24
+ 306 0002 9A68     		ldr	r2, [r3, #8]
+ 307 0004 42F48070 		orr	r0, r2, #256
+ 308 0008 9860     		str	r0, [r3, #8]
+ 309 000a 7047     		bx	lr
+ 310              	.L25:
+ 311              		.align	2
+ 312              	.L24:
+ 313 000c 00040650 		.word	1342571520
+ 314              		.cfi_endproc
+ 315              	.LFE64:
+ 317              		.section	.text.HASH_SaveContext,"ax",%progbits
+ 318              		.align	1
+ 319              		.global	HASH_SaveContext
+ 320              		.thumb
+ 321              		.thumb_func
+ 323              	HASH_SaveContext:
+ 324              	.LFB65:
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @}
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @defgroup HASH_Group3 Context swapping functions
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *  @brief   Context swapping functions
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @verbatim   
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                              Context swapping functions
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================  
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   This section provides functions allowing to save and store HASH Context
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   It is possible to interrupt a HASH/HMAC process to perform another processing 
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   with a higher priority, and to complete the interrupted process later on, when 
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   the higher priority task is complete. To do so, the context of the interrupted 
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   task must be saved from the HASH registers to memory, and then be restored 
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   from memory to the HASH registers.
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   1. To save the current context, use HASH_SaveContext() function
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   2. To restore the saved context, use HASH_RestoreContext() function 
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @endverbatim
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Save the Hash peripheral Context. 
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   The context can be saved only when no block is currently being 
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         processed. So user must wait for DINIS = 1 (the last block has been 
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         processed and the input FIFO is empty) or NBW != 0 (the FIFO is not 
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         full and no processing is ongoing).   
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_ContextSave: pointer to a HASH_Context structure that contains
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         the repository for current context.
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_SaveContext(HASH_Context* HASH_ContextSave)
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 325              		.loc 1 396 0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 0
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 329              		@ link register save eliminated.
+ 330              	.LVL9:
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   uint8_t i = 0;
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* save context registers */
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_ContextSave->HASH_IMR = HASH->IMR;  
+ 331              		.loc 1 400 0
+ 332 0000 094B     		ldr	r3, .L29
+ 333 0002 1A6A     		ldr	r2, [r3, #32]
+ 334 0004 0260     		str	r2, [r0, #0]
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_ContextSave->HASH_STR = HASH->STR;      
+ 335              		.loc 1 401 0
+ 336 0006 9968     		ldr	r1, [r3, #8]
+ 337 0008 4160     		str	r1, [r0, #4]
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH_ContextSave->HASH_CR  = HASH->CR;     
+ 338              		.loc 1 402 0
+ 339 000a 1B68     		ldr	r3, [r3, #0]
+ 340 000c 8360     		str	r3, [r0, #8]
+ 341 000e 0023     		movs	r3, #0
+ 342              	.LVL10:
+ 343              	.L27:
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   for(i=0; i<=50;i++)
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      HASH_ContextSave->HASH_CSR[i] = HASH->CSR[i];
+ 344              		.loc 1 405 0 discriminator 2
+ 345 0010 054A     		ldr	r2, .L29
+ 346 0012 03F13E01 		add	r1, r3, #62
+ 347 0016 52F82110 		ldr	r1, [r2, r1, lsl #2]
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_SaveContext(HASH_Context* HASH_ContextSave)
+ 348              		.loc 1 395 0 discriminator 2
+ 349 001a 00EB8302 		add	r2, r0, r3, lsl #2
+ 350 001e 0133     		adds	r3, r3, #1
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   for(i=0; i<=50;i++)
+ 351              		.loc 1 403 0 discriminator 2
+ 352 0020 332B     		cmp	r3, #51
+ 353              		.loc 1 405 0 discriminator 2
+ 354 0022 D160     		str	r1, [r2, #12]
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   for(i=0; i<=50;i++)
+ 355              		.loc 1 403 0 discriminator 2
+ 356 0024 F4D1     		bne	.L27
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }   
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 357              		.loc 1 407 0
+ 358 0026 7047     		bx	lr
+ 359              	.L30:
+ 360              		.align	2
+ 361              	.L29:
+ 362 0028 00040650 		.word	1342571520
+ 363              		.cfi_endproc
+ 364              	.LFE65:
+ 366              		.section	.text.HASH_RestoreContext,"ax",%progbits
+ 367              		.align	1
+ 368              		.global	HASH_RestoreContext
+ 369              		.thumb
+ 370              		.thumb_func
+ 372              	HASH_RestoreContext:
+ 373              	.LFB66:
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Restore the Hash peripheral Context.  
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   After calling this function, user can restart the processing from the
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         point where it has been interrupted.  
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_ContextRestore: pointer to a HASH_Context structure that contains
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *         the repository for saved context.
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_RestoreContext(HASH_Context* HASH_ContextRestore)  
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 374              		.loc 1 418 0
+ 375              		.cfi_startproc
+ 376              		@ args = 0, pretend = 0, frame = 0
+ 377              		@ frame_needed = 0, uses_anonymous_args = 0
+ 378              	.LVL11:
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   uint8_t i = 0;
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* restore context registers */
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->IMR = HASH_ContextRestore->HASH_IMR;   
+ 379              		.loc 1 422 0
+ 380 0000 0C4B     		ldr	r3, .L34
+ 381 0002 0268     		ldr	r2, [r0, #0]
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 382              		.loc 1 418 0
+ 383 0004 10B5     		push	{r4, lr}
+ 384              	.LCFI2:
+ 385              		.cfi_def_cfa_offset 8
+ 386              		.cfi_offset 4, -8
+ 387              		.cfi_offset 14, -4
+ 388              		.loc 1 422 0
+ 389 0006 1A62     		str	r2, [r3, #32]
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->STR = HASH_ContextRestore->HASH_STR;     
+ 390              		.loc 1 423 0
+ 391 0008 4168     		ldr	r1, [r0, #4]
+ 392 000a 9960     		str	r1, [r3, #8]
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->CR = HASH_ContextRestore->HASH_CR;
+ 393              		.loc 1 424 0
+ 394 000c 8468     		ldr	r4, [r0, #8]
+ 395 000e 1C60     		str	r4, [r3, #0]
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Initialize the hash processor */
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->CR |= HASH_CR_INIT; 
+ 396              		.loc 1 427 0
+ 397 0010 1A68     		ldr	r2, [r3, #0]
+ 398 0012 42F00401 		orr	r1, r2, #4
+ 399 0016 1960     		str	r1, [r3, #0]
+ 400 0018 0023     		movs	r3, #0
+ 401              	.LVL12:
+ 402              	.L32:
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_RestoreContext(HASH_Context* HASH_ContextRestore)  
+ 403              		.loc 1 417 0 discriminator 2
+ 404 001a 00EB8304 		add	r4, r0, r3, lsl #2
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    /* continue restoring context registers */     
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   for(i=0; i<=50;i++)
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      HASH->CSR[i] = HASH_ContextRestore->HASH_CSR[i];
+ 405              		.loc 1 432 0 discriminator 2
+ 406 001e 03F13E01 		add	r1, r3, #62
+ 407 0022 E468     		ldr	r4, [r4, #12]
+ 408 0024 034A     		ldr	r2, .L34
+ 409 0026 0133     		adds	r3, r3, #1
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   for(i=0; i<=50;i++)
+ 410              		.loc 1 430 0 discriminator 2
+ 411 0028 332B     		cmp	r3, #51
+ 412              		.loc 1 432 0 discriminator 2
+ 413 002a 42F82140 		str	r4, [r2, r1, lsl #2]
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   for(i=0; i<=50;i++)
+ 414              		.loc 1 430 0 discriminator 2
+ 415 002e F4D1     		bne	.L32
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }   
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 416              		.loc 1 434 0
+ 417 0030 10BD     		pop	{r4, pc}
+ 418              	.L35:
+ 419 0032 00BF     		.align	2
+ 420              	.L34:
+ 421 0034 00040650 		.word	1342571520
+ 422              		.cfi_endproc
+ 423              	.LFE66:
+ 425              		.section	.text.HASH_DMACmd,"ax",%progbits
+ 426              		.align	1
+ 427              		.global	HASH_DMACmd
+ 428              		.thumb
+ 429              		.thumb_func
+ 431              	HASH_DMACmd:
+ 432              	.LFB67:
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @}
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @defgroup HASH_Group4 HASH's DMA interface Configuration function
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *  @brief   HASH's DMA interface Configuration function 
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @verbatim   
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                    HASH's DMA interface Configuration function
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================  
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   This section provides functions allowing to configure the DMA interface for 
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH/ HMAC data input transfer.
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   When the DMA mode is enabled (using the HASH_DMACmd() function), data can be 
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   sent to the IN FIFO using the DMA peripheral.
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @endverbatim
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Enables or disables the HASH DMA interface.
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @note   The DMA is disabled by hardware after the end of transfer.
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  NewState: new state of the selected HASH DMA transfer request.
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_DMACmd(FunctionalState NewState)
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 433              		.loc 1 467 0
+ 434              		.cfi_startproc
+ 435              		@ args = 0, pretend = 0, frame = 0
+ 436              		@ frame_needed = 0, uses_anonymous_args = 0
+ 437              		@ link register save eliminated.
+ 438              	.LVL13:
+ 439 0000 044B     		ldr	r3, .L40
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if (NewState != DISABLE)
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* Enable the HASH DMA request */
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     HASH->CR |= HASH_CR_DMAE;
+ 440              		.loc 1 474 0
+ 441 0002 1A68     		ldr	r2, [r3, #0]
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if (NewState != DISABLE)
+ 442              		.loc 1 471 0
+ 443 0004 10B1     		cbz	r0, .L37
+ 444              		.loc 1 474 0
+ 445 0006 42F00800 		orr	r0, r2, #8
+ 446              	.LVL14:
+ 447 000a 01E0     		b	.L39
+ 448              	.LVL15:
+ 449              	.L37:
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   else
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* Disable the HASH DMA request */
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     HASH->CR &= ~HASH_CR_DMAE;
+ 450              		.loc 1 479 0
+ 451 000c 22F00800 		bic	r0, r2, #8
+ 452              	.LVL16:
+ 453              	.L39:
+ 454 0010 1860     		str	r0, [r3, #0]
+ 455 0012 7047     		bx	lr
+ 456              	.L41:
+ 457              		.align	2
+ 458              	.L40:
+ 459 0014 00040650 		.word	1342571520
+ 460              		.cfi_endproc
+ 461              	.LFE67:
+ 463              		.section	.text.HASH_ITConfig,"ax",%progbits
+ 464              		.align	1
+ 465              		.global	HASH_ITConfig
+ 466              		.thumb
+ 467              		.thumb_func
+ 469              	HASH_ITConfig:
+ 470              	.LFB68:
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @}
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /** @defgroup HASH_Group5 Interrupts and flags management functions
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *  @brief   Interrupts and flags management functions
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  *
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @verbatim   
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                    Interrupts and flags management functions
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****  ===============================================================================  
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   This section provides functions allowing to configure the HASH Interrupts and 
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   to get the status and clear flags and Interrupts pending bits.
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   The HASH provides 2 Interrupts sources and 5 Flags:
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   Flags :
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   ---------- 
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      1. HASH_FLAG_DINIS : set when 16 locations are free in the Data IN FIFO 
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           which means that a  new block (512 bit) can be entered 
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           into the input buffer.
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      2. HASH_FLAG_DCIS :  set when Digest calculation is complete
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      3. HASH_FLAG_DMAS :  set when HASH's DMA interface is enabled (DMAE=1) or 
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           a transfer is ongoing.
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           This Flag is cleared only by hardware.
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                            
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      4. HASH_FLAG_BUSY :  set when The hash core is processing a block of data
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           This Flag is cleared only by hardware. 
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                            
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      5. HASH_FLAG_DINNE : set when Data IN FIFO is not empty which means that 
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           the Data IN FIFO contains at least one word of data.
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                           This Flag is cleared only by hardware.
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****      
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   Interrupts :
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   ------------
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    1. HASH_IT_DINI  : if enabled, this interrupt source is pending when 16 
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       locations are free in the Data IN FIFO  which means that 
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       a new block (512 bit) can be entered into the input buffer.
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       This interrupt source is cleared using 
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       HASH_ClearITPendingBit(HASH_IT_DINI) function.
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****    2. HASH_IT_DCI   : if enabled, this interrupt source is pending when Digest 
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       calculation is complete.
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       This interrupt source is cleared using 
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                       HASH_ClearITPendingBit(HASH_IT_DCI) function.
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   Managing the HASH controller events :
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   ------------------------------------ 
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   The user should identify which mode will be used in his application to manage 
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   the HASH controller events: Polling mode or Interrupt mode.
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   1.  In the Polling Mode it is advised to use the following functions:
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - HASH_GetFlagStatus() : to check if flags events occur. 
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - HASH_ClearFlag()     : to clear the flags events.
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   2.  In the Interrupt Mode it is advised to use the following functions:
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - HASH_ITConfig()       : to enable or disable the interrupt source.
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - HASH_GetITStatus()    : to check if Interrupt occurs.
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****       - HASH_ClearITPendingBit() : to clear the Interrupt pending Bit 
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****                                 (corresponding Flag). 
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** @endverbatim
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @{
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */ 
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Enables or disables the specified HASH interrupts.
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_IT: specifies the HASH interrupt source to be enabled or disabled.
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          This parameter can be any combination of the following values:
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_IT_DINI: Data Input interrupt
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_IT_DCI: Digest Calculation Completion Interrupt
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  NewState: new state of the specified HASH interrupt.
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *           This parameter can be: ENABLE or DISABLE.
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_ITConfig(uint8_t HASH_IT, FunctionalState NewState)
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 471              		.loc 1 562 0
+ 472              		.cfi_startproc
+ 473              		@ args = 0, pretend = 0, frame = 0
+ 474              		@ frame_needed = 0, uses_anonymous_args = 0
+ 475              		@ link register save eliminated.
+ 476              	.LVL17:
+ 477 0000 054B     		ldr	r3, .L46
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_IT(HASH_IT));
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if (NewState != DISABLE)
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* Enable the selected HASH interrupt */
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     HASH->IMR |= HASH_IT;
+ 478              		.loc 1 570 0
+ 479 0002 1A6A     		ldr	r2, [r3, #32]
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if (NewState != DISABLE)
+ 480              		.loc 1 567 0
+ 481 0004 09B1     		cbz	r1, .L43
+ 482              		.loc 1 570 0
+ 483 0006 1043     		orrs	r0, r0, r2
+ 484              	.LVL18:
+ 485 0008 03E0     		b	.L45
+ 486              	.LVL19:
+ 487              	.L43:
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   else
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* Disable the selected HASH interrupt */
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     HASH->IMR &= (uint8_t) ~HASH_IT;
+ 488              		.loc 1 575 0
+ 489 000a 22EA0000 		bic	r0, r2, r0
+ 490              	.LVL20:
+ 491 000e 00F0FF00 		and	r0, r0, #255
+ 492              	.L45:
+ 493 0012 1862     		str	r0, [r3, #32]
+ 494 0014 7047     		bx	lr
+ 495              	.L47:
+ 496 0016 00BF     		.align	2
+ 497              	.L46:
+ 498 0018 00040650 		.word	1342571520
+ 499              		.cfi_endproc
+ 500              	.LFE68:
+ 502              		.section	.text.HASH_GetFlagStatus,"ax",%progbits
+ 503              		.align	1
+ 504              		.global	HASH_GetFlagStatus
+ 505              		.thumb
+ 506              		.thumb_func
+ 508              	HASH_GetFlagStatus:
+ 509              	.LFB69:
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Checks whether the specified HASH flag is set or not.
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_FLAG: specifies the HASH flag to check.
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          This parameter can be one of the following values:
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_FLAG_DINIS: Data input interrupt status flag
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_FLAG_DCIS: Digest calculation completion interrupt status flag
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_FLAG_BUSY: Busy flag
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_FLAG_DMAS: DMAS Status flag
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_FLAG_DINNE: Data Input register (DIN) not empty status flag
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval The new state of HASH_FLAG (SET or RESET)
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** FlagStatus HASH_GetFlagStatus(uint16_t HASH_FLAG)
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 510              		.loc 1 591 0
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 0
+ 513              		@ frame_needed = 0, uses_anonymous_args = 0
+ 514              		@ link register save eliminated.
+ 515              	.LVL21:
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   FlagStatus bitstatus = RESET;
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   uint32_t tempreg = 0;
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_GET_FLAG(HASH_FLAG));
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* check if the FLAG is in CR register */
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if ((HASH_FLAG & HASH_FLAG_DINNE) != (uint16_t)RESET ) 
+ 516              		.loc 1 599 0
+ 517 0000 00F48052 		and	r2, r0, #4096
+ 518 0004 91B2     		uxth	r1, r2
+ 519 0006 054B     		ldr	r3, .L51
+ 520 0008 09B1     		cbz	r1, .L49
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     tempreg = HASH->CR;
+ 521              		.loc 1 601 0
+ 522 000a 1A68     		ldr	r2, [r3, #0]
+ 523              	.LVL22:
+ 524 000c 00E0     		b	.L50
+ 525              	.LVL23:
+ 526              	.L49:
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   else /* The FLAG is in SR register */
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     tempreg = HASH->SR;
+ 527              		.loc 1 605 0
+ 528 000e 5A6A     		ldr	r2, [r3, #36]
+ 529              	.LVL24:
+ 530              	.L50:
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the status of the specified HASH flag */
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if ((tempreg & HASH_FLAG) != (uint16_t)RESET)
+ 531              		.loc 1 609 0
+ 532 0010 0242     		tst	r2, r0
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* HASH is set */
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     bitstatus = SET;
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   else
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* HASH_FLAG is reset */
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     bitstatus = RESET;
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Return the HASH_FLAG status */
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   return  bitstatus;
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 533              		.loc 1 622 0
+ 534 0012 0CBF     		ite	eq
+ 535 0014 0020     		moveq	r0, #0
+ 536 0016 0120     		movne	r0, #1
+ 537              	.LVL25:
+ 538 0018 7047     		bx	lr
+ 539              	.L52:
+ 540 001a 00BF     		.align	2
+ 541              	.L51:
+ 542 001c 00040650 		.word	1342571520
+ 543              		.cfi_endproc
+ 544              	.LFE69:
+ 546              		.section	.text.HASH_ClearFlag,"ax",%progbits
+ 547              		.align	1
+ 548              		.global	HASH_ClearFlag
+ 549              		.thumb
+ 550              		.thumb_func
+ 552              	HASH_ClearFlag:
+ 553              	.LFB70:
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Clears the HASH flags.
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_FLAG: specifies the flag to clear. 
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          This parameter can be any combination of the following values:
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_FLAG_DINIS: Data Input Flag
+ 628:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_FLAG_DCIS: Digest Calculation Completion Flag                       
+ 629:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 631:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_ClearFlag(uint16_t HASH_FLAG)
+ 632:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 554              		.loc 1 632 0
+ 555              		.cfi_startproc
+ 556              		@ args = 0, pretend = 0, frame = 0
+ 557              		@ frame_needed = 0, uses_anonymous_args = 0
+ 558              		@ link register save eliminated.
+ 559              	.LVL26:
+ 633:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 634:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_CLEAR_FLAG(HASH_FLAG));
+ 635:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   
+ 636:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Clear the selected HASH flags */
+ 637:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->SR = ~(uint32_t)HASH_FLAG;
+ 560              		.loc 1 637 0
+ 561 0000 014B     		ldr	r3, .L54
+ 562 0002 C043     		mvns	r0, r0
+ 563              	.LVL27:
+ 564 0004 5862     		str	r0, [r3, #36]
+ 565 0006 7047     		bx	lr
+ 566              	.L55:
+ 567              		.align	2
+ 568              	.L54:
+ 569 0008 00040650 		.word	1342571520
+ 570              		.cfi_endproc
+ 571              	.LFE70:
+ 573              		.section	.text.HASH_GetITStatus,"ax",%progbits
+ 574              		.align	1
+ 575              		.global	HASH_GetITStatus
+ 576              		.thumb
+ 577              		.thumb_func
+ 579              	HASH_GetITStatus:
+ 580              	.LFB71:
+ 638:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 639:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 640:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Checks whether the specified HASH interrupt has occurred or not.
+ 641:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_IT: specifies the HASH interrupt source to check.
+ 642:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          This parameter can be one of the following values:
+ 643:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_IT_DINI: Data Input interrupt
+ 644:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_IT_DCI: Digest Calculation Completion Interrupt
+ 645:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval The new state of HASH_IT (SET or RESET).
+ 646:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 647:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** ITStatus HASH_GetITStatus(uint8_t HASH_IT)
+ 648:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 581              		.loc 1 648 0
+ 582              		.cfi_startproc
+ 583              		@ args = 0, pretend = 0, frame = 0
+ 584              		@ frame_needed = 0, uses_anonymous_args = 0
+ 585              		@ link register save eliminated.
+ 586              	.LVL28:
+ 649:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   ITStatus bitstatus = RESET;
+ 650:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   uint32_t tmpreg = 0;
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_GET_IT(HASH_IT));  
+ 654:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 655:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 656:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the status of the specified HASH interrupt */
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   tmpreg =  HASH->SR;
+ 587              		.loc 1 657 0
+ 588 0000 044B     		ldr	r3, .L57
+ 589 0002 5A6A     		ldr	r2, [r3, #36]
+ 590              	.LVL29:
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   if (((HASH->IMR & tmpreg) & HASH_IT) != RESET)
+ 591              		.loc 1 659 0
+ 592 0004 196A     		ldr	r1, [r3, #32]
+ 593              	.LVL30:
+ 594 0006 1140     		ands	r1, r1, r2
+ 595              	.LVL31:
+ 596 0008 0142     		tst	r1, r0
+ 660:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 661:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* HASH_IT is set */
+ 662:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     bitstatus = SET;
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   else
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   {
+ 666:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     /* HASH_IT is reset */
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****     bitstatus = RESET;
+ 668:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   }
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Return the HASH_IT status */
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   return bitstatus;
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** }
+ 597              		.loc 1 671 0
+ 598 000a 0CBF     		ite	eq
+ 599 000c 0020     		moveq	r0, #0
+ 600 000e 0120     		movne	r0, #1
+ 601              	.LVL32:
+ 602 0010 7047     		bx	lr
+ 603              	.L58:
+ 604 0012 00BF     		.align	2
+ 605              	.L57:
+ 606 0014 00040650 		.word	1342571520
+ 607              		.cfi_endproc
+ 608              	.LFE71:
+ 610              		.section	.text.HASH_ClearITPendingBit,"ax",%progbits
+ 611              		.align	1
+ 612              		.global	HASH_ClearITPendingBit
+ 613              		.thumb
+ 614              		.thumb_func
+ 616              	HASH_ClearITPendingBit:
+ 617              	.LFB72:
+ 672:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 673:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** /**
+ 674:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @brief  Clears the HASH interrupt pending bit(s).
+ 675:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @param  HASH_IT: specifies the HASH interrupt pending bit(s) to clear.
+ 676:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *          This parameter can be any combination of the following values:
+ 677:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_IT_DINI: Data Input interrupt
+ 678:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   *            @arg HASH_IT_DCI: Digest Calculation Completion Interrupt
+ 679:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   * @retval None
+ 680:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   */
+ 681:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** void HASH_ClearITPendingBit(uint8_t HASH_IT)
+ 682:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** {
+ 618              		.loc 1 682 0
+ 619              		.cfi_startproc
+ 620              		@ args = 0, pretend = 0, frame = 0
+ 621              		@ frame_needed = 0, uses_anonymous_args = 0
+ 622              		@ link register save eliminated.
+ 623              	.LVL33:
+ 683:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Check the parameters */
+ 684:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   assert_param(IS_HASH_IT(HASH_IT));
+ 685:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c **** 
+ 686:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   /* Clear the selected HASH interrupt pending bit */
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_hash.c ****   HASH->SR = (uint8_t)~HASH_IT;
+ 624              		.loc 1 687 0
+ 625 0000 C043     		mvns	r0, r0
+ 626              	.LVL34:
+ 627 0002 024B     		ldr	r3, .L60
+ 628 0004 C1B2     		uxtb	r1, r0
+ 629 0006 5962     		str	r1, [r3, #36]
+ 630 0008 7047     		bx	lr
+ 631              	.L61:
+ 632 000a 00BF     		.align	2
+ 633              	.L60:
+ 634 000c 00040650 		.word	1342571520
+ 635              		.cfi_endproc
+ 636              	.LFE72:
+ 638              		.text
+ 639              	.Letext0:
+ 640              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 641              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 642              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_hash.h"
+ 643              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 644              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_hash.c
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:19     .text.HASH_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:24     .text.HASH_DeInit:00000000 HASH_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:55     .text.HASH_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:60     .text.HASH_Init:00000000 HASH_Init
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:113    .text.HASH_Init:00000040 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:118    .text.HASH_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:123    .text.HASH_StructInit:00000000 HASH_StructInit
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:145    .text.HASH_Reset:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:150    .text.HASH_Reset:00000000 HASH_Reset
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:166    .text.HASH_Reset:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:171    .text.HASH_SetLastWordValidBitsNbr:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:176    .text.HASH_SetLastWordValidBitsNbr:00000000 HASH_SetLastWordValidBitsNbr
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:198    .text.HASH_SetLastWordValidBitsNbr:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:203    .text.HASH_DataIn:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:208    .text.HASH_DataIn:00000000 HASH_DataIn
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:223    .text.HASH_DataIn:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:228    .text.HASH_GetInFIFOWordsNbr:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:233    .text.HASH_GetInFIFOWordsNbr:00000000 HASH_GetInFIFOWordsNbr
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:249    .text.HASH_GetInFIFOWordsNbr:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:254    .text.HASH_GetDigest:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:259    .text.HASH_GetDigest:00000000 HASH_GetDigest
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:287    .text.HASH_GetDigest:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:292    .text.HASH_StartDigest:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:297    .text.HASH_StartDigest:00000000 HASH_StartDigest
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:313    .text.HASH_StartDigest:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:318    .text.HASH_SaveContext:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:323    .text.HASH_SaveContext:00000000 HASH_SaveContext
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:362    .text.HASH_SaveContext:00000028 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:367    .text.HASH_RestoreContext:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:372    .text.HASH_RestoreContext:00000000 HASH_RestoreContext
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:421    .text.HASH_RestoreContext:00000034 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:426    .text.HASH_DMACmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:431    .text.HASH_DMACmd:00000000 HASH_DMACmd
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:459    .text.HASH_DMACmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:464    .text.HASH_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:469    .text.HASH_ITConfig:00000000 HASH_ITConfig
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:498    .text.HASH_ITConfig:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:503    .text.HASH_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:508    .text.HASH_GetFlagStatus:00000000 HASH_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:542    .text.HASH_GetFlagStatus:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:547    .text.HASH_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:552    .text.HASH_ClearFlag:00000000 HASH_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:569    .text.HASH_ClearFlag:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:574    .text.HASH_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:579    .text.HASH_GetITStatus:00000000 HASH_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:606    .text.HASH_GetITStatus:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:611    .text.HASH_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:616    .text.HASH_ClearITPendingBit:00000000 HASH_ClearITPendingBit
+C:\Users\STINA\AppData\Local\Temp\ccJO1otc.s:634    .text.HASH_ClearITPendingBit:0000000c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_AHB2PeriphResetCmd

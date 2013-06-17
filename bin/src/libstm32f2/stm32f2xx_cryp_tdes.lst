@@ -1,0 +1,1259 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_cryp_tdes.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.CRYP_TDES_ECB,"ax",%progbits
+  19              		.align	1
+  20              		.global	CRYP_TDES_ECB
+  21              		.thumb
+  22              		.thumb_func
+  24              	CRYP_TDES_ECB:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_cryp_tdes.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @file    stm32f2xx_cryp_tdes.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @brief   This file provides high level functions to encrypt and decrypt an 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          input message using TDES in ECB/CBC modes .
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          It uses the stm32f2xx_cryp.c/.h drivers to access the STM32F2xx CRYP
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          peripheral.
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *  @verbatim
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          ===================================================================
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *                                   How to use this driver
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          ===================================================================
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          1. Enable The CRYP controller clock using 
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_CRYP, ENABLE); function.
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          2. Encrypt and decrypt using TDES in ECB Mode using CRYP_TDES_ECB()
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *             function.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          3. Encrypt and decrypt using TDES in CBC Mode using CRYP_TDES_CBC()
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *             function.
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *  @endverbatim
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ******************************************************************************
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @attention
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * You may not use this file except in compliance with the License.
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * You may obtain a copy of the License at:
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * Unless required by applicable law or agreed to in writing, software 
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * See the License for the specific language governing permissions and
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * limitations under the License.
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ******************************************************************************
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   */ 
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /* Includes ------------------------------------------------------------------*/
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** #include "stm32f2xx_cryp.h"
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @{
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   */
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /** @defgroup CRYP 
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @brief CRYP driver modules
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @{
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   */
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /* Private typedef -----------------------------------------------------------*/
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /* Private define ------------------------------------------------------------*/
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** #define TDESBUSY_TIMEOUT    ((uint32_t) 0x00010000)
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /* Private macro -------------------------------------------------------------*/
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /* Private variables ---------------------------------------------------------*/
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /* Private function prototypes -----------------------------------------------*/
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /* Private functions ---------------------------------------------------------*/
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /** @defgroup CRYP_Private_Functions
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @{
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   */ 
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /** @defgroup CRYP_Group7 High Level TDES functions
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****  *  @brief   High Level TDES functions 
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****  *
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** @verbatim   
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****  ===============================================================================
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****                           High Level TDES functions
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****  ===============================================================================
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** @endverbatim
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @{
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   */
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /**
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @brief  Encrypt and decrypt using TDES in ECB Mode
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Mode: encryption or decryption Mode.
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *           This parameter can be one of the following values:
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *            @arg MODE_ENCRYPT: Encryption
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *            @arg MODE_DECRYPT: Decryption
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Key: Key used for TDES algorithm.
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Ilength: length of the Input buffer, must be a multiple of 8.
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Input: pointer to the Input buffer.
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Output: pointer to the returned buffer.
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @retval An ErrorStatus enumeration value:
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          - SUCCESS: Operation done
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          - ERROR: Operation failed
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   */
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** ErrorStatus CRYP_TDES_ECB(uint8_t Mode, uint8_t Key[24], uint8_t *Input, 
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****                           uint32_t Ilength, uint8_t *Output)
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** {
+  27              		.loc 1 104 0
+  28              		.cfi_startproc
+  29              		@ args = 4, pretend = 0, frame = 48
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 28
+  35              		.cfi_offset 4, -28
+  36              		.cfi_offset 5, -24
+  37              		.cfi_offset 6, -20
+  38              		.cfi_offset 7, -16
+  39              		.cfi_offset 8, -12
+  40              		.cfi_offset 9, -8
+  41              		.cfi_offset 14, -4
+  42 0004 8DB0     		sub	sp, sp, #52
+  43              	.LCFI1:
+  44              		.cfi_def_cfa_offset 80
+  45              		.loc 1 104 0
+  46 0006 8146     		mov	r9, r0
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_InitTypeDef TDES_CRYP_InitStructure;
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_KeyInitTypeDef TDES_CRYP_KeyInitStructure;
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   __IO uint32_t counter = 0;
+  47              		.loc 1 107 0
+  48 0008 0026     		movs	r6, #0
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t busystatus = 0;
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ErrorStatus status = SUCCESS;
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t keyaddr    = (uint32_t)Key;
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t i = 0;
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Crypto structures initialisation*/
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_KeyStructInit(&TDES_CRYP_KeyInitStructure);
+  49              		.loc 1 116 0
+  50 000a 04A8     		add	r0, sp, #16
+  51              	.LVL1:
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** {
+  52              		.loc 1 104 0
+  53 000c 0C46     		mov	r4, r1
+  54 000e 1746     		mov	r7, r2
+  55 0010 9846     		mov	r8, r3
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   __IO uint32_t counter = 0;
+  56              		.loc 1 107 0
+  57 0012 0196     		str	r6, [sp, #4]
+  58              	.LVL2:
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t outputaddr = (uint32_t)Output;
+  59              		.loc 1 112 0
+  60 0014 149D     		ldr	r5, [sp, #80]
+  61              	.LVL3:
+  62              		.loc 1 116 0
+  63 0016 FFF7FEFF 		bl	CRYP_KeyStructInit
+  64              	.LVL4:
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Crypto Init for Encryption process */
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   if(Mode == MODE_ENCRYPT) /* TDES encryption */
+  65              		.loc 1 119 0
+  66 001a B9F1010F 		cmp	r9, #1
+  67 001e 02D1     		bne	.L2
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   {
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****      TDES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Encrypt;
+  68              		.loc 1 121 0
+  69 0020 ADF80860 		strh	r6, [sp, #8]	@ movhi
+  70 0024 02E0     		b	.L3
+  71              	.L2:
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   }
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   else /*if(Mode == MODE_DECRYPT)*/ /* TDES decryption */
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   {
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****      TDES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+  72              		.loc 1 125 0
+  73 0026 0423     		movs	r3, #4
+  74 0028 ADF80830 		strh	r3, [sp, #8]	@ movhi
+  75              	.L3:
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   }
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_TDES_ECB;
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+  76              		.loc 1 129 0
+  77 002c 8020     		movs	r0, #128
+  78 002e ADF80C00 		strh	r0, [sp, #12]	@ movhi
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_Init(&TDES_CRYP_InitStructure);
+  79              		.loc 1 130 0
+  80 0032 02A8     		add	r0, sp, #8
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_TDES_ECB;
+  81              		.loc 1 128 0
+  82 0034 ADF80A60 		strh	r6, [sp, #10]	@ movhi
+  83              		.loc 1 130 0
+  84 0038 FFF7FEFF 		bl	CRYP_Init
+  85              	.LVL5:
+  86              	.LBB30:
+  87              	.LBB31:
+  88              		.file 2 "src/libstm32f2/core_cmInstr.h"
+   1:src/libstm32f2/core_cmInstr.h **** /**************************************************************************//**
+   2:src/libstm32f2/core_cmInstr.h ****  * @file     core_cmInstr.h
+   3:src/libstm32f2/core_cmInstr.h ****  * @brief    CMSIS Cortex-M Core Instruction Access Header File
+   4:src/libstm32f2/core_cmInstr.h ****  * @version  V3.01
+   5:src/libstm32f2/core_cmInstr.h ****  * @date     06. March 2012
+   6:src/libstm32f2/core_cmInstr.h ****  *
+   7:src/libstm32f2/core_cmInstr.h ****  * @note
+   8:src/libstm32f2/core_cmInstr.h ****  * Copyright (C) 2009-2012 ARM Limited. All rights reserved.
+   9:src/libstm32f2/core_cmInstr.h ****  *
+  10:src/libstm32f2/core_cmInstr.h ****  * @par
+  11:src/libstm32f2/core_cmInstr.h ****  * ARM Limited (ARM) is supplying this software for use with Cortex-M
+  12:src/libstm32f2/core_cmInstr.h ****  * processor based microcontrollers.  This file can be freely distributed
+  13:src/libstm32f2/core_cmInstr.h ****  * within development tools that are supporting such ARM based processors.
+  14:src/libstm32f2/core_cmInstr.h ****  *
+  15:src/libstm32f2/core_cmInstr.h ****  * @par
+  16:src/libstm32f2/core_cmInstr.h ****  * THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
+  17:src/libstm32f2/core_cmInstr.h ****  * OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+  18:src/libstm32f2/core_cmInstr.h ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
+  19:src/libstm32f2/core_cmInstr.h ****  * ARM SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR
+  20:src/libstm32f2/core_cmInstr.h ****  * CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+  21:src/libstm32f2/core_cmInstr.h ****  *
+  22:src/libstm32f2/core_cmInstr.h ****  ******************************************************************************/
+  23:src/libstm32f2/core_cmInstr.h **** 
+  24:src/libstm32f2/core_cmInstr.h **** #ifndef __CORE_CMINSTR_H
+  25:src/libstm32f2/core_cmInstr.h **** #define __CORE_CMINSTR_H
+  26:src/libstm32f2/core_cmInstr.h **** 
+  27:src/libstm32f2/core_cmInstr.h **** 
+  28:src/libstm32f2/core_cmInstr.h **** /* ##########################  Core Instruction Access  ######################### */
+  29:src/libstm32f2/core_cmInstr.h **** /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+  30:src/libstm32f2/core_cmInstr.h ****   Access to dedicated instructions
+  31:src/libstm32f2/core_cmInstr.h ****   @{
+  32:src/libstm32f2/core_cmInstr.h **** */
+  33:src/libstm32f2/core_cmInstr.h **** 
+  34:src/libstm32f2/core_cmInstr.h **** #if   defined ( __CC_ARM ) /*------------------RealView Compiler -----------------*/
+  35:src/libstm32f2/core_cmInstr.h **** /* ARM armcc specific functions */
+  36:src/libstm32f2/core_cmInstr.h **** 
+  37:src/libstm32f2/core_cmInstr.h **** #if (__ARMCC_VERSION < 400677)
+  38:src/libstm32f2/core_cmInstr.h ****   #error "Please use ARM Compiler Toolchain V4.0.677 or later!"
+  39:src/libstm32f2/core_cmInstr.h **** #endif
+  40:src/libstm32f2/core_cmInstr.h **** 
+  41:src/libstm32f2/core_cmInstr.h **** 
+  42:src/libstm32f2/core_cmInstr.h **** /** \brief  No Operation
+  43:src/libstm32f2/core_cmInstr.h **** 
+  44:src/libstm32f2/core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+  45:src/libstm32f2/core_cmInstr.h ****  */
+  46:src/libstm32f2/core_cmInstr.h **** #define __NOP                             __nop
+  47:src/libstm32f2/core_cmInstr.h **** 
+  48:src/libstm32f2/core_cmInstr.h **** 
+  49:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Interrupt
+  50:src/libstm32f2/core_cmInstr.h **** 
+  51:src/libstm32f2/core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+  52:src/libstm32f2/core_cmInstr.h ****     until one of a number of events occurs.
+  53:src/libstm32f2/core_cmInstr.h ****  */
+  54:src/libstm32f2/core_cmInstr.h **** #define __WFI                             __wfi
+  55:src/libstm32f2/core_cmInstr.h **** 
+  56:src/libstm32f2/core_cmInstr.h **** 
+  57:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Event
+  58:src/libstm32f2/core_cmInstr.h **** 
+  59:src/libstm32f2/core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+  60:src/libstm32f2/core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+  61:src/libstm32f2/core_cmInstr.h ****  */
+  62:src/libstm32f2/core_cmInstr.h **** #define __WFE                             __wfe
+  63:src/libstm32f2/core_cmInstr.h **** 
+  64:src/libstm32f2/core_cmInstr.h **** 
+  65:src/libstm32f2/core_cmInstr.h **** /** \brief  Send Event
+  66:src/libstm32f2/core_cmInstr.h **** 
+  67:src/libstm32f2/core_cmInstr.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+  68:src/libstm32f2/core_cmInstr.h ****  */
+  69:src/libstm32f2/core_cmInstr.h **** #define __SEV                             __sev
+  70:src/libstm32f2/core_cmInstr.h **** 
+  71:src/libstm32f2/core_cmInstr.h **** 
+  72:src/libstm32f2/core_cmInstr.h **** /** \brief  Instruction Synchronization Barrier
+  73:src/libstm32f2/core_cmInstr.h **** 
+  74:src/libstm32f2/core_cmInstr.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+  75:src/libstm32f2/core_cmInstr.h ****     so that all instructions following the ISB are fetched from cache or
+  76:src/libstm32f2/core_cmInstr.h ****     memory, after the instruction has been completed.
+  77:src/libstm32f2/core_cmInstr.h ****  */
+  78:src/libstm32f2/core_cmInstr.h **** #define __ISB()                           __isb(0xF)
+  79:src/libstm32f2/core_cmInstr.h **** 
+  80:src/libstm32f2/core_cmInstr.h **** 
+  81:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Synchronization Barrier
+  82:src/libstm32f2/core_cmInstr.h **** 
+  83:src/libstm32f2/core_cmInstr.h ****     This function acts as a special kind of Data Memory Barrier.
+  84:src/libstm32f2/core_cmInstr.h ****     It completes when all explicit memory accesses before this instruction complete.
+  85:src/libstm32f2/core_cmInstr.h ****  */
+  86:src/libstm32f2/core_cmInstr.h **** #define __DSB()                           __dsb(0xF)
+  87:src/libstm32f2/core_cmInstr.h **** 
+  88:src/libstm32f2/core_cmInstr.h **** 
+  89:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Memory Barrier
+  90:src/libstm32f2/core_cmInstr.h **** 
+  91:src/libstm32f2/core_cmInstr.h ****     This function ensures the apparent order of the explicit memory operations before
+  92:src/libstm32f2/core_cmInstr.h ****     and after the instruction, without ensuring their completion.
+  93:src/libstm32f2/core_cmInstr.h ****  */
+  94:src/libstm32f2/core_cmInstr.h **** #define __DMB()                           __dmb(0xF)
+  95:src/libstm32f2/core_cmInstr.h **** 
+  96:src/libstm32f2/core_cmInstr.h **** 
+  97:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (32 bit)
+  98:src/libstm32f2/core_cmInstr.h **** 
+  99:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in integer value.
+ 100:src/libstm32f2/core_cmInstr.h **** 
+ 101:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 102:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 103:src/libstm32f2/core_cmInstr.h ****  */
+ 104:src/libstm32f2/core_cmInstr.h **** #define __REV                             __rev
+ 105:src/libstm32f2/core_cmInstr.h **** 
+ 106:src/libstm32f2/core_cmInstr.h **** 
+ 107:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (16 bit)
+ 108:src/libstm32f2/core_cmInstr.h **** 
+ 109:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in two unsigned short values.
+ 110:src/libstm32f2/core_cmInstr.h **** 
+ 111:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 112:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 113:src/libstm32f2/core_cmInstr.h ****  */
+ 114:src/libstm32f2/core_cmInstr.h **** __attribute__((section(".rev16_text"))) __STATIC_INLINE __ASM uint32_t __REV16(uint32_t value)
+ 115:src/libstm32f2/core_cmInstr.h **** {
+ 116:src/libstm32f2/core_cmInstr.h ****   rev16 r0, r0
+ 117:src/libstm32f2/core_cmInstr.h ****   bx lr
+ 118:src/libstm32f2/core_cmInstr.h **** }
+ 119:src/libstm32f2/core_cmInstr.h **** 
+ 120:src/libstm32f2/core_cmInstr.h **** 
+ 121:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order in signed short value
+ 122:src/libstm32f2/core_cmInstr.h **** 
+ 123:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in a signed short value with sign extension to integer.
+ 124:src/libstm32f2/core_cmInstr.h **** 
+ 125:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 126:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 127:src/libstm32f2/core_cmInstr.h ****  */
+ 128:src/libstm32f2/core_cmInstr.h **** __attribute__((section(".revsh_text"))) __STATIC_INLINE __ASM int32_t __REVSH(int32_t value)
+ 129:src/libstm32f2/core_cmInstr.h **** {
+ 130:src/libstm32f2/core_cmInstr.h ****   revsh r0, r0
+ 131:src/libstm32f2/core_cmInstr.h ****   bx lr
+ 132:src/libstm32f2/core_cmInstr.h **** }
+ 133:src/libstm32f2/core_cmInstr.h **** 
+ 134:src/libstm32f2/core_cmInstr.h **** 
+ 135:src/libstm32f2/core_cmInstr.h **** /** \brief  Rotate Right in unsigned value (32 bit)
+ 136:src/libstm32f2/core_cmInstr.h **** 
+ 137:src/libstm32f2/core_cmInstr.h ****     This function Rotate Right (immediate) provides the value of the contents of a register rotated
+ 138:src/libstm32f2/core_cmInstr.h **** 
+ 139:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to rotate
+ 140:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Number of Bits to rotate
+ 141:src/libstm32f2/core_cmInstr.h ****     \return               Rotated value
+ 142:src/libstm32f2/core_cmInstr.h ****  */
+ 143:src/libstm32f2/core_cmInstr.h **** #define __ROR                             __ror
+ 144:src/libstm32f2/core_cmInstr.h **** 
+ 145:src/libstm32f2/core_cmInstr.h **** 
+ 146:src/libstm32f2/core_cmInstr.h **** #if       (__CORTEX_M >= 0x03)
+ 147:src/libstm32f2/core_cmInstr.h **** 
+ 148:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse bit order of value
+ 149:src/libstm32f2/core_cmInstr.h **** 
+ 150:src/libstm32f2/core_cmInstr.h ****     This function reverses the bit order of the given value.
+ 151:src/libstm32f2/core_cmInstr.h **** 
+ 152:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 153:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 154:src/libstm32f2/core_cmInstr.h ****  */
+ 155:src/libstm32f2/core_cmInstr.h **** #define __RBIT                            __rbit
+ 156:src/libstm32f2/core_cmInstr.h **** 
+ 157:src/libstm32f2/core_cmInstr.h **** 
+ 158:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (8 bit)
+ 159:src/libstm32f2/core_cmInstr.h **** 
+ 160:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 8 bit value.
+ 161:src/libstm32f2/core_cmInstr.h **** 
+ 162:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 163:src/libstm32f2/core_cmInstr.h ****     \return             value of type uint8_t at (*ptr)
+ 164:src/libstm32f2/core_cmInstr.h ****  */
+ 165:src/libstm32f2/core_cmInstr.h **** #define __LDREXB(ptr)                     ((uint8_t ) __ldrex(ptr))
+ 166:src/libstm32f2/core_cmInstr.h **** 
+ 167:src/libstm32f2/core_cmInstr.h **** 
+ 168:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (16 bit)
+ 169:src/libstm32f2/core_cmInstr.h **** 
+ 170:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 16 bit values.
+ 171:src/libstm32f2/core_cmInstr.h **** 
+ 172:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 173:src/libstm32f2/core_cmInstr.h ****     \return        value of type uint16_t at (*ptr)
+ 174:src/libstm32f2/core_cmInstr.h ****  */
+ 175:src/libstm32f2/core_cmInstr.h **** #define __LDREXH(ptr)                     ((uint16_t) __ldrex(ptr))
+ 176:src/libstm32f2/core_cmInstr.h **** 
+ 177:src/libstm32f2/core_cmInstr.h **** 
+ 178:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (32 bit)
+ 179:src/libstm32f2/core_cmInstr.h **** 
+ 180:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 32 bit values.
+ 181:src/libstm32f2/core_cmInstr.h **** 
+ 182:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 183:src/libstm32f2/core_cmInstr.h ****     \return        value of type uint32_t at (*ptr)
+ 184:src/libstm32f2/core_cmInstr.h ****  */
+ 185:src/libstm32f2/core_cmInstr.h **** #define __LDREXW(ptr)                     ((uint32_t ) __ldrex(ptr))
+ 186:src/libstm32f2/core_cmInstr.h **** 
+ 187:src/libstm32f2/core_cmInstr.h **** 
+ 188:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (8 bit)
+ 189:src/libstm32f2/core_cmInstr.h **** 
+ 190:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 8 bit values.
+ 191:src/libstm32f2/core_cmInstr.h **** 
+ 192:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 193:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 194:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 195:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 196:src/libstm32f2/core_cmInstr.h ****  */
+ 197:src/libstm32f2/core_cmInstr.h **** #define __STREXB(value, ptr)              __strex(value, ptr)
+ 198:src/libstm32f2/core_cmInstr.h **** 
+ 199:src/libstm32f2/core_cmInstr.h **** 
+ 200:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (16 bit)
+ 201:src/libstm32f2/core_cmInstr.h **** 
+ 202:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 16 bit values.
+ 203:src/libstm32f2/core_cmInstr.h **** 
+ 204:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 205:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 206:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 207:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 208:src/libstm32f2/core_cmInstr.h ****  */
+ 209:src/libstm32f2/core_cmInstr.h **** #define __STREXH(value, ptr)              __strex(value, ptr)
+ 210:src/libstm32f2/core_cmInstr.h **** 
+ 211:src/libstm32f2/core_cmInstr.h **** 
+ 212:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (32 bit)
+ 213:src/libstm32f2/core_cmInstr.h **** 
+ 214:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 32 bit values.
+ 215:src/libstm32f2/core_cmInstr.h **** 
+ 216:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 217:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 218:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 219:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 220:src/libstm32f2/core_cmInstr.h ****  */
+ 221:src/libstm32f2/core_cmInstr.h **** #define __STREXW(value, ptr)              __strex(value, ptr)
+ 222:src/libstm32f2/core_cmInstr.h **** 
+ 223:src/libstm32f2/core_cmInstr.h **** 
+ 224:src/libstm32f2/core_cmInstr.h **** /** \brief  Remove the exclusive lock
+ 225:src/libstm32f2/core_cmInstr.h **** 
+ 226:src/libstm32f2/core_cmInstr.h ****     This function removes the exclusive lock which is created by LDREX.
+ 227:src/libstm32f2/core_cmInstr.h **** 
+ 228:src/libstm32f2/core_cmInstr.h ****  */
+ 229:src/libstm32f2/core_cmInstr.h **** #define __CLREX                           __clrex
+ 230:src/libstm32f2/core_cmInstr.h **** 
+ 231:src/libstm32f2/core_cmInstr.h **** 
+ 232:src/libstm32f2/core_cmInstr.h **** /** \brief  Signed Saturate
+ 233:src/libstm32f2/core_cmInstr.h **** 
+ 234:src/libstm32f2/core_cmInstr.h ****     This function saturates a signed value.
+ 235:src/libstm32f2/core_cmInstr.h **** 
+ 236:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 237:src/libstm32f2/core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (1..32)
+ 238:src/libstm32f2/core_cmInstr.h ****     \return             Saturated value
+ 239:src/libstm32f2/core_cmInstr.h ****  */
+ 240:src/libstm32f2/core_cmInstr.h **** #define __SSAT                            __ssat
+ 241:src/libstm32f2/core_cmInstr.h **** 
+ 242:src/libstm32f2/core_cmInstr.h **** 
+ 243:src/libstm32f2/core_cmInstr.h **** /** \brief  Unsigned Saturate
+ 244:src/libstm32f2/core_cmInstr.h **** 
+ 245:src/libstm32f2/core_cmInstr.h ****     This function saturates an unsigned value.
+ 246:src/libstm32f2/core_cmInstr.h **** 
+ 247:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 248:src/libstm32f2/core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (0..31)
+ 249:src/libstm32f2/core_cmInstr.h ****     \return             Saturated value
+ 250:src/libstm32f2/core_cmInstr.h ****  */
+ 251:src/libstm32f2/core_cmInstr.h **** #define __USAT                            __usat
+ 252:src/libstm32f2/core_cmInstr.h **** 
+ 253:src/libstm32f2/core_cmInstr.h **** 
+ 254:src/libstm32f2/core_cmInstr.h **** /** \brief  Count leading zeros
+ 255:src/libstm32f2/core_cmInstr.h **** 
+ 256:src/libstm32f2/core_cmInstr.h ****     This function counts the number of leading zeros of a data value.
+ 257:src/libstm32f2/core_cmInstr.h **** 
+ 258:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to count the leading zeros
+ 259:src/libstm32f2/core_cmInstr.h ****     \return             number of leading zeros in value
+ 260:src/libstm32f2/core_cmInstr.h ****  */
+ 261:src/libstm32f2/core_cmInstr.h **** #define __CLZ                             __clz
+ 262:src/libstm32f2/core_cmInstr.h **** 
+ 263:src/libstm32f2/core_cmInstr.h **** #endif /* (__CORTEX_M >= 0x03) */
+ 264:src/libstm32f2/core_cmInstr.h **** 
+ 265:src/libstm32f2/core_cmInstr.h **** 
+ 266:src/libstm32f2/core_cmInstr.h **** 
+ 267:src/libstm32f2/core_cmInstr.h **** #elif defined ( __ICCARM__ ) /*------------------ ICC Compiler -------------------*/
+ 268:src/libstm32f2/core_cmInstr.h **** /* IAR iccarm specific functions */
+ 269:src/libstm32f2/core_cmInstr.h **** 
+ 270:src/libstm32f2/core_cmInstr.h **** #include <cmsis_iar.h>
+ 271:src/libstm32f2/core_cmInstr.h **** 
+ 272:src/libstm32f2/core_cmInstr.h **** 
+ 273:src/libstm32f2/core_cmInstr.h **** #elif defined ( __TMS470__ ) /*---------------- TI CCS Compiler ------------------*/
+ 274:src/libstm32f2/core_cmInstr.h **** /* TI CCS specific functions */
+ 275:src/libstm32f2/core_cmInstr.h **** 
+ 276:src/libstm32f2/core_cmInstr.h **** #include <cmsis_ccs.h>
+ 277:src/libstm32f2/core_cmInstr.h **** 
+ 278:src/libstm32f2/core_cmInstr.h **** 
+ 279:src/libstm32f2/core_cmInstr.h **** #elif defined ( __GNUC__ ) /*------------------ GNU Compiler ---------------------*/
+ 280:src/libstm32f2/core_cmInstr.h **** /* GNU gcc specific functions */
+ 281:src/libstm32f2/core_cmInstr.h **** 
+ 282:src/libstm32f2/core_cmInstr.h **** /** \brief  No Operation
+ 283:src/libstm32f2/core_cmInstr.h **** 
+ 284:src/libstm32f2/core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+ 285:src/libstm32f2/core_cmInstr.h ****  */
+ 286:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __NOP(void)
+ 287:src/libstm32f2/core_cmInstr.h **** {
+ 288:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("nop");
+ 289:src/libstm32f2/core_cmInstr.h **** }
+ 290:src/libstm32f2/core_cmInstr.h **** 
+ 291:src/libstm32f2/core_cmInstr.h **** 
+ 292:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Interrupt
+ 293:src/libstm32f2/core_cmInstr.h **** 
+ 294:src/libstm32f2/core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+ 295:src/libstm32f2/core_cmInstr.h ****     until one of a number of events occurs.
+ 296:src/libstm32f2/core_cmInstr.h ****  */
+ 297:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFI(void)
+ 298:src/libstm32f2/core_cmInstr.h **** {
+ 299:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("wfi");
+ 300:src/libstm32f2/core_cmInstr.h **** }
+ 301:src/libstm32f2/core_cmInstr.h **** 
+ 302:src/libstm32f2/core_cmInstr.h **** 
+ 303:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Event
+ 304:src/libstm32f2/core_cmInstr.h **** 
+ 305:src/libstm32f2/core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+ 306:src/libstm32f2/core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+ 307:src/libstm32f2/core_cmInstr.h ****  */
+ 308:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFE(void)
+ 309:src/libstm32f2/core_cmInstr.h **** {
+ 310:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("wfe");
+ 311:src/libstm32f2/core_cmInstr.h **** }
+ 312:src/libstm32f2/core_cmInstr.h **** 
+ 313:src/libstm32f2/core_cmInstr.h **** 
+ 314:src/libstm32f2/core_cmInstr.h **** /** \brief  Send Event
+ 315:src/libstm32f2/core_cmInstr.h **** 
+ 316:src/libstm32f2/core_cmInstr.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+ 317:src/libstm32f2/core_cmInstr.h ****  */
+ 318:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __SEV(void)
+ 319:src/libstm32f2/core_cmInstr.h **** {
+ 320:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("sev");
+ 321:src/libstm32f2/core_cmInstr.h **** }
+ 322:src/libstm32f2/core_cmInstr.h **** 
+ 323:src/libstm32f2/core_cmInstr.h **** 
+ 324:src/libstm32f2/core_cmInstr.h **** /** \brief  Instruction Synchronization Barrier
+ 325:src/libstm32f2/core_cmInstr.h **** 
+ 326:src/libstm32f2/core_cmInstr.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+ 327:src/libstm32f2/core_cmInstr.h ****     so that all instructions following the ISB are fetched from cache or
+ 328:src/libstm32f2/core_cmInstr.h ****     memory, after the instruction has been completed.
+ 329:src/libstm32f2/core_cmInstr.h ****  */
+ 330:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __ISB(void)
+ 331:src/libstm32f2/core_cmInstr.h **** {
+ 332:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("isb");
+ 333:src/libstm32f2/core_cmInstr.h **** }
+ 334:src/libstm32f2/core_cmInstr.h **** 
+ 335:src/libstm32f2/core_cmInstr.h **** 
+ 336:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Synchronization Barrier
+ 337:src/libstm32f2/core_cmInstr.h **** 
+ 338:src/libstm32f2/core_cmInstr.h ****     This function acts as a special kind of Data Memory Barrier.
+ 339:src/libstm32f2/core_cmInstr.h ****     It completes when all explicit memory accesses before this instruction complete.
+ 340:src/libstm32f2/core_cmInstr.h ****  */
+ 341:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __DSB(void)
+ 342:src/libstm32f2/core_cmInstr.h **** {
+ 343:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("dsb");
+ 344:src/libstm32f2/core_cmInstr.h **** }
+ 345:src/libstm32f2/core_cmInstr.h **** 
+ 346:src/libstm32f2/core_cmInstr.h **** 
+ 347:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Memory Barrier
+ 348:src/libstm32f2/core_cmInstr.h **** 
+ 349:src/libstm32f2/core_cmInstr.h ****     This function ensures the apparent order of the explicit memory operations before
+ 350:src/libstm32f2/core_cmInstr.h ****     and after the instruction, without ensuring their completion.
+ 351:src/libstm32f2/core_cmInstr.h ****  */
+ 352:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __DMB(void)
+ 353:src/libstm32f2/core_cmInstr.h **** {
+ 354:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("dmb");
+ 355:src/libstm32f2/core_cmInstr.h **** }
+ 356:src/libstm32f2/core_cmInstr.h **** 
+ 357:src/libstm32f2/core_cmInstr.h **** 
+ 358:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (32 bit)
+ 359:src/libstm32f2/core_cmInstr.h **** 
+ 360:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in integer value.
+ 361:src/libstm32f2/core_cmInstr.h **** 
+ 362:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 363:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 364:src/libstm32f2/core_cmInstr.h ****  */
+ 365:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __REV(uint32_t value)
+ 366:src/libstm32f2/core_cmInstr.h **** {
+ 367:src/libstm32f2/core_cmInstr.h ****   uint32_t result;
+ 368:src/libstm32f2/core_cmInstr.h **** 
+ 369:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("rev %0, %1" : "=r" (result) : "r" (value) );
+  89              		.loc 2 369 0
+  90 003c 2168     		ldr	r1, [r4, #0]
+  91              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+  92 003e 0ABA     		rev r2, r1
+  93              	@ 0 "" 2
+  94              	.LVL6:
+  95              		.thumb
+  96              	.LBE31:
+  97              	.LBE30:
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Key Initialisation */
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+  98              		.loc 1 133 0
+  99 0040 0692     		str	r2, [sp, #24]
+ 100              	.LVL7:
+ 101              	.LBB32:
+ 102              	.LBB33:
+ 103              		.loc 2 369 0
+ 104 0042 6668     		ldr	r6, [r4, #4]
+ 105              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 106 0044 33BA     		rev r3, r6
+ 107              	@ 0 "" 2
+ 108              	.LVL8:
+ 109              		.thumb
+ 110              	.LBE33:
+ 111              	.LBE32:
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 112              		.loc 1 135 0
+ 113 0046 0793     		str	r3, [sp, #28]
+ 114              	.LVL9:
+ 115              	.LBB34:
+ 116              	.LBB35:
+ 117              		.loc 2 369 0
+ 118 0048 A068     		ldr	r0, [r4, #8]
+ 119              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 120 004a 01BA     		rev r1, r0
+ 121              	@ 0 "" 2
+ 122              	.LVL10:
+ 123              		.thumb
+ 124              	.LBE35:
+ 125              	.LBE34:
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 126              		.loc 1 137 0
+ 127 004c 0891     		str	r1, [sp, #32]
+ 128              	.LVL11:
+ 129              	.LBB36:
+ 130              	.LBB37:
+ 131              		.loc 2 369 0
+ 132 004e E268     		ldr	r2, [r4, #12]
+ 133              	.LVL12:
+ 134              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 135 0050 16BA     		rev r6, r2
+ 136              	@ 0 "" 2
+ 137              	.LVL13:
+ 138              		.thumb
+ 139              	.LBE37:
+ 140              	.LBE36:
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 141              		.loc 1 139 0
+ 142 0052 0996     		str	r6, [sp, #36]
+ 143              	.LVL14:
+ 144              	.LBB38:
+ 145              	.LBB39:
+ 146              		.loc 2 369 0
+ 147 0054 2369     		ldr	r3, [r4, #16]
+ 148              	.LVL15:
+ 149              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 150 0056 18BA     		rev r0, r3
+ 151              	@ 0 "" 2
+ 152              	.LVL16:
+ 153              		.thumb
+ 154              	.LBE39:
+ 155              	.LBE38:
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 156              		.loc 1 141 0
+ 157 0058 0A90     		str	r0, [sp, #40]
+ 158              	.LVL17:
+ 159              	.LBB40:
+ 160              	.LBB41:
+ 161              		.loc 2 369 0
+ 162 005a 6469     		ldr	r4, [r4, #20]
+ 163              	.LVL18:
+ 164              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 165 005c 21BA     		rev r1, r4
+ 166              	@ 0 "" 2
+ 167              	.LVL19:
+ 168              		.thumb
+ 169              	.LBE41:
+ 170              	.LBE40:
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_KeyInit(& TDES_CRYP_KeyInitStructure);
+ 171              		.loc 1 144 0
+ 172 005e 04A8     		add	r0, sp, #16
+ 173              	.LVL20:
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 174              		.loc 1 143 0
+ 175 0060 0B91     		str	r1, [sp, #44]
+ 176              		.loc 1 144 0
+ 177 0062 FFF7FEFF 		bl	CRYP_KeyInit
+ 178              	.LVL21:
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Flush IN/OUT FIFO */
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_FIFOFlush();
+ 179              		.loc 1 147 0
+ 180 0066 FFF7FEFF 		bl	CRYP_FIFOFlush
+ 181              	.LVL22:
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Enable Crypto processor */
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_Cmd(ENABLE);
+ 182              		.loc 1 150 0
+ 183 006a 0120     		movs	r0, #1
+ 184 006c FFF7FEFF 		bl	CRYP_Cmd
+ 185              	.LVL23:
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=8)
+ 186              		.loc 1 152 0
+ 187 0070 0024     		movs	r4, #0
+ 188              	.LVL24:
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ErrorStatus status = SUCCESS;
+ 189              		.loc 1 109 0
+ 190 0072 0126     		movs	r6, #1
+ 191              	.LVL25:
+ 192              	.L4:
+ 193              		.loc 1 152 0 discriminator 1
+ 194 0074 4445     		cmp	r4, r8
+ 195 0076 22D2     		bcs	.L9
+ 196              		.loc 1 152 0 is_stmt 0 discriminator 2
+ 197 0078 0EB3     		cbz	r6, .L9
+ 198              	.L10:
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   {
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     /* Write the Input block in the Input FIFO */
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 199              		.loc 1 155 0 is_stmt 1
+ 200 007a 3859     		ldr	r0, [r7, r4]
+ 201 007c FFF7FEFF 		bl	CRYP_DataIn
+ 202              	.LVL26:
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** ErrorStatus CRYP_TDES_ECB(uint8_t Mode, uint8_t Key[24], uint8_t *Input, 
+ 203              		.loc 1 102 0
+ 204 0080 3A19     		adds	r2, r7, r4
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     inputaddr+=4;
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 205              		.loc 1 157 0
+ 206 0082 5068     		ldr	r0, [r2, #4]
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     inputaddr+=4;
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     /* Wait until the complete message has been processed */
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     counter = 0;
+ 207              		.loc 1 161 0
+ 208 0084 0026     		movs	r6, #0
+ 209              	.LVL27:
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 210              		.loc 1 157 0
+ 211 0086 FFF7FEFF 		bl	CRYP_DataIn
+ 212              	.LVL28:
+ 213              		.loc 1 161 0
+ 214 008a 0196     		str	r6, [sp, #4]
+ 215              	.L6:
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     do
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     {
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 216              		.loc 1 164 0 discriminator 1
+ 217 008c 1020     		movs	r0, #16
+ 218 008e FFF7FEFF 		bl	CRYP_GetFlagStatus
+ 219              	.LVL29:
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       counter++;
+ 220              		.loc 1 165 0 discriminator 1
+ 221 0092 019B     		ldr	r3, [sp, #4]
+ 222 0094 591C     		adds	r1, r3, #1
+ 223              	.LVL30:
+ 224 0096 0191     		str	r1, [sp, #4]
+ 225              	.LVL31:
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     }while ((counter != TDESBUSY_TIMEOUT) && (busystatus != RESET));
+ 226              		.loc 1 166 0 discriminator 1
+ 227 0098 019A     		ldr	r2, [sp, #4]
+ 228 009a B2F5803F 		cmp	r2, #65536
+ 229 009e 02D0     		beq	.L5
+ 230 00a0 0028     		cmp	r0, #0
+ 231 00a2 F3D1     		bne	.L6
+ 232 00a4 01E0     		b	.L7
+ 233              	.L5:
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     if (busystatus != RESET)
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     {
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****        status = ERROR;
+ 234              		.loc 1 170 0
+ 235 00a6 0026     		movs	r6, #0
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     if (busystatus != RESET)
+ 236              		.loc 1 168 0
+ 237 00a8 38B9     		cbnz	r0, .L8
+ 238              	.L7:
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     }
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     else
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     {
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       /* Read the Output block from the Output FIFO */
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 239              		.loc 1 176 0
+ 240 00aa FFF7FEFF 		bl	CRYP_DataOut
+ 241              	.LVL32:
+ 242 00ae 2860     		str	r0, [r5, #0]
+ 243              	.LVL33:
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       outputaddr+=4;
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 244              		.loc 1 178 0
+ 245 00b0 FFF7FEFF 		bl	CRYP_DataOut
+ 246              	.LVL34:
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       outputaddr+=4;
+ 247              		.loc 1 179 0
+ 248 00b4 0126     		movs	r6, #1
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 249              		.loc 1 178 0
+ 250 00b6 6860     		str	r0, [r5, #4]
+ 251              		.loc 1 179 0
+ 252 00b8 0835     		adds	r5, r5, #8
+ 253              	.LVL35:
+ 254              	.L8:
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=8)
+ 255              		.loc 1 152 0
+ 256 00ba 0834     		adds	r4, r4, #8
+ 257              	.LVL36:
+ 258 00bc DAE7     		b	.L4
+ 259              	.L9:
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     }
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   }
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Disable Crypto */
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_Cmd(DISABLE);
+ 260              		.loc 1 184 0
+ 261 00be 0020     		movs	r0, #0
+ 262 00c0 FFF7FEFF 		bl	CRYP_Cmd
+ 263              	.LVL37:
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   return status; 
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** }
+ 264              		.loc 1 187 0
+ 265 00c4 3046     		mov	r0, r6
+ 266 00c6 0DB0     		add	sp, sp, #52
+ 267 00c8 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 268              		.cfi_endproc
+ 269              	.LFE56:
+ 271              		.section	.text.CRYP_TDES_CBC,"ax",%progbits
+ 272              		.align	1
+ 273              		.global	CRYP_TDES_CBC
+ 274              		.thumb
+ 275              		.thumb_func
+ 277              	CRYP_TDES_CBC:
+ 278              	.LFB57:
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** /**
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @brief  Encrypt and decrypt using TDES in CBC Mode
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Mode: encryption or decryption Mode.
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *           This parameter can be one of the following values:
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *            @arg MODE_ENCRYPT: Encryption
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *            @arg MODE_DECRYPT: Decryption
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Key: Key used for TDES algorithm.
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  InitVectors: Initialisation Vectors used for TDES algorithm.
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Input: pointer to the Input buffer.
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Ilength: length of the Input buffer, must be a multiple of 8.
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @param  Output: pointer to the returned buffer.
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   * @retval An ErrorStatus enumeration value:
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          - SUCCESS: Operation done
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   *          - ERROR: Operation failed
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   */
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** ErrorStatus CRYP_TDES_CBC(uint8_t Mode, uint8_t Key[24], uint8_t InitVectors[8],
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****                           uint8_t *Input, uint32_t Ilength, uint8_t *Output)
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** {
+ 279              		.loc 1 206 0
+ 280              		.cfi_startproc
+ 281              		@ args = 8, pretend = 0, frame = 64
+ 282              		@ frame_needed = 0, uses_anonymous_args = 0
+ 283              	.LVL38:
+ 284 0000 2DE9F045 		push	{r4, r5, r6, r7, r8, sl, lr}
+ 285              	.LCFI2:
+ 286              		.cfi_def_cfa_offset 28
+ 287              		.cfi_offset 4, -28
+ 288              		.cfi_offset 5, -24
+ 289              		.cfi_offset 6, -20
+ 290              		.cfi_offset 7, -16
+ 291              		.cfi_offset 8, -12
+ 292              		.cfi_offset 10, -8
+ 293              		.cfi_offset 14, -4
+ 294 0004 91B0     		sub	sp, sp, #68
+ 295              	.LCFI3:
+ 296              		.cfi_def_cfa_offset 96
+ 297              		.loc 1 206 0
+ 298 0006 8246     		mov	sl, r0
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_InitTypeDef TDES_CRYP_InitStructure;
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_KeyInitTypeDef TDES_CRYP_KeyInitStructure;
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_IVInitTypeDef TDES_CRYP_IVInitStructure;
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   __IO uint32_t counter = 0;
+ 299              		.loc 1 210 0
+ 300 0008 0026     		movs	r6, #0
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t busystatus = 0;
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ErrorStatus status = SUCCESS;
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t keyaddr    = (uint32_t)Key;
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t ivaddr     = (uint32_t)InitVectors;
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t i = 0;
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Crypto structures initialisation*/
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_KeyStructInit(&TDES_CRYP_KeyInitStructure);
+ 301              		.loc 1 220 0
+ 302 000a 08A8     		add	r0, sp, #32
+ 303              	.LVL39:
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** {
+ 304              		.loc 1 206 0
+ 305 000c 0C46     		mov	r4, r1
+ 306 000e 1746     		mov	r7, r2
+ 307 0010 9846     		mov	r8, r3
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   __IO uint32_t counter = 0;
+ 308              		.loc 1 210 0
+ 309 0012 0196     		str	r6, [sp, #4]
+ 310              	.LVL40:
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 311              		.loc 1 215 0
+ 312 0014 199D     		ldr	r5, [sp, #100]
+ 313              	.LVL41:
+ 314              		.loc 1 220 0
+ 315 0016 FFF7FEFF 		bl	CRYP_KeyStructInit
+ 316              	.LVL42:
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Crypto Init for Encryption process */
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   if(Mode == MODE_ENCRYPT) /* TDES encryption */
+ 317              		.loc 1 223 0
+ 318 001a BAF1010F 		cmp	sl, #1
+ 319 001e 02D1     		bne	.L15
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   {
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     TDES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Encrypt;
+ 320              		.loc 1 225 0
+ 321 0020 ADF80860 		strh	r6, [sp, #8]	@ movhi
+ 322 0024 02E0     		b	.L16
+ 323              	.L15:
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   }
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   else
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   {
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     TDES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 324              		.loc 1 229 0
+ 325 0026 0423     		movs	r3, #4
+ 326 0028 ADF80830 		strh	r3, [sp, #8]	@ movhi
+ 327              	.L16:
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   }
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_TDES_CBC;
+ 328              		.loc 1 231 0
+ 329 002c 0820     		movs	r0, #8
+ 330 002e ADF80A00 		strh	r0, [sp, #10]	@ movhi
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 331              		.loc 1 232 0
+ 332 0032 8021     		movs	r1, #128
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_Init(&TDES_CRYP_InitStructure);
+ 333              		.loc 1 234 0
+ 334 0034 02A8     		add	r0, sp, #8
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 335              		.loc 1 232 0
+ 336 0036 ADF80C10 		strh	r1, [sp, #12]	@ movhi
+ 337              		.loc 1 234 0
+ 338 003a FFF7FEFF 		bl	CRYP_Init
+ 339              	.LVL43:
+ 340              	.LBB42:
+ 341              	.LBB43:
+ 342              		.loc 2 369 0
+ 343 003e 2268     		ldr	r2, [r4, #0]
+ 344              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 345 0040 13BA     		rev r3, r2
+ 346              	@ 0 "" 2
+ 347              	.LVL44:
+ 348              		.thumb
+ 349              	.LBE43:
+ 350              	.LBE42:
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Key Initialisation */
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+ 351              		.loc 1 237 0
+ 352 0042 0A93     		str	r3, [sp, #40]
+ 353              	.LVL45:
+ 354              	.LBB44:
+ 355              	.LBB45:
+ 356              		.loc 2 369 0
+ 357 0044 6068     		ldr	r0, [r4, #4]
+ 358              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 359 0046 01BA     		rev r1, r0
+ 360              	@ 0 "" 2
+ 361              	.LVL46:
+ 362              		.thumb
+ 363              	.LBE45:
+ 364              	.LBE44:
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 365              		.loc 1 239 0
+ 366 0048 0B91     		str	r1, [sp, #44]
+ 367              	.LVL47:
+ 368              	.LBB46:
+ 369              	.LBB47:
+ 370              		.loc 2 369 0
+ 371 004a A268     		ldr	r2, [r4, #8]
+ 372              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 373 004c 13BA     		rev r3, r2
+ 374              	@ 0 "" 2
+ 375              	.LVL48:
+ 376              		.thumb
+ 377              	.LBE47:
+ 378              	.LBE46:
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 379              		.loc 1 241 0
+ 380 004e 0C93     		str	r3, [sp, #48]
+ 381              	.LVL49:
+ 382              	.LBB48:
+ 383              	.LBB49:
+ 384              		.loc 2 369 0
+ 385 0050 E068     		ldr	r0, [r4, #12]
+ 386              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 387 0052 01BA     		rev r1, r0
+ 388              	@ 0 "" 2
+ 389              	.LVL50:
+ 390              		.thumb
+ 391              	.LBE49:
+ 392              	.LBE48:
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 393              		.loc 1 243 0
+ 394 0054 0D91     		str	r1, [sp, #52]
+ 395              	.LVL51:
+ 396              	.LBB50:
+ 397              	.LBB51:
+ 398              		.loc 2 369 0
+ 399 0056 2269     		ldr	r2, [r4, #16]
+ 400              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 401 0058 13BA     		rev r3, r2
+ 402              	@ 0 "" 2
+ 403              	.LVL52:
+ 404              		.thumb
+ 405              	.LBE51:
+ 406              	.LBE50:
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 407              		.loc 1 245 0
+ 408 005a 0E93     		str	r3, [sp, #56]
+ 409              	.LVL53:
+ 410              	.LBB52:
+ 411              	.LBB53:
+ 412              		.loc 2 369 0
+ 413 005c 6469     		ldr	r4, [r4, #20]
+ 414              	.LVL54:
+ 415              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 416 005e 20BA     		rev r0, r4
+ 417              	@ 0 "" 2
+ 418              	.LVL55:
+ 419              		.thumb
+ 420              	.LBE53:
+ 421              	.LBE52:
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   keyaddr+=4;
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 422              		.loc 1 247 0
+ 423 0060 0F90     		str	r0, [sp, #60]
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_KeyInit(& TDES_CRYP_KeyInitStructure);
+ 424              		.loc 1 248 0
+ 425 0062 08A8     		add	r0, sp, #32
+ 426              	.LVL56:
+ 427 0064 FFF7FEFF 		bl	CRYP_KeyInit
+ 428              	.LVL57:
+ 429              	.LBB54:
+ 430              	.LBB55:
+ 431              		.loc 2 369 0
+ 432 0068 3968     		ldr	r1, [r7, #0]
+ 433              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 434 006a 0ABA     		rev r2, r1
+ 435              	@ 0 "" 2
+ 436              	.LVL58:
+ 437              		.thumb
+ 438              	.LBE55:
+ 439              	.LBE54:
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Initialization Vectors */
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_IVInitStructure.CRYP_IV0Left = __REV(*(uint32_t*)(ivaddr));
+ 440              		.loc 1 251 0
+ 441 006c 0492     		str	r2, [sp, #16]
+ 442              	.LVL59:
+ 443              	.LBB56:
+ 444              	.LBB57:
+ 445              		.loc 2 369 0
+ 446 006e 7F68     		ldr	r7, [r7, #4]
+ 447              	.LVL60:
+ 448              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 449 0070 3BBA     		rev r3, r7
+ 450              	@ 0 "" 2
+ 451              	.LVL61:
+ 452              		.thumb
+ 453              	.LBE57:
+ 454              	.LBE56:
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ivaddr+=4;
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_IVInitStructure.CRYP_IV0Right= __REV(*(uint32_t*)(ivaddr));
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_IVInit(&TDES_CRYP_IVInitStructure);
+ 455              		.loc 1 254 0
+ 456 0072 04A8     		add	r0, sp, #16
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   TDES_CRYP_IVInitStructure.CRYP_IV0Right= __REV(*(uint32_t*)(ivaddr));
+ 457              		.loc 1 253 0
+ 458 0074 0593     		str	r3, [sp, #20]
+ 459              		.loc 1 254 0
+ 460 0076 FFF7FEFF 		bl	CRYP_IVInit
+ 461              	.LVL62:
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Flush IN/OUT FIFO */
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_FIFOFlush();
+ 462              		.loc 1 257 0
+ 463 007a FFF7FEFF 		bl	CRYP_FIFOFlush
+ 464              	.LVL63:
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Enable Crypto processor */
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_Cmd(ENABLE);
+ 465              		.loc 1 260 0
+ 466 007e 0120     		movs	r0, #1
+ 467 0080 FFF7FEFF 		bl	CRYP_Cmd
+ 468              	.LVL64:
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=8)
+ 469              		.loc 1 262 0
+ 470 0084 0024     		movs	r4, #0
+ 471              	.LVL65:
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   ErrorStatus status = SUCCESS;
+ 472              		.loc 1 212 0
+ 473 0086 0127     		movs	r7, #1
+ 474              	.LVL66:
+ 475              	.L17:
+ 476              		.loc 1 262 0 discriminator 1
+ 477 0088 1898     		ldr	r0, [sp, #96]
+ 478 008a 8442     		cmp	r4, r0
+ 479 008c 24D2     		bcs	.L22
+ 480              		.loc 1 262 0 is_stmt 0 discriminator 2
+ 481 008e 1FB3     		cbz	r7, .L22
+ 482              	.L23:
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   {
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     /* Write the Input block in the Input FIFO */
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 483              		.loc 1 265 0 is_stmt 1
+ 484 0090 58F80400 		ldr	r0, [r8, r4]
+ 485 0094 FFF7FEFF 		bl	CRYP_DataIn
+ 486              	.LVL67:
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** ErrorStatus CRYP_TDES_CBC(uint8_t Mode, uint8_t Key[24], uint8_t InitVectors[8],
+ 487              		.loc 1 204 0
+ 488 0098 08EB0401 		add	r1, r8, r4
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     inputaddr+=4;
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 489              		.loc 1 267 0
+ 490 009c 4868     		ldr	r0, [r1, #4]
+ 491 009e FFF7FEFF 		bl	CRYP_DataIn
+ 492              	.LVL68:
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     inputaddr+=4;
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     /* Wait until the complete message has been processed */
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     counter = 0;
+ 493              		.loc 1 271 0
+ 494 00a2 0022     		movs	r2, #0
+ 495 00a4 0192     		str	r2, [sp, #4]
+ 496              	.LVL69:
+ 497              	.L19:
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     do
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     {
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 498              		.loc 1 274 0 discriminator 1
+ 499 00a6 1020     		movs	r0, #16
+ 500 00a8 FFF7FEFF 		bl	CRYP_GetFlagStatus
+ 501              	.LVL70:
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       counter++;
+ 502              		.loc 1 275 0 discriminator 1
+ 503 00ac 019F     		ldr	r7, [sp, #4]
+ 504 00ae 7B1C     		adds	r3, r7, #1
+ 505              	.LVL71:
+ 506 00b0 0193     		str	r3, [sp, #4]
+ 507              	.LVL72:
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     }while ((counter != TDESBUSY_TIMEOUT) && (busystatus != RESET));
+ 508              		.loc 1 276 0 discriminator 1
+ 509 00b2 0199     		ldr	r1, [sp, #4]
+ 510 00b4 B1F5803F 		cmp	r1, #65536
+ 511 00b8 02D0     		beq	.L18
+ 512 00ba 0028     		cmp	r0, #0
+ 513 00bc F3D1     		bne	.L19
+ 514 00be 01E0     		b	.L20
+ 515              	.L18:
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     if (busystatus != RESET)
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****    {
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****        status = ERROR;
+ 516              		.loc 1 280 0
+ 517 00c0 0027     		movs	r7, #0
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     if (busystatus != RESET)
+ 518              		.loc 1 278 0
+ 519 00c2 38B9     		cbnz	r0, .L21
+ 520              	.L20:
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     }
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     else
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     {
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       /* Read the Output block from the Output FIFO */
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 521              		.loc 1 286 0
+ 522 00c4 FFF7FEFF 		bl	CRYP_DataOut
+ 523              	.LVL73:
+ 524 00c8 2860     		str	r0, [r5, #0]
+ 525              	.LVL74:
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       outputaddr+=4;
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 526              		.loc 1 288 0
+ 527 00ca FFF7FEFF 		bl	CRYP_DataOut
+ 528              	.LVL75:
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       outputaddr+=4;
+ 529              		.loc 1 289 0
+ 530 00ce 0127     		movs	r7, #1
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 531              		.loc 1 288 0
+ 532 00d0 6860     		str	r0, [r5, #4]
+ 533              		.loc 1 289 0
+ 534 00d2 0835     		adds	r5, r5, #8
+ 535              	.LVL76:
+ 536              	.L21:
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=8)
+ 537              		.loc 1 262 0
+ 538 00d4 0834     		adds	r4, r4, #8
+ 539              	.LVL77:
+ 540 00d6 D7E7     		b	.L17
+ 541              	.L22:
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****     }
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   }
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   /* Disable Crypto */
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   CRYP_Cmd(DISABLE);
+ 542              		.loc 1 294 0
+ 543 00d8 0020     		movs	r0, #0
+ 544 00da FFF7FEFF 		bl	CRYP_Cmd
+ 545              	.LVL78:
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** 
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c ****   return status; 
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_tdes.c **** }
+ 546              		.loc 1 297 0
+ 547 00de 3846     		mov	r0, r7
+ 548 00e0 11B0     		add	sp, sp, #68
+ 549 00e2 BDE8F085 		pop	{r4, r5, r6, r7, r8, sl, pc}
+ 550              		.cfi_endproc
+ 551              	.LFE57:
+ 553              		.text
+ 554              	.Letext0:
+ 555              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 556              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 557              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_cryp.h"
+ 558              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_cryp_tdes.c
+C:\Users\STINA\AppData\Local\Temp\cc9HJWXh.s:19     .text.CRYP_TDES_ECB:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc9HJWXh.s:24     .text.CRYP_TDES_ECB:00000000 CRYP_TDES_ECB
+C:\Users\STINA\AppData\Local\Temp\cc9HJWXh.s:272    .text.CRYP_TDES_CBC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc9HJWXh.s:277    .text.CRYP_TDES_CBC:00000000 CRYP_TDES_CBC
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CRYP_KeyStructInit
+CRYP_Init
+CRYP_KeyInit
+CRYP_FIFOFlush
+CRYP_Cmd
+CRYP_DataIn
+CRYP_GetFlagStatus
+CRYP_DataOut
+CRYP_IVInit

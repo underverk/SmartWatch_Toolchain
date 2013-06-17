@@ -1,0 +1,586 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_wwdg.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.WWDG_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	WWDG_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	WWDG_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_wwdg.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @file    stm32f2xx_wwdg.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          functionalities of the Window watchdog (WWDG) peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *           - Prescaler, Refresh window and Counter configuration
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *           - WWDG activation
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *           - Interrupts and flags management
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *  @verbatim
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *    
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          ===================================================================
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                                     WWDG features
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          ===================================================================
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                                        
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          Once enabled the WWDG generates a system reset on expiry of a programmed
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          time period, unless the program refreshes the counter (downcounter) 
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          before to reach 0x3F value (i.e. a reset is generated when the counter
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          value rolls over from 0x40 to 0x3F). 
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          An MCU reset is also generated if the counter value is refreshed
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          before the counter has reached the refresh window value. This 
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          implies that the counter must be refreshed in a limited window.
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *            
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          Once enabled the WWDG cannot be disabled except by a system reset.                    
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          WWDGRST flag in RCC_CSR register can be used to inform when a WWDG
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          reset occurs.
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *            
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          The WWDG counter input clock is derived from the APB clock divided 
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          by a programmable prescaler.
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *              
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          WWDG counter clock = PCLK1 / Prescaler
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          WWDG timeout = (WWDG counter clock) * (counter value)
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                      
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          Min-max timeout value @30 MHz(PCLK1): ~136.5 us / ~69.9 ms
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                            
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          ===================================================================
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                                 How to use this driver
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          =================================================================== 
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          1. Enable WWDG clock using RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE) functio
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *            
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          2. Configure the WWDG prescaler using WWDG_SetPrescaler() function
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                           
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          3. Configure the WWDG refresh window using WWDG_SetWindowValue() function
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *            
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          4. Set the WWDG counter value and start it using WWDG_Enable() function.
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             When the WWDG is enabled the counter value should be configured to 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             a value greater than 0x40 to prevent generating an immediate reset.     
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *            
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          5. Optionally you can enable the Early wakeup interrupt which is 
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             generated when the counter reach 0x40.
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             Once enabled this interrupt cannot be disabled except by a system reset.
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                 
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *          6. Then the application program must refresh the WWDG counter at regular
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             intervals during normal operation to prevent an MCU reset, using
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             WWDG_SetCounter() function. This operation must occur only when
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             the counter value is lower than the refresh window value, 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *             programmed using WWDG_SetWindowValue().         
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *  @endverbatim  
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *                             
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   ******************************************************************************
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @attention
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * You may not use this file except in compliance with the License.
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * You may obtain a copy of the License at:
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * Unless required by applicable law or agreed to in writing, software 
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * See the License for the specific language governing permissions and
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * limitations under the License.
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   ******************************************************************************
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Includes ------------------------------------------------------------------*/
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #include "stm32f2xx_wwdg.h"
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #include "stm32f2xx_rcc.h"
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @{
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /** @defgroup WWDG 
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief WWDG driver modules
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @{
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Private typedef -----------------------------------------------------------*/
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Private define ------------------------------------------------------------*/
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* ----------- WWDG registers bit address in the alias region ----------- */
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #define WWDG_OFFSET       (WWDG_BASE - PERIPH_BASE)
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Alias word address of EWI bit */
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #define CFR_OFFSET        (WWDG_OFFSET + 0x04)
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #define EWI_BitNumber     0x09
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #define CFR_EWI_BB        (PERIPH_BB_BASE + (CFR_OFFSET * 32) + (EWI_BitNumber * 4))
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* --------------------- WWDG registers bit mask ------------------------ */
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* CFR register bit mask */
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #define CFR_WDGTB_MASK    ((uint32_t)0xFFFFFE7F)
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #define CFR_W_MASK        ((uint32_t)0xFFFFFF80)
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** #define BIT_MASK          ((uint8_t)0x7F)
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Private macro -------------------------------------------------------------*/
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Private variables ---------------------------------------------------------*/
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Private function prototypes -----------------------------------------------*/
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /* Private functions ---------------------------------------------------------*/
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /** @defgroup WWDG_Private_Functions
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @{
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /** @defgroup WWDG_Group1 Prescaler, Refresh window and Counter configuration functions
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  *  @brief   Prescaler, Refresh window and Counter configuration functions 
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  *
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** @verbatim   
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  ===============================================================================
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****           Prescaler, Refresh window and Counter configuration functions
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  ===============================================================================  
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** @endverbatim
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @{
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Deinitializes the WWDG peripheral registers to their default reset values.
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  None
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval None
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** void WWDG_DeInit(void)
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+  27              		.loc 1 141 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, ENABLE);
+  31              		.loc 1 142 0
+  32 0000 0121     		movs	r1, #1
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+  33              		.loc 1 141 0
+  34 0002 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+  39              		.loc 1 142 0
+  40 0004 4FF40060 		mov	r0, #2048
+  41 0008 FFF7FEFF 		bl	RCC_APB1PeriphResetCmd
+  42              	.LVL0:
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, DISABLE);
+  43              		.loc 1 143 0
+  44 000c 4FF40060 		mov	r0, #2048
+  45 0010 0021     		movs	r1, #0
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** }
+  46              		.loc 1 144 0
+  47 0012 BDE80840 		pop	{r3, lr}
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, DISABLE);
+  48              		.loc 1 143 0
+  49 0016 FFF7FEBF 		b	RCC_APB1PeriphResetCmd
+  50              	.LVL1:
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.WWDG_SetPrescaler,"ax",%progbits
+  55              		.align	1
+  56              		.global	WWDG_SetPrescaler
+  57              		.thumb
+  58              		.thumb_func
+  60              	WWDG_SetPrescaler:
+  61              	.LFB57:
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Sets the WWDG Prescaler.
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  WWDG_Prescaler: specifies the WWDG Prescaler.
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *   This parameter can be one of the following values:
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *     @arg WWDG_Prescaler_1: WWDG counter clock = (PCLK1/4096)/1
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *     @arg WWDG_Prescaler_2: WWDG counter clock = (PCLK1/4096)/2
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *     @arg WWDG_Prescaler_4: WWDG counter clock = (PCLK1/4096)/4
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *     @arg WWDG_Prescaler_8: WWDG counter clock = (PCLK1/4096)/8
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval None
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** void WWDG_SetPrescaler(uint32_t WWDG_Prescaler)
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+  62              		.loc 1 157 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+  67              	.LVL2:
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   uint32_t tmpreg = 0;
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Check the parameters */
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   assert_param(IS_WWDG_PRESCALER(WWDG_Prescaler));
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Clear WDGTB[1:0] bits */
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   tmpreg = WWDG->CFR & CFR_WDGTB_MASK;
+  68              		.loc 1 162 0
+  69 0000 034B     		ldr	r3, .L3
+  70 0002 5A68     		ldr	r2, [r3, #4]
+  71 0004 22F4C071 		bic	r1, r2, #384
+  72              	.LVL3:
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Set WDGTB[1:0] bits according to WWDG_Prescaler value */
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   tmpreg |= WWDG_Prescaler;
+  73              		.loc 1 164 0
+  74 0008 0843     		orrs	r0, r0, r1
+  75              	.LVL4:
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Store the new value */
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   WWDG->CFR = tmpreg;
+  76              		.loc 1 166 0
+  77 000a 5860     		str	r0, [r3, #4]
+  78 000c 7047     		bx	lr
+  79              	.L4:
+  80 000e 00BF     		.align	2
+  81              	.L3:
+  82 0010 002C0040 		.word	1073753088
+  83              		.cfi_endproc
+  84              	.LFE57:
+  86              		.section	.text.WWDG_SetWindowValue,"ax",%progbits
+  87              		.align	1
+  88              		.global	WWDG_SetWindowValue
+  89              		.thumb
+  90              		.thumb_func
+  92              	WWDG_SetWindowValue:
+  93              	.LFB58:
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** }
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Sets the WWDG window value.
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  WindowValue: specifies the window value to be compared to the downcounter.
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *   This parameter value must be lower than 0x80.
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval None
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** void WWDG_SetWindowValue(uint8_t WindowValue)
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+  94              		.loc 1 176 0
+  95              		.cfi_startproc
+  96              		@ args = 0, pretend = 0, frame = 8
+  97              		@ frame_needed = 0, uses_anonymous_args = 0
+  98              		@ link register save eliminated.
+  99              	.LVL5:
+ 100 0000 82B0     		sub	sp, sp, #8
+ 101              	.LCFI1:
+ 102              		.cfi_def_cfa_offset 8
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   __IO uint32_t tmpreg = 0;
+ 103              		.loc 1 177 0
+ 104 0002 0023     		movs	r3, #0
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Check the parameters */
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   assert_param(IS_WWDG_WINDOW_VALUE(WindowValue));
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Clear W[6:0] bits */
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   tmpreg = WWDG->CFR & CFR_W_MASK;
+ 105              		.loc 1 183 0
+ 106 0004 0749     		ldr	r1, .L6
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   __IO uint32_t tmpreg = 0;
+ 107              		.loc 1 177 0
+ 108 0006 0193     		str	r3, [sp, #4]
+ 109              	.LVL6:
+ 110              		.loc 1 183 0
+ 111 0008 4A68     		ldr	r2, [r1, #4]
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Set W[6:0] bits according to WindowValue value */
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   tmpreg |= WindowValue & (uint32_t) BIT_MASK;
+ 112              		.loc 1 186 0
+ 113 000a 00F07F00 		and	r0, r0, #127
+ 114              	.LVL7:
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   tmpreg = WWDG->CFR & CFR_W_MASK;
+ 115              		.loc 1 183 0
+ 116 000e 22F07F03 		bic	r3, r2, #127
+ 117              	.LVL8:
+ 118 0012 0193     		str	r3, [sp, #4]
+ 119              	.LVL9:
+ 120              		.loc 1 186 0
+ 121 0014 019A     		ldr	r2, [sp, #4]
+ 122 0016 40EA0203 		orr	r3, r0, r2
+ 123              	.LVL10:
+ 124 001a 0193     		str	r3, [sp, #4]
+ 125              	.LVL11:
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Store the new value */
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   WWDG->CFR = tmpreg;
+ 126              		.loc 1 189 0
+ 127 001c 019A     		ldr	r2, [sp, #4]
+ 128 001e 4A60     		str	r2, [r1, #4]
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** }
+ 129              		.loc 1 190 0
+ 130 0020 02B0     		add	sp, sp, #8
+ 131 0022 7047     		bx	lr
+ 132              	.L7:
+ 133              		.align	2
+ 134              	.L6:
+ 135 0024 002C0040 		.word	1073753088
+ 136              		.cfi_endproc
+ 137              	.LFE58:
+ 139              		.section	.text.WWDG_EnableIT,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	WWDG_EnableIT
+ 142              		.thumb
+ 143              		.thumb_func
+ 145              	WWDG_EnableIT:
+ 146              	.LFB59:
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Enables the WWDG Early Wakeup interrupt(EWI).
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @note   Once enabled this interrupt cannot be disabled except by a system reset.
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  None
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval None
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** void WWDG_EnableIT(void)
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+ 147              		.loc 1 199 0
+ 148              		.cfi_startproc
+ 149              		@ args = 0, pretend = 0, frame = 0
+ 150              		@ frame_needed = 0, uses_anonymous_args = 0
+ 151              		@ link register save eliminated.
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *(__IO uint32_t *) CFR_EWI_BB = (uint32_t)ENABLE;
+ 152              		.loc 1 200 0
+ 153 0000 014B     		ldr	r3, .L9
+ 154 0002 0122     		movs	r2, #1
+ 155 0004 1A60     		str	r2, [r3, #0]
+ 156 0006 7047     		bx	lr
+ 157              	.L10:
+ 158              		.align	2
+ 159              	.L9:
+ 160 0008 A4800542 		.word	1107656868
+ 161              		.cfi_endproc
+ 162              	.LFE59:
+ 164              		.section	.text.WWDG_SetCounter,"ax",%progbits
+ 165              		.align	1
+ 166              		.global	WWDG_SetCounter
+ 167              		.thumb
+ 168              		.thumb_func
+ 170              	WWDG_SetCounter:
+ 171              	.LFB60:
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** }
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Sets the WWDG counter value.
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  Counter: specifies the watchdog counter value.
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *   This parameter must be a number between 0x40 and 0x7F (to prevent generating
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *   an immediate reset) 
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval None
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** void WWDG_SetCounter(uint8_t Counter)
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+ 172              		.loc 1 211 0
+ 173              		.cfi_startproc
+ 174              		@ args = 0, pretend = 0, frame = 0
+ 175              		@ frame_needed = 0, uses_anonymous_args = 0
+ 176              		@ link register save eliminated.
+ 177              	.LVL12:
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Check the parameters */
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   assert_param(IS_WWDG_COUNTER(Counter));
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Write to T[6:0] bits to configure the counter value, no need to do
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****      a read-modify-write; writing a 0 to WDGA bit does nothing */
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   WWDG->CR = Counter & BIT_MASK;
+ 178              		.loc 1 216 0
+ 179 0000 024B     		ldr	r3, .L12
+ 180 0002 00F07F00 		and	r0, r0, #127
+ 181              	.LVL13:
+ 182 0006 1860     		str	r0, [r3, #0]
+ 183 0008 7047     		bx	lr
+ 184              	.L13:
+ 185 000a 00BF     		.align	2
+ 186              	.L12:
+ 187 000c 002C0040 		.word	1073753088
+ 188              		.cfi_endproc
+ 189              	.LFE60:
+ 191              		.section	.text.WWDG_Enable,"ax",%progbits
+ 192              		.align	1
+ 193              		.global	WWDG_Enable
+ 194              		.thumb
+ 195              		.thumb_func
+ 197              	WWDG_Enable:
+ 198              	.LFB61:
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** }
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @}
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /** @defgroup WWDG_Group2 WWDG activation functions
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  *  @brief   WWDG activation functions 
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  *
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** @verbatim   
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  ===============================================================================
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****                        WWDG activation function
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  ===============================================================================  
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** @endverbatim
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @{
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Enables WWDG and load the counter value.                  
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  Counter: specifies the watchdog counter value.
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *   This parameter must be a number between 0x40 and 0x7F (to prevent generating
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   *   an immediate reset)
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval None
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** void WWDG_Enable(uint8_t Counter)
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+ 199              		.loc 1 242 0
+ 200              		.cfi_startproc
+ 201              		@ args = 0, pretend = 0, frame = 0
+ 202              		@ frame_needed = 0, uses_anonymous_args = 0
+ 203              		@ link register save eliminated.
+ 204              	.LVL14:
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   /* Check the parameters */
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   assert_param(IS_WWDG_COUNTER(Counter));
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   WWDG->CR = WWDG_CR_WDGA | Counter;
+ 205              		.loc 1 245 0
+ 206 0000 024B     		ldr	r3, .L15
+ 207 0002 40F08000 		orr	r0, r0, #128
+ 208              	.LVL15:
+ 209 0006 1860     		str	r0, [r3, #0]
+ 210 0008 7047     		bx	lr
+ 211              	.L16:
+ 212 000a 00BF     		.align	2
+ 213              	.L15:
+ 214 000c 002C0040 		.word	1073753088
+ 215              		.cfi_endproc
+ 216              	.LFE61:
+ 218              		.section	.text.WWDG_GetFlagStatus,"ax",%progbits
+ 219              		.align	1
+ 220              		.global	WWDG_GetFlagStatus
+ 221              		.thumb
+ 222              		.thumb_func
+ 224              	WWDG_GetFlagStatus:
+ 225              	.LFB62:
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** }
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @}
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /** @defgroup WWDG_Group3 Interrupts and flags management functions
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  *  @brief   Interrupts and flags management functions 
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  *
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** @verbatim   
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  ===============================================================================
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****                  Interrupts and flags management functions
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****  ===============================================================================  
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** @endverbatim
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @{
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Checks whether the Early Wakeup interrupt flag is set or not.
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  None
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval The new state of the Early Wakeup interrupt flag (SET or RESET)
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** FlagStatus WWDG_GetFlagStatus(void)
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+ 226              		.loc 1 269 0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 0
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 230              		@ link register save eliminated.
+ 231              	.LVL16:
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   FlagStatus bitstatus = RESET;
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****     
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   if ((WWDG->SR) != (uint32_t)RESET)
+ 232              		.loc 1 272 0
+ 233 0000 024B     		ldr	r3, .L18
+ 234 0002 9868     		ldr	r0, [r3, #8]
+ 235              	.LVL17:
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   {
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****     bitstatus = SET;
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   }
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   else
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   {
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****     bitstatus = RESET;
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   }
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   return bitstatus;
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** }
+ 236              		.loc 1 281 0
+ 237 0004 0030     		adds	r0, r0, #0
+ 238 0006 18BF     		it	ne
+ 239 0008 0120     		movne	r0, #1
+ 240              	.LVL18:
+ 241 000a 7047     		bx	lr
+ 242              	.L19:
+ 243              		.align	2
+ 244              	.L18:
+ 245 000c 002C0040 		.word	1073753088
+ 246              		.cfi_endproc
+ 247              	.LFE62:
+ 249              		.section	.text.WWDG_ClearFlag,"ax",%progbits
+ 250              		.align	1
+ 251              		.global	WWDG_ClearFlag
+ 252              		.thumb
+ 253              		.thumb_func
+ 255              	WWDG_ClearFlag:
+ 256              	.LFB63:
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** 
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** /**
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @brief  Clears Early Wakeup interrupt flag.
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @param  None
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   * @retval None
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   */
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** void WWDG_ClearFlag(void)
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c **** {
+ 257              		.loc 1 289 0
+ 258              		.cfi_startproc
+ 259              		@ args = 0, pretend = 0, frame = 0
+ 260              		@ frame_needed = 0, uses_anonymous_args = 0
+ 261              		@ link register save eliminated.
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_wwdg.c ****   WWDG->SR = (uint32_t)RESET;
+ 262              		.loc 1 290 0
+ 263 0000 014B     		ldr	r3, .L21
+ 264 0002 0022     		movs	r2, #0
+ 265 0004 9A60     		str	r2, [r3, #8]
+ 266 0006 7047     		bx	lr
+ 267              	.L22:
+ 268              		.align	2
+ 269              	.L21:
+ 270 0008 002C0040 		.word	1073753088
+ 271              		.cfi_endproc
+ 272              	.LFE63:
+ 274              		.text
+ 275              	.Letext0:
+ 276              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 277              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 278              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 279              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_wwdg.c
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:19     .text.WWDG_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:24     .text.WWDG_DeInit:00000000 WWDG_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:55     .text.WWDG_SetPrescaler:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:60     .text.WWDG_SetPrescaler:00000000 WWDG_SetPrescaler
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:82     .text.WWDG_SetPrescaler:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:87     .text.WWDG_SetWindowValue:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:92     .text.WWDG_SetWindowValue:00000000 WWDG_SetWindowValue
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:135    .text.WWDG_SetWindowValue:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:140    .text.WWDG_EnableIT:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:145    .text.WWDG_EnableIT:00000000 WWDG_EnableIT
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:160    .text.WWDG_EnableIT:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:165    .text.WWDG_SetCounter:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:170    .text.WWDG_SetCounter:00000000 WWDG_SetCounter
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:187    .text.WWDG_SetCounter:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:192    .text.WWDG_Enable:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:197    .text.WWDG_Enable:00000000 WWDG_Enable
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:214    .text.WWDG_Enable:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:219    .text.WWDG_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:224    .text.WWDG_GetFlagStatus:00000000 WWDG_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:245    .text.WWDG_GetFlagStatus:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:250    .text.WWDG_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:255    .text.WWDG_ClearFlag:00000000 WWDG_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccSJmSRQ.s:270    .text.WWDG_ClearFlag:00000008 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_APB1PeriphResetCmd

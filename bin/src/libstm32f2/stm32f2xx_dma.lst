@@ -1,0 +1,2273 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_dma.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.DMA_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	DMA_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	DMA_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_dma.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @file    stm32f2xx_dma.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          functionalities of the Direct Memory Access controller (DMA):           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - Initialization and Configuration
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - Data Counter
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - Double Buffer mode configuration and command  
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - Interrupts and flags management
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *  @verbatim
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *      
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          ===================================================================      
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                                 How to use this driver
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          =================================================================== 
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          1. Enable The DMA controller clock using RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_DMA1, E
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             function for DMA1 or using RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_DMA2, ENABLE)
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             function for DMA2.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          2. Enable and configure the peripheral to be connected to the DMA Stream
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             (except for internal SRAM / FLASH memories: no initialization is 
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             necessary). 
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          3. For a given Stream, program the required configuration through following parameters
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             Source and Destination addresses, Transfer Direction, Transfer size, Source and Des
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             data formats, Circular or Normal mode, Stream Priority level, Source and Destinatio
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             Incrementation mode, FIFO mode and its Threshold (if needed), Burst mode for Source
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             Destination (if needed) using the DMA_Init() function.
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             To avoid filling un-nesecessary fields, you can call DMA_StructInit() function
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             to initialize a given structure with default values (reset values), the modify
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             only necessary fields (ie. Source and Destination addresses, Transfer size and Data
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          4. Enable the NVIC and the corresponding interrupt(s) using the function 
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             DMA_ITConfig() if you need to use DMA interrupts. 
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          5. Optionally, if the Circular mode is enabled, you can use the Double buffer mode by 
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             the second Memory address and the first Memory to be used through the function 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             DMA_DoubleBufferModeConfig(). Then enable the Double buffer mode through the functi
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             DMA_DoubleBufferModeCmd(). These operations must be done before step 6.
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *    
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          6. Enable the DMA stream using the DMA_Cmd() function. 
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          7. Activate the needed Stream Request using PPP_DMACmd() function for
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             any PPP peripheral except internal SRAM and FLASH (ie. SPI, USART ...)
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             The function allowing this operation is provided in each PPP peripheral
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             driver (ie. SPI_DMACmd for SPI peripheral).
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             Once the Stream is enabled, it is not possible to modify its configuration
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             unless the stream is stopped and disabled.
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             After enabling the Stream, it is advised to monitor the EN bit status using
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             the function DMA_GetCmdStatus(). In case of configuration errors or bus errors
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             this bit will remain reset and all transfers on this Stream will remain on hold.   
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          8. Optionally, you can configure the number of data to be transferred
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             when the Stream is disabled (ie. after each Transfer Complete event
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             or when a Transfer Error occurs) using the function DMA_SetCurrDataCounter().
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             And you can get the number of remaining data to be transferred using 
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             the function DMA_GetCurrDataCounter() at run time (when the DMA Stream is
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *             enabled and running).  
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                   
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          9. To control DMA events you can use one of the following 
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              two methods:
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *               a- Check on DMA Stream flags using the function DMA_GetFlagStatus().  
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *               b- Use DMA interrupts through the function DMA_ITConfig() at initialization
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                  phase and DMA_GetITStatus() function into interrupt routines in
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                  communication phase.  
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              After checking on a flag you should clear it using DMA_ClearFlag()
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              function. And after checking on an interrupt event you should 
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              clear it using DMA_ClearITPendingBit() function.    
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          10. Optionally, if Circular mode and Double Buffer mode are enabled, you can modify
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              the Memory Addresses using the function DMA_MemoryTargetConfig(). Make sure that
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              the Memory Address to be modified is not the one currently in use by DMA Stream.
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              This condition can be monitored using the function DMA_GetCurrentMemoryTarget().
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          11. Optionally, Pause-Resume operations may be performed:
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              The DMA_Cmd() function may be used to perform Pause-Resume operation. When a 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              transfer is ongoing, calling this function to disable the Stream will cause the 
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              transfer to be paused. All configuration registers and the number of remaining 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              data will be preserved. When calling again this function to re-enable the Stream, 
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *              the transfer will be resumed from the point where it was paused.          
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                 
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   Memory-to-Memory transfer is possible by setting the address of the memory into
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         the Peripheral registers. In this mode, Circular mode and Double Buffer mode
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         are not allowed.
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *  
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   The FIFO is used mainly to reduce bus usage and to allow data packing/unpacking: it is
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         possible to set different Data Sizes for the Peripheral and the Memory (ie. you can set
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         Half-Word data size for the peripheral to access its data register and set Word data si
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         for the Memory to gain in access time. Each two Half-words will be packed and written i
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         a single access to a Word in the Memory).
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *    
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note  When FIFO is disabled, it is not allowed to configure different Data Sizes for Source
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        and Destination. In this case the Peripheral Data Size will be applied to both Source
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        and Destination.               
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *  @endverbatim
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                                  
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   ******************************************************************************
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @attention
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * You may not use this file except in compliance with the License.
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * You may obtain a copy of the License at:
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * Unless required by applicable law or agreed to in writing, software 
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * See the License for the specific language governing permissions and
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * limitations under the License.
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   ******************************************************************************
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Includes ------------------------------------------------------------------*/
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #include "stm32f2xx_dma.h"
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #include "stm32f2xx_rcc.h"
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @{
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /** @defgroup DMA 
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief DMA driver modules
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @{
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */ 
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Private typedef -----------------------------------------------------------*/
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Private define ------------------------------------------------------------*/
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Masks Definition */
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define TRANSFER_IT_ENABLE_MASK (uint32_t)(DMA_SxCR_TCIE | DMA_SxCR_HTIE | \
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                                            DMA_SxCR_TEIE | DMA_SxCR_DMEIE)
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream0_IT_MASK     (uint32_t)(DMA_LISR_FEIF0 | DMA_LISR_DMEIF0 | \
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                                            DMA_LISR_TEIF0 | DMA_LISR_HTIF0 | \
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                                            DMA_LISR_TCIF0)
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream1_IT_MASK     (uint32_t)(DMA_Stream0_IT_MASK << 6)
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream2_IT_MASK     (uint32_t)(DMA_Stream0_IT_MASK << 16)
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream3_IT_MASK     (uint32_t)(DMA_Stream0_IT_MASK << 22)
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream4_IT_MASK     (uint32_t)(DMA_Stream0_IT_MASK | (uint32_t)0x20000000)
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream5_IT_MASK     (uint32_t)(DMA_Stream1_IT_MASK | (uint32_t)0x20000000)
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream6_IT_MASK     (uint32_t)(DMA_Stream2_IT_MASK | (uint32_t)0x20000000)
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define DMA_Stream7_IT_MASK     (uint32_t)(DMA_Stream3_IT_MASK | (uint32_t)0x20000000)
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define TRANSFER_IT_MASK        (uint32_t)0x0F3C0F3C
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define HIGH_ISR_MASK           (uint32_t)0x20000000
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** #define RESERVED_MASK           (uint32_t)0x0F7D0F7D  
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Private macro -------------------------------------------------------------*/
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Private variables ---------------------------------------------------------*/
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Private function prototypes -----------------------------------------------*/
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /* Private functions ---------------------------------------------------------*/
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /** @defgroup DMA_Private_Functions
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @{
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /** @defgroup DMA_Group1 Initialization and Configuration functions
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *  @brief   Initialization and Configuration functions
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @verbatim   
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                  Initialization and Configuration functions
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================  
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   This subsection provides functions allowing to initialize the DMA Stream source
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   and destination addresses, incrementation and data sizes, transfer direction, 
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   buffer size, circular/normal mode selection, memory-to-memory mode selection 
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   and Stream priority value.
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The DMA_Init() function follows the DMA configuration procedures as described in
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   reference manual (RM0033) except the first point: waiting on EN bit to be reset.
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   This condition should be checked by user application using the function DMA_GetCmdStatus()
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   before calling the DMA_Init() function.
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @endverbatim
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @{
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Deinitialize the DMAy Streamx registers to their default reset values.
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         to 7 to select the DMA Stream.
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_DeInit(DMA_Stream_TypeDef* DMAy_Streamx)
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+  27              		.loc 1 195 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Disable the selected DMAy Streamx */
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->CR &= ~((uint32_t)DMA_SxCR_EN);
+  33              		.loc 1 200 0
+  34 0000 0368     		ldr	r3, [r0, #0]
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Reset DMAy Streamx control register */
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->CR  = 0;
+  35              		.loc 1 203 0
+  36 0002 0022     		movs	r2, #0
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->CR &= ~((uint32_t)DMA_SxCR_EN);
+  37              		.loc 1 200 0
+  38 0004 23F00101 		bic	r1, r3, #1
+  39 0008 0160     		str	r1, [r0, #0]
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Reset DMAy Streamx Number of Data to Transfer register */
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->NDTR = 0;
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Reset DMAy Streamx peripheral address register */
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->PAR  = 0;
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Reset DMAy Streamx memory 0 address register */
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->M0AR = 0;
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Reset DMAy Streamx memory 1 address register */
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->M1AR = 0;
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Reset DMAy Streamx FIFO control register */
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->FCR = (uint32_t)0x00000021; 
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Reset interrupt pending bits for the selected stream */
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMAy_Streamx == DMA1_Stream0)
+  40              		.loc 1 221 0
+  41 000a 2D49     		ldr	r1, .L27
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->FCR = (uint32_t)0x00000021; 
+  42              		.loc 1 218 0
+  43 000c 2123     		movs	r3, #33
+  44              		.loc 1 221 0
+  45 000e 8842     		cmp	r0, r1
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->CR  = 0;
+  46              		.loc 1 203 0
+  47 0010 0260     		str	r2, [r0, #0]
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->NDTR = 0;
+  48              		.loc 1 206 0
+  49 0012 4260     		str	r2, [r0, #4]
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->PAR  = 0;
+  50              		.loc 1 209 0
+  51 0014 8260     		str	r2, [r0, #8]
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->M0AR = 0;
+  52              		.loc 1 212 0
+  53 0016 C260     		str	r2, [r0, #12]
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->M1AR = 0;
+  54              		.loc 1 215 0
+  55 0018 0261     		str	r2, [r0, #16]
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->FCR = (uint32_t)0x00000021; 
+  56              		.loc 1 218 0
+  57 001a 4361     		str	r3, [r0, #20]
+  58              		.loc 1 221 0
+  59 001c 17D0     		beq	.L18
+  60              	.L2:
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream0 */
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->LIFCR = DMA_Stream0_IT_MASK;
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA1_Stream1)
+  61              		.loc 1 226 0
+  62 001e 294B     		ldr	r3, .L27+4
+  63 0020 9842     		cmp	r0, r3
+  64 0022 1BD0     		beq	.L19
+  65              	.L4:
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream1 */
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->LIFCR = DMA_Stream1_IT_MASK;
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA1_Stream2)
+  66              		.loc 1 231 0
+  67 0024 2849     		ldr	r1, .L27+8
+  68 0026 8842     		cmp	r0, r1
+  69 0028 20D0     		beq	.L20
+  70              	.L5:
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream2 */
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->LIFCR = DMA_Stream2_IT_MASK;
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA1_Stream3)
+  71              		.loc 1 236 0
+  72 002a 284B     		ldr	r3, .L27+12
+  73 002c 9842     		cmp	r0, r3
+  74 002e 25D0     		beq	.L21
+  75              	.L6:
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream3 */
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->LIFCR = DMA_Stream3_IT_MASK;
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA1_Stream4)
+  76              		.loc 1 241 0
+  77 0030 2749     		ldr	r1, .L27+16
+  78 0032 8842     		cmp	r0, r1
+  79 0034 2AD0     		beq	.L22
+  80              	.L7:
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream4 */
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->HIFCR = DMA_Stream4_IT_MASK;
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA1_Stream5)
+  81              		.loc 1 246 0
+  82 0036 274B     		ldr	r3, .L27+20
+  83 0038 9842     		cmp	r0, r3
+  84 003a 2ED0     		beq	.L23
+  85              	.L8:
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream5 */
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->HIFCR = DMA_Stream5_IT_MASK;
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA1_Stream6)
+  86              		.loc 1 251 0
+  87 003c 2649     		ldr	r1, .L27+24
+  88 003e 8842     		cmp	r0, r1
+  89 0040 32D0     		beq	.L24
+  90              	.L9:
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream6 */
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->HIFCR = (uint32_t)DMA_Stream6_IT_MASK;
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA1_Stream7)
+  91              		.loc 1 256 0
+  92 0042 264B     		ldr	r3, .L27+28
+  93 0044 9842     		cmp	r0, r3
+  94 0046 36D0     		beq	.L25
+  95              	.L10:
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA1 Stream7 */
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA1->HIFCR = DMA_Stream7_IT_MASK;
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA2_Stream0)
+  96              		.loc 1 261 0
+  97 0048 2549     		ldr	r1, .L27+32
+  98 004a 8842     		cmp	r0, r1
+  99 004c 03D1     		bne	.L11
+ 100              	.L18:
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA2 Stream0 */
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA2->LIFCR = DMA_Stream0_IT_MASK;
+ 101              		.loc 1 264 0
+ 102 004e 3D23     		movs	r3, #61
+ 103 0050 41F8083C 		str	r3, [r1, #-8]
+ 104 0054 7047     		bx	lr
+ 105              	.L11:
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA2_Stream1)
+ 106              		.loc 1 266 0
+ 107 0056 234B     		ldr	r3, .L27+36
+ 108 0058 9842     		cmp	r0, r3
+ 109 005a 04D1     		bne	.L12
+ 110              	.L19:
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA2 Stream1 */
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA2->LIFCR = DMA_Stream1_IT_MASK;
+ 111              		.loc 1 269 0
+ 112 005c 4FF47461 		mov	r1, #3904
+ 113 0060 43F8201C 		str	r1, [r3, #-32]
+ 114 0064 7047     		bx	lr
+ 115              	.L12:
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA2_Stream2)
+ 116              		.loc 1 271 0
+ 117 0066 2049     		ldr	r1, .L27+40
+ 118 0068 8842     		cmp	r0, r1
+ 119 006a 04D1     		bne	.L13
+ 120              	.L20:
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA2 Stream2 */
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA2->LIFCR = DMA_Stream2_IT_MASK;
+ 121              		.loc 1 274 0
+ 122 006c 4FF47412 		mov	r2, #3997696
+ 123 0070 41F8382C 		str	r2, [r1, #-56]
+ 124 0074 7047     		bx	lr
+ 125              	.L13:
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA2_Stream3)
+ 126              		.loc 1 276 0
+ 127 0076 1D4B     		ldr	r3, .L27+44
+ 128 0078 9842     		cmp	r0, r3
+ 129 007a 04D1     		bne	.L14
+ 130              	.L21:
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA2 Stream3 */
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA2->LIFCR = DMA_Stream3_IT_MASK;
+ 131              		.loc 1 279 0
+ 132 007c 4FF07460 		mov	r0, #255852544
+ 133              	.LVL1:
+ 134 0080 43F8500C 		str	r0, [r3, #-80]
+ 135 0084 7047     		bx	lr
+ 136              	.LVL2:
+ 137              	.L14:
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA2_Stream4)
+ 138              		.loc 1 281 0
+ 139 0086 1A49     		ldr	r1, .L27+48
+ 140 0088 8842     		cmp	r0, r1
+ 141 008a 03D1     		bne	.L15
+ 142              	.L22:
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA2 Stream4 */
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA2->HIFCR = DMA_Stream4_IT_MASK;
+ 143              		.loc 1 284 0
+ 144 008c 194B     		ldr	r3, .L27+52
+ 145 008e 41F8643C 		str	r3, [r1, #-100]
+ 146 0092 7047     		bx	lr
+ 147              	.L15:
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA2_Stream5)
+ 148              		.loc 1 286 0
+ 149 0094 184B     		ldr	r3, .L27+56
+ 150 0096 9842     		cmp	r0, r3
+ 151 0098 03D1     		bne	.L16
+ 152              	.L23:
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA2 Stream5 */
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA2->HIFCR = DMA_Stream5_IT_MASK;
+ 153              		.loc 1 289 0
+ 154 009a 1849     		ldr	r1, .L27+60
+ 155 009c 43F87C1C 		str	r1, [r3, #-124]
+ 156 00a0 7047     		bx	lr
+ 157              	.L16:
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else if (DMAy_Streamx == DMA2_Stream6)
+ 158              		.loc 1 291 0
+ 159 00a2 1749     		ldr	r1, .L27+64
+ 160 00a4 8842     		cmp	r0, r1
+ 161 00a6 03D1     		bne	.L17
+ 162              	.L24:
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Reset interrupt pending bits for DMA2 Stream6 */
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMA2->HIFCR = DMA_Stream6_IT_MASK;
+ 163              		.loc 1 294 0
+ 164 00a8 164A     		ldr	r2, .L27+68
+ 165 00aa 41F8942C 		str	r2, [r1, #-148]
+ 166 00ae 7047     		bx	lr
+ 167              	.L17:
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     if (DMAy_Streamx == DMA2_Stream7)
+ 168              		.loc 1 298 0
+ 169 00b0 154B     		ldr	r3, .L27+72
+ 170 00b2 9842     		cmp	r0, r3
+ 171 00b4 03D1     		bne	.L1
+ 172              	.L25:
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     {
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       /* Reset interrupt pending bits for DMA2 Stream7 */
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMA2->HIFCR = DMA_Stream7_IT_MASK;
+ 173              		.loc 1 301 0
+ 174 00b6 4FF03D50 		mov	r0, #792723456
+ 175              	.LVL3:
+ 176 00ba 43F8AC0C 		str	r0, [r3, #-172]
+ 177              	.L1:
+ 178 00be 7047     		bx	lr
+ 179              	.L28:
+ 180              		.align	2
+ 181              	.L27:
+ 182 00c0 10600240 		.word	1073897488
+ 183 00c4 28600240 		.word	1073897512
+ 184 00c8 40600240 		.word	1073897536
+ 185 00cc 58600240 		.word	1073897560
+ 186 00d0 70600240 		.word	1073897584
+ 187 00d4 88600240 		.word	1073897608
+ 188 00d8 A0600240 		.word	1073897632
+ 189 00dc B8600240 		.word	1073897656
+ 190 00e0 10640240 		.word	1073898512
+ 191 00e4 28640240 		.word	1073898536
+ 192 00e8 40640240 		.word	1073898560
+ 193 00ec 58640240 		.word	1073898584
+ 194 00f0 70640240 		.word	1073898608
+ 195 00f4 3D000020 		.word	536870973
+ 196 00f8 88640240 		.word	1073898632
+ 197 00fc 400F0020 		.word	536874816
+ 198 0100 A0640240 		.word	1073898656
+ 199 0104 00003D20 		.word	540868608
+ 200 0108 B8640240 		.word	1073898680
+ 201              		.cfi_endproc
+ 202              	.LFE56:
+ 204              		.section	.text.DMA_Init,"ax",%progbits
+ 205              		.align	1
+ 206              		.global	DMA_Init
+ 207              		.thumb
+ 208              		.thumb_func
+ 210              	DMA_Init:
+ 211              	.LFB57:
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     }
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Initializes the DMAy Streamx according to the specified parameters in 
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         the DMA_InitStruct structure.
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   Before calling this function, it is recommended to check that the Stream 
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         is actually disabled using the function DMA_GetCmdStatus().  
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         to 7 to select the DMA Stream.
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_InitStruct: pointer to a DMA_InitTypeDef structure that contains
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         the configuration information for the specified DMA Stream.  
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_Init(DMA_Stream_TypeDef* DMAy_Streamx, DMA_InitTypeDef* DMA_InitStruct)
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 212              		.loc 1 318 0
+ 213              		.cfi_startproc
+ 214              		@ args = 0, pretend = 0, frame = 0
+ 215              		@ frame_needed = 0, uses_anonymous_args = 0
+ 216              	.LVL4:
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   uint32_t tmpreg = 0;
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_CHANNEL(DMA_InitStruct->DMA_Channel));
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_DIRECTION(DMA_InitStruct->DMA_DIR));
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_BUFFER_SIZE(DMA_InitStruct->DMA_BufferSize));
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_PERIPHERAL_INC_STATE(DMA_InitStruct->DMA_PeripheralInc));
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_MEMORY_INC_STATE(DMA_InitStruct->DMA_MemoryInc));
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_PERIPHERAL_DATA_SIZE(DMA_InitStruct->DMA_PeripheralDataSize));
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_MEMORY_DATA_SIZE(DMA_InitStruct->DMA_MemoryDataSize));
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_MODE(DMA_InitStruct->DMA_Mode));
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_PRIORITY(DMA_InitStruct->DMA_Priority));
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_FIFO_MODE_STATE(DMA_InitStruct->DMA_FIFOMode));
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_FIFO_THRESHOLD(DMA_InitStruct->DMA_FIFOThreshold));
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_MEMORY_BURST(DMA_InitStruct->DMA_MemoryBurst));
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_PERIPHERAL_BURST(DMA_InitStruct->DMA_PeripheralBurst));
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /*------------------------- DMAy Streamx CR Configuration ------------------*/
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Get the DMAy_Streamx CR value */
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg = DMAy_Streamx->CR;
+ 217              		.loc 1 339 0
+ 218 0000 0268     		ldr	r2, [r0, #0]
+ 219              	.LVL5:
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Clear CHSEL, MBURST, PBURST, PL, MSIZE, PSIZE, MINC, PINC, CIRC and DIR bits */
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg &= ((uint32_t)~(DMA_SxCR_CHSEL | DMA_SxCR_MBURST | DMA_SxCR_PBURST | \
+ 220              		.loc 1 342 0
+ 221 0002 134B     		ldr	r3, .L30
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 222              		.loc 1 318 0
+ 223 0004 10B5     		push	{r4, lr}
+ 224              	.LCFI0:
+ 225              		.cfi_def_cfa_offset 8
+ 226              		.cfi_offset 4, -8
+ 227              		.cfi_offset 14, -4
+ 228              		.loc 1 342 0
+ 229 0006 1340     		ands	r3, r3, r2
+ 230              	.LVL6:
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                          DMA_SxCR_PL | DMA_SxCR_MSIZE | DMA_SxCR_PSIZE | \
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                          DMA_SxCR_MINC | DMA_SxCR_PINC | DMA_SxCR_CIRC | \
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                          DMA_SxCR_DIR));
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Configure DMAy Streamx: */
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set CHSEL bits according to DMA_CHSEL value */
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set DIR bits according to DMA_DIR value */
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set PINC bit according to DMA_PeripheralInc value */
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set MINC bit according to DMA_MemoryInc value */
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set PSIZE bits according to DMA_PeripheralDataSize value */
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set MSIZE bits according to DMA_MemoryDataSize value */
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set CIRC bit according to DMA_Mode value */
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set PL bits according to DMA_Priority value */
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set MBURST bits according to DMA_MemoryBurst value */
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Set PBURST bits according to DMA_PeripheralBurst value */
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg |= DMA_InitStruct->DMA_Channel | DMA_InitStruct->DMA_DIR |
+ 231              		.loc 1 358 0
+ 232 0008 CC68     		ldr	r4, [r1, #12]
+ 233 000a 0A68     		ldr	r2, [r1, #0]
+ 234 000c 1443     		orrs	r4, r4, r2
+ 235 000e 4A69     		ldr	r2, [r1, #20]
+ 236 0010 1443     		orrs	r4, r4, r2
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****             DMA_InitStruct->DMA_PeripheralInc | DMA_InitStruct->DMA_MemoryInc |
+ 237              		.loc 1 359 0
+ 238 0012 8A69     		ldr	r2, [r1, #24]
+ 239 0014 1443     		orrs	r4, r4, r2
+ 240 0016 CA69     		ldr	r2, [r1, #28]
+ 241 0018 1443     		orrs	r4, r4, r2
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****             DMA_InitStruct->DMA_PeripheralDataSize | DMA_InitStruct->DMA_MemoryDataSize |
+ 242              		.loc 1 360 0
+ 243 001a 0A6A     		ldr	r2, [r1, #32]
+ 244 001c 1443     		orrs	r4, r4, r2
+ 245 001e 4A6A     		ldr	r2, [r1, #36]
+ 246 0020 1443     		orrs	r4, r4, r2
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****             DMA_InitStruct->DMA_Mode | DMA_InitStruct->DMA_Priority |
+ 247              		.loc 1 361 0
+ 248 0022 8A6A     		ldr	r2, [r1, #40]
+ 249 0024 1443     		orrs	r4, r4, r2
+ 250 0026 4A6B     		ldr	r2, [r1, #52]
+ 251 0028 1443     		orrs	r4, r4, r2
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****             DMA_InitStruct->DMA_MemoryBurst | DMA_InitStruct->DMA_PeripheralBurst;
+ 252              		.loc 1 362 0
+ 253 002a 8A6B     		ldr	r2, [r1, #56]
+ 254 002c 1443     		orrs	r4, r4, r2
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg |= DMA_InitStruct->DMA_Channel | DMA_InitStruct->DMA_DIR |
+ 255              		.loc 1 358 0
+ 256 002e 2343     		orrs	r3, r3, r4
+ 257              	.LVL7:
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Write to DMAy Streamx CR register */
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->CR = tmpreg;
+ 258              		.loc 1 365 0
+ 259 0030 0360     		str	r3, [r0, #0]
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /*------------------------- DMAy Streamx FCR Configuration -----------------*/
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Get the DMAy_Streamx FCR value */
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg = DMAy_Streamx->FCR;
+ 260              		.loc 1 369 0
+ 261 0032 4269     		ldr	r2, [r0, #20]
+ 262              	.LVL8:
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Clear DMDIS and FTH bits */
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg &= (uint32_t)~(DMA_SxFCR_DMDIS | DMA_SxFCR_FTH);
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Configure DMAy Streamx FIFO: 
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     Set DMDIS bits according to DMA_FIFOMode value 
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     Set FTH bits according to DMA_FIFOThreshold value */
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg |= DMA_InitStruct->DMA_FIFOMode | DMA_InitStruct->DMA_FIFOThreshold;
+ 263              		.loc 1 377 0
+ 264 0034 CB6A     		ldr	r3, [r1, #44]
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg &= (uint32_t)~(DMA_SxFCR_DMDIS | DMA_SxFCR_FTH);
+ 265              		.loc 1 372 0
+ 266 0036 22F00704 		bic	r4, r2, #7
+ 267              	.LVL9:
+ 268              		.loc 1 377 0
+ 269 003a 0A6B     		ldr	r2, [r1, #48]
+ 270 003c 1A43     		orrs	r2, r2, r3
+ 271 003e 2243     		orrs	r2, r2, r4
+ 272              	.LVL10:
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Write to DMAy Streamx CR */
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->FCR = tmpreg;
+ 273              		.loc 1 380 0
+ 274 0040 4261     		str	r2, [r0, #20]
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /*------------------------- DMAy Streamx NDTR Configuration ----------------*/
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Write to DMAy Streamx NDTR register */
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->NDTR = DMA_InitStruct->DMA_BufferSize;
+ 275              		.loc 1 384 0
+ 276 0042 0B69     		ldr	r3, [r1, #16]
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /*------------------------- DMAy Streamx PAR Configuration -----------------*/
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Write to DMAy Streamx PAR */
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->PAR = DMA_InitStruct->DMA_PeripheralBaseAddr;
+ 277              		.loc 1 388 0
+ 278 0044 4A68     		ldr	r2, [r1, #4]
+ 279              	.LVL11:
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /*------------------------- DMAy Streamx M0AR Configuration ----------------*/
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Write to DMAy Streamx M0AR */
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->M0AR = DMA_InitStruct->DMA_Memory0BaseAddr;
+ 280              		.loc 1 392 0
+ 281 0046 8968     		ldr	r1, [r1, #8]
+ 282              	.LVL12:
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->NDTR = DMA_InitStruct->DMA_BufferSize;
+ 283              		.loc 1 384 0
+ 284 0048 4360     		str	r3, [r0, #4]
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->PAR = DMA_InitStruct->DMA_PeripheralBaseAddr;
+ 285              		.loc 1 388 0
+ 286 004a 8260     		str	r2, [r0, #8]
+ 287              		.loc 1 392 0
+ 288 004c C160     		str	r1, [r0, #12]
+ 289 004e 10BD     		pop	{r4, pc}
+ 290              	.L31:
+ 291              		.align	2
+ 292              	.L30:
+ 293 0050 3F801CF0 		.word	-266567617
+ 294              		.cfi_endproc
+ 295              	.LFE57:
+ 297              		.section	.text.DMA_StructInit,"ax",%progbits
+ 298              		.align	1
+ 299              		.global	DMA_StructInit
+ 300              		.thumb
+ 301              		.thumb_func
+ 303              	DMA_StructInit:
+ 304              	.LFB58:
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Fills each DMA_InitStruct member with its default value.
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_InitStruct : pointer to a DMA_InitTypeDef structure which will 
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         be initialized.
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_StructInit(DMA_InitTypeDef* DMA_InitStruct)
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 305              		.loc 1 402 0
+ 306              		.cfi_startproc
+ 307              		@ args = 0, pretend = 0, frame = 0
+ 308              		@ frame_needed = 0, uses_anonymous_args = 0
+ 309              		@ link register save eliminated.
+ 310              	.LVL13:
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /*-------------- Reset DMA init structure parameters values ----------------*/
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_Channel member */
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_Channel = 0;
+ 311              		.loc 1 405 0
+ 312 0000 0023     		movs	r3, #0
+ 313 0002 0360     		str	r3, [r0, #0]
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_PeripheralBaseAddr member */
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_PeripheralBaseAddr = 0;
+ 314              		.loc 1 408 0
+ 315 0004 4360     		str	r3, [r0, #4]
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_Memory0BaseAddr member */
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_Memory0BaseAddr = 0;
+ 316              		.loc 1 411 0
+ 317 0006 8360     		str	r3, [r0, #8]
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_DIR member */
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_DIR = DMA_DIR_PeripheralToMemory;
+ 318              		.loc 1 414 0
+ 319 0008 C360     		str	r3, [r0, #12]
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_BufferSize member */
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_BufferSize = 0;
+ 320              		.loc 1 417 0
+ 321 000a 0361     		str	r3, [r0, #16]
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_PeripheralInc member */
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+ 322              		.loc 1 420 0
+ 323 000c 4361     		str	r3, [r0, #20]
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_MemoryInc member */
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_MemoryInc = DMA_MemoryInc_Disable;
+ 324              		.loc 1 423 0
+ 325 000e 8361     		str	r3, [r0, #24]
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_PeripheralDataSize member */
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+ 326              		.loc 1 426 0
+ 327 0010 C361     		str	r3, [r0, #28]
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_MemoryDataSize member */
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+ 328              		.loc 1 429 0
+ 329 0012 0362     		str	r3, [r0, #32]
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_Mode member */
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_Mode = DMA_Mode_Normal;
+ 330              		.loc 1 432 0
+ 331 0014 4362     		str	r3, [r0, #36]
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_Priority member */
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_Priority = DMA_Priority_Low;
+ 332              		.loc 1 435 0
+ 333 0016 8362     		str	r3, [r0, #40]
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_FIFOMode member */
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_FIFOMode = DMA_FIFOMode_Disable;
+ 334              		.loc 1 438 0
+ 335 0018 C362     		str	r3, [r0, #44]
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_FIFOThreshold member */
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_FIFOThreshold = DMA_FIFOThreshold_1QuarterFull;
+ 336              		.loc 1 441 0
+ 337 001a 0363     		str	r3, [r0, #48]
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_MemoryBurst member */
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_MemoryBurst = DMA_MemoryBurst_Single;
+ 338              		.loc 1 444 0
+ 339 001c 4363     		str	r3, [r0, #52]
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Initialize the DMA_PeripheralBurst member */
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_InitStruct->DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+ 340              		.loc 1 447 0
+ 341 001e 8363     		str	r3, [r0, #56]
+ 342 0020 7047     		bx	lr
+ 343              		.cfi_endproc
+ 344              	.LFE58:
+ 346              		.section	.text.DMA_Cmd,"ax",%progbits
+ 347              		.align	1
+ 348              		.global	DMA_Cmd
+ 349              		.thumb
+ 350              		.thumb_func
+ 352              	DMA_Cmd:
+ 353              	.LFB59:
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Enables or disables the specified DMAy Streamx.
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         to 7 to select the DMA Stream.
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  NewState: new state of the DMAy Streamx. 
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note  This function may be used to perform Pause-Resume operation. When a
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        transfer is ongoing, calling this function to disable the Stream will
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        cause the transfer to be paused. All configuration registers and the
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        number of remaining data will be preserved. When calling again this
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        function to re-enable the Stream, the transfer will be resumed from
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        the point where it was paused.          
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *    
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note  After configuring the DMA Stream (DMA_Init() function) and enabling the
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        stream, it is recommended to check (or wait until) the DMA Stream is
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        effectively enabled. A Stream may remain disabled if a configuration 
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        parameter is wrong.
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        After disabling a DMA Stream, it is also recommended to check (or wait
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        until) the DMA Stream is effectively disabled. If a Stream is disabled 
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        while a data transfer is ongoing, the current data will be transferred
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        and the Stream will be effectively disabled only after the transfer of
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *        this single data is finished.            
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *    
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_Cmd(DMA_Stream_TypeDef* DMAy_Streamx, FunctionalState NewState)
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 354              		.loc 1 477 0
+ 355              		.cfi_startproc
+ 356              		@ args = 0, pretend = 0, frame = 0
+ 357              		@ frame_needed = 0, uses_anonymous_args = 0
+ 358              		@ link register save eliminated.
+ 359              	.LVL14:
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (NewState != DISABLE)
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Enable the selected DMAy Streamx by setting EN bit */
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR |= (uint32_t)DMA_SxCR_EN;
+ 360              		.loc 1 485 0
+ 361 0000 0368     		ldr	r3, [r0, #0]
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (NewState != DISABLE)
+ 362              		.loc 1 482 0
+ 363 0002 11B1     		cbz	r1, .L34
+ 364              		.loc 1 485 0
+ 365 0004 43F00101 		orr	r1, r3, #1
+ 366              	.LVL15:
+ 367 0008 01E0     		b	.L36
+ 368              	.LVL16:
+ 369              	.L34:
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Disable the selected DMAy Streamx by clearing EN bit */
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR &= ~(uint32_t)DMA_SxCR_EN;
+ 370              		.loc 1 490 0
+ 371 000a 23F00101 		bic	r1, r3, #1
+ 372              	.LVL17:
+ 373              	.L36:
+ 374 000e 0160     		str	r1, [r0, #0]
+ 375 0010 7047     		bx	lr
+ 376              		.cfi_endproc
+ 377              	.LFE59:
+ 379              		.section	.text.DMA_PeriphIncOffsetSizeConfig,"ax",%progbits
+ 380              		.align	1
+ 381              		.global	DMA_PeriphIncOffsetSizeConfig
+ 382              		.thumb
+ 383              		.thumb_func
+ 385              	DMA_PeriphIncOffsetSizeConfig:
+ 386              	.LFB60:
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Configures, when the PINC (Peripheral Increment address mode) bit is
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         set, if the peripheral address should be incremented with the data 
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         size (configured with PSIZE bits) or by a fixed offset equal to 4
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         (32-bit aligned addresses).
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *   
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   This function has no effect if the Peripheral Increment mode is disabled.
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *     
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_Pincos: specifies the Peripheral increment offset size.
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be one of the following values:
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_PINCOS_Psize: Peripheral address increment is done  
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                                   accordingly to PSIZE parameter.
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_PINCOS_WordAligned: Peripheral address increment offset is 
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                                         fixed to 4 (32-bit aligned addresses). 
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_PeriphIncOffsetSizeConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_Pincos)
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 387              		.loc 1 513 0
+ 388              		.cfi_startproc
+ 389              		@ args = 0, pretend = 0, frame = 0
+ 390              		@ frame_needed = 0, uses_anonymous_args = 0
+ 391              		@ link register save eliminated.
+ 392              	.LVL18:
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_PINCOS_SIZE(DMA_Pincos));
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the needed Peripheral increment offset */
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if(DMA_Pincos != DMA_PINCOS_Psize)
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Configure DMA_SxCR_PINCOS bit with the input parameter */
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR |= (uint32_t)DMA_SxCR_PINCOS;     
+ 393              		.loc 1 522 0
+ 394 0000 0368     		ldr	r3, [r0, #0]
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if(DMA_Pincos != DMA_PINCOS_Psize)
+ 395              		.loc 1 519 0
+ 396 0002 11B1     		cbz	r1, .L38
+ 397              		.loc 1 522 0
+ 398 0004 43F40041 		orr	r1, r3, #32768
+ 399              	.LVL19:
+ 400 0008 01E0     		b	.L40
+ 401              	.LVL20:
+ 402              	.L38:
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Clear the PINCOS bit: Peripheral address incremented according to PSIZE */
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR &= ~(uint32_t)DMA_SxCR_PINCOS;    
+ 403              		.loc 1 527 0
+ 404 000a 23F40041 		bic	r1, r3, #32768
+ 405              	.LVL21:
+ 406              	.L40:
+ 407 000e 0160     		str	r1, [r0, #0]
+ 408 0010 7047     		bx	lr
+ 409              		.cfi_endproc
+ 410              	.LFE60:
+ 412              		.section	.text.DMA_FlowControllerConfig,"ax",%progbits
+ 413              		.align	1
+ 414              		.global	DMA_FlowControllerConfig
+ 415              		.thumb
+ 416              		.thumb_func
+ 418              	DMA_FlowControllerConfig:
+ 419              	.LFB61:
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Configures, when the DMAy Streamx is disabled, the flow controller for
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         the next transactions (Peripheral or Memory).
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *       
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   Before enabling this feature, check if the used peripheral supports 
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         the Flow Controller mode or not.    
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *  
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_FlowCtrl: specifies the DMA flow controller.
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be one of the following values:
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FlowCtrl_Memory: DMAy_Streamx transactions flow controller is 
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                                      the DMA controller.
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FlowCtrl_Peripheral: DMAy_Streamx transactions flow controller 
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                                          is the peripheral.    
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_FlowControllerConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FlowCtrl)
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 420              		.loc 1 549 0
+ 421              		.cfi_startproc
+ 422              		@ args = 0, pretend = 0, frame = 0
+ 423              		@ frame_needed = 0, uses_anonymous_args = 0
+ 424              		@ link register save eliminated.
+ 425              	.LVL22:
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_FLOW_CTRL(DMA_FlowCtrl));
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the needed flow controller  */
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if(DMA_FlowCtrl != DMA_FlowCtrl_Memory)
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Configure DMA_SxCR_PFCTRL bit with the input parameter */
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR |= (uint32_t)DMA_SxCR_PFCTRL;   
+ 426              		.loc 1 558 0
+ 427 0000 0368     		ldr	r3, [r0, #0]
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if(DMA_FlowCtrl != DMA_FlowCtrl_Memory)
+ 428              		.loc 1 555 0
+ 429 0002 11B1     		cbz	r1, .L42
+ 430              		.loc 1 558 0
+ 431 0004 43F02001 		orr	r1, r3, #32
+ 432              	.LVL23:
+ 433 0008 01E0     		b	.L44
+ 434              	.LVL24:
+ 435              	.L42:
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Clear the PFCTRL bit: Memory is the flow controller */
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR &= ~(uint32_t)DMA_SxCR_PFCTRL;    
+ 436              		.loc 1 563 0
+ 437 000a 23F02001 		bic	r1, r3, #32
+ 438              	.LVL25:
+ 439              	.L44:
+ 440 000e 0160     		str	r1, [r0, #0]
+ 441 0010 7047     		bx	lr
+ 442              		.cfi_endproc
+ 443              	.LFE61:
+ 445              		.section	.text.DMA_SetCurrDataCounter,"ax",%progbits
+ 446              		.align	1
+ 447              		.global	DMA_SetCurrDataCounter
+ 448              		.thumb
+ 449              		.thumb_func
+ 451              	DMA_SetCurrDataCounter:
+ 452              	.LFB62:
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @}
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /** @defgroup DMA_Group2 Data Counter functions
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *  @brief   Data Counter functions 
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @verbatim   
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                            Data Counter functions
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================  
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   This subsection provides function allowing to configure and read the buffer size
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   (number of data to be transferred). 
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The DMA data counter can be written only when the DMA Stream is disabled 
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   (ie. after transfer complete event).
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The following function can be used to write the Stream data counter value:
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     - void DMA_SetCurrDataCounter(DMA_Stream_TypeDef* DMAy_Streamx, uint16_t Counter);
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @note It is advised to use this function rather than DMA_Init() in situations where
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       only the Data buffer needs to be reloaded.
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @note If the Source and Destination Data Sizes are different, then the value written in
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       data counter, expressing the number of transfers, is relative to the number of 
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       transfers from the Peripheral point of view.
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       ie. If Memory data size is Word, Peripheral data size is Half-Words, then the value
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       to be configured in the data counter is the number of Half-Words to be transferred
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       from/to the peripheral.
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The DMA data counter can be read to indicate the number of remaining transfers for
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   the relative DMA Stream. This counter is decremented at the end of each data 
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   transfer and when the transfer is complete: 
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    - If Normal mode is selected: the counter is set to 0.
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    - If Circular mode is selected: the counter is reloaded with the initial value
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      (configured before enabling the DMA Stream)
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The following function can be used to read the Stream data counter value:
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      - uint16_t DMA_GetCurrDataCounter(DMA_Stream_TypeDef* DMAy_Streamx);
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @endverbatim
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @{
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Writes the number of data units to be transferred on the DMAy Streamx.
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  Counter: Number of data units to be transferred (from 0 to 65535) 
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          Number of data items depends only on the Peripheral data format.
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   If Peripheral data format is Bytes: number of data units is equal 
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         to total number of bytes to be transferred.
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   If Peripheral data format is Half-Word: number of data units is  
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         equal to total number of bytes to be transferred / 2.
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   If Peripheral data format is Word: number of data units is equal 
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         to total  number of bytes to be transferred / 4.
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *      
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   In Memory-to-Memory transfer mode, the memory buffer pointed by 
+ 628:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         DMAy_SxPAR register is considered as Peripheral.
+ 629:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *      
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval The number of remaining data units in the current DMAy Streamx transfer.
+ 631:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 632:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_SetCurrDataCounter(DMA_Stream_TypeDef* DMAy_Streamx, uint16_t Counter)
+ 633:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 453              		.loc 1 633 0
+ 454              		.cfi_startproc
+ 455              		@ args = 0, pretend = 0, frame = 0
+ 456              		@ frame_needed = 0, uses_anonymous_args = 0
+ 457              		@ link register save eliminated.
+ 458              	.LVL26:
+ 634:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 635:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 636:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 637:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Write the number of data units to be transferred */
+ 638:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->NDTR = (uint16_t)Counter;
+ 459              		.loc 1 638 0
+ 460 0000 4160     		str	r1, [r0, #4]
+ 461 0002 7047     		bx	lr
+ 462              		.cfi_endproc
+ 463              	.LFE62:
+ 465              		.section	.text.DMA_GetCurrDataCounter,"ax",%progbits
+ 466              		.align	1
+ 467              		.global	DMA_GetCurrDataCounter
+ 468              		.thumb
+ 469              		.thumb_func
+ 471              	DMA_GetCurrDataCounter:
+ 472              	.LFB63:
+ 639:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 640:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 641:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 642:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Returns the number of remaining data units in the current DMAy Streamx transfer.
+ 643:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 644:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 645:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval The number of remaining data units in the current DMAy Streamx transfer.
+ 646:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 647:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** uint16_t DMA_GetCurrDataCounter(DMA_Stream_TypeDef* DMAy_Streamx)
+ 648:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 473              		.loc 1 648 0
+ 474              		.cfi_startproc
+ 475              		@ args = 0, pretend = 0, frame = 0
+ 476              		@ frame_needed = 0, uses_anonymous_args = 0
+ 477              		@ link register save eliminated.
+ 478              	.LVL27:
+ 649:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 650:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Return the number of remaining data units for DMAy Streamx */
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   return ((uint16_t)(DMAy_Streamx->NDTR));
+ 479              		.loc 1 653 0
+ 480 0000 4068     		ldr	r0, [r0, #4]
+ 481              	.LVL28:
+ 654:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 482              		.loc 1 654 0
+ 483 0002 80B2     		uxth	r0, r0
+ 484 0004 7047     		bx	lr
+ 485              		.cfi_endproc
+ 486              	.LFE63:
+ 488              		.section	.text.DMA_DoubleBufferModeConfig,"ax",%progbits
+ 489              		.align	1
+ 490              		.global	DMA_DoubleBufferModeConfig
+ 491              		.thumb
+ 492              		.thumb_func
+ 494              	DMA_DoubleBufferModeConfig:
+ 495              	.LFB64:
+ 655:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 656:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @}
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /** @defgroup DMA_Group3 Double Buffer mode functions
+ 660:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *  @brief   Double Buffer mode functions 
+ 661:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *
+ 662:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @verbatim   
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                          Double Buffer mode functions
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================  
+ 666:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   This subsection provides function allowing to configure and control the double 
+ 668:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   buffer mode parameters.
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The Double Buffer mode can be used only when Circular mode is enabled.
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The Double Buffer mode cannot be used when transferring data from Memory to Memory.
+ 672:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 673:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The Double Buffer mode allows to set two different Memory addresses from/to which
+ 674:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   the DMA controller will access alternatively (after completing transfer to/from target
+ 675:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   memory 0, it will start transfer to/from target memory 1).
+ 676:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   This allows to reduce software overhead for double buffering and reduce the CPU
+ 677:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   access time.
+ 678:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 679:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   Two functions must be called before calling the DMA_Init() function:
+ 680:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    - void DMA_DoubleBufferModeConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t Memory1BaseAddr,
+ 681:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                                 uint32_t DMA_CurrentMemory);
+ 682:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    - void DMA_DoubleBufferModeCmd(DMA_Stream_TypeDef* DMAy_Streamx, FunctionalState NewState);
+ 683:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    
+ 684:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_DoubleBufferModeConfig() is called to configure the Memory 1 base address and the first
+ 685:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   Memory target from/to which the transfer will start after enabling the DMA Stream.
+ 686:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   Then DMA_DoubleBufferModeCmd() must be called to enable the Double Buffer mode (or disable 
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   it when it should not be used).
+ 688:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 689:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    
+ 690:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   Two functions can be called dynamically when the transfer is ongoing (or when the DMA Stream is 
+ 691:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   stopped) to modify on of the target Memories addresses or to check wich Memory target is currentl
+ 692:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    used:
+ 693:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     - void DMA_MemoryTargetConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t MemoryBaseAddr,
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                             uint32_t DMA_MemoryTarget);
+ 695:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     - uint32_t DMA_GetCurrentMemoryTarget(DMA_Stream_TypeDef* DMAy_Streamx);
+ 696:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 697:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_MemoryTargetConfig() can be called to modify the base address of one of the two target Memori
+ 698:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The Memory of which the base address will be modified must not be currently be used by the DMA St
+ 699:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   (ie. if the DMA Stream is currently transferring from Memory 1 then you can only modify base addr
+ 700:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   of target Memory 0 and vice versa).
+ 701:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   To check this condition, it is recommended to use the function DMA_GetCurrentMemoryTarget() which
+ 702:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   returns the index of the Memory target currently in use by the DMA Stream.
+ 703:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 704:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @endverbatim
+ 705:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @{
+ 706:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 707:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 708:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 709:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Configures, when the DMAy Streamx is disabled, the double buffer mode 
+ 710:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         and the current memory target.
+ 711:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 712:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 713:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  Memory1BaseAddr: the base address of the second buffer (Memory 1)  
+ 714:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_CurrentMemory: specifies which memory will be first buffer for
+ 715:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         the transactions when the Stream will be enabled. 
+ 716:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be one of the following values:
+ 717:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_Memory_0: Memory 0 is the current buffer.
+ 718:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_Memory_1: Memory 1 is the current buffer.  
+ 719:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *       
+ 720:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   Memory0BaseAddr is set by the DMA structure configuration in DMA_Init().
+ 721:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *   
+ 722:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 723:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 724:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_DoubleBufferModeConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t Memory1BaseAddr,
+ 725:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                                 uint32_t DMA_CurrentMemory)
+ 726:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {  
+ 496              		.loc 1 726 0
+ 497              		.cfi_startproc
+ 498              		@ args = 0, pretend = 0, frame = 0
+ 499              		@ frame_needed = 0, uses_anonymous_args = 0
+ 500              		@ link register save eliminated.
+ 501              	.LVL29:
+ 727:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 728:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 729:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_CURRENT_MEM(DMA_CurrentMemory));
+ 730:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 731:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMA_CurrentMemory != DMA_Memory_0)
+ 732:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 733:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Set Memory 1 as current memory address */
+ 734:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR |= (uint32_t)(DMA_SxCR_CT);    
+ 502              		.loc 1 734 0
+ 503 0000 0368     		ldr	r3, [r0, #0]
+ 731:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMA_CurrentMemory != DMA_Memory_0)
+ 504              		.loc 1 731 0
+ 505 0002 12B1     		cbz	r2, .L48
+ 506              		.loc 1 734 0
+ 507 0004 43F40022 		orr	r2, r3, #524288
+ 508              	.LVL30:
+ 509 0008 01E0     		b	.L50
+ 510              	.LVL31:
+ 511              	.L48:
+ 735:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 736:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 737:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 738:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Set Memory 0 as current memory address */
+ 739:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR &= ~(uint32_t)(DMA_SxCR_CT);    
+ 512              		.loc 1 739 0
+ 513 000a 23F40022 		bic	r2, r3, #524288
+ 514              	.LVL32:
+ 515              	.L50:
+ 516 000e 0260     		str	r2, [r0, #0]
+ 740:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 741:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 742:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Write to DMAy Streamx M1AR */
+ 743:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMAy_Streamx->M1AR = Memory1BaseAddr;
+ 517              		.loc 1 743 0
+ 518 0010 0161     		str	r1, [r0, #16]
+ 519 0012 7047     		bx	lr
+ 520              		.cfi_endproc
+ 521              	.LFE64:
+ 523              		.section	.text.DMA_DoubleBufferModeCmd,"ax",%progbits
+ 524              		.align	1
+ 525              		.global	DMA_DoubleBufferModeCmd
+ 526              		.thumb
+ 527              		.thumb_func
+ 529              	DMA_DoubleBufferModeCmd:
+ 530              	.LFB65:
+ 744:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 745:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 746:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 747:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Enables or disables the double buffer mode for the selected DMA stream.
+ 748:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note   This function can be called only when the DMA Stream is disabled.  
+ 749:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 750:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 751:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  NewState: new state of the DMAy Streamx double buffer mode. 
+ 752:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 753:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 754:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 755:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_DoubleBufferModeCmd(DMA_Stream_TypeDef* DMAy_Streamx, FunctionalState NewState)
+ 756:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {  
+ 531              		.loc 1 756 0
+ 532              		.cfi_startproc
+ 533              		@ args = 0, pretend = 0, frame = 0
+ 534              		@ frame_needed = 0, uses_anonymous_args = 0
+ 535              		@ link register save eliminated.
+ 536              	.LVL33:
+ 757:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 758:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 759:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 760:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 761:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Configure the Double Buffer mode */
+ 762:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (NewState != DISABLE)
+ 763:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 764:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Enable the Double buffer mode */
+ 765:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR |= (uint32_t)DMA_SxCR_DBM;
+ 537              		.loc 1 765 0
+ 538 0000 0368     		ldr	r3, [r0, #0]
+ 762:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (NewState != DISABLE)
+ 539              		.loc 1 762 0
+ 540 0002 11B1     		cbz	r1, .L52
+ 541              		.loc 1 765 0
+ 542 0004 43F48021 		orr	r1, r3, #262144
+ 543              	.LVL34:
+ 544 0008 01E0     		b	.L54
+ 545              	.LVL35:
+ 546              	.L52:
+ 766:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 767:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 768:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 769:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Disable the Double buffer mode */
+ 770:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->CR &= ~(uint32_t)DMA_SxCR_DBM;
+ 547              		.loc 1 770 0
+ 548 000a 23F48021 		bic	r1, r3, #262144
+ 549              	.LVL36:
+ 550              	.L54:
+ 551 000e 0160     		str	r1, [r0, #0]
+ 552 0010 7047     		bx	lr
+ 553              		.cfi_endproc
+ 554              	.LFE65:
+ 556              		.section	.text.DMA_MemoryTargetConfig,"ax",%progbits
+ 557              		.align	1
+ 558              		.global	DMA_MemoryTargetConfig
+ 559              		.thumb
+ 560              		.thumb_func
+ 562              	DMA_MemoryTargetConfig:
+ 563              	.LFB66:
+ 771:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 772:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 773:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 774:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 775:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Configures the Memory address for the next buffer transfer in double
+ 776:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         buffer mode (for dynamic use). This function can be called when the
+ 777:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         DMA Stream is enabled and when the transfer is ongoing.  
+ 778:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 779:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 780:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  MemoryBaseAddr: The base address of the target memory buffer
+ 781:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_MemoryTarget: Next memory target to be used. 
+ 782:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         This parameter can be one of the following values:
+ 783:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_Memory_0: To use the memory address 0
+ 784:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_Memory_1: To use the memory address 1
+ 785:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * 
+ 786:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note    It is not allowed to modify the Base Address of a target Memory when
+ 787:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          this target is involved in the current transfer. ie. If the DMA Stream
+ 788:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          is currently transferring to/from Memory 1, then it not possible to
+ 789:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          modify Base address of Memory 1, but it is possible to modify Base
+ 790:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          address of Memory 0.
+ 791:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          To know which Memory is currently used, you can use the function
+ 792:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          DMA_GetCurrentMemoryTarget().             
+ 793:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *  
+ 794:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+ 795:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 796:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_MemoryTargetConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t MemoryBaseAddr,
+ 797:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                            uint32_t DMA_MemoryTarget)
+ 798:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 564              		.loc 1 798 0
+ 565              		.cfi_startproc
+ 566              		@ args = 0, pretend = 0, frame = 0
+ 567              		@ frame_needed = 0, uses_anonymous_args = 0
+ 568              		@ link register save eliminated.
+ 569              	.LVL37:
+ 799:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 800:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 801:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_CURRENT_MEM(DMA_MemoryTarget));
+ 802:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     
+ 803:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the Memory target to be configured */
+ 804:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMA_MemoryTarget != DMA_Memory_0)
+ 570              		.loc 1 804 0
+ 571 0000 0AB1     		cbz	r2, .L56
+ 805:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 806:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Write to DMAy Streamx M1AR */
+ 807:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->M1AR = MemoryBaseAddr;    
+ 572              		.loc 1 807 0
+ 573 0002 0161     		str	r1, [r0, #16]
+ 574 0004 7047     		bx	lr
+ 575              	.L56:
+ 808:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }  
+ 809:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 810:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 811:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Write to DMAy Streamx M0AR */
+ 812:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy_Streamx->M0AR = MemoryBaseAddr;  
+ 576              		.loc 1 812 0
+ 577 0006 C160     		str	r1, [r0, #12]
+ 578 0008 7047     		bx	lr
+ 579              		.cfi_endproc
+ 580              	.LFE66:
+ 582              		.section	.text.DMA_GetCurrentMemoryTarget,"ax",%progbits
+ 583              		.align	1
+ 584              		.global	DMA_GetCurrentMemoryTarget
+ 585              		.thumb
+ 586              		.thumb_func
+ 588              	DMA_GetCurrentMemoryTarget:
+ 589              	.LFB67:
+ 813:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 814:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 815:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 816:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 817:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Returns the current memory target used by double buffer transfer.
+ 818:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 819:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 820:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval The memory target number: 0 for Memory0 or 1 for Memory1. 
+ 821:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 822:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** uint32_t DMA_GetCurrentMemoryTarget(DMA_Stream_TypeDef* DMAy_Streamx)
+ 823:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 590              		.loc 1 823 0
+ 591              		.cfi_startproc
+ 592              		@ args = 0, pretend = 0, frame = 0
+ 593              		@ frame_needed = 0, uses_anonymous_args = 0
+ 594              		@ link register save eliminated.
+ 595              	.LVL38:
+ 824:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   uint32_t tmp = 0;
+ 825:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 826:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 827:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 828:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 829:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Get the current memory target */
+ 830:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMAy_Streamx->CR & DMA_SxCR_CT) != 0)
+ 596              		.loc 1 830 0
+ 597 0000 0068     		ldr	r0, [r0, #0]
+ 598              	.LVL39:
+ 831:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 832:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Current memory buffer used is Memory 1 */
+ 833:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmp = 1;
+ 834:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }  
+ 835:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 836:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 837:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Current memory buffer used is Memory 0 */
+ 838:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmp = 0;    
+ 839:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 840:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   return tmp;
+ 841:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 599              		.loc 1 841 0
+ 600 0002 C0F3C040 		ubfx	r0, r0, #19, #1
+ 601              	.LVL40:
+ 602 0006 7047     		bx	lr
+ 603              		.cfi_endproc
+ 604              	.LFE67:
+ 606              		.section	.text.DMA_GetCmdStatus,"ax",%progbits
+ 607              		.align	1
+ 608              		.global	DMA_GetCmdStatus
+ 609              		.thumb
+ 610              		.thumb_func
+ 612              	DMA_GetCmdStatus:
+ 613              	.LFB68:
+ 842:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 843:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @}
+ 844:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 845:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 846:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /** @defgroup DMA_Group4 Interrupts and flags management functions
+ 847:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *  @brief   Interrupts and flags management functions 
+ 848:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  *
+ 849:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @verbatim   
+ 850:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================
+ 851:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****                   Interrupts and flags management functions
+ 852:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  ===============================================================================  
+ 853:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 854:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   This subsection provides functions allowing to
+ 855:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    - Check the DMA enable status
+ 856:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    - Check the FIFO status 
+ 857:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    - Configure the DMA Interrupts sources and check or clear the flags or pending bits status.   
+ 858:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    
+ 859:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  1. DMA Enable status:
+ 860:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    After configuring the DMA Stream (DMA_Init() function) and enabling the stream,
+ 861:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    it is recommended to check (or wait until) the DMA Stream is effectively enabled.
+ 862:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    A Stream may remain disabled if a configuration parameter is wrong.
+ 863:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    After disabling a DMA Stream, it is also recommended to check (or wait until) the DMA
+ 864:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    Stream is effectively disabled. If a Stream is disabled while a data transfer is ongoing, 
+ 865:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    the current data will be transferred and the Stream will be effectively disabled only after
+ 866:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    this data transfer completion.
+ 867:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    To monitor this state it is possible to use the following function:
+ 868:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      - FunctionalState DMA_GetCmdStatus(DMA_Stream_TypeDef* DMAy_Streamx); 
+ 869:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  
+ 870:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  2. FIFO Status:
+ 871:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    It is possible to monitor the FIFO status when a transfer is ongoing using the following 
+ 872:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    function:
+ 873:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      - uint32_t DMA_GetFIFOStatus(DMA_Stream_TypeDef* DMAy_Streamx); 
+ 874:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  
+ 875:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  3. DMA Interrupts and Flags:
+ 876:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   The user should identify which mode will be used in his application to manage the
+ 877:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA controller events: Polling mode or Interrupt mode. 
+ 878:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     
+ 879:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   Polling Mode
+ 880:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   =============
+ 881:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     Each DMA stream can be managed through 4 event Flags:
+ 882:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     (x : DMA Stream number )
+ 883:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        1. DMA_FLAG_FEIFx  : to indicate that a FIFO Mode Transfer Error event occurred.
+ 884:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        2. DMA_FLAG_DMEIFx : to indicate that a Direct Mode Transfer Error event occurred.
+ 885:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        3. DMA_FLAG_TEIFx  : to indicate that a Transfer Error event occurred.
+ 886:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        4. DMA_FLAG_HTIFx  : to indicate that a Half-Transfer Complete event occurred.
+ 887:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        5. DMA_FLAG_TCIFx  : to indicate that a Transfer Complete event occurred .       
+ 888:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 889:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****    In this Mode it is advised to use the following functions:
+ 890:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       - FlagStatus DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG);
+ 891:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       - void DMA_ClearFlag(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG);
+ 892:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 893:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   Interrupt Mode
+ 894:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   ===============
+ 895:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     Each DMA Stream can be managed through 4 Interrupts:
+ 896:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 897:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     Interrupt Source
+ 898:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     ----------------
+ 899:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        1. DMA_IT_FEIFx  : specifies the interrupt source for the  FIFO Mode Transfer Error event.
+ 900:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        2. DMA_IT_DMEIFx : specifies the interrupt source for the Direct Mode Transfer Error event.
+ 901:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        3. DMA_IT_TEIFx  : specifies the interrupt source for the Transfer Error event.
+ 902:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        4. DMA_IT_HTIFx  : specifies the interrupt source for the Half-Transfer Complete event.
+ 903:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****        5. DMA_IT_TCIFx  : specifies the interrupt source for the a Transfer Complete event. 
+ 904:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      
+ 905:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   In this Mode it is advised to use the following functions:
+ 906:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      - void DMA_ITConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT, FunctionalState NewStat
+ 907:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      - ITStatus DMA_GetITStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT);
+ 908:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****      - void DMA_ClearITPendingBit(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT);
+ 909:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 910:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** @endverbatim
+ 911:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @{
+ 912:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 913:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 914:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 915:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Returns the status of EN bit for the specified DMAy Streamx.
+ 916:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 917:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 918:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *   
+ 919:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @note    After configuring the DMA Stream (DMA_Init() function) and enabling
+ 920:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          the stream, it is recommended to check (or wait until) the DMA Stream
+ 921:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          is effectively enabled. A Stream may remain disabled if a configuration
+ 922:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          parameter is wrong.
+ 923:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          After disabling a DMA Stream, it is also recommended to check (or wait 
+ 924:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          until) the DMA Stream is effectively disabled. If a Stream is disabled
+ 925:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          while a data transfer is ongoing, the current data will be transferred
+ 926:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          and the Stream will be effectively disabled only after the transfer
+ 927:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          of this single data is finished.  
+ 928:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *      
+ 929:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval Current state of the DMAy Streamx (ENABLE or DISABLE).
+ 930:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 931:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** FunctionalState DMA_GetCmdStatus(DMA_Stream_TypeDef* DMAy_Streamx)
+ 932:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 614              		.loc 1 932 0
+ 615              		.cfi_startproc
+ 616              		@ args = 0, pretend = 0, frame = 0
+ 617              		@ frame_needed = 0, uses_anonymous_args = 0
+ 618              		@ link register save eliminated.
+ 619              	.LVL41:
+ 933:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   FunctionalState state = DISABLE;
+ 934:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 935:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 936:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 937:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 938:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMAy_Streamx->CR & (uint32_t)DMA_SxCR_EN) != 0)
+ 620              		.loc 1 938 0
+ 621 0000 0068     		ldr	r0, [r0, #0]
+ 622              	.LVL42:
+ 939:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 940:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* The selected DMAy Streamx EN bit is set (DMA is still transferring) */
+ 941:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     state = ENABLE;
+ 942:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 943:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+ 944:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+ 945:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* The selected DMAy Streamx EN bit is cleared (DMA is disabled and 
+ 946:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****         all transfers are complete) */
+ 947:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     state = DISABLE;
+ 948:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+ 949:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   return state;
+ 950:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 623              		.loc 1 950 0
+ 624 0002 00F00100 		and	r0, r0, #1
+ 625              	.LVL43:
+ 626 0006 7047     		bx	lr
+ 627              		.cfi_endproc
+ 628              	.LFE68:
+ 630              		.section	.text.DMA_GetFIFOStatus,"ax",%progbits
+ 631              		.align	1
+ 632              		.global	DMA_GetFIFOStatus
+ 633              		.thumb
+ 634              		.thumb_func
+ 636              	DMA_GetFIFOStatus:
+ 637              	.LFB69:
+ 951:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 952:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 953:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Returns the current DMAy Streamx FIFO filled level.
+ 954:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0 
+ 955:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         to 7 to select the DMA Stream.
+ 956:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval The FIFO filling state.
+ 957:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - DMA_FIFOStatus_Less1QuarterFull: when FIFO is less than 1 quarter-full 
+ 958:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *                                               and not empty.
+ 959:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - DMA_FIFOStatus_1QuarterFull: if more than 1 quarter-full.
+ 960:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - DMA_FIFOStatus_HalfFull: if more than 1 half-full.
+ 961:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - DMA_FIFOStatus_3QuartersFull: if more than 3 quarters-full.
+ 962:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - DMA_FIFOStatus_Empty: when FIFO is empty
+ 963:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *           - DMA_FIFOStatus_Full: when FIFO is full
+ 964:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 965:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** uint32_t DMA_GetFIFOStatus(DMA_Stream_TypeDef* DMAy_Streamx)
+ 966:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 638              		.loc 1 966 0
+ 639              		.cfi_startproc
+ 640              		@ args = 0, pretend = 0, frame = 0
+ 641              		@ frame_needed = 0, uses_anonymous_args = 0
+ 642              		@ link register save eliminated.
+ 643              	.LVL44:
+ 967:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   uint32_t tmpreg = 0;
+ 968:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  
+ 969:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 970:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+ 971:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 972:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Get the FIFO level bits */
+ 973:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg = (uint32_t)((DMAy_Streamx->FCR & DMA_SxFCR_FS));
+ 644              		.loc 1 973 0
+ 645 0000 4069     		ldr	r0, [r0, #20]
+ 646              	.LVL45:
+ 974:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   
+ 975:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   return tmpreg;
+ 976:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 647              		.loc 1 976 0
+ 648 0002 00F03800 		and	r0, r0, #56
+ 649              	.LVL46:
+ 650 0006 7047     		bx	lr
+ 651              		.cfi_endproc
+ 652              	.LFE69:
+ 654              		.section	.text.DMA_GetFlagStatus,"ax",%progbits
+ 655              		.align	1
+ 656              		.global	DMA_GetFlagStatus
+ 657              		.thumb
+ 658              		.thumb_func
+ 660              	DMA_GetFlagStatus:
+ 661              	.LFB70:
+ 977:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 978:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+ 979:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Checks whether the specified DMAy Streamx flag is set or not.
+ 980:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+ 981:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+ 982:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_FLAG: specifies the flag to check.
+ 983:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be one of the following values:
+ 984:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_TCIFx:  Streamx transfer complete flag
+ 985:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_HTIFx:  Streamx half transfer complete flag
+ 986:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_TEIFx:  Streamx transfer error flag
+ 987:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_DMEIFx: Streamx direct mode error flag
+ 988:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_FEIFx:  Streamx FIFO error flag
+ 989:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         Where x can be 0 to 7 to select the DMA Stream.
+ 990:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval The new state of DMA_FLAG (SET or RESET).
+ 991:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+ 992:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** FlagStatus DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG)
+ 993:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 662              		.loc 1 993 0
+ 663              		.cfi_startproc
+ 664              		@ args = 0, pretend = 0, frame = 0
+ 665              		@ frame_needed = 0, uses_anonymous_args = 0
+ 666              	.LVL47:
+ 994:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   FlagStatus bitstatus = RESET;
+ 995:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_TypeDef* DMAy;
+ 996:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   uint32_t tmpreg = 0;
+ 997:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+ 998:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+ 999:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+1000:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_GET_FLAG(DMA_FLAG));
+1001:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1002:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Determine the DMA to which belongs the stream */
+1003:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMAy_Streamx < DMA2_Stream0)
+1004:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1005:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA1 */
+1006:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA1; 
+ 667              		.loc 1 1006 0
+ 668 0000 0A4B     		ldr	r3, .L66
+ 993:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 669              		.loc 1 993 0
+ 670 0002 10B5     		push	{r4, lr}
+ 671              	.LCFI1:
+ 672              		.cfi_def_cfa_offset 8
+ 673              		.cfi_offset 4, -8
+ 674              		.cfi_offset 14, -4
+ 675              		.loc 1 1006 0
+ 676 0004 0A4A     		ldr	r2, .L66+4
+ 677 0006 0B4C     		ldr	r4, .L66+8
+ 678 0008 A042     		cmp	r0, r4
+ 679 000a 8CBF     		ite	hi
+ 680 000c 1046     		movhi	r0, r2
+ 681 000e 1846     		movls	r0, r3
+ 682              	.LVL48:
+1007:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   } 
+1008:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+1009:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1010:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA2 */
+1011:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA2; 
+1012:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1013:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1014:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check if the flag is in HISR or LISR */
+1015:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMA_FLAG & HIGH_ISR_MASK) != (uint32_t)RESET)
+ 683              		.loc 1 1015 0
+ 684 0010 8B00     		lsls	r3, r1, #2
+1016:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1017:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Get DMAy HISR register value */
+1018:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmpreg = DMAy->HISR;
+ 685              		.loc 1 1018 0
+ 686 0012 4CBF     		ite	mi
+ 687 0014 4368     		ldrmi	r3, [r0, #4]
+ 688              	.LVL49:
+1019:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1020:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+1021:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1022:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Get DMAy LISR register value */
+1023:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmpreg = DMAy->LISR;
+ 689              		.loc 1 1023 0
+ 690 0016 0368     		ldrpl	r3, [r0, #0]
+ 691              	.LVL50:
+1024:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }   
+1025:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  
+1026:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Mask the reserved bits */
+1027:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg &= (uint32_t)RESERVED_MASK;
+ 692              		.loc 1 1027 0
+ 693 0018 21F0F021 		bic	r1, r1, #-268374016
+ 694              	.LVL51:
+ 695 001c 21F08212 		bic	r2, r1, #8519810
+1028:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1029:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the status of the specified DMA flag */
+1030:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((tmpreg & DMA_FLAG) != (uint32_t)RESET)
+ 696              		.loc 1 1030 0
+ 697 0020 1A42     		tst	r2, r3
+1031:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1032:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMA_FLAG is set */
+1033:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     bitstatus = SET;
+1034:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1035:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+1036:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1037:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMA_FLAG is reset */
+1038:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     bitstatus = RESET;
+1039:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1040:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1041:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Return the DMA_FLAG status */
+1042:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   return  bitstatus;
+1043:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 698              		.loc 1 1043 0
+ 699 0022 0CBF     		ite	eq
+ 700 0024 0020     		moveq	r0, #0
+ 701 0026 0120     		movne	r0, #1
+ 702              	.LVL52:
+ 703 0028 10BD     		pop	{r4, pc}
+ 704              	.L67:
+ 705 002a 00BF     		.align	2
+ 706              	.L66:
+ 707 002c 00600240 		.word	1073897472
+ 708 0030 00640240 		.word	1073898496
+ 709 0034 0F640240 		.word	1073898511
+ 710              		.cfi_endproc
+ 711              	.LFE70:
+ 713              		.section	.text.DMA_ClearFlag,"ax",%progbits
+ 714              		.align	1
+ 715              		.global	DMA_ClearFlag
+ 716              		.thumb
+ 717              		.thumb_func
+ 719              	DMA_ClearFlag:
+ 720              	.LFB71:
+1044:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1045:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+1046:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Clears the DMAy Streamx's pending flags.
+1047:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+1048:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+1049:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_FLAG: specifies the flag to clear.
+1050:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be any combination of the following values:
+1051:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_TCIFx:  Streamx transfer complete flag
+1052:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_HTIFx:  Streamx half transfer complete flag
+1053:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_TEIFx:  Streamx transfer error flag
+1054:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_DMEIFx: Streamx direct mode error flag
+1055:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_FLAG_FEIFx:  Streamx FIFO error flag
+1056:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         Where x can be 0 to 7 to select the DMA Stream.   
+1057:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+1058:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+1059:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_ClearFlag(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG)
+1060:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 721              		.loc 1 1060 0
+ 722              		.cfi_startproc
+ 723              		@ args = 0, pretend = 0, frame = 0
+ 724              		@ frame_needed = 0, uses_anonymous_args = 0
+ 725              	.LVL53:
+ 726 0000 10B5     		push	{r4, lr}
+ 727              	.LCFI2:
+ 728              		.cfi_def_cfa_offset 8
+ 729              		.cfi_offset 4, -8
+ 730              		.cfi_offset 14, -4
+1061:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_TypeDef* DMAy;
+1062:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1063:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+1064:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+1065:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_CLEAR_FLAG(DMA_FLAG));
+1066:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1067:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Determine the DMA to which belongs the stream */
+1068:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMAy_Streamx < DMA2_Stream0)
+1069:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1070:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA1 */
+1071:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA1; 
+ 731              		.loc 1 1071 0
+ 732 0002 084B     		ldr	r3, .L73
+ 733 0004 084A     		ldr	r2, .L73+4
+ 734 0006 094C     		ldr	r4, .L73+8
+ 735 0008 A042     		cmp	r0, r4
+ 736 000a 8CBF     		ite	hi
+ 737 000c 1046     		movhi	r0, r2
+ 738 000e 1846     		movls	r0, r3
+ 739              	.LVL54:
+1072:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   } 
+1073:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+1074:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1075:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA2 */
+1076:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA2; 
+1077:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1078:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1079:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check if LIFCR or HIFCR register is targeted */
+1080:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMA_FLAG & HIGH_ISR_MASK) != (uint32_t)RESET)
+ 740              		.loc 1 1080 0
+ 741 0010 11F0005F 		tst	r1, #536870912
+ 742 0014 21F0F021 		bic	r1, r1, #-268374016
+ 743              	.LVL55:
+1081:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1082:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Set DMAy HIFCR register clear flag bits */
+1083:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy->HIFCR = (uint32_t)(DMA_FLAG & RESERVED_MASK);
+ 744              		.loc 1 1083 0
+ 745 0018 21F08213 		bic	r3, r1, #8519810
+ 746 001c 14BF     		ite	ne
+ 747 001e C360     		strne	r3, [r0, #12]
+1084:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1085:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+1086:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1087:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Set DMAy LIFCR register clear flag bits */
+1088:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy->LIFCR = (uint32_t)(DMA_FLAG & RESERVED_MASK);
+ 748              		.loc 1 1088 0
+ 749 0020 8360     		streq	r3, [r0, #8]
+ 750 0022 10BD     		pop	{r4, pc}
+ 751              	.L74:
+ 752              		.align	2
+ 753              	.L73:
+ 754 0024 00600240 		.word	1073897472
+ 755 0028 00640240 		.word	1073898496
+ 756 002c 0F640240 		.word	1073898511
+ 757              		.cfi_endproc
+ 758              	.LFE71:
+ 760              		.section	.text.DMA_ITConfig,"ax",%progbits
+ 761              		.align	1
+ 762              		.global	DMA_ITConfig
+ 763              		.thumb
+ 764              		.thumb_func
+ 766              	DMA_ITConfig:
+ 767              	.LFB72:
+1089:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }    
+1090:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+1091:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1092:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+1093:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Enables or disables the specified DMAy Streamx interrupts.
+1094:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+1095:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+1096:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param DMA_IT: specifies the DMA interrupt sources to be enabled or disabled. 
+1097:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be any combination of the following values:
+1098:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_TC:  Transfer complete interrupt mask
+1099:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_HT:  Half transfer complete interrupt mask
+1100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_TE:  Transfer error interrupt mask
+1101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_FE:  FIFO error interrupt mask
+1102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  NewState: new state of the specified DMA interrupts.
+1103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be: ENABLE or DISABLE.
+1104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+1105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+1106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_ITConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT, FunctionalState NewState)
+1107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 768              		.loc 1 1107 0
+ 769              		.cfi_startproc
+ 770              		@ args = 0, pretend = 0, frame = 0
+ 771              		@ frame_needed = 0, uses_anonymous_args = 0
+ 772              		@ link register save eliminated.
+ 773              	.LVL56:
+1108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+1109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+1110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_CONFIG_IT(DMA_IT));
+1111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+1112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check if the DMA_IT parameter contains a FIFO interrupt */
+1114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMA_IT & DMA_IT_FE) != 0)
+ 774              		.loc 1 1114 0
+ 775 0000 0B06     		lsls	r3, r1, #24
+ 776 0002 11D5     		bpl	.L76
+1115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     if (NewState != DISABLE)
+1117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     {
+1118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       /* Enable the selected DMA FIFO interrupts */
+1119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMAy_Streamx->FCR |= (uint32_t)DMA_IT_FE;
+ 777              		.loc 1 1119 0
+ 778 0004 4369     		ldr	r3, [r0, #20]
+1116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     if (NewState != DISABLE)
+ 779              		.loc 1 1116 0
+ 780 0006 4AB1     		cbz	r2, .L77
+ 781              		.loc 1 1119 0
+ 782 0008 43F08003 		orr	r3, r3, #128
+1120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     }    
+1121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     else 
+1122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     {
+1123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       /* Disable the selected DMA FIFO interrupts */
+1124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMAy_Streamx->FCR &= ~(uint32_t)DMA_IT_FE;  
+1125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     }
+1126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check if the DMA_IT parameter contains a Transfer interrupt */
+1129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMA_IT != DMA_IT_FE)
+ 783              		.loc 1 1129 0
+ 784 000c 8029     		cmp	r1, #128
+1119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMAy_Streamx->FCR |= (uint32_t)DMA_IT_FE;
+ 785              		.loc 1 1119 0
+ 786 000e 4361     		str	r3, [r0, #20]
+ 787              		.loc 1 1129 0
+ 788 0010 14D0     		beq	.L75
+ 789              	.L78:
+1130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     if (NewState != DISABLE)
+1132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     {
+1133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       /* Enable the selected DMA transfer interrupts */
+1134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMAy_Streamx->CR |= (uint32_t)(DMA_IT  & TRANSFER_IT_ENABLE_MASK);
+ 790              		.loc 1 1134 0
+ 791 0012 0368     		ldr	r3, [r0, #0]
+ 792 0014 01F01E02 		and	r2, r1, #30
+ 793              	.LVL57:
+ 794 0018 1A43     		orrs	r2, r2, r3
+ 795 001a 0EE0     		b	.L85
+ 796              	.LVL58:
+ 797              	.L77:
+1124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMAy_Streamx->FCR &= ~(uint32_t)DMA_IT_FE;  
+ 798              		.loc 1 1124 0
+ 799 001c 23F08002 		bic	r2, r3, #128
+ 800              	.LVL59:
+1129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMA_IT != DMA_IT_FE)
+ 801              		.loc 1 1129 0
+ 802 0020 8029     		cmp	r1, #128
+1124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMAy_Streamx->FCR &= ~(uint32_t)DMA_IT_FE;  
+ 803              		.loc 1 1124 0
+ 804 0022 4261     		str	r2, [r0, #20]
+1129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMA_IT != DMA_IT_FE)
+ 805              		.loc 1 1129 0
+ 806 0024 04D1     		bne	.L80
+ 807 0026 7047     		bx	lr
+ 808              	.LVL60:
+ 809              	.L76:
+ 810 0028 8029     		cmp	r1, #128
+ 811 002a 07D0     		beq	.L75
+1131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     if (NewState != DISABLE)
+ 812              		.loc 1 1131 0
+ 813 002c 002A     		cmp	r2, #0
+ 814 002e F0D1     		bne	.L78
+ 815              	.LVL61:
+ 816              	.L80:
+1135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     }
+1136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     else
+1137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     {
+1138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       /* Disable the selected DMA transfer interrupts */
+1139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****       DMAy_Streamx->CR &= ~(uint32_t)(DMA_IT & TRANSFER_IT_ENABLE_MASK);
+ 817              		.loc 1 1139 0
+ 818 0030 0368     		ldr	r3, [r0, #0]
+ 819 0032 01F01E01 		and	r1, r1, #30
+ 820              	.LVL62:
+ 821 0036 23EA0102 		bic	r2, r3, r1
+ 822              	.L85:
+ 823 003a 0260     		str	r2, [r0, #0]
+ 824              	.L75:
+ 825 003c 7047     		bx	lr
+ 826              		.cfi_endproc
+ 827              	.LFE72:
+ 829              		.section	.text.DMA_GetITStatus,"ax",%progbits
+ 830              		.align	1
+ 831              		.global	DMA_GetITStatus
+ 832              		.thumb
+ 833              		.thumb_func
+ 835              	DMA_GetITStatus:
+ 836              	.LFB73:
+1140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     }    
+1141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+1143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+1145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Checks whether the specified DMAy Streamx interrupt has occurred or not.
+1146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+1147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+1148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_IT: specifies the DMA interrupt source to check.
+1149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be one of the following values:
+1150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_TCIFx:  Streamx transfer complete interrupt
+1151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_HTIFx:  Streamx half transfer complete interrupt
+1152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_TEIFx:  Streamx transfer error interrupt
+1153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_DMEIFx: Streamx direct mode error interrupt
+1154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_FEIFx:  Streamx FIFO error interrupt
+1155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         Where x can be 0 to 7 to select the DMA Stream.
+1156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval The new state of DMA_IT (SET or RESET).
+1157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+1158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** ITStatus DMA_GetITStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT)
+1159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 837              		.loc 1 1159 0
+ 838              		.cfi_startproc
+ 839              		@ args = 0, pretend = 0, frame = 0
+ 840              		@ frame_needed = 0, uses_anonymous_args = 0
+ 841              	.LVL63:
+1160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   ITStatus bitstatus = RESET;
+1161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_TypeDef* DMAy;
+1162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   uint32_t tmpreg = 0, enablestatus = 0;
+1163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+1165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+1166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_GET_IT(DMA_IT));
+1167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  
+1168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Determine the DMA to which belongs the stream */
+1169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMAy_Streamx < DMA2_Stream0)
+1170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA1 */
+1172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA1; 
+ 842              		.loc 1 1172 0
+ 843 0000 114B     		ldr	r3, .L95
+1159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 844              		.loc 1 1159 0
+ 845 0002 10B5     		push	{r4, lr}
+ 846              	.LCFI3:
+ 847              		.cfi_def_cfa_offset 8
+ 848              		.cfi_offset 4, -8
+ 849              		.cfi_offset 14, -4
+ 850              		.loc 1 1172 0
+ 851 0004 114A     		ldr	r2, .L95+4
+ 852 0006 124C     		ldr	r4, .L95+8
+ 853 0008 A042     		cmp	r0, r4
+ 854 000a 8CBF     		ite	hi
+ 855 000c 1446     		movhi	r4, r2
+ 856 000e 1C46     		movls	r4, r3
+ 857              	.LVL64:
+1173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   } 
+1174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+1175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA2 */
+1177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA2; 
+1178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check if the interrupt enable bit is in the CR or FCR register */
+1181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMA_IT & TRANSFER_IT_MASK) != (uint32_t)RESET)
+ 858              		.loc 1 1181 0
+ 859 0010 21F0F023 		bic	r3, r1, #-268374016
+ 860 0014 23F0C313 		bic	r3, r3, #12779715
+ 861 0018 2BB1     		cbz	r3, .L88
+ 862              	.LVL65:
+1182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Get the interrupt enable position mask in CR register */
+1184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmpreg = (uint32_t)((DMA_IT >> 11) & TRANSFER_IT_ENABLE_MASK);   
+1185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     
+1186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Check the enable bit in CR register */
+1187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     enablestatus = (uint32_t)(DMAy_Streamx->CR & tmpreg);
+ 863              		.loc 1 1187 0
+ 864 001a 0068     		ldr	r0, [r0, #0]
+ 865              	.LVL66:
+1184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmpreg = (uint32_t)((DMA_IT >> 11) & TRANSFER_IT_ENABLE_MASK);   
+ 866              		.loc 1 1184 0
+ 867 001c 00F01E02 		and	r2, r0, #30
+ 868              		.loc 1 1187 0
+ 869 0020 02EAD122 		and	r2, r2, r1, lsr #11
+ 870              	.LVL67:
+ 871 0024 02E0     		b	.L89
+ 872              	.LVL68:
+ 873              	.L88:
+1188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+1190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Check the enable bit in FCR register */
+1192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     enablestatus = (uint32_t)(DMAy_Streamx->FCR & DMA_IT_FE); 
+ 874              		.loc 1 1192 0
+ 875 0026 4069     		ldr	r0, [r0, #20]
+ 876              	.LVL69:
+ 877 0028 00F08002 		and	r2, r0, #128
+ 878              	.LVL70:
+ 879              	.L89:
+1193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****  
+1195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check if the interrupt pending flag is in LISR or HISR */
+1196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMA_IT & HIGH_ISR_MASK) != (uint32_t)RESET)
+ 880              		.loc 1 1196 0
+ 881 002c 8800     		lsls	r0, r1, #2
+1197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Get DMAy HISR register value */
+1199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmpreg = DMAy->HISR ;
+ 882              		.loc 1 1199 0
+ 883 002e 4CBF     		ite	mi
+ 884 0030 6368     		ldrmi	r3, [r4, #4]
+ 885              	.LVL71:
+1200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+1202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Get DMAy LISR register value */
+1204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     tmpreg = DMAy->LISR ;
+ 886              		.loc 1 1204 0
+ 887 0032 2368     		ldrpl	r3, [r4, #0]
+ 888              	.LVL72:
+1205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   } 
+1206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* mask all reserved bits */
+1208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   tmpreg &= (uint32_t)RESERVED_MASK;
+ 889              		.loc 1 1208 0
+ 890 0034 21F0F021 		bic	r1, r1, #-268374016
+ 891              	.LVL73:
+ 892 0038 21F08210 		bic	r0, r1, #8519810
+1209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the status of the specified DMA interrupt */
+1211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (((tmpreg & DMA_IT) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
+ 893              		.loc 1 1211 0
+ 894 003c 1840     		ands	r0, r0, r3
+ 895 003e 02D0     		beq	.L92
+1212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMA_IT is set */
+1214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     bitstatus = SET;
+ 896              		.loc 1 1214 0 discriminator 1
+ 897 0040 101C     		adds	r0, r2, #0
+ 898 0042 18BF     		it	ne
+ 899 0044 0120     		movne	r0, #1
+ 900              	.L92:
+ 901              	.LVL74:
+1215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else
+1217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMA_IT is reset */
+1219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     bitstatus = RESET;
+1220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Return the DMA_IT status */
+1223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   return  bitstatus;
+1224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** }
+ 902              		.loc 1 1224 0
+ 903 0046 10BD     		pop	{r4, pc}
+ 904              	.L96:
+ 905              		.align	2
+ 906              	.L95:
+ 907 0048 00600240 		.word	1073897472
+ 908 004c 00640240 		.word	1073898496
+ 909 0050 0F640240 		.word	1073898511
+ 910              		.cfi_endproc
+ 911              	.LFE73:
+ 913              		.section	.text.DMA_ClearITPendingBit,"ax",%progbits
+ 914              		.align	1
+ 915              		.global	DMA_ClearITPendingBit
+ 916              		.thumb
+ 917              		.thumb_func
+ 919              	DMA_ClearITPendingBit:
+ 920              	.LFB74:
+1225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** /**
+1227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @brief  Clears the DMAy Streamx's interrupt pending bits.
+1228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
+1229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          to 7 to select the DMA Stream.
+1230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @param  DMA_IT: specifies the DMA interrupt pending bit to clear.
+1231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *          This parameter can be any combination of the following values:
+1232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_TCIFx:  Streamx transfer complete interrupt
+1233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_HTIFx:  Streamx half transfer complete interrupt
+1234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_TEIFx:  Streamx transfer error interrupt
+1235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_DMEIFx: Streamx direct mode error interrupt
+1236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *            @arg DMA_IT_FEIFx:  Streamx FIFO error interrupt
+1237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   *         Where x can be 0 to 7 to select the DMA Stream.
+1238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   * @retval None
+1239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   */
+1240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** void DMA_ClearITPendingBit(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT)
+1241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** {
+ 921              		.loc 1 1241 0
+ 922              		.cfi_startproc
+ 923              		@ args = 0, pretend = 0, frame = 0
+ 924              		@ frame_needed = 0, uses_anonymous_args = 0
+ 925              	.LVL75:
+ 926 0000 10B5     		push	{r4, lr}
+ 927              	.LCFI4:
+ 928              		.cfi_def_cfa_offset 8
+ 929              		.cfi_offset 4, -8
+ 930              		.cfi_offset 14, -4
+1242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   DMA_TypeDef* DMAy;
+1243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check the parameters */
+1245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
+1246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   assert_param(IS_DMA_CLEAR_IT(DMA_IT));
+1247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Determine the DMA to which belongs the stream */
+1249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if (DMAy_Streamx < DMA2_Stream0)
+1250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA1 */
+1252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA1; 
+ 931              		.loc 1 1252 0
+ 932 0002 084B     		ldr	r3, .L102
+ 933 0004 084A     		ldr	r2, .L102+4
+ 934 0006 094C     		ldr	r4, .L102+8
+ 935 0008 A042     		cmp	r0, r4
+ 936 000a 8CBF     		ite	hi
+ 937 000c 1046     		movhi	r0, r2
+ 938 000e 1846     		movls	r0, r3
+ 939              	.LVL76:
+1253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   } 
+1254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+1255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* DMAy_Streamx belongs to DMA2 */
+1257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy = DMA2; 
+1258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c **** 
+1260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   /* Check if LIFCR or HIFCR register is targeted */
+1261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   if ((DMA_IT & HIGH_ISR_MASK) != (uint32_t)RESET)
+ 940              		.loc 1 1261 0
+ 941 0010 11F0005F 		tst	r1, #536870912
+ 942 0014 21F0F021 		bic	r1, r1, #-268374016
+ 943              	.LVL77:
+1262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Set DMAy HIFCR register clear interrupt bits */
+1264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy->HIFCR = (uint32_t)(DMA_IT & RESERVED_MASK);
+ 944              		.loc 1 1264 0
+ 945 0018 21F08213 		bic	r3, r1, #8519810
+ 946 001c 14BF     		ite	ne
+ 947 001e C360     		strne	r3, [r0, #12]
+1265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   }
+1266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   else 
+1267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****   {
+1268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     /* Set DMAy LIFCR register clear interrupt bits */
+1269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dma.c ****     DMAy->LIFCR = (uint32_t)(DMA_IT & RESERVED_MASK);
+ 948              		.loc 1 1269 0
+ 949 0020 8360     		streq	r3, [r0, #8]
+ 950 0022 10BD     		pop	{r4, pc}
+ 951              	.L103:
+ 952              		.align	2
+ 953              	.L102:
+ 954 0024 00600240 		.word	1073897472
+ 955 0028 00640240 		.word	1073898496
+ 956 002c 0F640240 		.word	1073898511
+ 957              		.cfi_endproc
+ 958              	.LFE74:
+ 960              		.text
+ 961              	.Letext0:
+ 962              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 963              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 964              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_dma.h"
+ 965              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_dma.c
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:19     .text.DMA_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:24     .text.DMA_DeInit:00000000 DMA_DeInit
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:182    .text.DMA_DeInit:000000c0 $d
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:205    .text.DMA_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:210    .text.DMA_Init:00000000 DMA_Init
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:293    .text.DMA_Init:00000050 $d
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:298    .text.DMA_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:303    .text.DMA_StructInit:00000000 DMA_StructInit
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:347    .text.DMA_Cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:352    .text.DMA_Cmd:00000000 DMA_Cmd
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:380    .text.DMA_PeriphIncOffsetSizeConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:385    .text.DMA_PeriphIncOffsetSizeConfig:00000000 DMA_PeriphIncOffsetSizeConfig
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:413    .text.DMA_FlowControllerConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:418    .text.DMA_FlowControllerConfig:00000000 DMA_FlowControllerConfig
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:446    .text.DMA_SetCurrDataCounter:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:451    .text.DMA_SetCurrDataCounter:00000000 DMA_SetCurrDataCounter
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:466    .text.DMA_GetCurrDataCounter:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:471    .text.DMA_GetCurrDataCounter:00000000 DMA_GetCurrDataCounter
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:489    .text.DMA_DoubleBufferModeConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:494    .text.DMA_DoubleBufferModeConfig:00000000 DMA_DoubleBufferModeConfig
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:524    .text.DMA_DoubleBufferModeCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:529    .text.DMA_DoubleBufferModeCmd:00000000 DMA_DoubleBufferModeCmd
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:557    .text.DMA_MemoryTargetConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:562    .text.DMA_MemoryTargetConfig:00000000 DMA_MemoryTargetConfig
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:583    .text.DMA_GetCurrentMemoryTarget:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:588    .text.DMA_GetCurrentMemoryTarget:00000000 DMA_GetCurrentMemoryTarget
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:607    .text.DMA_GetCmdStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:612    .text.DMA_GetCmdStatus:00000000 DMA_GetCmdStatus
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:631    .text.DMA_GetFIFOStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:636    .text.DMA_GetFIFOStatus:00000000 DMA_GetFIFOStatus
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:655    .text.DMA_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:660    .text.DMA_GetFlagStatus:00000000 DMA_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:707    .text.DMA_GetFlagStatus:0000002c $d
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:714    .text.DMA_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:719    .text.DMA_ClearFlag:00000000 DMA_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:754    .text.DMA_ClearFlag:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:761    .text.DMA_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:766    .text.DMA_ITConfig:00000000 DMA_ITConfig
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:830    .text.DMA_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:835    .text.DMA_GetITStatus:00000000 DMA_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:907    .text.DMA_GetITStatus:00000048 $d
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:914    .text.DMA_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:919    .text.DMA_ClearITPendingBit:00000000 DMA_ClearITPendingBit
+C:\Users\STINA\AppData\Local\Temp\cccrQSGI.s:954    .text.DMA_ClearITPendingBit:00000024 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

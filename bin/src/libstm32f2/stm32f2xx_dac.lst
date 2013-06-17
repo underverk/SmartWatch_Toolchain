@@ -1,0 +1,1412 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_dac.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.DAC_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	DAC_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	DAC_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_dac.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @file    stm32f2xx_dac.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****    * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          functionalities of the Digital-to-Analog Converter (DAC) peripheral: 
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *           - DAC channels configuration: trigger, output buffer, data format
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *           - DMA management      
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *           - Interrupts and flags management
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *  @verbatim
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *    
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          ===================================================================
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                             DAC Peripheral features
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          ===================================================================
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC Channels
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          =============  
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          The device integrates two 12-bit Digital Analog Converters that can 
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          be used independently or simultaneously (dual mode):
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            1- DAC channel1 with DAC_OUT1 (PA4) as output
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            1- DAC channel2 with DAC_OUT2 (PA5) as output
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC Triggers
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          =============
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          Digital to Analog conversion can be non-triggered using DAC_Trigger_None
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          and DAC_OUT1/DAC_OUT2 is available once writing to DHRx register 
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          using DAC_SetChannel1Data() / DAC_SetChannel2Data() functions.
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *   
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         Digital to Analog conversion can be triggered by:
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             1- External event: EXTI Line 9 (any GPIOx_Pin9) using DAC_Trigger_Ext_IT9.
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                The used pin (GPIOx_Pin9) must be configured in input mode.
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             2- Timers TRGO: TIM2, TIM4, TIM5, TIM6, TIM7 and TIM8 
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                (DAC_Trigger_T2_TRGO, DAC_Trigger_T4_TRGO...)
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                The timer TRGO event should be selected using TIM_SelectOutputTrigger()
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             3- Software using DAC_Trigger_Software
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC Buffer mode feature
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          ========================  
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          Each DAC channel integrates an output buffer that can be used to 
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          reduce the output impedance, and to drive external loads directly
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          without having to add an external operational amplifier.
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          To enable, the output buffer use  
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *              DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          Refer to the device datasheet for more details about output 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          impedance value with and without output buffer.
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC wave generation feature
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          =============================      
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          Both DAC channels can be used to generate
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             1- Noise wave using DAC_WaveGeneration_Noise
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             2- Triangle wave using DAC_WaveGeneration_Triangle
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *        
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          Wave generation can be disabled using DAC_WaveGeneration_None
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC data format
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          ================   
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          The DAC data format can be:
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             1- 8-bit right alignment using DAC_Align_8b_R
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             2- 12-bit left alignment using DAC_Align_12b_L
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             3- 12-bit right alignment using DAC_Align_12b_R
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC data value to voltage correspondence  
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          ========================================  
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          The analog output voltage on each DAC channel pin is determined
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          by the following equation: 
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC_OUTx = VREF+ * DOR / 4095
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          with  DOR is the Data Output Register
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                VEF+ is the input voltage reference (refer to the device datasheet)
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          e.g. To set DAC_OUT1 to 0.7V, use
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            DAC_SetChannel1Data(DAC_Align_12b_R, 868);
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          Assuming that VREF+ = 3.3V, DAC_OUT1 = (3.3 * 868) / 4095 = 0.7V
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DMA requests 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          =============    
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          A DMA1 request can be generated when an external trigger (but not
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          a software trigger) occurs if DMA1 requests are enabled using
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC_DMACmd()
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DMA1 requests are mapped as following:
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             1- DAC channel1 : mapped on DMA1 Stream5 channel7 which must be 
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                               already configured
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *             2- DAC channel2 : mapped on DMA1 Stream6 channel7 which must be 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                               already configured
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          ===================================================================      
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *                              How to use this driver 
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          ===================================================================          
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            - DAC APB clock must be enabled to get write access to DAC
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *              registers using
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *              RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE)
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            - Configure DAC_OUTx (DAC_OUT1: PA4, DAC_OUT2: PA5) in analog mode.
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            - Configure the DAC channel using DAC_Init() function
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            - Enable the DAC channel using DAC_Cmd() function
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * 
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *  @endverbatim
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *    
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   ******************************************************************************
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @attention
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * You may not use this file except in compliance with the License.
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * You may obtain a copy of the License at:
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * Unless required by applicable law or agreed to in writing, software 
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * See the License for the specific language governing permissions and
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * limitations under the License.
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   ******************************************************************************
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* Includes ------------------------------------------------------------------*/
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #include "stm32f2xx_dac.h"
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #include "stm32f2xx_rcc.h"
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @{
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /** @defgroup DAC 
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief DAC driver modules
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @{
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */ 
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* Private typedef -----------------------------------------------------------*/
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* Private define ------------------------------------------------------------*/
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* CR register Mask */
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #define CR_CLEAR_MASK              ((uint32_t)0x00000FFE)
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* DAC Dual Channels SWTRIG masks */
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #define DUAL_SWTRIG_SET            ((uint32_t)0x00000003)
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #define DUAL_SWTRIG_RESET          ((uint32_t)0xFFFFFFFC)
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* DHR registers offsets */
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #define DHR12R1_OFFSET             ((uint32_t)0x00000008)
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #define DHR12R2_OFFSET             ((uint32_t)0x00000014)
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #define DHR12RD_OFFSET             ((uint32_t)0x00000020)
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* DOR register offset */
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** #define DOR_OFFSET                 ((uint32_t)0x0000002C)
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* Private macro -------------------------------------------------------------*/
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* Private variables ---------------------------------------------------------*/
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* Private function prototypes -----------------------------------------------*/
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /* Private functions ---------------------------------------------------------*/
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /** @defgroup DAC_Private_Functions
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @{
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /** @defgroup DAC_Group1 DAC channels configuration
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  *  @brief   DAC channels configuration: trigger, output buffer, data format 
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  *
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** @verbatim   
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  ===============================================================================
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****           DAC channels configuration: trigger, output buffer, data format
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  ===============================================================================  
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** @endverbatim
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @{
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Deinitializes the DAC peripheral registers to their default reset values.
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  None
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_DeInit(void)
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+  27              		.loc 1 181 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Enable DAC reset state */
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, ENABLE);
+  31              		.loc 1 183 0
+  32 0000 0121     		movs	r1, #1
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+  33              		.loc 1 181 0
+  34 0002 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+  39              		.loc 1 183 0
+  40 0004 4FF00050 		mov	r0, #536870912
+  41 0008 FFF7FEFF 		bl	RCC_APB1PeriphResetCmd
+  42              	.LVL0:
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Release DAC from reset state */
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, DISABLE);
+  43              		.loc 1 185 0
+  44 000c 4FF00050 		mov	r0, #536870912
+  45 0010 0021     		movs	r1, #0
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+  46              		.loc 1 186 0
+  47 0012 BDE80840 		pop	{r3, lr}
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, DISABLE);
+  48              		.loc 1 185 0
+  49 0016 FFF7FEBF 		b	RCC_APB1PeriphResetCmd
+  50              	.LVL1:
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.DAC_Init,"ax",%progbits
+  55              		.align	1
+  56              		.global	DAC_Init
+  57              		.thumb
+  58              		.thumb_func
+  60              	DAC_Init:
+  61              	.LFB57:
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Initializes the DAC peripheral according to the specified parameters
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         in the DAC_InitStruct.
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: the selected DAC channel. 
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_InitStruct: pointer to a DAC_InitTypeDef structure that contains
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         the configuration information for the  specified DAC channel.
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_Init(uint32_t DAC_Channel, DAC_InitTypeDef* DAC_InitStruct)
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+  62              		.loc 1 200 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              	.LVL2:
+  67 0000 30B5     		push	{r4, r5, lr}
+  68              	.LCFI1:
+  69              		.cfi_def_cfa_offset 12
+  70              		.cfi_offset 4, -12
+  71              		.cfi_offset 5, -8
+  72              		.cfi_offset 14, -4
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   uint32_t tmpreg1 = 0, tmpreg2 = 0;
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the DAC parameters */
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_TRIGGER(DAC_InitStruct->DAC_Trigger));
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_GENERATE_WAVE(DAC_InitStruct->DAC_WaveGeneration));
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_LFSR_UNMASK_TRIANGLE_AMPLITUDE(DAC_InitStruct->DAC_LFSRUnmask_TriangleAmplitu
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_OUTPUT_BUFFER_STATE(DAC_InitStruct->DAC_OutputBuffer));
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /*---------------------------- DAC CR Configuration --------------------------*/
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Get the DAC CR value */
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmpreg1 = DAC->CR;
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Clear BOFFx, TENx, TSELx, WAVEx and MAMPx bits */
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmpreg1 &= ~(CR_CLEAR_MASK << DAC_Channel);
+  73              		.loc 1 213 0
+  74 0002 40F6FE75 		movw	r5, #4094
+  75 0006 05FA00F5 		lsl	r5, r5, r0
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmpreg1 = DAC->CR;
+  76              		.loc 1 211 0
+  77 000a 084B     		ldr	r3, .L3
+  78 000c 1A68     		ldr	r2, [r3, #0]
+  79              	.LVL3:
+  80              		.loc 1 213 0
+  81 000e 22EA0505 		bic	r5, r2, r5
+  82              	.LVL4:
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Configure for the selected DAC channel: buffer output, trigger, 
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****      wave generation, mask/amplitude for wave generation */
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Set TSELx and TENx bits according to DAC_Trigger value */
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Set WAVEx bits according to DAC_WaveGeneration value */
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Set MAMPx bits according to DAC_LFSRUnmask_TriangleAmplitude value */ 
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Set BOFFx bit according to DAC_OutputBuffer value */   
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmpreg2 = (DAC_InitStruct->DAC_Trigger | DAC_InitStruct->DAC_WaveGeneration |
+  83              		.loc 1 220 0
+  84 0012 91E81400 		ldmia	r1, {r2, r4}
+  85 0016 1443     		orrs	r4, r4, r2
+  86 0018 8A68     		ldr	r2, [r1, #8]
+  87 001a C968     		ldr	r1, [r1, #12]
+  88              	.LVL5:
+  89 001c 2243     		orrs	r2, r2, r4
+  90              	.LVL6:
+  91 001e 0A43     		orrs	r2, r2, r1
+  92              	.LVL7:
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****              DAC_InitStruct->DAC_LFSRUnmask_TriangleAmplitude | \
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****              DAC_InitStruct->DAC_OutputBuffer);
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Calculate CR register value depending on DAC_Channel */
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmpreg1 |= tmpreg2 << DAC_Channel;
+  93              		.loc 1 224 0
+  94 0020 02FA00F0 		lsl	r0, r2, r0
+  95              	.LVL8:
+  96 0024 45EA0002 		orr	r2, r5, r0
+  97              	.LVL9:
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Write to DAC CR */
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   DAC->CR = tmpreg1;
+  98              		.loc 1 226 0
+  99 0028 1A60     		str	r2, [r3, #0]
+ 100 002a 30BD     		pop	{r4, r5, pc}
+ 101              	.L4:
+ 102              		.align	2
+ 103              	.L3:
+ 104 002c 00740040 		.word	1073771520
+ 105              		.cfi_endproc
+ 106              	.LFE57:
+ 108              		.section	.text.DAC_StructInit,"ax",%progbits
+ 109              		.align	1
+ 110              		.global	DAC_StructInit
+ 111              		.thumb
+ 112              		.thumb_func
+ 114              	DAC_StructInit:
+ 115              	.LFB58:
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Fills each DAC_InitStruct member with its default value.
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_InitStruct: pointer to a DAC_InitTypeDef structure which will 
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         be initialized.
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_StructInit(DAC_InitTypeDef* DAC_InitStruct)
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 116              		.loc 1 236 0
+ 117              		.cfi_startproc
+ 118              		@ args = 0, pretend = 0, frame = 0
+ 119              		@ frame_needed = 0, uses_anonymous_args = 0
+ 120              		@ link register save eliminated.
+ 121              	.LVL10:
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /*--------------- Reset DAC init structure parameters values -----------------*/
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Initialize the DAC_Trigger member */
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   DAC_InitStruct->DAC_Trigger = DAC_Trigger_None;
+ 122              		.loc 1 239 0
+ 123 0000 0023     		movs	r3, #0
+ 124 0002 0360     		str	r3, [r0, #0]
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Initialize the DAC_WaveGeneration member */
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   DAC_InitStruct->DAC_WaveGeneration = DAC_WaveGeneration_None;
+ 125              		.loc 1 241 0
+ 126 0004 4360     		str	r3, [r0, #4]
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Initialize the DAC_LFSRUnmask_TriangleAmplitude member */
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   DAC_InitStruct->DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0;
+ 127              		.loc 1 243 0
+ 128 0006 8360     		str	r3, [r0, #8]
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Initialize the DAC_OutputBuffer member */
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   DAC_InitStruct->DAC_OutputBuffer = DAC_OutputBuffer_Enable;
+ 129              		.loc 1 245 0
+ 130 0008 C360     		str	r3, [r0, #12]
+ 131 000a 7047     		bx	lr
+ 132              		.cfi_endproc
+ 133              	.LFE58:
+ 135              		.section	.text.DAC_Cmd,"ax",%progbits
+ 136              		.align	1
+ 137              		.global	DAC_Cmd
+ 138              		.thumb
+ 139              		.thumb_func
+ 141              	DAC_Cmd:
+ 142              	.LFB59:
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Enables or disables the specified DAC channel.
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  NewState: new state of the DAC channel. 
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   When the DAC channel is enabled the trigger source can no more be modified.
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_Cmd(uint32_t DAC_Channel, FunctionalState NewState)
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 143              		.loc 1 260 0
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 0
+ 146              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147              		@ link register save eliminated.
+ 148              	.LVL11:
+ 149 0000 074B     		ldr	r3, .L11
+ 150 0002 0122     		movs	r2, #1
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (NewState != DISABLE)
+ 151              		.loc 1 265 0
+ 152 0004 21B1     		cbz	r1, .L7
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Enable the selected DAC channel */
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR |= (DAC_CR_EN1 << DAC_Channel);
+ 153              		.loc 1 268 0
+ 154 0006 02FA00F2 		lsl	r2, r2, r0
+ 155 000a 1968     		ldr	r1, [r3, #0]
+ 156              	.LVL12:
+ 157 000c 0A43     		orrs	r2, r2, r1
+ 158 000e 04E0     		b	.L9
+ 159              	.LVL13:
+ 160              	.L7:
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Disable the selected DAC channel */
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR &= (~(DAC_CR_EN1 << DAC_Channel));
+ 161              		.loc 1 273 0
+ 162 0010 02FA00F2 		lsl	r2, r2, r0
+ 163 0014 1968     		ldr	r1, [r3, #0]
+ 164              	.LVL14:
+ 165 0016 21EA0202 		bic	r2, r1, r2
+ 166              	.L9:
+ 167 001a 1A60     		str	r2, [r3, #0]
+ 168 001c 7047     		bx	lr
+ 169              	.L12:
+ 170 001e 00BF     		.align	2
+ 171              	.L11:
+ 172 0020 00740040 		.word	1073771520
+ 173              		.cfi_endproc
+ 174              	.LFE59:
+ 176              		.section	.text.DAC_SoftwareTriggerCmd,"ax",%progbits
+ 177              		.align	1
+ 178              		.global	DAC_SoftwareTriggerCmd
+ 179              		.thumb
+ 180              		.thumb_func
+ 182              	DAC_SoftwareTriggerCmd:
+ 183              	.LFB60:
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Enables or disables the selected DAC channel software trigger.
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  NewState: new state of the selected DAC channel software trigger.
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_SoftwareTriggerCmd(uint32_t DAC_Channel, FunctionalState NewState)
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 184              		.loc 1 288 0
+ 185              		.cfi_startproc
+ 186              		@ args = 0, pretend = 0, frame = 0
+ 187              		@ frame_needed = 0, uses_anonymous_args = 0
+ 188              		@ link register save eliminated.
+ 189              	.LVL15:
+ 190 0000 074B     		ldr	r3, .L17
+ 191 0002 0009     		lsrs	r0, r0, #4
+ 192              	.LVL16:
+ 193 0004 0122     		movs	r2, #1
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (NewState != DISABLE)
+ 194              		.loc 1 293 0
+ 195 0006 21B1     		cbz	r1, .L14
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Enable software trigger for the selected DAC channel */
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->SWTRIGR |= (uint32_t)DAC_SWTRIGR_SWTRIG1 << (DAC_Channel >> 4);
+ 196              		.loc 1 296 0
+ 197 0008 02FA00F2 		lsl	r2, r2, r0
+ 198 000c 5968     		ldr	r1, [r3, #4]
+ 199              	.LVL17:
+ 200 000e 0A43     		orrs	r2, r2, r1
+ 201 0010 04E0     		b	.L16
+ 202              	.LVL18:
+ 203              	.L14:
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Disable software trigger for the selected DAC channel */
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->SWTRIGR &= ~((uint32_t)DAC_SWTRIGR_SWTRIG1 << (DAC_Channel >> 4));
+ 204              		.loc 1 301 0
+ 205 0012 02FA00F2 		lsl	r2, r2, r0
+ 206 0016 5968     		ldr	r1, [r3, #4]
+ 207              	.LVL19:
+ 208 0018 21EA0202 		bic	r2, r1, r2
+ 209              	.L16:
+ 210 001c 5A60     		str	r2, [r3, #4]
+ 211 001e 7047     		bx	lr
+ 212              	.L18:
+ 213              		.align	2
+ 214              	.L17:
+ 215 0020 00740040 		.word	1073771520
+ 216              		.cfi_endproc
+ 217              	.LFE60:
+ 219              		.section	.text.DAC_DualSoftwareTriggerCmd,"ax",%progbits
+ 220              		.align	1
+ 221              		.global	DAC_DualSoftwareTriggerCmd
+ 222              		.thumb
+ 223              		.thumb_func
+ 225              	DAC_DualSoftwareTriggerCmd:
+ 226              	.LFB61:
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Enables or disables simultaneously the two DAC channels software triggers.
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  NewState: new state of the DAC channels software triggers.
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_DualSoftwareTriggerCmd(FunctionalState NewState)
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 227              		.loc 1 312 0
+ 228              		.cfi_startproc
+ 229              		@ args = 0, pretend = 0, frame = 0
+ 230              		@ frame_needed = 0, uses_anonymous_args = 0
+ 231              		@ link register save eliminated.
+ 232              	.LVL20:
+ 233 0000 044B     		ldr	r3, .L23
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (NewState != DISABLE)
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Enable software trigger for both DAC channels */
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->SWTRIGR |= DUAL_SWTRIG_SET;
+ 234              		.loc 1 319 0
+ 235 0002 5A68     		ldr	r2, [r3, #4]
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (NewState != DISABLE)
+ 236              		.loc 1 316 0
+ 237 0004 10B1     		cbz	r0, .L20
+ 238              		.loc 1 319 0
+ 239 0006 42F00300 		orr	r0, r2, #3
+ 240              	.LVL21:
+ 241 000a 01E0     		b	.L22
+ 242              	.LVL22:
+ 243              	.L20:
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Disable software trigger for both DAC channels */
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->SWTRIGR &= DUAL_SWTRIG_RESET;
+ 244              		.loc 1 324 0
+ 245 000c 22F00300 		bic	r0, r2, #3
+ 246              	.LVL23:
+ 247              	.L22:
+ 248 0010 5860     		str	r0, [r3, #4]
+ 249 0012 7047     		bx	lr
+ 250              	.L24:
+ 251              		.align	2
+ 252              	.L23:
+ 253 0014 00740040 		.word	1073771520
+ 254              		.cfi_endproc
+ 255              	.LFE61:
+ 257              		.section	.text.DAC_WaveGenerationCmd,"ax",%progbits
+ 258              		.align	1
+ 259              		.global	DAC_WaveGenerationCmd
+ 260              		.thumb
+ 261              		.thumb_func
+ 263              	DAC_WaveGenerationCmd:
+ 264              	.LFB62:
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Enables or disables the selected DAC channel wave generation.
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Wave: specifies the wave type to enable or disable.
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Wave_Noise: noise wave generation
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Wave_Triangle: triangle wave generation
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  NewState: new state of the selected DAC channel wave generation.
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be: ENABLE or DISABLE.  
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_WaveGenerationCmd(uint32_t DAC_Channel, uint32_t DAC_Wave, FunctionalState NewState)
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 265              		.loc 1 343 0
+ 266              		.cfi_startproc
+ 267              		@ args = 0, pretend = 0, frame = 0
+ 268              		@ frame_needed = 0, uses_anonymous_args = 0
+ 269              		@ link register save eliminated.
+ 270              	.LVL24:
+ 271 0000 054B     		ldr	r3, .L29
+ 272 0002 01FA00F1 		lsl	r1, r1, r0
+ 273              	.LVL25:
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_WAVE(DAC_Wave)); 
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (NewState != DISABLE)
+ 274              		.loc 1 349 0
+ 275 0006 12B1     		cbz	r2, .L26
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Enable the selected wave generation for the selected DAC channel */
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR |= DAC_Wave << DAC_Channel;
+ 276              		.loc 1 352 0
+ 277 0008 1868     		ldr	r0, [r3, #0]
+ 278              	.LVL26:
+ 279 000a 0143     		orrs	r1, r1, r0
+ 280 000c 02E0     		b	.L28
+ 281              	.LVL27:
+ 282              	.L26:
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Disable the selected wave generation for the selected DAC channel */
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR &= ~(DAC_Wave << DAC_Channel);
+ 283              		.loc 1 357 0
+ 284 000e 1A68     		ldr	r2, [r3, #0]
+ 285              	.LVL28:
+ 286 0010 22EA0101 		bic	r1, r2, r1
+ 287              	.LVL29:
+ 288              	.L28:
+ 289 0014 1960     		str	r1, [r3, #0]
+ 290 0016 7047     		bx	lr
+ 291              	.L30:
+ 292              		.align	2
+ 293              	.L29:
+ 294 0018 00740040 		.word	1073771520
+ 295              		.cfi_endproc
+ 296              	.LFE62:
+ 298              		.section	.text.DAC_SetChannel1Data,"ax",%progbits
+ 299              		.align	1
+ 300              		.global	DAC_SetChannel1Data
+ 301              		.thumb
+ 302              		.thumb_func
+ 304              	DAC_SetChannel1Data:
+ 305              	.LFB63:
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Set the specified data holding register value for DAC channel1.
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Align: Specifies the data alignment for DAC channel1.
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_8b_R: 8bit right data alignment selected
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_12b_L: 12bit left data alignment selected
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_12b_R: 12bit right data alignment selected
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  Data: Data to be loaded in the selected data holding register.
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_SetChannel1Data(uint32_t DAC_Align, uint16_t Data)
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {  
+ 306              		.loc 1 372 0
+ 307              		.cfi_startproc
+ 308              		@ args = 0, pretend = 0, frame = 8
+ 309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310              		@ link register save eliminated.
+ 311              	.LVL30:
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   __IO uint32_t tmp = 0;
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_ALIGN(DAC_Align));
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_DATA(Data));
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp = (uint32_t)DAC_BASE; 
+ 312              		.loc 1 379 0
+ 313 0000 064A     		ldr	r2, .L32
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {  
+ 314              		.loc 1 372 0
+ 315 0002 82B0     		sub	sp, sp, #8
+ 316              	.LCFI2:
+ 317              		.cfi_def_cfa_offset 8
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   __IO uint32_t tmp = 0;
+ 318              		.loc 1 373 0
+ 319 0004 0023     		movs	r3, #0
+ 320 0006 0193     		str	r3, [sp, #4]
+ 321              	.LVL31:
+ 322              		.loc 1 379 0
+ 323 0008 0192     		str	r2, [sp, #4]
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp += DHR12R1_OFFSET + DAC_Align;
+ 324              		.loc 1 380 0
+ 325 000a 019B     		ldr	r3, [sp, #4]
+ 326 000c 0833     		adds	r3, r3, #8
+ 327 000e 1818     		adds	r0, r3, r0
+ 328              	.LVL32:
+ 329 0010 0190     		str	r0, [sp, #4]
+ 330              	.LVL33:
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Set the DAC channel1 selected data holding register */
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *(__IO uint32_t *) tmp = Data;
+ 331              		.loc 1 383 0
+ 332 0012 019A     		ldr	r2, [sp, #4]
+ 333 0014 1160     		str	r1, [r2, #0]
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 334              		.loc 1 384 0
+ 335 0016 02B0     		add	sp, sp, #8
+ 336 0018 7047     		bx	lr
+ 337              	.L33:
+ 338 001a 00BF     		.align	2
+ 339              	.L32:
+ 340 001c 00740040 		.word	1073771520
+ 341              		.cfi_endproc
+ 342              	.LFE63:
+ 344              		.section	.text.DAC_SetChannel2Data,"ax",%progbits
+ 345              		.align	1
+ 346              		.global	DAC_SetChannel2Data
+ 347              		.thumb
+ 348              		.thumb_func
+ 350              	DAC_SetChannel2Data:
+ 351              	.LFB64:
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Set the specified data holding register value for DAC channel2.
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Align: Specifies the data alignment for DAC channel2.
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_8b_R: 8bit right data alignment selected
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_12b_L: 12bit left data alignment selected
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_12b_R: 12bit right data alignment selected
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  Data: Data to be loaded in the selected data holding register.
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_SetChannel2Data(uint32_t DAC_Align, uint16_t Data)
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 352              		.loc 1 397 0
+ 353              		.cfi_startproc
+ 354              		@ args = 0, pretend = 0, frame = 8
+ 355              		@ frame_needed = 0, uses_anonymous_args = 0
+ 356              		@ link register save eliminated.
+ 357              	.LVL34:
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   __IO uint32_t tmp = 0;
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_ALIGN(DAC_Align));
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_DATA(Data));
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp = (uint32_t)DAC_BASE;
+ 358              		.loc 1 404 0
+ 359 0000 064A     		ldr	r2, .L35
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 360              		.loc 1 397 0
+ 361 0002 82B0     		sub	sp, sp, #8
+ 362              	.LCFI3:
+ 363              		.cfi_def_cfa_offset 8
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   __IO uint32_t tmp = 0;
+ 364              		.loc 1 398 0
+ 365 0004 0023     		movs	r3, #0
+ 366 0006 0193     		str	r3, [sp, #4]
+ 367              	.LVL35:
+ 368              		.loc 1 404 0
+ 369 0008 0192     		str	r2, [sp, #4]
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp += DHR12R2_OFFSET + DAC_Align;
+ 370              		.loc 1 405 0
+ 371 000a 019B     		ldr	r3, [sp, #4]
+ 372 000c 1433     		adds	r3, r3, #20
+ 373 000e 1818     		adds	r0, r3, r0
+ 374              	.LVL36:
+ 375 0010 0190     		str	r0, [sp, #4]
+ 376              	.LVL37:
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Set the DAC channel2 selected data holding register */
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *(__IO uint32_t *)tmp = Data;
+ 377              		.loc 1 408 0
+ 378 0012 019A     		ldr	r2, [sp, #4]
+ 379 0014 1160     		str	r1, [r2, #0]
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 380              		.loc 1 409 0
+ 381 0016 02B0     		add	sp, sp, #8
+ 382 0018 7047     		bx	lr
+ 383              	.L36:
+ 384 001a 00BF     		.align	2
+ 385              	.L35:
+ 386 001c 00740040 		.word	1073771520
+ 387              		.cfi_endproc
+ 388              	.LFE64:
+ 390              		.section	.text.DAC_SetDualChannelData,"ax",%progbits
+ 391              		.align	1
+ 392              		.global	DAC_SetDualChannelData
+ 393              		.thumb
+ 394              		.thumb_func
+ 396              	DAC_SetDualChannelData:
+ 397              	.LFB65:
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Set the specified data holding register value for dual channel DAC.
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Align: Specifies the data alignment for dual channel DAC.
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_8b_R: 8bit right data alignment selected
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_12b_L: 12bit left data alignment selected
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Align_12b_R: 12bit right data alignment selected
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  Data2: Data for DAC Channel2 to be loaded in the selected data holding register.
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  Data1: Data for DAC Channel1 to be loaded in the selected data  holding register.
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   In dual mode, a unique register access is required to write in both
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          DAC channels at the same time.
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_SetDualChannelData(uint32_t DAC_Align, uint16_t Data2, uint16_t Data1)
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 398              		.loc 1 425 0
+ 399              		.cfi_startproc
+ 400              		@ args = 0, pretend = 0, frame = 0
+ 401              		@ frame_needed = 0, uses_anonymous_args = 0
+ 402              		@ link register save eliminated.
+ 403              	.LVL38:
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   uint32_t data = 0, tmp = 0;
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_ALIGN(DAC_Align));
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_DATA(Data1));
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_DATA(Data2));
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Calculate and set dual DAC data holding register value */
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (DAC_Align == DAC_Align_8b_R)
+ 404              		.loc 1 434 0
+ 405 0000 0828     		cmp	r0, #8
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     data = ((uint32_t)Data2 << 8) | Data1; 
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     data = ((uint32_t)Data2 << 16) | Data1;
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp = (uint32_t)DAC_BASE;
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp += DHR12RD_OFFSET + DAC_Align;
+ 406              		.loc 1 444 0
+ 407 0002 044B     		ldr	r3, .L40
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     data = ((uint32_t)Data2 << 8) | Data1; 
+ 408              		.loc 1 436 0
+ 409 0004 0CBF     		ite	eq
+ 410 0006 42EA0121 		orreq	r1, r2, r1, lsl #8
+ 411              	.LVL39:
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     data = ((uint32_t)Data2 << 16) | Data1;
+ 412              		.loc 1 440 0
+ 413 000a 42EA0141 		orrne	r1, r2, r1, lsl #16
+ 414              	.LVL40:
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Set the dual DAC selected data holding register */
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *(__IO uint32_t *)tmp = data;
+ 415              		.loc 1 447 0
+ 416 000e C150     		str	r1, [r0, r3]
+ 417 0010 7047     		bx	lr
+ 418              	.L41:
+ 419 0012 00BF     		.align	2
+ 420              	.L40:
+ 421 0014 20740040 		.word	1073771552
+ 422              		.cfi_endproc
+ 423              	.LFE65:
+ 425              		.section	.text.DAC_GetDataOutputValue,"ax",%progbits
+ 426              		.align	1
+ 427              		.global	DAC_GetDataOutputValue
+ 428              		.thumb
+ 429              		.thumb_func
+ 431              	DAC_GetDataOutputValue:
+ 432              	.LFB66:
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Returns the last data output value of the selected DAC channel.
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval The selected DAC channel data output value.
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** uint16_t DAC_GetDataOutputValue(uint32_t DAC_Channel)
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 433              		.loc 1 459 0
+ 434              		.cfi_startproc
+ 435              		@ args = 0, pretend = 0, frame = 8
+ 436              		@ frame_needed = 0, uses_anonymous_args = 0
+ 437              		@ link register save eliminated.
+ 438              	.LVL41:
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   __IO uint32_t tmp = 0;
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp = (uint32_t) DAC_BASE ;
+ 439              		.loc 1 465 0
+ 440 0000 0749     		ldr	r1, .L43
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 441              		.loc 1 459 0
+ 442 0002 82B0     		sub	sp, sp, #8
+ 443              	.LCFI4:
+ 444              		.cfi_def_cfa_offset 8
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   __IO uint32_t tmp = 0;
+ 445              		.loc 1 460 0
+ 446 0004 0023     		movs	r3, #0
+ 447 0006 0193     		str	r3, [sp, #4]
+ 448              	.LVL42:
+ 449              		.loc 1 465 0
+ 450 0008 0191     		str	r1, [sp, #4]
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   tmp += DOR_OFFSET + ((uint32_t)DAC_Channel >> 2);
+ 451              		.loc 1 466 0
+ 452 000a 019A     		ldr	r2, [sp, #4]
+ 453 000c 2C32     		adds	r2, r2, #44
+ 454 000e 02EB9000 		add	r0, r2, r0, lsr #2
+ 455              	.LVL43:
+ 456 0012 0190     		str	r0, [sp, #4]
+ 457              	.LVL44:
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Returns the DAC channel data output register value */
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   return (uint16_t) (*(__IO uint32_t*) tmp);
+ 458              		.loc 1 469 0
+ 459 0014 019B     		ldr	r3, [sp, #4]
+ 460 0016 1968     		ldr	r1, [r3, #0]
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 461              		.loc 1 470 0
+ 462 0018 88B2     		uxth	r0, r1
+ 463              	.LVL45:
+ 464 001a 02B0     		add	sp, sp, #8
+ 465 001c 7047     		bx	lr
+ 466              	.L44:
+ 467 001e 00BF     		.align	2
+ 468              	.L43:
+ 469 0020 00740040 		.word	1073771520
+ 470              		.cfi_endproc
+ 471              	.LFE66:
+ 473              		.section	.text.DAC_DMACmd,"ax",%progbits
+ 474              		.align	1
+ 475              		.global	DAC_DMACmd
+ 476              		.thumb
+ 477              		.thumb_func
+ 479              	DAC_DMACmd:
+ 480              	.LFB67:
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @}
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /** @defgroup DAC_Group2 DMA management functions
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  *  @brief   DMA management functions
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  *
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** @verbatim   
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  ===============================================================================
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****                           DMA management functions
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  ===============================================================================  
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** @endverbatim
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @{
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Enables or disables the specified DAC channel DMA request.
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   When enabled DMA1 is generated when an external trigger (EXTI Line9,
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         TIM2, TIM4, TIM5, TIM6, TIM7 or TIM8  but not a software trigger) occurs.
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  NewState: new state of the selected DAC channel DMA request.
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   The DAC channel1 is mapped on DMA1 Stream 5 channel7 which must be
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          already configured.
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   The DAC channel2 is mapped on DMA1 Stream 6 channel7 which must be
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          already configured.    
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_DMACmd(uint32_t DAC_Channel, FunctionalState NewState)
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 481              		.loc 1 504 0
+ 482              		.cfi_startproc
+ 483              		@ args = 0, pretend = 0, frame = 0
+ 484              		@ frame_needed = 0, uses_anonymous_args = 0
+ 485              		@ link register save eliminated.
+ 486              	.LVL46:
+ 487 0000 074B     		ldr	r3, .L49
+ 488 0002 4FF48052 		mov	r2, #4096
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (NewState != DISABLE)
+ 489              		.loc 1 509 0
+ 490 0006 21B1     		cbz	r1, .L46
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Enable the selected DAC channel DMA request */
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR |= (DAC_CR_DMAEN1 << DAC_Channel);
+ 491              		.loc 1 512 0
+ 492 0008 02FA00F2 		lsl	r2, r2, r0
+ 493 000c 1968     		ldr	r1, [r3, #0]
+ 494              	.LVL47:
+ 495 000e 0A43     		orrs	r2, r2, r1
+ 496 0010 04E0     		b	.L48
+ 497              	.LVL48:
+ 498              	.L46:
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Disable the selected DAC channel DMA request */
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR &= (~(DAC_CR_DMAEN1 << DAC_Channel));
+ 499              		.loc 1 517 0
+ 500 0012 02FA00F2 		lsl	r2, r2, r0
+ 501 0016 1968     		ldr	r1, [r3, #0]
+ 502              	.LVL49:
+ 503 0018 21EA0202 		bic	r2, r1, r2
+ 504              	.L48:
+ 505 001c 1A60     		str	r2, [r3, #0]
+ 506 001e 7047     		bx	lr
+ 507              	.L50:
+ 508              		.align	2
+ 509              	.L49:
+ 510 0020 00740040 		.word	1073771520
+ 511              		.cfi_endproc
+ 512              	.LFE67:
+ 514              		.section	.text.DAC_ITConfig,"ax",%progbits
+ 515              		.align	1
+ 516              		.global	DAC_ITConfig
+ 517              		.thumb
+ 518              		.thumb_func
+ 520              	DAC_ITConfig:
+ 521              	.LFB68:
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @}
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /** @defgroup DAC_Group3 Interrupts and flags management functions
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  *  @brief   Interrupts and flags management functions
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  *
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** @verbatim   
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  ===============================================================================
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****                    Interrupts and flags management functions
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****  ===============================================================================  
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** @endverbatim
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @{
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Enables or disables the specified DAC interrupts.
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_IT: specifies the DAC interrupt sources to be enabled or disabled. 
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be the following values:
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_IT_DMAUDR: DMA underrun interrupt mask
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   The DMA underrun occurs when a second external trigger arrives before the 
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         acknowledgement for the first external trigger is received (first request).
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  NewState: new state of the specified DAC interrupts.
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */ 
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewState)  
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 522              		.loc 1 552 0
+ 523              		.cfi_startproc
+ 524              		@ args = 0, pretend = 0, frame = 0
+ 525              		@ frame_needed = 0, uses_anonymous_args = 0
+ 526              		@ link register save eliminated.
+ 527              	.LVL50:
+ 528 0000 054B     		ldr	r3, .L55
+ 529 0002 01FA00F1 		lsl	r1, r1, r0
+ 530              	.LVL51:
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_IT(DAC_IT)); 
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (NewState != DISABLE)
+ 531              		.loc 1 558 0
+ 532 0006 12B1     		cbz	r2, .L52
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Enable the selected DAC interrupts */
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR |=  (DAC_IT << DAC_Channel);
+ 533              		.loc 1 561 0
+ 534 0008 1868     		ldr	r0, [r3, #0]
+ 535              	.LVL52:
+ 536 000a 0143     		orrs	r1, r1, r0
+ 537 000c 02E0     		b	.L54
+ 538              	.LVL53:
+ 539              	.L52:
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* Disable the selected DAC interrupts */
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     DAC->CR &= (~(uint32_t)(DAC_IT << DAC_Channel));
+ 540              		.loc 1 566 0
+ 541 000e 1A68     		ldr	r2, [r3, #0]
+ 542              	.LVL54:
+ 543 0010 22EA0101 		bic	r1, r2, r1
+ 544              	.LVL55:
+ 545              	.L54:
+ 546 0014 1960     		str	r1, [r3, #0]
+ 547 0016 7047     		bx	lr
+ 548              	.L56:
+ 549              		.align	2
+ 550              	.L55:
+ 551 0018 00740040 		.word	1073771520
+ 552              		.cfi_endproc
+ 553              	.LFE68:
+ 555              		.section	.text.DAC_GetFlagStatus,"ax",%progbits
+ 556              		.align	1
+ 557              		.global	DAC_GetFlagStatus
+ 558              		.thumb
+ 559              		.thumb_func
+ 561              	DAC_GetFlagStatus:
+ 562              	.LFB69:
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Checks whether the specified DAC flag is set or not.
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_FLAG: specifies the flag to check. 
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be only of the following value:
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_FLAG_DMAUDR: DMA underrun flag
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   The DMA underrun occurs when a second external trigger arrives before the 
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         acknowledgement for the first external trigger is received (first request).
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval The new state of DAC_FLAG (SET or RESET).
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** FlagStatus DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG)
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 563              		.loc 1 584 0
+ 564              		.cfi_startproc
+ 565              		@ args = 0, pretend = 0, frame = 0
+ 566              		@ frame_needed = 0, uses_anonymous_args = 0
+ 567              		@ link register save eliminated.
+ 568              	.LVL56:
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   FlagStatus bitstatus = RESET;
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_FLAG(DAC_FLAG));
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the status of the specified DAC flag */
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if ((DAC->SR & (DAC_FLAG << DAC_Channel)) != (uint8_t)RESET)
+ 569              		.loc 1 591 0
+ 570 0000 01FA00F1 		lsl	r1, r1, r0
+ 571              	.LVL57:
+ 572 0004 034B     		ldr	r3, .L58
+ 573 0006 5A6B     		ldr	r2, [r3, #52]
+ 574              	.LVL58:
+ 575 0008 1142     		tst	r1, r2
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* DAC_FLAG is set */
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     bitstatus = SET;
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* DAC_FLAG is reset */
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     bitstatus = RESET;
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Return the DAC_FLAG status */
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   return  bitstatus;
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 576              		.loc 1 603 0
+ 577 000a 0CBF     		ite	eq
+ 578 000c 0020     		moveq	r0, #0
+ 579 000e 0120     		movne	r0, #1
+ 580              	.LVL59:
+ 581 0010 7047     		bx	lr
+ 582              	.L59:
+ 583 0012 00BF     		.align	2
+ 584              	.L58:
+ 585 0014 00740040 		.word	1073771520
+ 586              		.cfi_endproc
+ 587              	.LFE69:
+ 589              		.section	.text.DAC_ClearFlag,"ax",%progbits
+ 590              		.align	1
+ 591              		.global	DAC_ClearFlag
+ 592              		.thumb
+ 593              		.thumb_func
+ 595              	DAC_ClearFlag:
+ 596              	.LFB70:
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Clears the DAC channel's pending flags.
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_FLAG: specifies the flag to clear. 
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be of the following value:
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_FLAG_DMAUDR: DMA underrun flag 
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   The DMA underrun occurs when a second external trigger arrives before the 
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         acknowledgement for the first external trigger is received (first request).            
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_ClearFlag(uint32_t DAC_Channel, uint32_t DAC_FLAG)
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 597              		.loc 1 619 0
+ 598              		.cfi_startproc
+ 599              		@ args = 0, pretend = 0, frame = 0
+ 600              		@ frame_needed = 0, uses_anonymous_args = 0
+ 601              		@ link register save eliminated.
+ 602              	.LVL60:
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_FLAG(DAC_FLAG));
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Clear the selected DAC flags */
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   DAC->SR = (DAC_FLAG << DAC_Channel);
+ 603              		.loc 1 625 0
+ 604 0000 01FA00F1 		lsl	r1, r1, r0
+ 605              	.LVL61:
+ 606 0004 014B     		ldr	r3, .L61
+ 607 0006 5963     		str	r1, [r3, #52]
+ 608 0008 7047     		bx	lr
+ 609              	.L62:
+ 610 000a 00BF     		.align	2
+ 611              	.L61:
+ 612 000c 00740040 		.word	1073771520
+ 613              		.cfi_endproc
+ 614              	.LFE70:
+ 616              		.section	.text.DAC_GetITStatus,"ax",%progbits
+ 617              		.align	1
+ 618              		.global	DAC_GetITStatus
+ 619              		.thumb
+ 620              		.thumb_func
+ 622              	DAC_GetITStatus:
+ 623              	.LFB71:
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 628:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 629:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Checks whether the specified DAC interrupt has occurred or not.
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 631:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 632:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 633:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 634:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_IT: specifies the DAC interrupt source to check. 
+ 635:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be the following values:
+ 636:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_IT_DMAUDR: DMA underrun interrupt mask
+ 637:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   The DMA underrun occurs when a second external trigger arrives before the 
+ 638:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         acknowledgement for the first external trigger is received (first request).
+ 639:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval The new state of DAC_IT (SET or RESET).
+ 640:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 641:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** ITStatus DAC_GetITStatus(uint32_t DAC_Channel, uint32_t DAC_IT)
+ 642:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 624              		.loc 1 642 0
+ 625              		.cfi_startproc
+ 626              		@ args = 0, pretend = 0, frame = 0
+ 627              		@ frame_needed = 0, uses_anonymous_args = 0
+ 628              		@ link register save eliminated.
+ 629              	.LVL62:
+ 643:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   ITStatus bitstatus = RESET;
+ 644:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   uint32_t enablestatus = 0;
+ 645:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 646:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 647:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 648:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_IT(DAC_IT));
+ 649:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 650:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Get the DAC_IT enable bit status */
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   enablestatus = (DAC->CR & (DAC_IT << DAC_Channel)) ;
+ 630              		.loc 1 651 0
+ 631 0000 01FA00F1 		lsl	r1, r1, r0
+ 632              	.LVL63:
+ 633 0004 044B     		ldr	r3, .L66
+ 634 0006 1A68     		ldr	r2, [r3, #0]
+ 635              	.LVL64:
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the status of the specified DAC interrupt */
+ 654:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   if (((DAC->SR & (DAC_IT << DAC_Channel)) != (uint32_t)RESET) && enablestatus)
+ 636              		.loc 1 654 0
+ 637 0008 586B     		ldr	r0, [r3, #52]
+ 638              	.LVL65:
+ 639 000a 0840     		ands	r0, r1, r0
+ 640 000c 03D0     		beq	.L64
+ 641              		.loc 1 654 0 is_stmt 0 discriminator 1
+ 642 000e 1142     		tst	r1, r2
+ 655:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 656:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* DAC_IT is set */
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     bitstatus = SET;
+ 643              		.loc 1 657 0 is_stmt 1 discriminator 1
+ 644 0010 0CBF     		ite	eq
+ 645 0012 0020     		moveq	r0, #0
+ 646 0014 0120     		movne	r0, #1
+ 647              	.L64:
+ 648              	.LVL66:
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   else
+ 660:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   {
+ 661:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     /* DAC_IT is reset */
+ 662:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****     bitstatus = RESET;
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   }
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Return the DAC_IT status */
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   return  bitstatus;
+ 666:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** }
+ 649              		.loc 1 666 0
+ 650 0016 7047     		bx	lr
+ 651              	.L67:
+ 652              		.align	2
+ 653              	.L66:
+ 654 0018 00740040 		.word	1073771520
+ 655              		.cfi_endproc
+ 656              	.LFE71:
+ 658              		.section	.text.DAC_ClearITPendingBit,"ax",%progbits
+ 659              		.align	1
+ 660              		.global	DAC_ClearITPendingBit
+ 661              		.thumb
+ 662              		.thumb_func
+ 664              	DAC_ClearITPendingBit:
+ 665              	.LFB72:
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 668:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** /**
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @brief  Clears the DAC channel's interrupt pending bits.
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_Channel: The selected DAC channel. 
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be one of the following values:
+ 672:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_1: DAC Channel1 selected
+ 673:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_Channel_2: DAC Channel2 selected
+ 674:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @param  DAC_IT: specifies the DAC interrupt pending bit to clear.
+ 675:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *          This parameter can be the following values:
+ 676:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *            @arg DAC_IT_DMAUDR: DMA underrun interrupt mask                         
+ 677:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @note   The DMA underrun occurs when a second external trigger arrives before the 
+ 678:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   *         acknowledgement for the first external trigger is received (first request).            
+ 679:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   * @retval None
+ 680:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   */
+ 681:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** void DAC_ClearITPendingBit(uint32_t DAC_Channel, uint32_t DAC_IT)
+ 682:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** {
+ 666              		.loc 1 682 0
+ 667              		.cfi_startproc
+ 668              		@ args = 0, pretend = 0, frame = 0
+ 669              		@ frame_needed = 0, uses_anonymous_args = 0
+ 670              		@ link register save eliminated.
+ 671              	.LVL67:
+ 683:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Check the parameters */
+ 684:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_CHANNEL(DAC_Channel));
+ 685:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   assert_param(IS_DAC_IT(DAC_IT)); 
+ 686:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c **** 
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   /* Clear the selected DAC interrupt pending bits */
+ 688:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dac.c ****   DAC->SR = (DAC_IT << DAC_Channel);
+ 672              		.loc 1 688 0
+ 673 0000 01FA00F1 		lsl	r1, r1, r0
+ 674              	.LVL68:
+ 675 0004 014B     		ldr	r3, .L69
+ 676 0006 5963     		str	r1, [r3, #52]
+ 677 0008 7047     		bx	lr
+ 678              	.L70:
+ 679 000a 00BF     		.align	2
+ 680              	.L69:
+ 681 000c 00740040 		.word	1073771520
+ 682              		.cfi_endproc
+ 683              	.LFE72:
+ 685              		.text
+ 686              	.Letext0:
+ 687              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 688              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 689              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_dac.h"
+ 690              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 691              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_dac.c
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:19     .text.DAC_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:24     .text.DAC_DeInit:00000000 DAC_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:55     .text.DAC_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:60     .text.DAC_Init:00000000 DAC_Init
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:104    .text.DAC_Init:0000002c $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:109    .text.DAC_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:114    .text.DAC_StructInit:00000000 DAC_StructInit
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:136    .text.DAC_Cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:141    .text.DAC_Cmd:00000000 DAC_Cmd
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:172    .text.DAC_Cmd:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:177    .text.DAC_SoftwareTriggerCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:182    .text.DAC_SoftwareTriggerCmd:00000000 DAC_SoftwareTriggerCmd
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:215    .text.DAC_SoftwareTriggerCmd:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:220    .text.DAC_DualSoftwareTriggerCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:225    .text.DAC_DualSoftwareTriggerCmd:00000000 DAC_DualSoftwareTriggerCmd
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:253    .text.DAC_DualSoftwareTriggerCmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:258    .text.DAC_WaveGenerationCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:263    .text.DAC_WaveGenerationCmd:00000000 DAC_WaveGenerationCmd
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:294    .text.DAC_WaveGenerationCmd:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:299    .text.DAC_SetChannel1Data:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:304    .text.DAC_SetChannel1Data:00000000 DAC_SetChannel1Data
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:340    .text.DAC_SetChannel1Data:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:345    .text.DAC_SetChannel2Data:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:350    .text.DAC_SetChannel2Data:00000000 DAC_SetChannel2Data
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:386    .text.DAC_SetChannel2Data:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:391    .text.DAC_SetDualChannelData:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:396    .text.DAC_SetDualChannelData:00000000 DAC_SetDualChannelData
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:421    .text.DAC_SetDualChannelData:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:426    .text.DAC_GetDataOutputValue:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:431    .text.DAC_GetDataOutputValue:00000000 DAC_GetDataOutputValue
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:469    .text.DAC_GetDataOutputValue:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:474    .text.DAC_DMACmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:479    .text.DAC_DMACmd:00000000 DAC_DMACmd
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:510    .text.DAC_DMACmd:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:515    .text.DAC_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:520    .text.DAC_ITConfig:00000000 DAC_ITConfig
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:551    .text.DAC_ITConfig:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:556    .text.DAC_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:561    .text.DAC_GetFlagStatus:00000000 DAC_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:585    .text.DAC_GetFlagStatus:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:590    .text.DAC_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:595    .text.DAC_ClearFlag:00000000 DAC_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:612    .text.DAC_ClearFlag:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:617    .text.DAC_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:622    .text.DAC_GetITStatus:00000000 DAC_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:654    .text.DAC_GetITStatus:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:659    .text.DAC_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:664    .text.DAC_ClearITPendingBit:00000000 DAC_ClearITPendingBit
+C:\Users\STINA\AppData\Local\Temp\ccLfda0H.s:681    .text.DAC_ClearITPendingBit:0000000c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_APB1PeriphResetCmd

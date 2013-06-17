@@ -1,0 +1,1268 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_gpio.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.GPIO_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	GPIO_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	GPIO_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_gpio.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @file    stm32f2xx_gpio.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          functionalities of the GPIO peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *           - Initialization and Configuration
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *           - GPIO Read and Write
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *           - GPIO Alternate functions configuration
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * 
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *  @verbatim
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          ===================================================================
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                                 How to use this driver
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          ===================================================================       
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *           1. Enable the GPIO AHB clock using the following function
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *           2. Configure the GPIO pin(s) using GPIO_Init()
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *              Four possible configuration are available for each pin:
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                - Input: Floating, Pull-up, Pull-down.
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                - Output: Push-Pull (Pull-up, Pull-down or no Pull)
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                          Open Drain (Pull-up, Pull-down or no Pull).
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                  In output mode, the speed is configurable: 2 MHz, 25 MHz,
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                  50 MHz or 100 MHz.
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                - Alternate Function: Push-Pull (Pull-up, Pull-down or no Pull)
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                                      Open Drain (Pull-up, Pull-down or no Pull).
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                - Analog: required mode when a pin is to be used as ADC channel
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                          or DAC output.
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * 
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          3- Peripherals alternate function:
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *              - For ADC and DAC, configure the desired pin in analog mode using 
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                  GPIO_InitStruct->GPIO_Mode = GPIO_Mode_AN;
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *              - For other peripherals (TIM, USART...):
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                 - Connect the pin to the desired peripherals' Alternate 
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                   Function (AF) using GPIO_PinAFConfig() function
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                 - Configure the desired pin in alternate function mode using
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                   GPIO_InitStruct->GPIO_Mode = GPIO_Mode_AF
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                 - Select the type, pull-up/pull-down and output speed via 
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                   GPIO_PuPd, GPIO_OType and GPIO_Speed members
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *                 - Call GPIO_Init() function
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *        
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          4. To get the level of a pin configured in input mode use GPIO_ReadInputDataBit()
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          5. To set/reset the level of a pin configured in output mode use
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             GPIO_SetBits()/GPIO_ResetBits()
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *               
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          6. During and just after reset, the alternate functions are not 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             active and the GPIO pins are configured in input floating mode
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             (except JTAG pins).
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          7. The LSE oscillator pins OSC32_IN and OSC32_OUT can be used as 
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             general-purpose (PC14 and PC15, respectively) when the LSE
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             oscillator is off. The LSE has priority over the GPIO function.
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          8. The HSE oscillator pins OSC_IN/OSC_OUT can be used as 
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             general-purpose PH0 and PH1, respectively, when the HSE 
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             oscillator is off. The HSE has priority over the GPIO function.
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *             
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *  @endverbatim        
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   ******************************************************************************
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @attention
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * You may not use this file except in compliance with the License.
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * You may obtain a copy of the License at:
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * Unless required by applicable law or agreed to in writing, software 
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * See the License for the specific language governing permissions and
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * limitations under the License.
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   ******************************************************************************
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /* Includes ------------------------------------------------------------------*/
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** #include "stm32f2xx_gpio.h"
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** #include "stm32f2xx_rcc.h"
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @{
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /** @defgroup GPIO 
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief GPIO driver modules
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @{
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */ 
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /* Private typedef -----------------------------------------------------------*/
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /* Private define ------------------------------------------------------------*/
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /* Private macro -------------------------------------------------------------*/
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /* Private variables ---------------------------------------------------------*/
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /* Private function prototypes -----------------------------------------------*/
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /* Private functions ---------------------------------------------------------*/
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /** @defgroup GPIO_Private_Functions
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @{
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */ 
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /** @defgroup GPIO_Group1 Initialization and Configuration
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  *  @brief   Initialization and Configuration
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  *
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** @verbatim   
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  ===============================================================================
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****                         Initialization and Configuration
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  ===============================================================================  
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** @endverbatim
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @{
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Deinitializes the GPIOx peripheral registers to their default reset values.
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @note   By default, The GPIO pins are configured in input floating mode (except JTAG pins).
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_DeInit(GPIO_TypeDef* GPIOx)
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+  27              		.loc 1 127 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 08B5     		push	{r3, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   if (GPIOx == GPIOA)
+  37              		.loc 1 131 0
+  38 0002 2C4B     		ldr	r3, .L13
+  39 0004 9842     		cmp	r0, r3
+  40 0006 05D1     		bne	.L2
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+  41              		.loc 1 133 0
+  42 0008 0120     		movs	r0, #1
+  43              	.LVL1:
+  44 000a 0146     		mov	r1, r0
+  45 000c FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+  46              	.LVL2:
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOA, DISABLE);
+  47              		.loc 1 134 0
+  48 0010 0120     		movs	r0, #1
+  49 0012 48E0     		b	.L11
+  50              	.LVL3:
+  51              	.L2:
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else if (GPIOx == GPIOB)
+  52              		.loc 1 136 0
+  53 0014 2849     		ldr	r1, .L13+4
+  54 0016 8842     		cmp	r0, r1
+  55 0018 05D1     		bne	.L3
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+  56              		.loc 1 138 0
+  57 001a 0220     		movs	r0, #2
+  58              	.LVL4:
+  59 001c 0121     		movs	r1, #1
+  60 001e FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+  61              	.LVL5:
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOB, DISABLE);
+  62              		.loc 1 139 0
+  63 0022 0220     		movs	r0, #2
+  64 0024 3FE0     		b	.L11
+  65              	.LVL6:
+  66              	.L3:
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else if (GPIOx == GPIOC)
+  67              		.loc 1 141 0
+  68 0026 254A     		ldr	r2, .L13+8
+  69 0028 9042     		cmp	r0, r2
+  70 002a 05D1     		bne	.L4
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+  71              		.loc 1 143 0
+  72 002c 0420     		movs	r0, #4
+  73              	.LVL7:
+  74 002e 0121     		movs	r1, #1
+  75 0030 FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+  76              	.LVL8:
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOC, DISABLE);
+  77              		.loc 1 144 0
+  78 0034 0420     		movs	r0, #4
+  79 0036 36E0     		b	.L11
+  80              	.LVL9:
+  81              	.L4:
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else if (GPIOx == GPIOD)
+  82              		.loc 1 146 0
+  83 0038 214B     		ldr	r3, .L13+12
+  84 003a 9842     		cmp	r0, r3
+  85 003c 05D1     		bne	.L5
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+  86              		.loc 1 148 0
+  87 003e 0820     		movs	r0, #8
+  88              	.LVL10:
+  89 0040 0121     		movs	r1, #1
+  90 0042 FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+  91              	.LVL11:
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOD, DISABLE);
+  92              		.loc 1 149 0
+  93 0046 0820     		movs	r0, #8
+  94 0048 2DE0     		b	.L11
+  95              	.LVL12:
+  96              	.L5:
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else if (GPIOx == GPIOE)
+  97              		.loc 1 151 0
+  98 004a 1E49     		ldr	r1, .L13+16
+  99 004c 8842     		cmp	r0, r1
+ 100 004e 05D1     		bne	.L6
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+ 101              		.loc 1 153 0
+ 102 0050 1020     		movs	r0, #16
+ 103              	.LVL13:
+ 104 0052 0121     		movs	r1, #1
+ 105 0054 FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+ 106              	.LVL14:
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, DISABLE);
+ 107              		.loc 1 154 0
+ 108 0058 1020     		movs	r0, #16
+ 109 005a 24E0     		b	.L11
+ 110              	.LVL15:
+ 111              	.L6:
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else if (GPIOx == GPIOF)
+ 112              		.loc 1 156 0
+ 113 005c 1A4A     		ldr	r2, .L13+20
+ 114 005e 9042     		cmp	r0, r2
+ 115 0060 05D1     		bne	.L7
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOF, ENABLE);
+ 116              		.loc 1 158 0
+ 117 0062 2020     		movs	r0, #32
+ 118              	.LVL16:
+ 119 0064 0121     		movs	r1, #1
+ 120 0066 FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+ 121              	.LVL17:
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOF, DISABLE);
+ 122              		.loc 1 159 0
+ 123 006a 2020     		movs	r0, #32
+ 124 006c 1BE0     		b	.L11
+ 125              	.LVL18:
+ 126              	.L7:
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else if (GPIOx == GPIOG)
+ 127              		.loc 1 161 0
+ 128 006e 174B     		ldr	r3, .L13+24
+ 129 0070 9842     		cmp	r0, r3
+ 130 0072 05D1     		bne	.L8
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOG, ENABLE);
+ 131              		.loc 1 163 0
+ 132 0074 4020     		movs	r0, #64
+ 133              	.LVL19:
+ 134 0076 0121     		movs	r1, #1
+ 135 0078 FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+ 136              	.LVL20:
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOG, DISABLE);
+ 137              		.loc 1 164 0
+ 138 007c 4020     		movs	r0, #64
+ 139 007e 12E0     		b	.L11
+ 140              	.LVL21:
+ 141              	.L8:
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else if (GPIOx == GPIOH)
+ 142              		.loc 1 166 0
+ 143 0080 1349     		ldr	r1, .L13+28
+ 144 0082 8842     		cmp	r0, r1
+ 145 0084 05D1     		bne	.L9
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOH, ENABLE);
+ 146              		.loc 1 168 0
+ 147 0086 8020     		movs	r0, #128
+ 148              	.LVL22:
+ 149 0088 0121     		movs	r1, #1
+ 150 008a FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+ 151              	.LVL23:
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOH, DISABLE);
+ 152              		.loc 1 169 0
+ 153 008e 8020     		movs	r0, #128
+ 154 0090 09E0     		b	.L11
+ 155              	.LVL24:
+ 156              	.L9:
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     if (GPIOx == GPIOI)
+ 157              		.loc 1 173 0
+ 158 0092 104A     		ldr	r2, .L13+32
+ 159 0094 9042     		cmp	r0, r2
+ 160 0096 0BD1     		bne	.L1
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     {
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, ENABLE);
+ 161              		.loc 1 175 0
+ 162 0098 4FF48070 		mov	r0, #256
+ 163              	.LVL25:
+ 164 009c 0121     		movs	r1, #1
+ 165 009e FFF7FEFF 		bl	RCC_AHB1PeriphResetCmd
+ 166              	.LVL26:
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, DISABLE);
+ 167              		.loc 1 176 0
+ 168 00a2 4FF48070 		mov	r0, #256
+ 169              	.L11:
+ 170 00a6 0021     		movs	r1, #0
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     }
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 171              		.loc 1 179 0
+ 172 00a8 BDE80840 		pop	{r3, lr}
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, DISABLE);
+ 173              		.loc 1 176 0
+ 174 00ac FFF7FEBF 		b	RCC_AHB1PeriphResetCmd
+ 175              	.LVL27:
+ 176              	.L1:
+ 177 00b0 08BD     		pop	{r3, pc}
+ 178              	.L14:
+ 179 00b2 00BF     		.align	2
+ 180              	.L13:
+ 181 00b4 00000240 		.word	1073872896
+ 182 00b8 00040240 		.word	1073873920
+ 183 00bc 00080240 		.word	1073874944
+ 184 00c0 000C0240 		.word	1073875968
+ 185 00c4 00100240 		.word	1073876992
+ 186 00c8 00140240 		.word	1073878016
+ 187 00cc 00180240 		.word	1073879040
+ 188 00d0 001C0240 		.word	1073880064
+ 189 00d4 00200240 		.word	1073881088
+ 190              		.cfi_endproc
+ 191              	.LFE56:
+ 193              		.section	.text.GPIO_Init,"ax",%progbits
+ 194              		.align	1
+ 195              		.global	GPIO_Init
+ 196              		.thumb
+ 197              		.thumb_func
+ 199              	GPIO_Init:
+ 200              	.LFB57:
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Initializes the GPIOx peripheral according to the specified parameters in the GPIO_Init
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that contains
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         the configuration information for the specified GPIO peripheral.
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 201              		.loc 1 189 0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 205              	.LVL28:
+ 206 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 207              	.LCFI1:
+ 208              		.cfi_def_cfa_offset 24
+ 209              		.cfi_offset 4, -24
+ 210              		.cfi_offset 5, -20
+ 211              		.cfi_offset 6, -16
+ 212              		.cfi_offset 7, -12
+ 213              		.cfi_offset 8, -8
+ 214              		.cfi_offset 14, -4
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   uint32_t pinpos = 0x00, pos = 0x00 , currentpin = 0x00;
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_PIN(GPIO_InitStruct->GPIO_Pin));
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_MODE(GPIO_InitStruct->GPIO_Mode));
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_PUPD(GPIO_InitStruct->GPIO_PuPd));
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* -------------------------Configure the port pins---------------- */
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /*-- GPIO Mode Configuration --*/
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   for (pinpos = 0x00; pinpos < 0x10; pinpos++)
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     pos = ((uint32_t)0x01) << pinpos;
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     /* Get the port pins position */
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     currentpin = (GPIO_InitStruct->GPIO_Pin) & pos;
+ 215              		.loc 1 204 0
+ 216 0004 0F68     		ldr	r7, [r1, #0]
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   for (pinpos = 0x00; pinpos < 0x10; pinpos++)
+ 217              		.loc 1 200 0
+ 218 0006 0023     		movs	r3, #0
+ 219              	.LVL29:
+ 220              	.L18:
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     pos = ((uint32_t)0x01) << pinpos;
+ 221              		.loc 1 202 0
+ 222 0008 0122     		movs	r2, #1
+ 223 000a 02FA03F2 		lsl	r2, r2, r3
+ 224              	.LVL30:
+ 225              		.loc 1 204 0
+ 226 000e 02EA0705 		and	r5, r2, r7
+ 227              	.LVL31:
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     if (currentpin == pos)
+ 228              		.loc 1 206 0
+ 229 0012 9542     		cmp	r5, r2
+ 230 0014 32D1     		bne	.L16
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
+ 231              		.loc 1 188 0
+ 232 0016 5A00     		lsls	r2, r3, #1
+ 233              	.LVL32:
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     {
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->MODER  &= ~(GPIO_MODER_MODER0 << (pinpos * 2));
+ 234              		.loc 1 208 0
+ 235 0018 0324     		movs	r4, #3
+ 236 001a 04FA02F4 		lsl	r4, r4, r2
+ 237 001e 0668     		ldr	r6, [r0, #0]
+ 238 0020 E443     		mvns	r4, r4
+ 239 0022 2640     		ands	r6, r6, r4
+ 240 0024 0660     		str	r6, [r0, #0]
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->MODER |= (((uint32_t)GPIO_InitStruct->GPIO_Mode) << (pinpos * 2));
+ 241              		.loc 1 209 0
+ 242 0026 0E79     		ldrb	r6, [r1, #4]	@ zero_extendqisi2
+ 243 0028 D0F800C0 		ldr	ip, [r0, #0]
+ 244 002c 06FA02F8 		lsl	r8, r6, r2
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       if ((GPIO_InitStruct->GPIO_Mode == GPIO_Mode_OUT) || (GPIO_InitStruct->GPIO_Mode == GPIO_Mode
+ 245              		.loc 1 211 0
+ 246 0030 013E     		subs	r6, r6, #1
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->MODER |= (((uint32_t)GPIO_InitStruct->GPIO_Mode) << (pinpos * 2));
+ 247              		.loc 1 209 0
+ 248 0032 48EA0C0C 		orr	ip, r8, ip
+ 249              		.loc 1 211 0
+ 250 0036 012E     		cmp	r6, #1
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->MODER |= (((uint32_t)GPIO_InitStruct->GPIO_Mode) << (pinpos * 2));
+ 251              		.loc 1 209 0
+ 252 0038 C0F800C0 		str	ip, [r0, #0]
+ 253              		.loc 1 211 0
+ 254 003c 15D8     		bhi	.L17
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       {
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         /* Check Speed mode parameters */
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         assert_param(IS_GPIO_SPEED(GPIO_InitStruct->GPIO_Speed));
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         /* Speed mode configuration */
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         GPIOx->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR0 << (pinpos * 2));
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         GPIOx->OSPEEDR |= ((uint32_t)(GPIO_InitStruct->GPIO_Speed) << (pinpos * 2));
+ 255              		.loc 1 218 0
+ 256 003e 91F805C0 		ldrb	ip, [r1, #5]	@ zero_extendqisi2
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         GPIOx->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR0 << (pinpos * 2));
+ 257              		.loc 1 217 0
+ 258 0042 8668     		ldr	r6, [r0, #8]
+ 259              		.loc 1 218 0
+ 260 0044 0CFA02FC 		lsl	ip, ip, r2
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         GPIOx->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR0 << (pinpos * 2));
+ 261              		.loc 1 217 0
+ 262 0048 2640     		ands	r6, r6, r4
+ 263 004a 8660     		str	r6, [r0, #8]
+ 264              		.loc 1 218 0
+ 265 004c 8668     		ldr	r6, [r0, #8]
+ 266 004e 4CEA0606 		orr	r6, ip, r6
+ 267 0052 8660     		str	r6, [r0, #8]
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         /* Check Output mode parameters */
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         assert_param(IS_GPIO_OTYPE(GPIO_InitStruct->GPIO_OType));
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         /* Output mode configuration*/
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         GPIOx->OTYPER  &= ~((GPIO_OTYPER_OT_0) << ((uint16_t)pinpos)) ;
+ 268              		.loc 1 224 0
+ 269 0054 4668     		ldr	r6, [r0, #4]
+ 270 0056 26EA0505 		bic	r5, r6, r5
+ 271              	.LVL33:
+ 272 005a 4560     		str	r5, [r0, #4]
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         GPIOx->OTYPER |= (uint16_t)(((uint16_t)GPIO_InitStruct->GPIO_OType) << ((uint16_t)pinpos));
+ 273              		.loc 1 225 0
+ 274 005c 8D79     		ldrb	r5, [r1, #6]	@ zero_extendqisi2
+ 275 005e 4668     		ldr	r6, [r0, #4]
+ 276 0060 05FA03F5 		lsl	r5, r5, r3
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       }
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       /* Pull-up Pull down resistor configuration*/
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->PUPDR &= ~(GPIO_PUPDR_PUPDR0 << ((uint16_t)pinpos * 2));
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->PUPDR |= (((uint32_t)GPIO_InitStruct->GPIO_PuPd) << (pinpos * 2));
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     }
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Fills each GPIO_InitStruct member with its default value.
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_InitStruct : pointer to a GPIO_InitTypeDef structure which will be initialized.
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct)
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Reset GPIO init structure parameters values */
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_Pin  = GPIO_Pin_All;
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_Mode = GPIO_Mode_IN;
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_Speed = GPIO_Speed_2MHz;
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_OType = GPIO_OType_PP;
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_PuPd = GPIO_PuPd_NOPULL;
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Locks GPIO Pins configuration registers.
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @note   The locked registers are GPIOx_MODER, GPIOx_OTYPER, GPIOx_OSPEEDR,
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         GPIOx_PUPDR, GPIOx_AFRL and GPIOx_AFRH.
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @note   The configuration of the locked GPIO pins can no longer be modified
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         until the next reset.
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_Pin: specifies the port bit to be locked.
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_PinLockConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   __IO uint32_t tmp = 0x00010000;
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_PIN(GPIO_Pin));
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   tmp |= GPIO_Pin;
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Set LCKK bit */
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->LCKR = tmp;
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Reset LCKK bit */
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->LCKR =  GPIO_Pin;
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Set LCKK bit */
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->LCKR = tmp;
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Read LCKK bit*/
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   tmp = GPIOx->LCKR;
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Read LCKK bit*/
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   tmp = GPIOx->LCKR;
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @}
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /** @defgroup GPIO_Group2 GPIO Read and Write
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  *  @brief   GPIO Read and Write
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  *
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** @verbatim   
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  ===============================================================================
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****                               GPIO Read and Write
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  ===============================================================================  
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** @endverbatim
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @{
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Reads the specified input port pin.
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_Pin: specifies the port bit to read.
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         This parameter can be GPIO_Pin_x where x can be (0..15).
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval The input port pin value.
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** uint8_t GPIO_ReadInputDataBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   uint8_t bitstatus = 0x00;
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GET_GPIO_PIN(GPIO_Pin));
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   if ((GPIOx->IDR & GPIO_Pin) != (uint32_t)Bit_RESET)
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     bitstatus = (uint8_t)Bit_SET;
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     bitstatus = (uint8_t)Bit_RESET;
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   return bitstatus;
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Reads the specified GPIO input data port.
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval GPIO input data port value.
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** uint16_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx)
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   return ((uint16_t)GPIOx->IDR);
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Reads the specified output data port bit.
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_Pin: specifies the port bit to read.
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          This parameter can be GPIO_Pin_x where x can be (0..15).
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval The output port pin value.
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** uint8_t GPIO_ReadOutputDataBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   uint8_t bitstatus = 0x00;
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GET_GPIO_PIN(GPIO_Pin));
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   if ((GPIOx->ODR & GPIO_Pin) != (uint32_t)Bit_RESET)
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     bitstatus = (uint8_t)Bit_SET;
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     bitstatus = (uint8_t)Bit_RESET;
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   return bitstatus;
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Reads the specified GPIO output data port.
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval GPIO output data port value.
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** uint16_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx)
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   return ((uint16_t)GPIOx->ODR);
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Sets the selected data port bits.
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @note   This functions uses GPIOx_BSRR register to allow atomic read/modify 
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         accesses. In this way, there is no risk of an IRQ occurring between
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         the read and the modify access.
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_Pin: specifies the port bits to be written.
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_SetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_PIN(GPIO_Pin));
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->BSRRL = GPIO_Pin;
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Clears the selected data port bits.
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @note   This functions uses GPIOx_BSRR register to allow atomic read/modify 
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         accesses. In this way, there is no risk of an IRQ occurring between
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         the read and the modify access.
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_Pin: specifies the port bits to be written.
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_ResetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_PIN(GPIO_Pin));
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->BSRRH = GPIO_Pin;
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Sets or clears the selected data port bit.
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_Pin: specifies the port bit to be written.
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          This parameter can be one of GPIO_Pin_x where x can be (0..15).
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  BitVal: specifies the value to be written to the selected bit.
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          This parameter can be one of the BitAction enum values:
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg Bit_RESET: to clear the port pin
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg Bit_SET: to set the port pin
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_WriteBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, BitAction BitVal)
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GET_GPIO_PIN(GPIO_Pin));
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_BIT_ACTION(BitVal));
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   if (BitVal != Bit_RESET)
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     GPIOx->BSRRL = GPIO_Pin;
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   else
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   {
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     GPIOx->BSRRH = GPIO_Pin ;
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   }
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Writes data to the specified GPIO data port.
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  PortVal: specifies the value to be written to the port output data register.
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal)
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->ODR = PortVal;
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Toggles the specified GPIO pins..
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_Pin: Specifies the pins to be toggled.
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_ToggleBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->ODR ^= GPIO_Pin;
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @}
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /** @defgroup GPIO_Group3 GPIO Alternate functions configuration function
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  *  @brief   GPIO Alternate functions configuration function
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  *
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** @verbatim   
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  ===============================================================================
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****                GPIO Alternate functions configuration function
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****  ===============================================================================  
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** @endverbatim
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @{
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** 
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** /**
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @brief  Changes the mapping of the specified pin.
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIOx: where x can be (A..I) to select the GPIO peripheral.
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_PinSource: specifies the pin for the Alternate function.
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *         This parameter can be GPIO_PinSourcex where x can be (0..15).
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @param  GPIO_AFSelection: selects the pin to used as Alternate function.
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *          This parameter can be one of the following values:
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_RTC_50Hz: Connect RTC_50Hz pin to AF0 (default after reset) 
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_MCO: Connect MCO pin (MCO1 and MCO2) to AF0 (default after reset) 
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TAMPER: Connect TAMPER pins (TAMPER_1 and TAMPER_2) to AF0 (default aft
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_SWJ: Connect SWJ pins (SWD and JTAG)to AF0 (default after reset) 
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TRACE: Connect TRACE pins to AF0 (default after reset)
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM1: Connect TIM1 pins to AF1
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM2: Connect TIM2 pins to AF1
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM3: Connect TIM3 pins to AF2
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM4: Connect TIM4 pins to AF2
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM5: Connect TIM5 pins to AF2
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM8: Connect TIM8 pins to AF3
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM9: Connect TIM9 pins to AF3
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM10: Connect TIM10 pins to AF3
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM11: Connect TIM11 pins to AF3
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_I2C1: Connect I2C1 pins to AF4
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_I2C2: Connect I2C2 pins to AF4
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_I2C3: Connect I2C3 pins to AF4
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_SPI1: Connect SPI1 pins to AF5
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_SPI2: Connect SPI2/I2S2 pins to AF5
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_SPI3: Connect SPI3/I2S3 pins to AF6
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_USART1: Connect USART1 pins to AF7
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_USART2: Connect USART2 pins to AF7
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_USART3: Connect USART3 pins to AF7
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_UART4: Connect UART4 pins to AF8
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_UART5: Connect UART5 pins to AF8
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_USART6: Connect USART6 pins to AF8
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_CAN1: Connect CAN1 pins to AF9
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_CAN2: Connect CAN2 pins to AF9
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM12: Connect TIM12 pins to AF9
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM13: Connect TIM13 pins to AF9
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_TIM14: Connect TIM14 pins to AF9
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_OTG_FS: Connect OTG_FS pins to AF10
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_OTG_HS: Connect OTG_HS pins to AF10
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_ETH: Connect ETHERNET pins to AF11
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_FSMC: Connect FSMC pins to AF12
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_OTG_HS_FS: Connect OTG HS (configured in FS) pins to AF12
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_SDIO: Connect SDIO pins to AF12
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_DCMI: Connect DCMI pins to AF13
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   *            @arg GPIO_AF_EVENTOUT: Connect EVENTOUT pins to AF15
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   * @retval None
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   */
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** void GPIO_PinAFConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_PinSource, uint8_t GPIO_AF)
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   uint32_t temp = 0x00;
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   uint32_t temp_2 = 0x00;
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   /* Check the parameters */
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_PIN_SOURCE(GPIO_PinSource));
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   assert_param(IS_GPIO_AF(GPIO_AF));
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   temp = ((uint32_t)(GPIO_AF) << ((uint32_t)((uint32_t)GPIO_PinSource & (uint32_t)0x07) * 4)) ;
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->AFR[GPIO_PinSource >> 0x03] &= ~((uint32_t)0xF << ((uint32_t)((uint32_t)GPIO_PinSource & (
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   temp_2 = GPIOx->AFR[GPIO_PinSource >> 0x03] | temp;
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->AFR[GPIO_PinSource >> 0x03] = temp_2;
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 277              		.loc 1 548 0
+ 278 0064 ADB2     		uxth	r5, r5
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****         GPIOx->OTYPER |= (uint16_t)(((uint16_t)GPIO_InitStruct->GPIO_OType) << ((uint16_t)pinpos));
+ 279              		.loc 1 225 0
+ 280 0066 3543     		orrs	r5, r5, r6
+ 281 0068 4560     		str	r5, [r0, #4]
+ 282              	.L17:
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->PUPDR &= ~(GPIO_PUPDR_PUPDR0 << ((uint16_t)pinpos * 2));
+ 283              		.loc 1 229 0
+ 284 006a C568     		ldr	r5, [r0, #12]
+ 285 006c 2C40     		ands	r4, r4, r5
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->PUPDR |= (((uint32_t)GPIO_InitStruct->GPIO_PuPd) << (pinpos * 2));
+ 286              		.loc 1 230 0
+ 287 006e CD79     		ldrb	r5, [r1, #7]	@ zero_extendqisi2
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->PUPDR &= ~(GPIO_PUPDR_PUPDR0 << ((uint16_t)pinpos * 2));
+ 288              		.loc 1 229 0
+ 289 0070 C460     		str	r4, [r0, #12]
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****       GPIOx->PUPDR |= (((uint32_t)GPIO_InitStruct->GPIO_PuPd) << (pinpos * 2));
+ 290              		.loc 1 230 0
+ 291 0072 05FA02F2 		lsl	r2, r5, r2
+ 292 0076 C468     		ldr	r4, [r0, #12]
+ 293 0078 2243     		orrs	r2, r2, r4
+ 294 007a C260     		str	r2, [r0, #12]
+ 295              	.L16:
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   for (pinpos = 0x00; pinpos < 0x10; pinpos++)
+ 296              		.loc 1 200 0
+ 297 007c 0133     		adds	r3, r3, #1
+ 298              	.LVL34:
+ 299 007e 102B     		cmp	r3, #16
+ 300 0080 C2D1     		bne	.L18
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 301              		.loc 1 233 0
+ 302 0082 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 303              		.cfi_endproc
+ 304              	.LFE57:
+ 306              		.section	.text.GPIO_StructInit,"ax",%progbits
+ 307              		.align	1
+ 308              		.global	GPIO_StructInit
+ 309              		.thumb
+ 310              		.thumb_func
+ 312              	GPIO_StructInit:
+ 313              	.LFB58:
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 314              		.loc 1 241 0
+ 315              		.cfi_startproc
+ 316              		@ args = 0, pretend = 0, frame = 0
+ 317              		@ frame_needed = 0, uses_anonymous_args = 0
+ 318              		@ link register save eliminated.
+ 319              	.LVL35:
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_Mode = GPIO_Mode_IN;
+ 320              		.loc 1 244 0
+ 321 0000 0021     		movs	r1, #0
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_Pin  = GPIO_Pin_All;
+ 322              		.loc 1 243 0
+ 323 0002 4FF6FF73 		movw	r3, #65535
+ 324 0006 0360     		str	r3, [r0, #0]
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_Mode = GPIO_Mode_IN;
+ 325              		.loc 1 244 0
+ 326 0008 0171     		strb	r1, [r0, #4]
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_Speed = GPIO_Speed_2MHz;
+ 327              		.loc 1 245 0
+ 328 000a 4171     		strb	r1, [r0, #5]
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_OType = GPIO_OType_PP;
+ 329              		.loc 1 246 0
+ 330 000c 8171     		strb	r1, [r0, #6]
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIO_InitStruct->GPIO_PuPd = GPIO_PuPd_NOPULL;
+ 331              		.loc 1 247 0
+ 332 000e C171     		strb	r1, [r0, #7]
+ 333 0010 7047     		bx	lr
+ 334              		.cfi_endproc
+ 335              	.LFE58:
+ 337              		.section	.text.GPIO_PinLockConfig,"ax",%progbits
+ 338              		.align	1
+ 339              		.global	GPIO_PinLockConfig
+ 340              		.thumb
+ 341              		.thumb_func
+ 343              	GPIO_PinLockConfig:
+ 344              	.LFB59:
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 345              		.loc 1 262 0
+ 346              		.cfi_startproc
+ 347              		@ args = 0, pretend = 0, frame = 8
+ 348              		@ frame_needed = 0, uses_anonymous_args = 0
+ 349              		@ link register save eliminated.
+ 350              	.LVL36:
+ 351 0000 82B0     		sub	sp, sp, #8
+ 352              	.LCFI2:
+ 353              		.cfi_def_cfa_offset 8
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   __IO uint32_t tmp = 0x00010000;
+ 354              		.loc 1 263 0
+ 355 0002 4FF48033 		mov	r3, #65536
+ 356 0006 0193     		str	r3, [sp, #4]
+ 357              	.LVL37:
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   tmp |= GPIO_Pin;
+ 358              		.loc 1 269 0
+ 359 0008 019A     		ldr	r2, [sp, #4]
+ 360 000a 41EA0203 		orr	r3, r1, r2
+ 361              	.LVL38:
+ 362 000e 0193     		str	r3, [sp, #4]
+ 363              	.LVL39:
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->LCKR = tmp;
+ 364              		.loc 1 271 0
+ 365 0010 019A     		ldr	r2, [sp, #4]
+ 366 0012 C261     		str	r2, [r0, #28]
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->LCKR =  GPIO_Pin;
+ 367              		.loc 1 273 0
+ 368 0014 C161     		str	r1, [r0, #28]
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->LCKR = tmp;
+ 369              		.loc 1 275 0
+ 370 0016 0199     		ldr	r1, [sp, #4]
+ 371              	.LVL40:
+ 372 0018 C161     		str	r1, [r0, #28]
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   tmp = GPIOx->LCKR;
+ 373              		.loc 1 277 0
+ 374 001a C369     		ldr	r3, [r0, #28]
+ 375 001c 0193     		str	r3, [sp, #4]
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   tmp = GPIOx->LCKR;
+ 376              		.loc 1 279 0
+ 377 001e C069     		ldr	r0, [r0, #28]
+ 378              	.LVL41:
+ 379 0020 0190     		str	r0, [sp, #4]
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 380              		.loc 1 280 0
+ 381 0022 02B0     		add	sp, sp, #8
+ 382 0024 7047     		bx	lr
+ 383              		.cfi_endproc
+ 384              	.LFE59:
+ 386              		.section	.text.GPIO_ReadInputDataBit,"ax",%progbits
+ 387              		.align	1
+ 388              		.global	GPIO_ReadInputDataBit
+ 389              		.thumb
+ 390              		.thumb_func
+ 392              	GPIO_ReadInputDataBit:
+ 393              	.LFB60:
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 394              		.loc 1 306 0
+ 395              		.cfi_startproc
+ 396              		@ args = 0, pretend = 0, frame = 0
+ 397              		@ frame_needed = 0, uses_anonymous_args = 0
+ 398              		@ link register save eliminated.
+ 399              	.LVL42:
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   if ((GPIOx->IDR & GPIO_Pin) != (uint32_t)Bit_RESET)
+ 400              		.loc 1 313 0
+ 401 0000 0369     		ldr	r3, [r0, #16]
+ 402              	.LVL43:
+ 403 0002 1942     		tst	r1, r3
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 404              		.loc 1 322 0
+ 405 0004 0CBF     		ite	eq
+ 406 0006 0020     		moveq	r0, #0
+ 407 0008 0120     		movne	r0, #1
+ 408              	.LVL44:
+ 409 000a 7047     		bx	lr
+ 410              		.cfi_endproc
+ 411              	.LFE60:
+ 413              		.section	.text.GPIO_ReadInputData,"ax",%progbits
+ 414              		.align	1
+ 415              		.global	GPIO_ReadInputData
+ 416              		.thumb
+ 417              		.thumb_func
+ 419              	GPIO_ReadInputData:
+ 420              	.LFB61:
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 421              		.loc 1 330 0
+ 422              		.cfi_startproc
+ 423              		@ args = 0, pretend = 0, frame = 0
+ 424              		@ frame_needed = 0, uses_anonymous_args = 0
+ 425              		@ link register save eliminated.
+ 426              	.LVL45:
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   return ((uint16_t)GPIOx->IDR);
+ 427              		.loc 1 334 0
+ 428 0000 0069     		ldr	r0, [r0, #16]
+ 429              	.LVL46:
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 430              		.loc 1 335 0
+ 431 0002 80B2     		uxth	r0, r0
+ 432 0004 7047     		bx	lr
+ 433              		.cfi_endproc
+ 434              	.LFE61:
+ 436              		.section	.text.GPIO_ReadOutputDataBit,"ax",%progbits
+ 437              		.align	1
+ 438              		.global	GPIO_ReadOutputDataBit
+ 439              		.thumb
+ 440              		.thumb_func
+ 442              	GPIO_ReadOutputDataBit:
+ 443              	.LFB62:
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 444              		.loc 1 345 0
+ 445              		.cfi_startproc
+ 446              		@ args = 0, pretend = 0, frame = 0
+ 447              		@ frame_needed = 0, uses_anonymous_args = 0
+ 448              		@ link register save eliminated.
+ 449              	.LVL47:
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   if ((GPIOx->ODR & GPIO_Pin) != (uint32_t)Bit_RESET)
+ 450              		.loc 1 352 0
+ 451 0000 4369     		ldr	r3, [r0, #20]
+ 452              	.LVL48:
+ 453 0002 1942     		tst	r1, r3
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 454              		.loc 1 361 0
+ 455 0004 0CBF     		ite	eq
+ 456 0006 0020     		moveq	r0, #0
+ 457 0008 0120     		movne	r0, #1
+ 458              	.LVL49:
+ 459 000a 7047     		bx	lr
+ 460              		.cfi_endproc
+ 461              	.LFE62:
+ 463              		.section	.text.GPIO_ReadOutputData,"ax",%progbits
+ 464              		.align	1
+ 465              		.global	GPIO_ReadOutputData
+ 466              		.thumb
+ 467              		.thumb_func
+ 469              	GPIO_ReadOutputData:
+ 470              	.LFB63:
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 471              		.loc 1 369 0
+ 472              		.cfi_startproc
+ 473              		@ args = 0, pretend = 0, frame = 0
+ 474              		@ frame_needed = 0, uses_anonymous_args = 0
+ 475              		@ link register save eliminated.
+ 476              	.LVL50:
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   return ((uint16_t)GPIOx->ODR);
+ 477              		.loc 1 373 0
+ 478 0000 4069     		ldr	r0, [r0, #20]
+ 479              	.LVL51:
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** }
+ 480              		.loc 1 374 0
+ 481 0002 80B2     		uxth	r0, r0
+ 482 0004 7047     		bx	lr
+ 483              		.cfi_endproc
+ 484              	.LFE63:
+ 486              		.section	.text.GPIO_SetBits,"ax",%progbits
+ 487              		.align	1
+ 488              		.global	GPIO_SetBits
+ 489              		.thumb
+ 490              		.thumb_func
+ 492              	GPIO_SetBits:
+ 493              	.LFB64:
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 494              		.loc 1 387 0
+ 495              		.cfi_startproc
+ 496              		@ args = 0, pretend = 0, frame = 0
+ 497              		@ frame_needed = 0, uses_anonymous_args = 0
+ 498              		@ link register save eliminated.
+ 499              	.LVL52:
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->BSRRL = GPIO_Pin;
+ 500              		.loc 1 392 0
+ 501 0000 0183     		strh	r1, [r0, #24]	@ movhi
+ 502 0002 7047     		bx	lr
+ 503              		.cfi_endproc
+ 504              	.LFE64:
+ 506              		.section	.text.GPIO_ResetBits,"ax",%progbits
+ 507              		.align	1
+ 508              		.global	GPIO_ResetBits
+ 509              		.thumb
+ 510              		.thumb_func
+ 512              	GPIO_ResetBits:
+ 513              	.LFB65:
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 514              		.loc 1 406 0
+ 515              		.cfi_startproc
+ 516              		@ args = 0, pretend = 0, frame = 0
+ 517              		@ frame_needed = 0, uses_anonymous_args = 0
+ 518              		@ link register save eliminated.
+ 519              	.LVL53:
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->BSRRH = GPIO_Pin;
+ 520              		.loc 1 411 0
+ 521 0000 4183     		strh	r1, [r0, #26]	@ movhi
+ 522 0002 7047     		bx	lr
+ 523              		.cfi_endproc
+ 524              	.LFE65:
+ 526              		.section	.text.GPIO_WriteBit,"ax",%progbits
+ 527              		.align	1
+ 528              		.global	GPIO_WriteBit
+ 529              		.thumb
+ 530              		.thumb_func
+ 532              	GPIO_WriteBit:
+ 533              	.LFB66:
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 534              		.loc 1 426 0
+ 535              		.cfi_startproc
+ 536              		@ args = 0, pretend = 0, frame = 0
+ 537              		@ frame_needed = 0, uses_anonymous_args = 0
+ 538              		@ link register save eliminated.
+ 539              	.LVL54:
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   if (BitVal != Bit_RESET)
+ 540              		.loc 1 432 0
+ 541 0000 0AB1     		cbz	r2, .L29
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     GPIOx->BSRRL = GPIO_Pin;
+ 542              		.loc 1 434 0
+ 543 0002 0183     		strh	r1, [r0, #24]	@ movhi
+ 544 0004 7047     		bx	lr
+ 545              	.L29:
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****     GPIOx->BSRRH = GPIO_Pin ;
+ 546              		.loc 1 438 0
+ 547 0006 4183     		strh	r1, [r0, #26]	@ movhi
+ 548 0008 7047     		bx	lr
+ 549              		.cfi_endproc
+ 550              	.LFE66:
+ 552              		.section	.text.GPIO_Write,"ax",%progbits
+ 553              		.align	1
+ 554              		.global	GPIO_Write
+ 555              		.thumb
+ 556              		.thumb_func
+ 558              	GPIO_Write:
+ 559              	.LFB67:
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 560              		.loc 1 449 0
+ 561              		.cfi_startproc
+ 562              		@ args = 0, pretend = 0, frame = 0
+ 563              		@ frame_needed = 0, uses_anonymous_args = 0
+ 564              		@ link register save eliminated.
+ 565              	.LVL55:
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->ODR = PortVal;
+ 566              		.loc 1 453 0
+ 567 0000 4161     		str	r1, [r0, #20]
+ 568 0002 7047     		bx	lr
+ 569              		.cfi_endproc
+ 570              	.LFE67:
+ 572              		.section	.text.GPIO_ToggleBits,"ax",%progbits
+ 573              		.align	1
+ 574              		.global	GPIO_ToggleBits
+ 575              		.thumb
+ 576              		.thumb_func
+ 578              	GPIO_ToggleBits:
+ 579              	.LFB68:
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 580              		.loc 1 463 0
+ 581              		.cfi_startproc
+ 582              		@ args = 0, pretend = 0, frame = 0
+ 583              		@ frame_needed = 0, uses_anonymous_args = 0
+ 584              		@ link register save eliminated.
+ 585              	.LVL56:
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->ODR ^= GPIO_Pin;
+ 586              		.loc 1 467 0
+ 587 0000 4369     		ldr	r3, [r0, #20]
+ 588 0002 5940     		eors	r1, r1, r3
+ 589              	.LVL57:
+ 590 0004 4161     		str	r1, [r0, #20]
+ 591 0006 7047     		bx	lr
+ 592              		.cfi_endproc
+ 593              	.LFE68:
+ 595              		.section	.text.GPIO_PinAFConfig,"ax",%progbits
+ 596              		.align	1
+ 597              		.global	GPIO_PinAFConfig
+ 598              		.thumb
+ 599              		.thumb_func
+ 601              	GPIO_PinAFConfig:
+ 602              	.LFB69:
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 603              		.loc 1 535 0
+ 604              		.cfi_startproc
+ 605              		@ args = 0, pretend = 0, frame = 0
+ 606              		@ frame_needed = 0, uses_anonymous_args = 0
+ 607              	.LVL58:
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   temp = ((uint32_t)(GPIO_AF) << ((uint32_t)((uint32_t)GPIO_PinSource & (uint32_t)0x07) * 4)) ;
+ 608              		.loc 1 544 0
+ 609 0000 01F00703 		and	r3, r1, #7
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c **** {
+ 610              		.loc 1 535 0
+ 611 0004 30B5     		push	{r4, r5, lr}
+ 612              	.LCFI3:
+ 613              		.cfi_def_cfa_offset 12
+ 614              		.cfi_offset 4, -12
+ 615              		.cfi_offset 5, -8
+ 616              		.cfi_offset 14, -4
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   temp = ((uint32_t)(GPIO_AF) << ((uint32_t)((uint32_t)GPIO_PinSource & (uint32_t)0x07) * 4)) ;
+ 617              		.loc 1 544 0
+ 618 0006 9B00     		lsls	r3, r3, #2
+ 619              	.LVL59:
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->AFR[GPIO_PinSource >> 0x03] &= ~((uint32_t)0xF << ((uint32_t)((uint32_t)GPIO_PinSource & (
+ 620              		.loc 1 545 0
+ 621 0008 0F24     		movs	r4, #15
+ 622 000a 04FA03F4 		lsl	r4, r4, r3
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   temp = ((uint32_t)(GPIO_AF) << ((uint32_t)((uint32_t)GPIO_PinSource & (uint32_t)0x07) * 4)) ;
+ 623              		.loc 1 544 0
+ 624 000e 02FA03F2 		lsl	r2, r2, r3
+ 625              	.LVL60:
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->AFR[GPIO_PinSource >> 0x03] &= ~((uint32_t)0xF << ((uint32_t)((uint32_t)GPIO_PinSource & (
+ 626              		.loc 1 545 0
+ 627 0012 C908     		lsrs	r1, r1, #3
+ 628              	.LVL61:
+ 629 0014 0831     		adds	r1, r1, #8
+ 630 0016 50F82150 		ldr	r5, [r0, r1, lsl #2]
+ 631 001a 25EA0404 		bic	r4, r5, r4
+ 632 001e 40F82140 		str	r4, [r0, r1, lsl #2]
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   temp_2 = GPIOx->AFR[GPIO_PinSource >> 0x03] | temp;
+ 633              		.loc 1 546 0
+ 634 0022 50F82140 		ldr	r4, [r0, r1, lsl #2]
+ 635 0026 1443     		orrs	r4, r4, r2
+ 636              	.LVL62:
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_gpio.c ****   GPIOx->AFR[GPIO_PinSource >> 0x03] = temp_2;
+ 637              		.loc 1 547 0
+ 638 0028 40F82140 		str	r4, [r0, r1, lsl #2]
+ 639 002c 30BD     		pop	{r4, r5, pc}
+ 640              		.cfi_endproc
+ 641              	.LFE69:
+ 643              		.text
+ 644              	.Letext0:
+ 645              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 646              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 647              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_gpio.h"
+ 648              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 649              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_gpio.c
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:19     .text.GPIO_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:24     .text.GPIO_DeInit:00000000 GPIO_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:181    .text.GPIO_DeInit:000000b4 $d
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:194    .text.GPIO_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:199    .text.GPIO_Init:00000000 GPIO_Init
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:307    .text.GPIO_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:312    .text.GPIO_StructInit:00000000 GPIO_StructInit
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:338    .text.GPIO_PinLockConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:343    .text.GPIO_PinLockConfig:00000000 GPIO_PinLockConfig
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:387    .text.GPIO_ReadInputDataBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:392    .text.GPIO_ReadInputDataBit:00000000 GPIO_ReadInputDataBit
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:414    .text.GPIO_ReadInputData:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:419    .text.GPIO_ReadInputData:00000000 GPIO_ReadInputData
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:437    .text.GPIO_ReadOutputDataBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:442    .text.GPIO_ReadOutputDataBit:00000000 GPIO_ReadOutputDataBit
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:464    .text.GPIO_ReadOutputData:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:469    .text.GPIO_ReadOutputData:00000000 GPIO_ReadOutputData
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:487    .text.GPIO_SetBits:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:492    .text.GPIO_SetBits:00000000 GPIO_SetBits
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:507    .text.GPIO_ResetBits:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:512    .text.GPIO_ResetBits:00000000 GPIO_ResetBits
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:527    .text.GPIO_WriteBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:532    .text.GPIO_WriteBit:00000000 GPIO_WriteBit
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:553    .text.GPIO_Write:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:558    .text.GPIO_Write:00000000 GPIO_Write
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:573    .text.GPIO_ToggleBits:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:578    .text.GPIO_ToggleBits:00000000 GPIO_ToggleBits
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:596    .text.GPIO_PinAFConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccMAkP2O.s:601    .text.GPIO_PinAFConfig:00000000 GPIO_PinAFConfig
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_AHB1PeriphResetCmd

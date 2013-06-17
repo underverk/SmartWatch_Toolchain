@@ -1,0 +1,2422 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"driver_power.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.cpu_reclock,"ax",%progbits
+  19              		.align	1
+  20              		.global	cpu_reclock
+  21              		.thumb
+  22              		.thumb_func
+  24              	cpu_reclock:
+  25              	.LFB58:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/driver_power.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** // Davey Taylor, Arduino Verkstad AB
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** // Power Management Driver
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #include <stm32f2xx_rcc.h>
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #include <stm32f2xx_pwr.h>
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #include <stm32f2xx_flash.h>
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #include "pins.h"
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #include "driver_power.h"
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #include "driver_i2c.h"
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #include "pmu_defines.h"
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** #define MHZ (HSE_VALUE / 1000000) // External crystal speed in Mhz
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** const ClockDef_t sysclock_3m25 = {  3250000, 0,     0, 0, 0, 0, RCC_SYSCLK_Div8, RCC_HCLK_Div1, RCC
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** const ClockDef_t sysclock_15m  = { 15000000, MHZ, 240, 2, 5, 0, RCC_SYSCLK_Div8, RCC_HCLK_Div1, RCC
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** const ClockDef_t sysclock_26m  = { 26000000, 0,     0, 0, 0, 1, RCC_SYSCLK_Div1, RCC_HCLK_Div1, RCC
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** const ClockDef_t sysclock_120m = {120000000, MHZ, 240, 2, 5, 7, RCC_SYSCLK_Div1, RCC_HCLK_Div2, RCC
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** void cpu_reclock(const ClockDef_t *clk) {
+  27              		.loc 1 19 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 13B5     		push	{r0, r1, r4, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 16
+  35              		.cfi_offset 0, -16
+  36              		.cfi_offset 1, -12
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  39              		.loc 1 19 0
+  40 0002 0446     		mov	r4, r0
+  41              	.LBB14:
+  42              	.LBB15:
+  43              		.file 2 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Davey Taylor, Arduino Verkstad AB
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Platform configuration and Arduino internals
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #ifndef _PINS_H_
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define _PINS_H_
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #include "stm32f2xx_gpio.h"
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #include <stdint.h>
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #include <stdbool.h>
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define HIGH 1
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define LOW 0
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define NO_CHANGE -1
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** typedef struct {
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOMode_TypeDef  mode;  // operating mode @ref GPIOMode_TypeDef
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOSpeed_TypeDef speed; // speed @ref GPIOSpeed_TypeDef
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOOType_TypeDef type;  // output type @ref GPIOOType_TypeDef
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOPuPd_TypeDef  pupd;  // pull-up/down @ref GPIOPuPd_TypeDef
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint8_t af;              // alternate function
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   int16_t set;             // pin setting
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** } PinCfg_t;
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** typedef struct {
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIO_TypeDef *port; // Pin port
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint32_t pin;       // Pin mask @ref GPIO_pins_define
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint8_t  source;    // Pin number @ref GPIO_Pin_sources 
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint32_t clock;     // clock source
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   const PinCfg_t *cfg;      // Default configuration
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** } PinDef_t;
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t INPUT;
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t INPUT_PULLDOWN;
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t INPUT_PULLUP;
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t ANALOG_INPUT;
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t OUTPUT;
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t OUTPUT_HIGH;
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t OUTPUT_LOW;
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t AF_SPI1;
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t AF_MCO1;
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA0 ;
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA1 ;
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA2 ;
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA4 ;
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA5 ;
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA7 ;
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA8 ;
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA9 ;
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA11;
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA12;
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA15;
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB0 ;
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB1 ;
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB2 ;
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB3 ;
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB4 ;
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB5 ;
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB6 ;
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB7 ;
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB8 ;
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB9 ;
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB10;
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB11;
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB12;
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB13;
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB14;
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB15; 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC0 ;
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC1 ;
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC3 ;
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC4 ;
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC6 ;
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC7 ;
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC9 ;
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC10;
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC11;
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC12; 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC13;
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** void pinMode(const PinDef_t *pin, const PinCfg_t *cfg);
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** void initializePins(void);
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** void digitalWrite(const PinDef_t *pin, uint8_t value);
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** uint8_t digitalRead(const PinDef_t *pin);
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern volatile uint16_t int_ctr;
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Nested interrupt enable
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void cli(void) {
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   __ASM volatile ("cpsid i");
+  44              		.loc 2 89 0
+  45              	@ 89 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h" 1
+  46 0004 72B6     		cpsid i
+  47              	@ 0 "" 2
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   int_ctr++;
+  48              		.loc 2 90 0
+  49              		.thumb
+  50 0006 294B     		ldr	r3, .L16
+  51 0008 1A88     		ldrh	r2, [r3, #0]
+  52 000a 501C     		adds	r0, r2, #1
+  53              	.LVL1:
+  54 000c 81B2     		uxth	r1, r0
+  55              	.LVL2:
+  56              	.LBE15:
+  57              	.LBE14:
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Disable interrupts
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   cli();
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Switch to HSE (as changing PLL while using it is asking for trouble)
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   RCC_SYSCLKConfig(RCC_SYSCLKSource_HSE);
+  58              		.loc 1 24 0
+  59 000e 0120     		movs	r0, #1
+  60              	.LVL3:
+  61              	.LBB17:
+  62              	.LBB16:
+  63              		.loc 2 90 0
+  64 0010 1980     		strh	r1, [r3, #0]	@ movhi
+  65              	.LBE16:
+  66              	.LBE17:
+  67              		.loc 1 24 0
+  68 0012 FFF7FEFF 		bl	RCC_SYSCLKConfig
+  69              	.LVL4:
+  70              	.L2:
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   while(RCC_GetSYSCLKSource() != (uint32_t)RCC_CFGR_SWS_HSE); // Wait for completion
+  71              		.loc 1 25 0 discriminator 1
+  72 0016 FFF7FEFF 		bl	RCC_GetSYSCLKSource
+  73              	.LVL5:
+  74 001a 0428     		cmp	r0, #4
+  75 001c FBD1     		bne	.L2
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Disable PLL
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   RCC_PLLCmd(DISABLE);
+  76              		.loc 1 28 0
+  77 001e 0020     		movs	r0, #0
+  78 0020 FFF7FEFF 		bl	RCC_PLLCmd
+  79              	.LVL6:
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Set HCLK & PCLK from table
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   RCC_HCLKConfig(clk->hps);
+  80              		.loc 1 31 0
+  81 0024 2069     		ldr	r0, [r4, #16]
+  82 0026 FFF7FEFF 		bl	RCC_HCLKConfig
+  83              	.LVL7:
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   RCC_PCLK2Config(clk->pps2);
+  84              		.loc 1 32 0
+  85 002a 6069     		ldr	r0, [r4, #20]
+  86 002c FFF7FEFF 		bl	RCC_PCLK2Config
+  87              	.LVL8:
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   RCC_PCLK1Config(clk->pps1);
+  88              		.loc 1 33 0
+  89 0030 A069     		ldr	r0, [r4, #24]
+  90 0032 FFF7FEFF 		bl	RCC_PCLK1Config
+  91              	.LVL9:
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Set flash latency from table
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   FLASH_SetLatency(clk->f_latency);
+  92              		.loc 1 36 0
+  93 0036 E068     		ldr	r0, [r4, #12]
+  94 0038 FFF7FEFF 		bl	FLASH_SetLatency
+  95              	.LVL10:
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Use PLL?
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if(clk->m) {
+  96              		.loc 1 39 0
+  97 003c A188     		ldrh	r1, [r4, #4]
+  98 003e D9B9     		cbnz	r1, .L3
+  99              	.L8:
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Configure PLL
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     RCC_PLLConfig(RCC_PLLCFGR_PLLSRC_HSE, clk->m, clk->n, clk->p, clk->q);
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Enable PLL
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     RCC_PLLCmd(ENABLE);
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Wait for PLL to become stable
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Switch to PLL
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     while (RCC_GetSYSCLKSource() != (uint32_t)RCC_CFGR_SWS_PLL); // Wait for completion
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   }
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Update system tick
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   SystemCoreClockUpdate();
+ 100              		.loc 1 52 0
+ 101 0040 FFF7FEFF 		bl	SystemCoreClockUpdate
+ 102              	.LVL11:
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   SysTick_Config(SystemCoreClock / 1000);
+ 103              		.loc 1 53 0
+ 104 0044 1A4B     		ldr	r3, .L16+4
+ 105              	.LVL12:
+ 106 0046 4FF47A71 		mov	r1, #1000
+ 107 004a 1A68     		ldr	r2, [r3, #0]
+ 108              	.LBB18:
+ 109              	.LBB19:
+ 110              		.file 3 "src/libstm32f2/core_cm3.h"
+   1:src/libstm32f2/core_cm3.h **** /**************************************************************************//**
+   2:src/libstm32f2/core_cm3.h ****  * @file     core_cm3.h
+   3:src/libstm32f2/core_cm3.h ****  * @brief    CMSIS Cortex-M3 Core Peripheral Access Layer Header File
+   4:src/libstm32f2/core_cm3.h ****  * @version  V3.01
+   5:src/libstm32f2/core_cm3.h ****  * @date     22. March 2012
+   6:src/libstm32f2/core_cm3.h ****  *
+   7:src/libstm32f2/core_cm3.h ****  * @note
+   8:src/libstm32f2/core_cm3.h ****  * Copyright (C) 2009-2012 ARM Limited. All rights reserved.
+   9:src/libstm32f2/core_cm3.h ****  *
+  10:src/libstm32f2/core_cm3.h ****  * @par
+  11:src/libstm32f2/core_cm3.h ****  * ARM Limited (ARM) is supplying this software for use with Cortex-M
+  12:src/libstm32f2/core_cm3.h ****  * processor based microcontrollers.  This file can be freely distributed
+  13:src/libstm32f2/core_cm3.h ****  * within development tools that are supporting such ARM based processors.
+  14:src/libstm32f2/core_cm3.h ****  *
+  15:src/libstm32f2/core_cm3.h ****  * @par
+  16:src/libstm32f2/core_cm3.h ****  * THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
+  17:src/libstm32f2/core_cm3.h ****  * OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+  18:src/libstm32f2/core_cm3.h ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
+  19:src/libstm32f2/core_cm3.h ****  * ARM SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR
+  20:src/libstm32f2/core_cm3.h ****  * CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+  21:src/libstm32f2/core_cm3.h ****  *
+  22:src/libstm32f2/core_cm3.h ****  ******************************************************************************/
+  23:src/libstm32f2/core_cm3.h **** #if defined ( __ICCARM__ )
+  24:src/libstm32f2/core_cm3.h ****  #pragma system_include  /* treat file as system include file for MISRA check */
+  25:src/libstm32f2/core_cm3.h **** #endif
+  26:src/libstm32f2/core_cm3.h **** 
+  27:src/libstm32f2/core_cm3.h **** #ifdef __cplusplus
+  28:src/libstm32f2/core_cm3.h ****  extern "C" {
+  29:src/libstm32f2/core_cm3.h **** #endif
+  30:src/libstm32f2/core_cm3.h **** 
+  31:src/libstm32f2/core_cm3.h **** #ifndef __CORE_CM3_H_GENERIC
+  32:src/libstm32f2/core_cm3.h **** #define __CORE_CM3_H_GENERIC
+  33:src/libstm32f2/core_cm3.h **** 
+  34:src/libstm32f2/core_cm3.h **** /** \page CMSIS_MISRA_Exceptions  MISRA-C:2004 Compliance Exceptions
+  35:src/libstm32f2/core_cm3.h ****   CMSIS violates the following MISRA-C:2004 rules:
+  36:src/libstm32f2/core_cm3.h **** 
+  37:src/libstm32f2/core_cm3.h ****    \li Required Rule 8.5, object/function definition in header file.<br>
+  38:src/libstm32f2/core_cm3.h ****      Function definitions in header files are used to allow 'inlining'.
+  39:src/libstm32f2/core_cm3.h **** 
+  40:src/libstm32f2/core_cm3.h ****    \li Required Rule 18.4, declaration of union type or object of union type: '{...}'.<br>
+  41:src/libstm32f2/core_cm3.h ****      Unions are used for effective representation of core registers.
+  42:src/libstm32f2/core_cm3.h **** 
+  43:src/libstm32f2/core_cm3.h ****    \li Advisory Rule 19.7, Function-like macro defined.<br>
+  44:src/libstm32f2/core_cm3.h ****      Function-like macros are used to allow more efficient code.
+  45:src/libstm32f2/core_cm3.h ****  */
+  46:src/libstm32f2/core_cm3.h **** 
+  47:src/libstm32f2/core_cm3.h **** 
+  48:src/libstm32f2/core_cm3.h **** /*******************************************************************************
+  49:src/libstm32f2/core_cm3.h ****  *                 CMSIS definitions
+  50:src/libstm32f2/core_cm3.h ****  ******************************************************************************/
+  51:src/libstm32f2/core_cm3.h **** /** \ingroup Cortex_M3
+  52:src/libstm32f2/core_cm3.h ****   @{
+  53:src/libstm32f2/core_cm3.h ****  */
+  54:src/libstm32f2/core_cm3.h **** 
+  55:src/libstm32f2/core_cm3.h **** /*  CMSIS CM3 definitions */
+  56:src/libstm32f2/core_cm3.h **** #define __CM3_CMSIS_VERSION_MAIN  (0x03)                                   /*!< [31:16] CMSIS HAL m
+  57:src/libstm32f2/core_cm3.h **** #define __CM3_CMSIS_VERSION_SUB   (0x01)                                   /*!< [15:0]  CMSIS HAL s
+  58:src/libstm32f2/core_cm3.h **** #define __CM3_CMSIS_VERSION       ((__CM3_CMSIS_VERSION_MAIN << 16) | \
+  59:src/libstm32f2/core_cm3.h ****                                     __CM3_CMSIS_VERSION_SUB          )     /*!< CMSIS HAL version n
+  60:src/libstm32f2/core_cm3.h **** 
+  61:src/libstm32f2/core_cm3.h **** #define __CORTEX_M                (0x03)                                   /*!< Cortex-M Core      
+  62:src/libstm32f2/core_cm3.h **** 
+  63:src/libstm32f2/core_cm3.h **** 
+  64:src/libstm32f2/core_cm3.h **** #if   defined ( __CC_ARM )
+  65:src/libstm32f2/core_cm3.h ****   #define __ASM            __asm                                      /*!< asm keyword for ARM Comp
+  66:src/libstm32f2/core_cm3.h ****   #define __INLINE         __inline                                   /*!< inline keyword for ARM C
+  67:src/libstm32f2/core_cm3.h ****   #define __STATIC_INLINE  static __inline
+  68:src/libstm32f2/core_cm3.h **** 
+  69:src/libstm32f2/core_cm3.h **** #elif defined ( __ICCARM__ )
+  70:src/libstm32f2/core_cm3.h ****   #define __ASM            __asm                                      /*!< asm keyword for IAR Comp
+  71:src/libstm32f2/core_cm3.h ****   #define __INLINE         inline                                     /*!< inline keyword for IAR C
+  72:src/libstm32f2/core_cm3.h ****   #define __STATIC_INLINE  static inline
+  73:src/libstm32f2/core_cm3.h **** 
+  74:src/libstm32f2/core_cm3.h **** #elif defined ( __TMS470__ )
+  75:src/libstm32f2/core_cm3.h ****   #define __ASM            __asm                                      /*!< asm keyword for TI CCS C
+  76:src/libstm32f2/core_cm3.h ****   #define __STATIC_INLINE  static inline
+  77:src/libstm32f2/core_cm3.h **** 
+  78:src/libstm32f2/core_cm3.h **** #elif defined ( __GNUC__ )
+  79:src/libstm32f2/core_cm3.h ****   #define __ASM            __asm                                      /*!< asm keyword for GNU Comp
+  80:src/libstm32f2/core_cm3.h ****   #define __INLINE         inline                                     /*!< inline keyword for GNU C
+  81:src/libstm32f2/core_cm3.h ****   #define __STATIC_INLINE  static inline
+  82:src/libstm32f2/core_cm3.h **** 
+  83:src/libstm32f2/core_cm3.h **** #elif defined ( __TASKING__ )
+  84:src/libstm32f2/core_cm3.h ****   #define __ASM            __asm                                      /*!< asm keyword for TASKING 
+  85:src/libstm32f2/core_cm3.h ****   #define __INLINE         inline                                     /*!< inline keyword for TASKI
+  86:src/libstm32f2/core_cm3.h ****   #define __STATIC_INLINE  static inline
+  87:src/libstm32f2/core_cm3.h **** 
+  88:src/libstm32f2/core_cm3.h **** #endif
+  89:src/libstm32f2/core_cm3.h **** 
+  90:src/libstm32f2/core_cm3.h **** /** __FPU_USED indicates whether an FPU is used or not. This core does not support an FPU at all
+  91:src/libstm32f2/core_cm3.h **** */
+  92:src/libstm32f2/core_cm3.h **** #define __FPU_USED       0
+  93:src/libstm32f2/core_cm3.h **** 
+  94:src/libstm32f2/core_cm3.h **** #if defined ( __CC_ARM )
+  95:src/libstm32f2/core_cm3.h ****   #if defined __TARGET_FPU_VFP
+  96:src/libstm32f2/core_cm3.h ****     #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+  97:src/libstm32f2/core_cm3.h ****   #endif
+  98:src/libstm32f2/core_cm3.h **** 
+  99:src/libstm32f2/core_cm3.h **** #elif defined ( __ICCARM__ )
+ 100:src/libstm32f2/core_cm3.h ****   #if defined __ARMVFP__
+ 101:src/libstm32f2/core_cm3.h ****     #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 102:src/libstm32f2/core_cm3.h ****   #endif
+ 103:src/libstm32f2/core_cm3.h **** 
+ 104:src/libstm32f2/core_cm3.h **** #elif defined ( __TMS470__ )
+ 105:src/libstm32f2/core_cm3.h ****   #if defined __TI__VFP_SUPPORT____
+ 106:src/libstm32f2/core_cm3.h ****     #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 107:src/libstm32f2/core_cm3.h ****   #endif
+ 108:src/libstm32f2/core_cm3.h **** 
+ 109:src/libstm32f2/core_cm3.h **** #elif defined ( __GNUC__ )
+ 110:src/libstm32f2/core_cm3.h ****   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+ 111:src/libstm32f2/core_cm3.h ****     #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 112:src/libstm32f2/core_cm3.h ****   #endif
+ 113:src/libstm32f2/core_cm3.h **** 
+ 114:src/libstm32f2/core_cm3.h **** #elif defined ( __TASKING__ )
+ 115:src/libstm32f2/core_cm3.h ****   #if defined __FPU_VFP__
+ 116:src/libstm32f2/core_cm3.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 117:src/libstm32f2/core_cm3.h ****   #endif
+ 118:src/libstm32f2/core_cm3.h **** #endif
+ 119:src/libstm32f2/core_cm3.h **** 
+ 120:src/libstm32f2/core_cm3.h **** #include <stdint.h>                      /* standard types definitions                      */
+ 121:src/libstm32f2/core_cm3.h **** #include <core_cmInstr.h>                /* Core Instruction Access                         */
+ 122:src/libstm32f2/core_cm3.h **** #include <core_cmFunc.h>                 /* Core Function Access                            */
+ 123:src/libstm32f2/core_cm3.h **** 
+ 124:src/libstm32f2/core_cm3.h **** #endif /* __CORE_CM3_H_GENERIC */
+ 125:src/libstm32f2/core_cm3.h **** 
+ 126:src/libstm32f2/core_cm3.h **** #ifndef __CMSIS_GENERIC
+ 127:src/libstm32f2/core_cm3.h **** 
+ 128:src/libstm32f2/core_cm3.h **** #ifndef __CORE_CM3_H_DEPENDANT
+ 129:src/libstm32f2/core_cm3.h **** #define __CORE_CM3_H_DEPENDANT
+ 130:src/libstm32f2/core_cm3.h **** 
+ 131:src/libstm32f2/core_cm3.h **** /* check device defines and use defaults */
+ 132:src/libstm32f2/core_cm3.h **** #if defined __CHECK_DEVICE_DEFINES
+ 133:src/libstm32f2/core_cm3.h ****   #ifndef __CM3_REV
+ 134:src/libstm32f2/core_cm3.h ****     #define __CM3_REV               0x0200
+ 135:src/libstm32f2/core_cm3.h ****     #warning "__CM3_REV not defined in device header file; using default!"
+ 136:src/libstm32f2/core_cm3.h ****   #endif
+ 137:src/libstm32f2/core_cm3.h **** 
+ 138:src/libstm32f2/core_cm3.h ****   #ifndef __MPU_PRESENT
+ 139:src/libstm32f2/core_cm3.h ****     #define __MPU_PRESENT             0
+ 140:src/libstm32f2/core_cm3.h ****     #warning "__MPU_PRESENT not defined in device header file; using default!"
+ 141:src/libstm32f2/core_cm3.h ****   #endif
+ 142:src/libstm32f2/core_cm3.h **** 
+ 143:src/libstm32f2/core_cm3.h ****   #ifndef __NVIC_PRIO_BITS
+ 144:src/libstm32f2/core_cm3.h ****     #define __NVIC_PRIO_BITS          4
+ 145:src/libstm32f2/core_cm3.h ****     #warning "__NVIC_PRIO_BITS not defined in device header file; using default!"
+ 146:src/libstm32f2/core_cm3.h ****   #endif
+ 147:src/libstm32f2/core_cm3.h **** 
+ 148:src/libstm32f2/core_cm3.h ****   #ifndef __Vendor_SysTickConfig
+ 149:src/libstm32f2/core_cm3.h ****     #define __Vendor_SysTickConfig    0
+ 150:src/libstm32f2/core_cm3.h ****     #warning "__Vendor_SysTickConfig not defined in device header file; using default!"
+ 151:src/libstm32f2/core_cm3.h ****   #endif
+ 152:src/libstm32f2/core_cm3.h **** #endif
+ 153:src/libstm32f2/core_cm3.h **** 
+ 154:src/libstm32f2/core_cm3.h **** /* IO definitions (access restrictions to peripheral registers) */
+ 155:src/libstm32f2/core_cm3.h **** /**
+ 156:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_glob_defs CMSIS Global Defines
+ 157:src/libstm32f2/core_cm3.h **** 
+ 158:src/libstm32f2/core_cm3.h ****     <strong>IO Type Qualifiers</strong> are used
+ 159:src/libstm32f2/core_cm3.h ****     \li to specify the access to peripheral variables.
+ 160:src/libstm32f2/core_cm3.h ****     \li for automatic generation of peripheral register debug information.
+ 161:src/libstm32f2/core_cm3.h **** */
+ 162:src/libstm32f2/core_cm3.h **** #ifdef __cplusplus
+ 163:src/libstm32f2/core_cm3.h ****   #define   __I     volatile             /*!< Defines 'read only' permissions                 */
+ 164:src/libstm32f2/core_cm3.h **** #else
+ 165:src/libstm32f2/core_cm3.h ****   #define   __I     volatile const       /*!< Defines 'read only' permissions                 */
+ 166:src/libstm32f2/core_cm3.h **** #endif
+ 167:src/libstm32f2/core_cm3.h **** #define     __O     volatile             /*!< Defines 'write only' permissions                */
+ 168:src/libstm32f2/core_cm3.h **** #define     __IO    volatile             /*!< Defines 'read / write' permissions              */
+ 169:src/libstm32f2/core_cm3.h **** 
+ 170:src/libstm32f2/core_cm3.h **** /*@} end of group Cortex_M3 */
+ 171:src/libstm32f2/core_cm3.h **** 
+ 172:src/libstm32f2/core_cm3.h **** 
+ 173:src/libstm32f2/core_cm3.h **** 
+ 174:src/libstm32f2/core_cm3.h **** /*******************************************************************************
+ 175:src/libstm32f2/core_cm3.h ****  *                 Register Abstraction
+ 176:src/libstm32f2/core_cm3.h ****   Core Register contain:
+ 177:src/libstm32f2/core_cm3.h ****   - Core Register
+ 178:src/libstm32f2/core_cm3.h ****   - Core NVIC Register
+ 179:src/libstm32f2/core_cm3.h ****   - Core SCB Register
+ 180:src/libstm32f2/core_cm3.h ****   - Core SysTick Register
+ 181:src/libstm32f2/core_cm3.h ****   - Core Debug Register
+ 182:src/libstm32f2/core_cm3.h ****   - Core MPU Register
+ 183:src/libstm32f2/core_cm3.h ****  ******************************************************************************/
+ 184:src/libstm32f2/core_cm3.h **** /** \defgroup CMSIS_core_register Defines and Type Definitions
+ 185:src/libstm32f2/core_cm3.h ****     \brief Type definitions and defines for Cortex-M processor based devices.
+ 186:src/libstm32f2/core_cm3.h **** */
+ 187:src/libstm32f2/core_cm3.h **** 
+ 188:src/libstm32f2/core_cm3.h **** /** \ingroup    CMSIS_core_register
+ 189:src/libstm32f2/core_cm3.h ****     \defgroup   CMSIS_CORE  Status and Control Registers
+ 190:src/libstm32f2/core_cm3.h ****     \brief  Core Register type definitions.
+ 191:src/libstm32f2/core_cm3.h ****   @{
+ 192:src/libstm32f2/core_cm3.h ****  */
+ 193:src/libstm32f2/core_cm3.h **** 
+ 194:src/libstm32f2/core_cm3.h **** /** \brief  Union type to access the Application Program Status Register (APSR).
+ 195:src/libstm32f2/core_cm3.h ****  */
+ 196:src/libstm32f2/core_cm3.h **** typedef union
+ 197:src/libstm32f2/core_cm3.h **** {
+ 198:src/libstm32f2/core_cm3.h ****   struct
+ 199:src/libstm32f2/core_cm3.h ****   {
+ 200:src/libstm32f2/core_cm3.h **** #if (__CORTEX_M != 0x04)
+ 201:src/libstm32f2/core_cm3.h ****     uint32_t _reserved0:27;              /*!< bit:  0..26  Reserved                           */
+ 202:src/libstm32f2/core_cm3.h **** #else
+ 203:src/libstm32f2/core_cm3.h ****     uint32_t _reserved0:16;              /*!< bit:  0..15  Reserved                           */
+ 204:src/libstm32f2/core_cm3.h ****     uint32_t GE:4;                       /*!< bit: 16..19  Greater than or Equal flags        */
+ 205:src/libstm32f2/core_cm3.h ****     uint32_t _reserved1:7;               /*!< bit: 20..26  Reserved                           */
+ 206:src/libstm32f2/core_cm3.h **** #endif
+ 207:src/libstm32f2/core_cm3.h ****     uint32_t Q:1;                        /*!< bit:     27  Saturation condition flag          */
+ 208:src/libstm32f2/core_cm3.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag       */
+ 209:src/libstm32f2/core_cm3.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag          */
+ 210:src/libstm32f2/core_cm3.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag           */
+ 211:src/libstm32f2/core_cm3.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag       */
+ 212:src/libstm32f2/core_cm3.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 213:src/libstm32f2/core_cm3.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 214:src/libstm32f2/core_cm3.h **** } APSR_Type;
+ 215:src/libstm32f2/core_cm3.h **** 
+ 216:src/libstm32f2/core_cm3.h **** 
+ 217:src/libstm32f2/core_cm3.h **** /** \brief  Union type to access the Interrupt Program Status Register (IPSR).
+ 218:src/libstm32f2/core_cm3.h ****  */
+ 219:src/libstm32f2/core_cm3.h **** typedef union
+ 220:src/libstm32f2/core_cm3.h **** {
+ 221:src/libstm32f2/core_cm3.h ****   struct
+ 222:src/libstm32f2/core_cm3.h ****   {
+ 223:src/libstm32f2/core_cm3.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number                   */
+ 224:src/libstm32f2/core_cm3.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved                           */
+ 225:src/libstm32f2/core_cm3.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 226:src/libstm32f2/core_cm3.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 227:src/libstm32f2/core_cm3.h **** } IPSR_Type;
+ 228:src/libstm32f2/core_cm3.h **** 
+ 229:src/libstm32f2/core_cm3.h **** 
+ 230:src/libstm32f2/core_cm3.h **** /** \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
+ 231:src/libstm32f2/core_cm3.h ****  */
+ 232:src/libstm32f2/core_cm3.h **** typedef union
+ 233:src/libstm32f2/core_cm3.h **** {
+ 234:src/libstm32f2/core_cm3.h ****   struct
+ 235:src/libstm32f2/core_cm3.h ****   {
+ 236:src/libstm32f2/core_cm3.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number                   */
+ 237:src/libstm32f2/core_cm3.h **** #if (__CORTEX_M != 0x04)
+ 238:src/libstm32f2/core_cm3.h ****     uint32_t _reserved0:15;              /*!< bit:  9..23  Reserved                           */
+ 239:src/libstm32f2/core_cm3.h **** #else
+ 240:src/libstm32f2/core_cm3.h ****     uint32_t _reserved0:7;               /*!< bit:  9..15  Reserved                           */
+ 241:src/libstm32f2/core_cm3.h ****     uint32_t GE:4;                       /*!< bit: 16..19  Greater than or Equal flags        */
+ 242:src/libstm32f2/core_cm3.h ****     uint32_t _reserved1:4;               /*!< bit: 20..23  Reserved                           */
+ 243:src/libstm32f2/core_cm3.h **** #endif
+ 244:src/libstm32f2/core_cm3.h ****     uint32_t T:1;                        /*!< bit:     24  Thumb bit        (read 0)          */
+ 245:src/libstm32f2/core_cm3.h ****     uint32_t IT:2;                       /*!< bit: 25..26  saved IT state   (read 0)          */
+ 246:src/libstm32f2/core_cm3.h ****     uint32_t Q:1;                        /*!< bit:     27  Saturation condition flag          */
+ 247:src/libstm32f2/core_cm3.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag       */
+ 248:src/libstm32f2/core_cm3.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag          */
+ 249:src/libstm32f2/core_cm3.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag           */
+ 250:src/libstm32f2/core_cm3.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag       */
+ 251:src/libstm32f2/core_cm3.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 252:src/libstm32f2/core_cm3.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 253:src/libstm32f2/core_cm3.h **** } xPSR_Type;
+ 254:src/libstm32f2/core_cm3.h **** 
+ 255:src/libstm32f2/core_cm3.h **** 
+ 256:src/libstm32f2/core_cm3.h **** /** \brief  Union type to access the Control Registers (CONTROL).
+ 257:src/libstm32f2/core_cm3.h ****  */
+ 258:src/libstm32f2/core_cm3.h **** typedef union
+ 259:src/libstm32f2/core_cm3.h **** {
+ 260:src/libstm32f2/core_cm3.h ****   struct
+ 261:src/libstm32f2/core_cm3.h ****   {
+ 262:src/libstm32f2/core_cm3.h ****     uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
+ 263:src/libstm32f2/core_cm3.h ****     uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used                   */
+ 264:src/libstm32f2/core_cm3.h ****     uint32_t FPCA:1;                     /*!< bit:      2  FP extension active flag           */
+ 265:src/libstm32f2/core_cm3.h ****     uint32_t _reserved0:29;              /*!< bit:  3..31  Reserved                           */
+ 266:src/libstm32f2/core_cm3.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 267:src/libstm32f2/core_cm3.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 268:src/libstm32f2/core_cm3.h **** } CONTROL_Type;
+ 269:src/libstm32f2/core_cm3.h **** 
+ 270:src/libstm32f2/core_cm3.h **** /*@} end of group CMSIS_CORE */
+ 271:src/libstm32f2/core_cm3.h **** 
+ 272:src/libstm32f2/core_cm3.h **** 
+ 273:src/libstm32f2/core_cm3.h **** /** \ingroup    CMSIS_core_register
+ 274:src/libstm32f2/core_cm3.h ****     \defgroup   CMSIS_NVIC  Nested Vectored Interrupt Controller (NVIC)
+ 275:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the NVIC Registers
+ 276:src/libstm32f2/core_cm3.h ****   @{
+ 277:src/libstm32f2/core_cm3.h ****  */
+ 278:src/libstm32f2/core_cm3.h **** 
+ 279:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 280:src/libstm32f2/core_cm3.h ****  */
+ 281:src/libstm32f2/core_cm3.h **** typedef struct
+ 282:src/libstm32f2/core_cm3.h **** {
+ 283:src/libstm32f2/core_cm3.h ****   __IO uint32_t ISER[8];                 /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register   
+ 284:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED0[24];
+ 285:src/libstm32f2/core_cm3.h ****   __IO uint32_t ICER[8];                 /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register 
+ 286:src/libstm32f2/core_cm3.h ****        uint32_t RSERVED1[24];
+ 287:src/libstm32f2/core_cm3.h ****   __IO uint32_t ISPR[8];                 /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register  
+ 288:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED2[24];
+ 289:src/libstm32f2/core_cm3.h ****   __IO uint32_t ICPR[8];                 /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+ 290:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED3[24];
+ 291:src/libstm32f2/core_cm3.h ****   __IO uint32_t IABR[8];                 /*!< Offset: 0x200 (R/W)  Interrupt Active bit Register   
+ 292:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED4[56];
+ 293:src/libstm32f2/core_cm3.h ****   __IO uint8_t  IP[240];                 /*!< Offset: 0x300 (R/W)  Interrupt Priority Register (8Bi
+ 294:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED5[644];
+ 295:src/libstm32f2/core_cm3.h ****   __O  uint32_t STIR;                    /*!< Offset: 0xE00 ( /W)  Software Trigger Interrupt Regis
+ 296:src/libstm32f2/core_cm3.h **** }  NVIC_Type;
+ 297:src/libstm32f2/core_cm3.h **** 
+ 298:src/libstm32f2/core_cm3.h **** /* Software Triggered Interrupt Register Definitions */
+ 299:src/libstm32f2/core_cm3.h **** #define NVIC_STIR_INTID_Pos                 0                                          /*!< STIR: I
+ 300:src/libstm32f2/core_cm3.h **** #define NVIC_STIR_INTID_Msk                (0x1FFUL << NVIC_STIR_INTID_Pos)            /*!< STIR: I
+ 301:src/libstm32f2/core_cm3.h **** 
+ 302:src/libstm32f2/core_cm3.h **** /*@} end of group CMSIS_NVIC */
+ 303:src/libstm32f2/core_cm3.h **** 
+ 304:src/libstm32f2/core_cm3.h **** 
+ 305:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+ 306:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_SCB     System Control Block (SCB)
+ 307:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the System Control Block Registers
+ 308:src/libstm32f2/core_cm3.h ****   @{
+ 309:src/libstm32f2/core_cm3.h ****  */
+ 310:src/libstm32f2/core_cm3.h **** 
+ 311:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the System Control Block (SCB).
+ 312:src/libstm32f2/core_cm3.h ****  */
+ 313:src/libstm32f2/core_cm3.h **** typedef struct
+ 314:src/libstm32f2/core_cm3.h **** {
+ 315:src/libstm32f2/core_cm3.h ****   __I  uint32_t CPUID;                   /*!< Offset: 0x000 (R/ )  CPUID Base Register             
+ 316:src/libstm32f2/core_cm3.h ****   __IO uint32_t ICSR;                    /*!< Offset: 0x004 (R/W)  Interrupt Control and State Regi
+ 317:src/libstm32f2/core_cm3.h ****   __IO uint32_t VTOR;                    /*!< Offset: 0x008 (R/W)  Vector Table Offset Register    
+ 318:src/libstm32f2/core_cm3.h ****   __IO uint32_t AIRCR;                   /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset 
+ 319:src/libstm32f2/core_cm3.h ****   __IO uint32_t SCR;                     /*!< Offset: 0x010 (R/W)  System Control Register         
+ 320:src/libstm32f2/core_cm3.h ****   __IO uint32_t CCR;                     /*!< Offset: 0x014 (R/W)  Configuration Control Register  
+ 321:src/libstm32f2/core_cm3.h ****   __IO uint8_t  SHP[12];                 /*!< Offset: 0x018 (R/W)  System Handlers Priority Registe
+ 322:src/libstm32f2/core_cm3.h ****   __IO uint32_t SHCSR;                   /*!< Offset: 0x024 (R/W)  System Handler Control and State
+ 323:src/libstm32f2/core_cm3.h ****   __IO uint32_t CFSR;                    /*!< Offset: 0x028 (R/W)  Configurable Fault Status Regist
+ 324:src/libstm32f2/core_cm3.h ****   __IO uint32_t HFSR;                    /*!< Offset: 0x02C (R/W)  HardFault Status Register       
+ 325:src/libstm32f2/core_cm3.h ****   __IO uint32_t DFSR;                    /*!< Offset: 0x030 (R/W)  Debug Fault Status Register     
+ 326:src/libstm32f2/core_cm3.h ****   __IO uint32_t MMFAR;                   /*!< Offset: 0x034 (R/W)  MemManage Fault Address Register
+ 327:src/libstm32f2/core_cm3.h ****   __IO uint32_t BFAR;                    /*!< Offset: 0x038 (R/W)  BusFault Address Register       
+ 328:src/libstm32f2/core_cm3.h ****   __IO uint32_t AFSR;                    /*!< Offset: 0x03C (R/W)  Auxiliary Fault Status Register 
+ 329:src/libstm32f2/core_cm3.h ****   __I  uint32_t PFR[2];                  /*!< Offset: 0x040 (R/ )  Processor Feature Register      
+ 330:src/libstm32f2/core_cm3.h ****   __I  uint32_t DFR;                     /*!< Offset: 0x048 (R/ )  Debug Feature Register          
+ 331:src/libstm32f2/core_cm3.h ****   __I  uint32_t ADR;                     /*!< Offset: 0x04C (R/ )  Auxiliary Feature Register      
+ 332:src/libstm32f2/core_cm3.h ****   __I  uint32_t MMFR[4];                 /*!< Offset: 0x050 (R/ )  Memory Model Feature Register   
+ 333:src/libstm32f2/core_cm3.h ****   __I  uint32_t ISAR[5];                 /*!< Offset: 0x060 (R/ )  Instruction Set Attributes Regis
+ 334:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED0[5];
+ 335:src/libstm32f2/core_cm3.h ****   __IO uint32_t CPACR;                   /*!< Offset: 0x088 (R/W)  Coprocessor Access Control Regis
+ 336:src/libstm32f2/core_cm3.h **** } SCB_Type;
+ 337:src/libstm32f2/core_cm3.h **** 
+ 338:src/libstm32f2/core_cm3.h **** /* SCB CPUID Register Definitions */
+ 339:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24                                             /*!< SCB 
+ 340:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFUL << SCB_CPUID_IMPLEMENTER_Pos)          /*!< SCB 
+ 341:src/libstm32f2/core_cm3.h **** 
+ 342:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_VARIANT_Pos              20                                             /*!< SCB 
+ 343:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_VARIANT_Msk              (0xFUL << SCB_CPUID_VARIANT_Pos)               /*!< SCB 
+ 344:src/libstm32f2/core_cm3.h **** 
+ 345:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16                                             /*!< SCB 
+ 346:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
+ 347:src/libstm32f2/core_cm3.h **** 
+ 348:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_PARTNO_Pos                4                                             /*!< SCB 
+ 349:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
+ 350:src/libstm32f2/core_cm3.h **** 
+ 351:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_REVISION_Pos              0                                             /*!< SCB 
+ 352:src/libstm32f2/core_cm3.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL << SCB_CPUID_REVISION_Pos)              /*!< SCB 
+ 353:src/libstm32f2/core_cm3.h **** 
+ 354:src/libstm32f2/core_cm3.h **** /* SCB Interrupt Control State Register Definitions */
+ 355:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_NMIPENDSET_Pos            31                                             /*!< SCB 
+ 356:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1UL << SCB_ICSR_NMIPENDSET_Pos)               /*!< SCB 
+ 357:src/libstm32f2/core_cm3.h **** 
+ 358:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSVSET_Pos             28                                             /*!< SCB 
+ 359:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSVSET_Msk             (1UL << SCB_ICSR_PENDSVSET_Pos)                /*!< SCB 
+ 360:src/libstm32f2/core_cm3.h **** 
+ 361:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSVCLR_Pos             27                                             /*!< SCB 
+ 362:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1UL << SCB_ICSR_PENDSVCLR_Pos)                /*!< SCB 
+ 363:src/libstm32f2/core_cm3.h **** 
+ 364:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSTSET_Pos             26                                             /*!< SCB 
+ 365:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSTSET_Msk             (1UL << SCB_ICSR_PENDSTSET_Pos)                /*!< SCB 
+ 366:src/libstm32f2/core_cm3.h **** 
+ 367:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSTCLR_Pos             25                                             /*!< SCB 
+ 368:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1UL << SCB_ICSR_PENDSTCLR_Pos)                /*!< SCB 
+ 369:src/libstm32f2/core_cm3.h **** 
+ 370:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23                                             /*!< SCB 
+ 371:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1UL << SCB_ICSR_ISRPREEMPT_Pos)               /*!< SCB 
+ 372:src/libstm32f2/core_cm3.h **** 
+ 373:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_ISRPENDING_Pos            22                                             /*!< SCB 
+ 374:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_ISRPENDING_Msk            (1UL << SCB_ICSR_ISRPENDING_Pos)               /*!< SCB 
+ 375:src/libstm32f2/core_cm3.h **** 
+ 376:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_VECTPENDING_Pos           12                                             /*!< SCB 
+ 377:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFUL << SCB_ICSR_VECTPENDING_Pos)          /*!< SCB 
+ 378:src/libstm32f2/core_cm3.h **** 
+ 379:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_RETTOBASE_Pos             11                                             /*!< SCB 
+ 380:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_RETTOBASE_Msk             (1UL << SCB_ICSR_RETTOBASE_Pos)                /*!< SCB 
+ 381:src/libstm32f2/core_cm3.h **** 
+ 382:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_VECTACTIVE_Pos             0                                             /*!< SCB 
+ 383:src/libstm32f2/core_cm3.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL << SCB_ICSR_VECTACTIVE_Pos)           /*!< SCB 
+ 384:src/libstm32f2/core_cm3.h **** 
+ 385:src/libstm32f2/core_cm3.h **** /* SCB Vector Table Offset Register Definitions */
+ 386:src/libstm32f2/core_cm3.h **** #if (__CM3_REV < 0x0201)                   /* core r2p1 */
+ 387:src/libstm32f2/core_cm3.h **** #define SCB_VTOR_TBLBASE_Pos               29                                             /*!< SCB 
+ 388:src/libstm32f2/core_cm3.h **** #define SCB_VTOR_TBLBASE_Msk               (1UL << SCB_VTOR_TBLBASE_Pos)                  /*!< SCB 
+ 389:src/libstm32f2/core_cm3.h **** 
+ 390:src/libstm32f2/core_cm3.h **** #define SCB_VTOR_TBLOFF_Pos                 7                                             /*!< SCB 
+ 391:src/libstm32f2/core_cm3.h **** #define SCB_VTOR_TBLOFF_Msk                (0x3FFFFFUL << SCB_VTOR_TBLOFF_Pos)            /*!< SCB 
+ 392:src/libstm32f2/core_cm3.h **** #else
+ 393:src/libstm32f2/core_cm3.h **** #define SCB_VTOR_TBLOFF_Pos                 7                                             /*!< SCB 
+ 394:src/libstm32f2/core_cm3.h **** #define SCB_VTOR_TBLOFF_Msk                (0x1FFFFFFUL << SCB_VTOR_TBLOFF_Pos)           /*!< SCB 
+ 395:src/libstm32f2/core_cm3.h **** #endif
+ 396:src/libstm32f2/core_cm3.h **** 
+ 397:src/libstm32f2/core_cm3.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 398:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTKEY_Pos              16                                             /*!< SCB 
+ 399:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFUL << SCB_AIRCR_VECTKEY_Pos)            /*!< SCB 
+ 400:src/libstm32f2/core_cm3.h **** 
+ 401:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16                                             /*!< SCB 
+ 402:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFUL << SCB_AIRCR_VECTKEYSTAT_Pos)        /*!< SCB 
+ 403:src/libstm32f2/core_cm3.h **** 
+ 404:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_ENDIANESS_Pos            15                                             /*!< SCB 
+ 405:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1UL << SCB_AIRCR_ENDIANESS_Pos)               /*!< SCB 
+ 406:src/libstm32f2/core_cm3.h **** 
+ 407:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_PRIGROUP_Pos              8                                             /*!< SCB 
+ 408:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_PRIGROUP_Msk             (7UL << SCB_AIRCR_PRIGROUP_Pos)                /*!< SCB 
+ 409:src/libstm32f2/core_cm3.h **** 
+ 410:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2                                             /*!< SCB 
+ 411:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
+ 412:src/libstm32f2/core_cm3.h **** 
+ 413:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1                                             /*!< SCB 
+ 414:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
+ 415:src/libstm32f2/core_cm3.h **** 
+ 416:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTRESET_Pos             0                                             /*!< SCB 
+ 417:src/libstm32f2/core_cm3.h **** #define SCB_AIRCR_VECTRESET_Msk            (1UL << SCB_AIRCR_VECTRESET_Pos)               /*!< SCB 
+ 418:src/libstm32f2/core_cm3.h **** 
+ 419:src/libstm32f2/core_cm3.h **** /* SCB System Control Register Definitions */
+ 420:src/libstm32f2/core_cm3.h **** #define SCB_SCR_SEVONPEND_Pos               4                                             /*!< SCB 
+ 421:src/libstm32f2/core_cm3.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
+ 422:src/libstm32f2/core_cm3.h **** 
+ 423:src/libstm32f2/core_cm3.h **** #define SCB_SCR_SLEEPDEEP_Pos               2                                             /*!< SCB 
+ 424:src/libstm32f2/core_cm3.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1UL << SCB_SCR_SLEEPDEEP_Pos)                 /*!< SCB 
+ 425:src/libstm32f2/core_cm3.h **** 
+ 426:src/libstm32f2/core_cm3.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1                                             /*!< SCB 
+ 427:src/libstm32f2/core_cm3.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1UL << SCB_SCR_SLEEPONEXIT_Pos)               /*!< SCB 
+ 428:src/libstm32f2/core_cm3.h **** 
+ 429:src/libstm32f2/core_cm3.h **** /* SCB Configuration Control Register Definitions */
+ 430:src/libstm32f2/core_cm3.h **** #define SCB_CCR_STKALIGN_Pos                9                                             /*!< SCB 
+ 431:src/libstm32f2/core_cm3.h **** #define SCB_CCR_STKALIGN_Msk               (1UL << SCB_CCR_STKALIGN_Pos)                  /*!< SCB 
+ 432:src/libstm32f2/core_cm3.h **** 
+ 433:src/libstm32f2/core_cm3.h **** #define SCB_CCR_BFHFNMIGN_Pos               8                                             /*!< SCB 
+ 434:src/libstm32f2/core_cm3.h **** #define SCB_CCR_BFHFNMIGN_Msk              (1UL << SCB_CCR_BFHFNMIGN_Pos)                 /*!< SCB 
+ 435:src/libstm32f2/core_cm3.h **** 
+ 436:src/libstm32f2/core_cm3.h **** #define SCB_CCR_DIV_0_TRP_Pos               4                                             /*!< SCB 
+ 437:src/libstm32f2/core_cm3.h **** #define SCB_CCR_DIV_0_TRP_Msk              (1UL << SCB_CCR_DIV_0_TRP_Pos)                 /*!< SCB 
+ 438:src/libstm32f2/core_cm3.h **** 
+ 439:src/libstm32f2/core_cm3.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3                                             /*!< SCB 
+ 440:src/libstm32f2/core_cm3.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1UL << SCB_CCR_UNALIGN_TRP_Pos)               /*!< SCB 
+ 441:src/libstm32f2/core_cm3.h **** 
+ 442:src/libstm32f2/core_cm3.h **** #define SCB_CCR_USERSETMPEND_Pos            1                                             /*!< SCB 
+ 443:src/libstm32f2/core_cm3.h **** #define SCB_CCR_USERSETMPEND_Msk           (1UL << SCB_CCR_USERSETMPEND_Pos)              /*!< SCB 
+ 444:src/libstm32f2/core_cm3.h **** 
+ 445:src/libstm32f2/core_cm3.h **** #define SCB_CCR_NONBASETHRDENA_Pos          0                                             /*!< SCB 
+ 446:src/libstm32f2/core_cm3.h **** #define SCB_CCR_NONBASETHRDENA_Msk         (1UL << SCB_CCR_NONBASETHRDENA_Pos)            /*!< SCB 
+ 447:src/libstm32f2/core_cm3.h **** 
+ 448:src/libstm32f2/core_cm3.h **** /* SCB System Handler Control and State Register Definitions */
+ 449:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_USGFAULTENA_Pos          18                                             /*!< SCB 
+ 450:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_USGFAULTENA_Msk          (1UL << SCB_SHCSR_USGFAULTENA_Pos)             /*!< SCB 
+ 451:src/libstm32f2/core_cm3.h **** 
+ 452:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_BUSFAULTENA_Pos          17                                             /*!< SCB 
+ 453:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_BUSFAULTENA_Msk          (1UL << SCB_SHCSR_BUSFAULTENA_Pos)             /*!< SCB 
+ 454:src/libstm32f2/core_cm3.h **** 
+ 455:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MEMFAULTENA_Pos          16                                             /*!< SCB 
+ 456:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MEMFAULTENA_Msk          (1UL << SCB_SHCSR_MEMFAULTENA_Pos)             /*!< SCB 
+ 457:src/libstm32f2/core_cm3.h **** 
+ 458:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15                                             /*!< SCB 
+ 459:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB 
+ 460:src/libstm32f2/core_cm3.h **** 
+ 461:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_BUSFAULTPENDED_Pos       14                                             /*!< SCB 
+ 462:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_BUSFAULTPENDED_Msk       (1UL << SCB_SHCSR_BUSFAULTPENDED_Pos)          /*!< SCB 
+ 463:src/libstm32f2/core_cm3.h **** 
+ 464:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MEMFAULTPENDED_Pos       13                                             /*!< SCB 
+ 465:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MEMFAULTPENDED_Msk       (1UL << SCB_SHCSR_MEMFAULTPENDED_Pos)          /*!< SCB 
+ 466:src/libstm32f2/core_cm3.h **** 
+ 467:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_USGFAULTPENDED_Pos       12                                             /*!< SCB 
+ 468:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_USGFAULTPENDED_Msk       (1UL << SCB_SHCSR_USGFAULTPENDED_Pos)          /*!< SCB 
+ 469:src/libstm32f2/core_cm3.h **** 
+ 470:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_SYSTICKACT_Pos           11                                             /*!< SCB 
+ 471:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_SYSTICKACT_Msk           (1UL << SCB_SHCSR_SYSTICKACT_Pos)              /*!< SCB 
+ 472:src/libstm32f2/core_cm3.h **** 
+ 473:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_PENDSVACT_Pos            10                                             /*!< SCB 
+ 474:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_PENDSVACT_Msk            (1UL << SCB_SHCSR_PENDSVACT_Pos)               /*!< SCB 
+ 475:src/libstm32f2/core_cm3.h **** 
+ 476:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MONITORACT_Pos            8                                             /*!< SCB 
+ 477:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MONITORACT_Msk           (1UL << SCB_SHCSR_MONITORACT_Pos)              /*!< SCB 
+ 478:src/libstm32f2/core_cm3.h **** 
+ 479:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_SVCALLACT_Pos             7                                             /*!< SCB 
+ 480:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_SVCALLACT_Msk            (1UL << SCB_SHCSR_SVCALLACT_Pos)               /*!< SCB 
+ 481:src/libstm32f2/core_cm3.h **** 
+ 482:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_USGFAULTACT_Pos           3                                             /*!< SCB 
+ 483:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_USGFAULTACT_Msk          (1UL << SCB_SHCSR_USGFAULTACT_Pos)             /*!< SCB 
+ 484:src/libstm32f2/core_cm3.h **** 
+ 485:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_BUSFAULTACT_Pos           1                                             /*!< SCB 
+ 486:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_BUSFAULTACT_Msk          (1UL << SCB_SHCSR_BUSFAULTACT_Pos)             /*!< SCB 
+ 487:src/libstm32f2/core_cm3.h **** 
+ 488:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MEMFAULTACT_Pos           0                                             /*!< SCB 
+ 489:src/libstm32f2/core_cm3.h **** #define SCB_SHCSR_MEMFAULTACT_Msk          (1UL << SCB_SHCSR_MEMFAULTACT_Pos)             /*!< SCB 
+ 490:src/libstm32f2/core_cm3.h **** 
+ 491:src/libstm32f2/core_cm3.h **** /* SCB Configurable Fault Status Registers Definitions */
+ 492:src/libstm32f2/core_cm3.h **** #define SCB_CFSR_USGFAULTSR_Pos            16                                             /*!< SCB 
+ 493:src/libstm32f2/core_cm3.h **** #define SCB_CFSR_USGFAULTSR_Msk            (0xFFFFUL << SCB_CFSR_USGFAULTSR_Pos)          /*!< SCB 
+ 494:src/libstm32f2/core_cm3.h **** 
+ 495:src/libstm32f2/core_cm3.h **** #define SCB_CFSR_BUSFAULTSR_Pos             8                                             /*!< SCB 
+ 496:src/libstm32f2/core_cm3.h **** #define SCB_CFSR_BUSFAULTSR_Msk            (0xFFUL << SCB_CFSR_BUSFAULTSR_Pos)            /*!< SCB 
+ 497:src/libstm32f2/core_cm3.h **** 
+ 498:src/libstm32f2/core_cm3.h **** #define SCB_CFSR_MEMFAULTSR_Pos             0                                             /*!< SCB 
+ 499:src/libstm32f2/core_cm3.h **** #define SCB_CFSR_MEMFAULTSR_Msk            (0xFFUL << SCB_CFSR_MEMFAULTSR_Pos)            /*!< SCB 
+ 500:src/libstm32f2/core_cm3.h **** 
+ 501:src/libstm32f2/core_cm3.h **** /* SCB Hard Fault Status Registers Definitions */
+ 502:src/libstm32f2/core_cm3.h **** #define SCB_HFSR_DEBUGEVT_Pos              31                                             /*!< SCB 
+ 503:src/libstm32f2/core_cm3.h **** #define SCB_HFSR_DEBUGEVT_Msk              (1UL << SCB_HFSR_DEBUGEVT_Pos)                 /*!< SCB 
+ 504:src/libstm32f2/core_cm3.h **** 
+ 505:src/libstm32f2/core_cm3.h **** #define SCB_HFSR_FORCED_Pos                30                                             /*!< SCB 
+ 506:src/libstm32f2/core_cm3.h **** #define SCB_HFSR_FORCED_Msk                (1UL << SCB_HFSR_FORCED_Pos)                   /*!< SCB 
+ 507:src/libstm32f2/core_cm3.h **** 
+ 508:src/libstm32f2/core_cm3.h **** #define SCB_HFSR_VECTTBL_Pos                1                                             /*!< SCB 
+ 509:src/libstm32f2/core_cm3.h **** #define SCB_HFSR_VECTTBL_Msk               (1UL << SCB_HFSR_VECTTBL_Pos)                  /*!< SCB 
+ 510:src/libstm32f2/core_cm3.h **** 
+ 511:src/libstm32f2/core_cm3.h **** /* SCB Debug Fault Status Register Definitions */
+ 512:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_EXTERNAL_Pos               4                                             /*!< SCB 
+ 513:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_EXTERNAL_Msk              (1UL << SCB_DFSR_EXTERNAL_Pos)                 /*!< SCB 
+ 514:src/libstm32f2/core_cm3.h **** 
+ 515:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_VCATCH_Pos                 3                                             /*!< SCB 
+ 516:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_VCATCH_Msk                (1UL << SCB_DFSR_VCATCH_Pos)                   /*!< SCB 
+ 517:src/libstm32f2/core_cm3.h **** 
+ 518:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_DWTTRAP_Pos                2                                             /*!< SCB 
+ 519:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_DWTTRAP_Msk               (1UL << SCB_DFSR_DWTTRAP_Pos)                  /*!< SCB 
+ 520:src/libstm32f2/core_cm3.h **** 
+ 521:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_BKPT_Pos                   1                                             /*!< SCB 
+ 522:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_BKPT_Msk                  (1UL << SCB_DFSR_BKPT_Pos)                     /*!< SCB 
+ 523:src/libstm32f2/core_cm3.h **** 
+ 524:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_HALTED_Pos                 0                                             /*!< SCB 
+ 525:src/libstm32f2/core_cm3.h **** #define SCB_DFSR_HALTED_Msk                (1UL << SCB_DFSR_HALTED_Pos)                   /*!< SCB 
+ 526:src/libstm32f2/core_cm3.h **** 
+ 527:src/libstm32f2/core_cm3.h **** /*@} end of group CMSIS_SCB */
+ 528:src/libstm32f2/core_cm3.h **** 
+ 529:src/libstm32f2/core_cm3.h **** 
+ 530:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+ 531:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_SCnSCB System Controls not in SCB (SCnSCB)
+ 532:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the System Control and ID Register not in the SCB
+ 533:src/libstm32f2/core_cm3.h ****   @{
+ 534:src/libstm32f2/core_cm3.h ****  */
+ 535:src/libstm32f2/core_cm3.h **** 
+ 536:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the System Control and ID Register not in the SCB.
+ 537:src/libstm32f2/core_cm3.h ****  */
+ 538:src/libstm32f2/core_cm3.h **** typedef struct
+ 539:src/libstm32f2/core_cm3.h **** {
+ 540:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED0[1];
+ 541:src/libstm32f2/core_cm3.h ****   __I  uint32_t ICTR;                    /*!< Offset: 0x004 (R/ )  Interrupt Controller Type Regist
+ 542:src/libstm32f2/core_cm3.h **** #if ((defined __CM3_REV) && (__CM3_REV >= 0x200))
+ 543:src/libstm32f2/core_cm3.h ****   __IO uint32_t ACTLR;                   /*!< Offset: 0x008 (R/W)  Auxiliary Control Register      
+ 544:src/libstm32f2/core_cm3.h **** #else
+ 545:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED1[1];
+ 546:src/libstm32f2/core_cm3.h **** #endif
+ 547:src/libstm32f2/core_cm3.h **** } SCnSCB_Type;
+ 548:src/libstm32f2/core_cm3.h **** 
+ 549:src/libstm32f2/core_cm3.h **** /* Interrupt Controller Type Register Definitions */
+ 550:src/libstm32f2/core_cm3.h **** #define SCnSCB_ICTR_INTLINESNUM_Pos         0                                          /*!< ICTR: I
+ 551:src/libstm32f2/core_cm3.h **** #define SCnSCB_ICTR_INTLINESNUM_Msk        (0xFUL << SCnSCB_ICTR_INTLINESNUM_Pos)      /*!< ICTR: I
+ 552:src/libstm32f2/core_cm3.h **** 
+ 553:src/libstm32f2/core_cm3.h **** /* Auxiliary Control Register Definitions */
+ 554:src/libstm32f2/core_cm3.h **** 
+ 555:src/libstm32f2/core_cm3.h **** #define SCnSCB_ACTLR_DISFOLD_Pos            2                                          /*!< ACTLR: 
+ 556:src/libstm32f2/core_cm3.h **** #define SCnSCB_ACTLR_DISFOLD_Msk           (1UL << SCnSCB_ACTLR_DISFOLD_Pos)           /*!< ACTLR: 
+ 557:src/libstm32f2/core_cm3.h **** 
+ 558:src/libstm32f2/core_cm3.h **** #define SCnSCB_ACTLR_DISDEFWBUF_Pos         1                                          /*!< ACTLR: 
+ 559:src/libstm32f2/core_cm3.h **** #define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: 
+ 560:src/libstm32f2/core_cm3.h **** 
+ 561:src/libstm32f2/core_cm3.h **** #define SCnSCB_ACTLR_DISMCYCINT_Pos         0                                          /*!< ACTLR: 
+ 562:src/libstm32f2/core_cm3.h **** #define SCnSCB_ACTLR_DISMCYCINT_Msk        (1UL << SCnSCB_ACTLR_DISMCYCINT_Pos)        /*!< ACTLR: 
+ 563:src/libstm32f2/core_cm3.h **** 
+ 564:src/libstm32f2/core_cm3.h **** /*@} end of group CMSIS_SCnotSCB */
+ 565:src/libstm32f2/core_cm3.h **** 
+ 566:src/libstm32f2/core_cm3.h **** 
+ 567:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+ 568:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_SysTick     System Tick Timer (SysTick)
+ 569:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the System Timer Registers.
+ 570:src/libstm32f2/core_cm3.h ****   @{
+ 571:src/libstm32f2/core_cm3.h ****  */
+ 572:src/libstm32f2/core_cm3.h **** 
+ 573:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the System Timer (SysTick).
+ 574:src/libstm32f2/core_cm3.h ****  */
+ 575:src/libstm32f2/core_cm3.h **** typedef struct
+ 576:src/libstm32f2/core_cm3.h **** {
+ 577:src/libstm32f2/core_cm3.h ****   __IO uint32_t CTRL;                    /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
+ 578:src/libstm32f2/core_cm3.h ****   __IO uint32_t LOAD;                    /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register   
+ 579:src/libstm32f2/core_cm3.h ****   __IO uint32_t VAL;                     /*!< Offset: 0x008 (R/W)  SysTick Current Value Register  
+ 580:src/libstm32f2/core_cm3.h ****   __I  uint32_t CALIB;                   /*!< Offset: 0x00C (R/ )  SysTick Calibration Register    
+ 581:src/libstm32f2/core_cm3.h **** } SysTick_Type;
+ 582:src/libstm32f2/core_cm3.h **** 
+ 583:src/libstm32f2/core_cm3.h **** /* SysTick Control / Status Register Definitions */
+ 584:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16                                             /*!< SysT
+ 585:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1UL << SysTick_CTRL_COUNTFLAG_Pos)            /*!< SysT
+ 586:src/libstm32f2/core_cm3.h **** 
+ 587:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2                                             /*!< SysT
+ 588:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1UL << SysTick_CTRL_CLKSOURCE_Pos)            /*!< SysT
+ 589:src/libstm32f2/core_cm3.h **** 
+ 590:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_TICKINT_Pos            1                                             /*!< SysT
+ 591:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_TICKINT_Msk           (1UL << SysTick_CTRL_TICKINT_Pos)              /*!< SysT
+ 592:src/libstm32f2/core_cm3.h **** 
+ 593:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_ENABLE_Pos             0                                             /*!< SysT
+ 594:src/libstm32f2/core_cm3.h **** #define SysTick_CTRL_ENABLE_Msk            (1UL << SysTick_CTRL_ENABLE_Pos)               /*!< SysT
+ 595:src/libstm32f2/core_cm3.h **** 
+ 596:src/libstm32f2/core_cm3.h **** /* SysTick Reload Register Definitions */
+ 597:src/libstm32f2/core_cm3.h **** #define SysTick_LOAD_RELOAD_Pos             0                                             /*!< SysT
+ 598:src/libstm32f2/core_cm3.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFUL << SysTick_LOAD_RELOAD_Pos)        /*!< SysT
+ 599:src/libstm32f2/core_cm3.h **** 
+ 600:src/libstm32f2/core_cm3.h **** /* SysTick Current Register Definitions */
+ 601:src/libstm32f2/core_cm3.h **** #define SysTick_VAL_CURRENT_Pos             0                                             /*!< SysT
+ 602:src/libstm32f2/core_cm3.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFUL << SysTick_VAL_CURRENT_Pos)        /*!< SysT
+ 603:src/libstm32f2/core_cm3.h **** 
+ 604:src/libstm32f2/core_cm3.h **** /* SysTick Calibration Register Definitions */
+ 605:src/libstm32f2/core_cm3.h **** #define SysTick_CALIB_NOREF_Pos            31                                             /*!< SysT
+ 606:src/libstm32f2/core_cm3.h **** #define SysTick_CALIB_NOREF_Msk            (1UL << SysTick_CALIB_NOREF_Pos)               /*!< SysT
+ 607:src/libstm32f2/core_cm3.h **** 
+ 608:src/libstm32f2/core_cm3.h **** #define SysTick_CALIB_SKEW_Pos             30                                             /*!< SysT
+ 609:src/libstm32f2/core_cm3.h **** #define SysTick_CALIB_SKEW_Msk             (1UL << SysTick_CALIB_SKEW_Pos)                /*!< SysT
+ 610:src/libstm32f2/core_cm3.h **** 
+ 611:src/libstm32f2/core_cm3.h **** #define SysTick_CALIB_TENMS_Pos             0                                             /*!< SysT
+ 612:src/libstm32f2/core_cm3.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL << SysTick_VAL_CURRENT_Pos)        /*!< SysT
+ 613:src/libstm32f2/core_cm3.h **** 
+ 614:src/libstm32f2/core_cm3.h **** /*@} end of group CMSIS_SysTick */
+ 615:src/libstm32f2/core_cm3.h **** 
+ 616:src/libstm32f2/core_cm3.h **** 
+ 617:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+ 618:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_ITM     Instrumentation Trace Macrocell (ITM)
+ 619:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the Instrumentation Trace Macrocell (ITM)
+ 620:src/libstm32f2/core_cm3.h ****   @{
+ 621:src/libstm32f2/core_cm3.h ****  */
+ 622:src/libstm32f2/core_cm3.h **** 
+ 623:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the Instrumentation Trace Macrocell Register (ITM).
+ 624:src/libstm32f2/core_cm3.h ****  */
+ 625:src/libstm32f2/core_cm3.h **** typedef struct
+ 626:src/libstm32f2/core_cm3.h **** {
+ 627:src/libstm32f2/core_cm3.h ****   __O  union
+ 628:src/libstm32f2/core_cm3.h ****   {
+ 629:src/libstm32f2/core_cm3.h ****     __O  uint8_t    u8;                  /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 8-bit         
+ 630:src/libstm32f2/core_cm3.h ****     __O  uint16_t   u16;                 /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 16-bit        
+ 631:src/libstm32f2/core_cm3.h ****     __O  uint32_t   u32;                 /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 32-bit        
+ 632:src/libstm32f2/core_cm3.h ****   }  PORT [32];                          /*!< Offset: 0x000 ( /W)  ITM Stimulus Port Registers     
+ 633:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED0[864];
+ 634:src/libstm32f2/core_cm3.h ****   __IO uint32_t TER;                     /*!< Offset: 0xE00 (R/W)  ITM Trace Enable Register       
+ 635:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED1[15];
+ 636:src/libstm32f2/core_cm3.h ****   __IO uint32_t TPR;                     /*!< Offset: 0xE40 (R/W)  ITM Trace Privilege Register    
+ 637:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED2[15];
+ 638:src/libstm32f2/core_cm3.h ****   __IO uint32_t TCR;                     /*!< Offset: 0xE80 (R/W)  ITM Trace Control Register      
+ 639:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED3[29];                                  
+ 640:src/libstm32f2/core_cm3.h ****   __O  uint32_t IWR;                     /*!< Offset: 0xEF8 ( /W)  ITM Integration Write Register  
+ 641:src/libstm32f2/core_cm3.h ****   __I  uint32_t IRR;                     /*!< Offset: 0xEFC (R/ )  ITM Integration Read Register   
+ 642:src/libstm32f2/core_cm3.h ****   __IO uint32_t IMCR;                    /*!< Offset: 0xF00 (R/W)  ITM Integration Mode Control Reg
+ 643:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED4[43];                                  
+ 644:src/libstm32f2/core_cm3.h ****   __O  uint32_t LAR;                     /*!< Offset: 0xFB0 ( /W)  ITM Lock Access Register        
+ 645:src/libstm32f2/core_cm3.h ****   __I  uint32_t LSR;                     /*!< Offset: 0xFB4 (R/ )  ITM Lock Status Register        
+ 646:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED5[6];                                   
+ 647:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID4;                    /*!< Offset: 0xFD0 (R/ )  ITM Peripheral Identification Re
+ 648:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID5;                    /*!< Offset: 0xFD4 (R/ )  ITM Peripheral Identification Re
+ 649:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID6;                    /*!< Offset: 0xFD8 (R/ )  ITM Peripheral Identification Re
+ 650:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID7;                    /*!< Offset: 0xFDC (R/ )  ITM Peripheral Identification Re
+ 651:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID0;                    /*!< Offset: 0xFE0 (R/ )  ITM Peripheral Identification Re
+ 652:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID1;                    /*!< Offset: 0xFE4 (R/ )  ITM Peripheral Identification Re
+ 653:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID2;                    /*!< Offset: 0xFE8 (R/ )  ITM Peripheral Identification Re
+ 654:src/libstm32f2/core_cm3.h ****   __I  uint32_t PID3;                    /*!< Offset: 0xFEC (R/ )  ITM Peripheral Identification Re
+ 655:src/libstm32f2/core_cm3.h ****   __I  uint32_t CID0;                    /*!< Offset: 0xFF0 (R/ )  ITM Component  Identification Re
+ 656:src/libstm32f2/core_cm3.h ****   __I  uint32_t CID1;                    /*!< Offset: 0xFF4 (R/ )  ITM Component  Identification Re
+ 657:src/libstm32f2/core_cm3.h ****   __I  uint32_t CID2;                    /*!< Offset: 0xFF8 (R/ )  ITM Component  Identification Re
+ 658:src/libstm32f2/core_cm3.h ****   __I  uint32_t CID3;                    /*!< Offset: 0xFFC (R/ )  ITM Component  Identification Re
+ 659:src/libstm32f2/core_cm3.h **** } ITM_Type;
+ 660:src/libstm32f2/core_cm3.h **** 
+ 661:src/libstm32f2/core_cm3.h **** /* ITM Trace Privilege Register Definitions */
+ 662:src/libstm32f2/core_cm3.h **** #define ITM_TPR_PRIVMASK_Pos                0                                             /*!< ITM 
+ 663:src/libstm32f2/core_cm3.h **** #define ITM_TPR_PRIVMASK_Msk               (0xFUL << ITM_TPR_PRIVMASK_Pos)                /*!< ITM 
+ 664:src/libstm32f2/core_cm3.h **** 
+ 665:src/libstm32f2/core_cm3.h **** /* ITM Trace Control Register Definitions */
+ 666:src/libstm32f2/core_cm3.h **** #define ITM_TCR_BUSY_Pos                   23                                             /*!< ITM 
+ 667:src/libstm32f2/core_cm3.h **** #define ITM_TCR_BUSY_Msk                   (1UL << ITM_TCR_BUSY_Pos)                      /*!< ITM 
+ 668:src/libstm32f2/core_cm3.h **** 
+ 669:src/libstm32f2/core_cm3.h **** #define ITM_TCR_TraceBusID_Pos             16                                             /*!< ITM 
+ 670:src/libstm32f2/core_cm3.h **** #define ITM_TCR_TraceBusID_Msk             (0x7FUL << ITM_TCR_TraceBusID_Pos)             /*!< ITM 
+ 671:src/libstm32f2/core_cm3.h **** 
+ 672:src/libstm32f2/core_cm3.h **** #define ITM_TCR_GTSFREQ_Pos                10                                             /*!< ITM 
+ 673:src/libstm32f2/core_cm3.h **** #define ITM_TCR_GTSFREQ_Msk                (3UL << ITM_TCR_GTSFREQ_Pos)                   /*!< ITM 
+ 674:src/libstm32f2/core_cm3.h **** 
+ 675:src/libstm32f2/core_cm3.h **** #define ITM_TCR_TSPrescale_Pos              8                                             /*!< ITM 
+ 676:src/libstm32f2/core_cm3.h **** #define ITM_TCR_TSPrescale_Msk             (3UL << ITM_TCR_TSPrescale_Pos)                /*!< ITM 
+ 677:src/libstm32f2/core_cm3.h **** 
+ 678:src/libstm32f2/core_cm3.h **** #define ITM_TCR_SWOENA_Pos                  4                                             /*!< ITM 
+ 679:src/libstm32f2/core_cm3.h **** #define ITM_TCR_SWOENA_Msk                 (1UL << ITM_TCR_SWOENA_Pos)                    /*!< ITM 
+ 680:src/libstm32f2/core_cm3.h **** 
+ 681:src/libstm32f2/core_cm3.h **** #define ITM_TCR_DWTENA_Pos                  3                                             /*!< ITM 
+ 682:src/libstm32f2/core_cm3.h **** #define ITM_TCR_DWTENA_Msk                 (1UL << ITM_TCR_DWTENA_Pos)                    /*!< ITM 
+ 683:src/libstm32f2/core_cm3.h **** 
+ 684:src/libstm32f2/core_cm3.h **** #define ITM_TCR_SYNCENA_Pos                 2                                             /*!< ITM 
+ 685:src/libstm32f2/core_cm3.h **** #define ITM_TCR_SYNCENA_Msk                (1UL << ITM_TCR_SYNCENA_Pos)                   /*!< ITM 
+ 686:src/libstm32f2/core_cm3.h **** 
+ 687:src/libstm32f2/core_cm3.h **** #define ITM_TCR_TSENA_Pos                   1                                             /*!< ITM 
+ 688:src/libstm32f2/core_cm3.h **** #define ITM_TCR_TSENA_Msk                  (1UL << ITM_TCR_TSENA_Pos)                     /*!< ITM 
+ 689:src/libstm32f2/core_cm3.h **** 
+ 690:src/libstm32f2/core_cm3.h **** #define ITM_TCR_ITMENA_Pos                  0                                             /*!< ITM 
+ 691:src/libstm32f2/core_cm3.h **** #define ITM_TCR_ITMENA_Msk                 (1UL << ITM_TCR_ITMENA_Pos)                    /*!< ITM 
+ 692:src/libstm32f2/core_cm3.h **** 
+ 693:src/libstm32f2/core_cm3.h **** /* ITM Integration Write Register Definitions */
+ 694:src/libstm32f2/core_cm3.h **** #define ITM_IWR_ATVALIDM_Pos                0                                             /*!< ITM 
+ 695:src/libstm32f2/core_cm3.h **** #define ITM_IWR_ATVALIDM_Msk               (1UL << ITM_IWR_ATVALIDM_Pos)                  /*!< ITM 
+ 696:src/libstm32f2/core_cm3.h **** 
+ 697:src/libstm32f2/core_cm3.h **** /* ITM Integration Read Register Definitions */
+ 698:src/libstm32f2/core_cm3.h **** #define ITM_IRR_ATREADYM_Pos                0                                             /*!< ITM 
+ 699:src/libstm32f2/core_cm3.h **** #define ITM_IRR_ATREADYM_Msk               (1UL << ITM_IRR_ATREADYM_Pos)                  /*!< ITM 
+ 700:src/libstm32f2/core_cm3.h **** 
+ 701:src/libstm32f2/core_cm3.h **** /* ITM Integration Mode Control Register Definitions */
+ 702:src/libstm32f2/core_cm3.h **** #define ITM_IMCR_INTEGRATION_Pos            0                                             /*!< ITM 
+ 703:src/libstm32f2/core_cm3.h **** #define ITM_IMCR_INTEGRATION_Msk           (1UL << ITM_IMCR_INTEGRATION_Pos)              /*!< ITM 
+ 704:src/libstm32f2/core_cm3.h **** 
+ 705:src/libstm32f2/core_cm3.h **** /* ITM Lock Status Register Definitions */
+ 706:src/libstm32f2/core_cm3.h **** #define ITM_LSR_ByteAcc_Pos                 2                                             /*!< ITM 
+ 707:src/libstm32f2/core_cm3.h **** #define ITM_LSR_ByteAcc_Msk                (1UL << ITM_LSR_ByteAcc_Pos)                   /*!< ITM 
+ 708:src/libstm32f2/core_cm3.h **** 
+ 709:src/libstm32f2/core_cm3.h **** #define ITM_LSR_Access_Pos                  1                                             /*!< ITM 
+ 710:src/libstm32f2/core_cm3.h **** #define ITM_LSR_Access_Msk                 (1UL << ITM_LSR_Access_Pos)                    /*!< ITM 
+ 711:src/libstm32f2/core_cm3.h **** 
+ 712:src/libstm32f2/core_cm3.h **** #define ITM_LSR_Present_Pos                 0                                             /*!< ITM 
+ 713:src/libstm32f2/core_cm3.h **** #define ITM_LSR_Present_Msk                (1UL << ITM_LSR_Present_Pos)                   /*!< ITM 
+ 714:src/libstm32f2/core_cm3.h **** 
+ 715:src/libstm32f2/core_cm3.h **** /*@}*/ /* end of group CMSIS_ITM */
+ 716:src/libstm32f2/core_cm3.h **** 
+ 717:src/libstm32f2/core_cm3.h **** 
+ 718:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+ 719:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_DWT     Data Watchpoint and Trace (DWT)
+ 720:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the Data Watchpoint and Trace (DWT)
+ 721:src/libstm32f2/core_cm3.h ****   @{
+ 722:src/libstm32f2/core_cm3.h ****  */
+ 723:src/libstm32f2/core_cm3.h **** 
+ 724:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the Data Watchpoint and Trace Register (DWT).
+ 725:src/libstm32f2/core_cm3.h ****  */
+ 726:src/libstm32f2/core_cm3.h **** typedef struct
+ 727:src/libstm32f2/core_cm3.h **** {
+ 728:src/libstm32f2/core_cm3.h ****   __IO uint32_t CTRL;                    /*!< Offset: 0x000 (R/W)  Control Register                
+ 729:src/libstm32f2/core_cm3.h ****   __IO uint32_t CYCCNT;                  /*!< Offset: 0x004 (R/W)  Cycle Count Register            
+ 730:src/libstm32f2/core_cm3.h ****   __IO uint32_t CPICNT;                  /*!< Offset: 0x008 (R/W)  CPI Count Register              
+ 731:src/libstm32f2/core_cm3.h ****   __IO uint32_t EXCCNT;                  /*!< Offset: 0x00C (R/W)  Exception Overhead Count Registe
+ 732:src/libstm32f2/core_cm3.h ****   __IO uint32_t SLEEPCNT;                /*!< Offset: 0x010 (R/W)  Sleep Count Register            
+ 733:src/libstm32f2/core_cm3.h ****   __IO uint32_t LSUCNT;                  /*!< Offset: 0x014 (R/W)  LSU Count Register              
+ 734:src/libstm32f2/core_cm3.h ****   __IO uint32_t FOLDCNT;                 /*!< Offset: 0x018 (R/W)  Folded-instruction Count Registe
+ 735:src/libstm32f2/core_cm3.h ****   __I  uint32_t PCSR;                    /*!< Offset: 0x01C (R/ )  Program Counter Sample Register 
+ 736:src/libstm32f2/core_cm3.h ****   __IO uint32_t COMP0;                   /*!< Offset: 0x020 (R/W)  Comparator Register 0           
+ 737:src/libstm32f2/core_cm3.h ****   __IO uint32_t MASK0;                   /*!< Offset: 0x024 (R/W)  Mask Register 0                 
+ 738:src/libstm32f2/core_cm3.h ****   __IO uint32_t FUNCTION0;               /*!< Offset: 0x028 (R/W)  Function Register 0             
+ 739:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED0[1];
+ 740:src/libstm32f2/core_cm3.h ****   __IO uint32_t COMP1;                   /*!< Offset: 0x030 (R/W)  Comparator Register 1           
+ 741:src/libstm32f2/core_cm3.h ****   __IO uint32_t MASK1;                   /*!< Offset: 0x034 (R/W)  Mask Register 1                 
+ 742:src/libstm32f2/core_cm3.h ****   __IO uint32_t FUNCTION1;               /*!< Offset: 0x038 (R/W)  Function Register 1             
+ 743:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED1[1];
+ 744:src/libstm32f2/core_cm3.h ****   __IO uint32_t COMP2;                   /*!< Offset: 0x040 (R/W)  Comparator Register 2           
+ 745:src/libstm32f2/core_cm3.h ****   __IO uint32_t MASK2;                   /*!< Offset: 0x044 (R/W)  Mask Register 2                 
+ 746:src/libstm32f2/core_cm3.h ****   __IO uint32_t FUNCTION2;               /*!< Offset: 0x048 (R/W)  Function Register 2             
+ 747:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED2[1];
+ 748:src/libstm32f2/core_cm3.h ****   __IO uint32_t COMP3;                   /*!< Offset: 0x050 (R/W)  Comparator Register 3           
+ 749:src/libstm32f2/core_cm3.h ****   __IO uint32_t MASK3;                   /*!< Offset: 0x054 (R/W)  Mask Register 3                 
+ 750:src/libstm32f2/core_cm3.h ****   __IO uint32_t FUNCTION3;               /*!< Offset: 0x058 (R/W)  Function Register 3             
+ 751:src/libstm32f2/core_cm3.h **** } DWT_Type;
+ 752:src/libstm32f2/core_cm3.h **** 
+ 753:src/libstm32f2/core_cm3.h **** /* DWT Control Register Definitions */
+ 754:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NUMCOMP_Pos               28                                          /*!< DWT CTR
+ 755:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NUMCOMP_Msk               (0xFUL << DWT_CTRL_NUMCOMP_Pos)             /*!< DWT CTR
+ 756:src/libstm32f2/core_cm3.h **** 
+ 757:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOTRCPKT_Pos              27                                          /*!< DWT CTR
+ 758:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOTRCPKT_Msk              (0x1UL << DWT_CTRL_NOTRCPKT_Pos)            /*!< DWT CTR
+ 759:src/libstm32f2/core_cm3.h **** 
+ 760:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOEXTTRIG_Pos             26                                          /*!< DWT CTR
+ 761:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOEXTTRIG_Msk             (0x1UL << DWT_CTRL_NOEXTTRIG_Pos)           /*!< DWT CTR
+ 762:src/libstm32f2/core_cm3.h **** 
+ 763:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOCYCCNT_Pos              25                                          /*!< DWT CTR
+ 764:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOCYCCNT_Msk              (0x1UL << DWT_CTRL_NOCYCCNT_Pos)            /*!< DWT CTR
+ 765:src/libstm32f2/core_cm3.h **** 
+ 766:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOPRFCNT_Pos              24                                          /*!< DWT CTR
+ 767:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_NOPRFCNT_Msk              (0x1UL << DWT_CTRL_NOPRFCNT_Pos)            /*!< DWT CTR
+ 768:src/libstm32f2/core_cm3.h **** 
+ 769:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CYCEVTENA_Pos             22                                          /*!< DWT CTR
+ 770:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CYCEVTENA_Msk             (0x1UL << DWT_CTRL_CYCEVTENA_Pos)           /*!< DWT CTR
+ 771:src/libstm32f2/core_cm3.h **** 
+ 772:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_FOLDEVTENA_Pos            21                                          /*!< DWT CTR
+ 773:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_FOLDEVTENA_Msk            (0x1UL << DWT_CTRL_FOLDEVTENA_Pos)          /*!< DWT CTR
+ 774:src/libstm32f2/core_cm3.h **** 
+ 775:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_LSUEVTENA_Pos             20                                          /*!< DWT CTR
+ 776:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_LSUEVTENA_Msk             (0x1UL << DWT_CTRL_LSUEVTENA_Pos)           /*!< DWT CTR
+ 777:src/libstm32f2/core_cm3.h **** 
+ 778:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_SLEEPEVTENA_Pos           19                                          /*!< DWT CTR
+ 779:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_SLEEPEVTENA_Msk           (0x1UL << DWT_CTRL_SLEEPEVTENA_Pos)         /*!< DWT CTR
+ 780:src/libstm32f2/core_cm3.h **** 
+ 781:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_EXCEVTENA_Pos             18                                          /*!< DWT CTR
+ 782:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_EXCEVTENA_Msk             (0x1UL << DWT_CTRL_EXCEVTENA_Pos)           /*!< DWT CTR
+ 783:src/libstm32f2/core_cm3.h **** 
+ 784:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CPIEVTENA_Pos             17                                          /*!< DWT CTR
+ 785:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CPIEVTENA_Msk             (0x1UL << DWT_CTRL_CPIEVTENA_Pos)           /*!< DWT CTR
+ 786:src/libstm32f2/core_cm3.h **** 
+ 787:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_EXCTRCENA_Pos             16                                          /*!< DWT CTR
+ 788:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_EXCTRCENA_Msk             (0x1UL << DWT_CTRL_EXCTRCENA_Pos)           /*!< DWT CTR
+ 789:src/libstm32f2/core_cm3.h **** 
+ 790:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_PCSAMPLENA_Pos            12                                          /*!< DWT CTR
+ 791:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_PCSAMPLENA_Msk            (0x1UL << DWT_CTRL_PCSAMPLENA_Pos)          /*!< DWT CTR
+ 792:src/libstm32f2/core_cm3.h **** 
+ 793:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_SYNCTAP_Pos               10                                          /*!< DWT CTR
+ 794:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_SYNCTAP_Msk               (0x3UL << DWT_CTRL_SYNCTAP_Pos)             /*!< DWT CTR
+ 795:src/libstm32f2/core_cm3.h **** 
+ 796:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CYCTAP_Pos                 9                                          /*!< DWT CTR
+ 797:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CYCTAP_Msk                (0x1UL << DWT_CTRL_CYCTAP_Pos)              /*!< DWT CTR
+ 798:src/libstm32f2/core_cm3.h **** 
+ 799:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_POSTINIT_Pos               5                                          /*!< DWT CTR
+ 800:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_POSTINIT_Msk              (0xFUL << DWT_CTRL_POSTINIT_Pos)            /*!< DWT CTR
+ 801:src/libstm32f2/core_cm3.h **** 
+ 802:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_POSTPRESET_Pos             1                                          /*!< DWT CTR
+ 803:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_POSTPRESET_Msk            (0xFUL << DWT_CTRL_POSTPRESET_Pos)          /*!< DWT CTR
+ 804:src/libstm32f2/core_cm3.h **** 
+ 805:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CYCCNTENA_Pos              0                                          /*!< DWT CTR
+ 806:src/libstm32f2/core_cm3.h **** #define DWT_CTRL_CYCCNTENA_Msk             (0x1UL << DWT_CTRL_CYCCNTENA_Pos)           /*!< DWT CTR
+ 807:src/libstm32f2/core_cm3.h **** 
+ 808:src/libstm32f2/core_cm3.h **** /* DWT CPI Count Register Definitions */
+ 809:src/libstm32f2/core_cm3.h **** #define DWT_CPICNT_CPICNT_Pos               0                                          /*!< DWT CPI
+ 810:src/libstm32f2/core_cm3.h **** #define DWT_CPICNT_CPICNT_Msk              (0xFFUL << DWT_CPICNT_CPICNT_Pos)           /*!< DWT CPI
+ 811:src/libstm32f2/core_cm3.h **** 
+ 812:src/libstm32f2/core_cm3.h **** /* DWT Exception Overhead Count Register Definitions */
+ 813:src/libstm32f2/core_cm3.h **** #define DWT_EXCCNT_EXCCNT_Pos               0                                          /*!< DWT EXC
+ 814:src/libstm32f2/core_cm3.h **** #define DWT_EXCCNT_EXCCNT_Msk              (0xFFUL << DWT_EXCCNT_EXCCNT_Pos)           /*!< DWT EXC
+ 815:src/libstm32f2/core_cm3.h **** 
+ 816:src/libstm32f2/core_cm3.h **** /* DWT Sleep Count Register Definitions */
+ 817:src/libstm32f2/core_cm3.h **** #define DWT_SLEEPCNT_SLEEPCNT_Pos           0                                          /*!< DWT SLE
+ 818:src/libstm32f2/core_cm3.h **** #define DWT_SLEEPCNT_SLEEPCNT_Msk          (0xFFUL << DWT_SLEEPCNT_SLEEPCNT_Pos)       /*!< DWT SLE
+ 819:src/libstm32f2/core_cm3.h **** 
+ 820:src/libstm32f2/core_cm3.h **** /* DWT LSU Count Register Definitions */
+ 821:src/libstm32f2/core_cm3.h **** #define DWT_LSUCNT_LSUCNT_Pos               0                                          /*!< DWT LSU
+ 822:src/libstm32f2/core_cm3.h **** #define DWT_LSUCNT_LSUCNT_Msk              (0xFFUL << DWT_LSUCNT_LSUCNT_Pos)           /*!< DWT LSU
+ 823:src/libstm32f2/core_cm3.h **** 
+ 824:src/libstm32f2/core_cm3.h **** /* DWT Folded-instruction Count Register Definitions */
+ 825:src/libstm32f2/core_cm3.h **** #define DWT_FOLDCNT_FOLDCNT_Pos             0                                          /*!< DWT FOL
+ 826:src/libstm32f2/core_cm3.h **** #define DWT_FOLDCNT_FOLDCNT_Msk            (0xFFUL << DWT_FOLDCNT_FOLDCNT_Pos)         /*!< DWT FOL
+ 827:src/libstm32f2/core_cm3.h **** 
+ 828:src/libstm32f2/core_cm3.h **** /* DWT Comparator Mask Register Definitions */
+ 829:src/libstm32f2/core_cm3.h **** #define DWT_MASK_MASK_Pos                   0                                          /*!< DWT MAS
+ 830:src/libstm32f2/core_cm3.h **** #define DWT_MASK_MASK_Msk                  (0x1FUL << DWT_MASK_MASK_Pos)               /*!< DWT MAS
+ 831:src/libstm32f2/core_cm3.h **** 
+ 832:src/libstm32f2/core_cm3.h **** /* DWT Comparator Function Register Definitions */
+ 833:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_MATCHED_Pos           24                                          /*!< DWT FUN
+ 834:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_MATCHED_Msk           (0x1UL << DWT_FUNCTION_MATCHED_Pos)         /*!< DWT FUN
+ 835:src/libstm32f2/core_cm3.h **** 
+ 836:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVADDR1_Pos        16                                          /*!< DWT FUN
+ 837:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVADDR1_Msk        (0xFUL << DWT_FUNCTION_DATAVADDR1_Pos)      /*!< DWT FUN
+ 838:src/libstm32f2/core_cm3.h **** 
+ 839:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVADDR0_Pos        12                                          /*!< DWT FUN
+ 840:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVADDR0_Msk        (0xFUL << DWT_FUNCTION_DATAVADDR0_Pos)      /*!< DWT FUN
+ 841:src/libstm32f2/core_cm3.h **** 
+ 842:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVSIZE_Pos         10                                          /*!< DWT FUN
+ 843:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVSIZE_Msk         (0x3UL << DWT_FUNCTION_DATAVSIZE_Pos)       /*!< DWT FUN
+ 844:src/libstm32f2/core_cm3.h **** 
+ 845:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_LNK1ENA_Pos            9                                          /*!< DWT FUN
+ 846:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_LNK1ENA_Msk           (0x1UL << DWT_FUNCTION_LNK1ENA_Pos)         /*!< DWT FUN
+ 847:src/libstm32f2/core_cm3.h **** 
+ 848:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVMATCH_Pos         8                                          /*!< DWT FUN
+ 849:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_DATAVMATCH_Msk        (0x1UL << DWT_FUNCTION_DATAVMATCH_Pos)      /*!< DWT FUN
+ 850:src/libstm32f2/core_cm3.h **** 
+ 851:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_CYCMATCH_Pos           7                                          /*!< DWT FUN
+ 852:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_CYCMATCH_Msk          (0x1UL << DWT_FUNCTION_CYCMATCH_Pos)        /*!< DWT FUN
+ 853:src/libstm32f2/core_cm3.h **** 
+ 854:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_EMITRANGE_Pos          5                                          /*!< DWT FUN
+ 855:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_EMITRANGE_Msk         (0x1UL << DWT_FUNCTION_EMITRANGE_Pos)       /*!< DWT FUN
+ 856:src/libstm32f2/core_cm3.h **** 
+ 857:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_FUNCTION_Pos           0                                          /*!< DWT FUN
+ 858:src/libstm32f2/core_cm3.h **** #define DWT_FUNCTION_FUNCTION_Msk          (0xFUL << DWT_FUNCTION_FUNCTION_Pos)        /*!< DWT FUN
+ 859:src/libstm32f2/core_cm3.h **** 
+ 860:src/libstm32f2/core_cm3.h **** /*@}*/ /* end of group CMSIS_DWT */
+ 861:src/libstm32f2/core_cm3.h **** 
+ 862:src/libstm32f2/core_cm3.h **** 
+ 863:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+ 864:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_TPI     Trace Port Interface (TPI)
+ 865:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the Trace Port Interface (TPI)
+ 866:src/libstm32f2/core_cm3.h ****   @{
+ 867:src/libstm32f2/core_cm3.h ****  */
+ 868:src/libstm32f2/core_cm3.h **** 
+ 869:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the Trace Port Interface Register (TPI).
+ 870:src/libstm32f2/core_cm3.h ****  */
+ 871:src/libstm32f2/core_cm3.h **** typedef struct
+ 872:src/libstm32f2/core_cm3.h **** {
+ 873:src/libstm32f2/core_cm3.h ****   __IO uint32_t SSPSR;                   /*!< Offset: 0x000 (R/ )  Supported Parallel Port Size Reg
+ 874:src/libstm32f2/core_cm3.h ****   __IO uint32_t CSPSR;                   /*!< Offset: 0x004 (R/W)  Current Parallel Port Size Regis
+ 875:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED0[2];
+ 876:src/libstm32f2/core_cm3.h ****   __IO uint32_t ACPR;                    /*!< Offset: 0x010 (R/W)  Asynchronous Clock Prescaler Reg
+ 877:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED1[55];
+ 878:src/libstm32f2/core_cm3.h ****   __IO uint32_t SPPR;                    /*!< Offset: 0x0F0 (R/W)  Selected Pin Protocol Register *
+ 879:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED2[131];
+ 880:src/libstm32f2/core_cm3.h ****   __I  uint32_t FFSR;                    /*!< Offset: 0x300 (R/ )  Formatter and Flush Status Regis
+ 881:src/libstm32f2/core_cm3.h ****   __IO uint32_t FFCR;                    /*!< Offset: 0x304 (R/W)  Formatter and Flush Control Regi
+ 882:src/libstm32f2/core_cm3.h ****   __I  uint32_t FSCR;                    /*!< Offset: 0x308 (R/ )  Formatter Synchronization Counte
+ 883:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED3[759];
+ 884:src/libstm32f2/core_cm3.h ****   __I  uint32_t TRIGGER;                 /*!< Offset: 0xEE8 (R/ )  TRIGGER */
+ 885:src/libstm32f2/core_cm3.h ****   __I  uint32_t FIFO0;                   /*!< Offset: 0xEEC (R/ )  Integration ETM Data */
+ 886:src/libstm32f2/core_cm3.h ****   __I  uint32_t ITATBCTR2;               /*!< Offset: 0xEF0 (R/ )  ITATBCTR2 */
+ 887:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED4[1];
+ 888:src/libstm32f2/core_cm3.h ****   __I  uint32_t ITATBCTR0;               /*!< Offset: 0xEF8 (R/ )  ITATBCTR0 */
+ 889:src/libstm32f2/core_cm3.h ****   __I  uint32_t FIFO1;                   /*!< Offset: 0xEFC (R/ )  Integration ITM Data */
+ 890:src/libstm32f2/core_cm3.h ****   __IO uint32_t ITCTRL;                  /*!< Offset: 0xF00 (R/W)  Integration Mode Control */
+ 891:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED5[39];
+ 892:src/libstm32f2/core_cm3.h ****   __IO uint32_t CLAIMSET;                /*!< Offset: 0xFA0 (R/W)  Claim tag set */
+ 893:src/libstm32f2/core_cm3.h ****   __IO uint32_t CLAIMCLR;                /*!< Offset: 0xFA4 (R/W)  Claim tag clear */
+ 894:src/libstm32f2/core_cm3.h ****        uint32_t RESERVED7[8];
+ 895:src/libstm32f2/core_cm3.h ****   __I  uint32_t DEVID;                   /*!< Offset: 0xFC8 (R/ )  TPIU_DEVID */
+ 896:src/libstm32f2/core_cm3.h ****   __I  uint32_t DEVTYPE;                 /*!< Offset: 0xFCC (R/ )  TPIU_DEVTYPE */
+ 897:src/libstm32f2/core_cm3.h **** } TPI_Type;
+ 898:src/libstm32f2/core_cm3.h **** 
+ 899:src/libstm32f2/core_cm3.h **** /* TPI Asynchronous Clock Prescaler Register Definitions */
+ 900:src/libstm32f2/core_cm3.h **** #define TPI_ACPR_PRESCALER_Pos              0                                          /*!< TPI ACP
+ 901:src/libstm32f2/core_cm3.h **** #define TPI_ACPR_PRESCALER_Msk             (0x1FFFUL << TPI_ACPR_PRESCALER_Pos)        /*!< TPI ACP
+ 902:src/libstm32f2/core_cm3.h **** 
+ 903:src/libstm32f2/core_cm3.h **** /* TPI Selected Pin Protocol Register Definitions */
+ 904:src/libstm32f2/core_cm3.h **** #define TPI_SPPR_TXMODE_Pos                 0                                          /*!< TPI SPP
+ 905:src/libstm32f2/core_cm3.h **** #define TPI_SPPR_TXMODE_Msk                (0x3UL << TPI_SPPR_TXMODE_Pos)              /*!< TPI SPP
+ 906:src/libstm32f2/core_cm3.h **** 
+ 907:src/libstm32f2/core_cm3.h **** /* TPI Formatter and Flush Status Register Definitions */
+ 908:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_FtNonStop_Pos              3                                          /*!< TPI FFS
+ 909:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_FtNonStop_Msk             (0x1UL << TPI_FFSR_FtNonStop_Pos)           /*!< TPI FFS
+ 910:src/libstm32f2/core_cm3.h **** 
+ 911:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_TCPresent_Pos              2                                          /*!< TPI FFS
+ 912:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_TCPresent_Msk             (0x1UL << TPI_FFSR_TCPresent_Pos)           /*!< TPI FFS
+ 913:src/libstm32f2/core_cm3.h **** 
+ 914:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_FtStopped_Pos              1                                          /*!< TPI FFS
+ 915:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_FtStopped_Msk             (0x1UL << TPI_FFSR_FtStopped_Pos)           /*!< TPI FFS
+ 916:src/libstm32f2/core_cm3.h **** 
+ 917:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_FlInProg_Pos               0                                          /*!< TPI FFS
+ 918:src/libstm32f2/core_cm3.h **** #define TPI_FFSR_FlInProg_Msk              (0x1UL << TPI_FFSR_FlInProg_Pos)            /*!< TPI FFS
+ 919:src/libstm32f2/core_cm3.h **** 
+ 920:src/libstm32f2/core_cm3.h **** /* TPI Formatter and Flush Control Register Definitions */
+ 921:src/libstm32f2/core_cm3.h **** #define TPI_FFCR_TrigIn_Pos                 8                                          /*!< TPI FFC
+ 922:src/libstm32f2/core_cm3.h **** #define TPI_FFCR_TrigIn_Msk                (0x1UL << TPI_FFCR_TrigIn_Pos)              /*!< TPI FFC
+ 923:src/libstm32f2/core_cm3.h **** 
+ 924:src/libstm32f2/core_cm3.h **** #define TPI_FFCR_EnFCont_Pos                1                                          /*!< TPI FFC
+ 925:src/libstm32f2/core_cm3.h **** #define TPI_FFCR_EnFCont_Msk               (0x1UL << TPI_FFCR_EnFCont_Pos)             /*!< TPI FFC
+ 926:src/libstm32f2/core_cm3.h **** 
+ 927:src/libstm32f2/core_cm3.h **** /* TPI TRIGGER Register Definitions */
+ 928:src/libstm32f2/core_cm3.h **** #define TPI_TRIGGER_TRIGGER_Pos             0                                          /*!< TPI TRI
+ 929:src/libstm32f2/core_cm3.h **** #define TPI_TRIGGER_TRIGGER_Msk            (0x1UL << TPI_TRIGGER_TRIGGER_Pos)          /*!< TPI TRI
+ 930:src/libstm32f2/core_cm3.h **** 
+ 931:src/libstm32f2/core_cm3.h **** /* TPI Integration ETM Data Register Definitions (FIFO0) */
+ 932:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ITM_ATVALID_Pos          29                                          /*!< TPI FIF
+ 933:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ITM_ATVALID_Msk          (0x3UL << TPI_FIFO0_ITM_ATVALID_Pos)        /*!< TPI FIF
+ 934:src/libstm32f2/core_cm3.h **** 
+ 935:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ITM_bytecount_Pos        27                                          /*!< TPI FIF
+ 936:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ITM_bytecount_Msk        (0x3UL << TPI_FIFO0_ITM_bytecount_Pos)      /*!< TPI FIF
+ 937:src/libstm32f2/core_cm3.h **** 
+ 938:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM_ATVALID_Pos          26                                          /*!< TPI FIF
+ 939:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM_ATVALID_Msk          (0x3UL << TPI_FIFO0_ETM_ATVALID_Pos)        /*!< TPI FIF
+ 940:src/libstm32f2/core_cm3.h **** 
+ 941:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM_bytecount_Pos        24                                          /*!< TPI FIF
+ 942:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM_bytecount_Msk        (0x3UL << TPI_FIFO0_ETM_bytecount_Pos)      /*!< TPI FIF
+ 943:src/libstm32f2/core_cm3.h **** 
+ 944:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM2_Pos                 16                                          /*!< TPI FIF
+ 945:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM2_Msk                 (0xFFUL << TPI_FIFO0_ETM2_Pos)              /*!< TPI FIF
+ 946:src/libstm32f2/core_cm3.h **** 
+ 947:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM1_Pos                  8                                          /*!< TPI FIF
+ 948:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM1_Msk                 (0xFFUL << TPI_FIFO0_ETM1_Pos)              /*!< TPI FIF
+ 949:src/libstm32f2/core_cm3.h **** 
+ 950:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM0_Pos                  0                                          /*!< TPI FIF
+ 951:src/libstm32f2/core_cm3.h **** #define TPI_FIFO0_ETM0_Msk                 (0xFFUL << TPI_FIFO0_ETM0_Pos)              /*!< TPI FIF
+ 952:src/libstm32f2/core_cm3.h **** 
+ 953:src/libstm32f2/core_cm3.h **** /* TPI ITATBCTR2 Register Definitions */
+ 954:src/libstm32f2/core_cm3.h **** #define TPI_ITATBCTR2_ATREADY_Pos           0                                          /*!< TPI ITA
+ 955:src/libstm32f2/core_cm3.h **** #define TPI_ITATBCTR2_ATREADY_Msk          (0x1UL << TPI_ITATBCTR2_ATREADY_Pos)        /*!< TPI ITA
+ 956:src/libstm32f2/core_cm3.h **** 
+ 957:src/libstm32f2/core_cm3.h **** /* TPI Integration ITM Data Register Definitions (FIFO1) */
+ 958:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM_ATVALID_Pos          29                                          /*!< TPI FIF
+ 959:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM_ATVALID_Msk          (0x3UL << TPI_FIFO1_ITM_ATVALID_Pos)        /*!< TPI FIF
+ 960:src/libstm32f2/core_cm3.h **** 
+ 961:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM_bytecount_Pos        27                                          /*!< TPI FIF
+ 962:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM_bytecount_Msk        (0x3UL << TPI_FIFO1_ITM_bytecount_Pos)      /*!< TPI FIF
+ 963:src/libstm32f2/core_cm3.h **** 
+ 964:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ETM_ATVALID_Pos          26                                          /*!< TPI FIF
+ 965:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ETM_ATVALID_Msk          (0x3UL << TPI_FIFO1_ETM_ATVALID_Pos)        /*!< TPI FIF
+ 966:src/libstm32f2/core_cm3.h **** 
+ 967:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ETM_bytecount_Pos        24                                          /*!< TPI FIF
+ 968:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ETM_bytecount_Msk        (0x3UL << TPI_FIFO1_ETM_bytecount_Pos)      /*!< TPI FIF
+ 969:src/libstm32f2/core_cm3.h **** 
+ 970:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM2_Pos                 16                                          /*!< TPI FIF
+ 971:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM2_Msk                 (0xFFUL << TPI_FIFO1_ITM2_Pos)              /*!< TPI FIF
+ 972:src/libstm32f2/core_cm3.h **** 
+ 973:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM1_Pos                  8                                          /*!< TPI FIF
+ 974:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM1_Msk                 (0xFFUL << TPI_FIFO1_ITM1_Pos)              /*!< TPI FIF
+ 975:src/libstm32f2/core_cm3.h **** 
+ 976:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM0_Pos                  0                                          /*!< TPI FIF
+ 977:src/libstm32f2/core_cm3.h **** #define TPI_FIFO1_ITM0_Msk                 (0xFFUL << TPI_FIFO1_ITM0_Pos)              /*!< TPI FIF
+ 978:src/libstm32f2/core_cm3.h **** 
+ 979:src/libstm32f2/core_cm3.h **** /* TPI ITATBCTR0 Register Definitions */
+ 980:src/libstm32f2/core_cm3.h **** #define TPI_ITATBCTR0_ATREADY_Pos           0                                          /*!< TPI ITA
+ 981:src/libstm32f2/core_cm3.h **** #define TPI_ITATBCTR0_ATREADY_Msk          (0x1UL << TPI_ITATBCTR0_ATREADY_Pos)        /*!< TPI ITA
+ 982:src/libstm32f2/core_cm3.h **** 
+ 983:src/libstm32f2/core_cm3.h **** /* TPI Integration Mode Control Register Definitions */
+ 984:src/libstm32f2/core_cm3.h **** #define TPI_ITCTRL_Mode_Pos                 0                                          /*!< TPI ITC
+ 985:src/libstm32f2/core_cm3.h **** #define TPI_ITCTRL_Mode_Msk                (0x1UL << TPI_ITCTRL_Mode_Pos)              /*!< TPI ITC
+ 986:src/libstm32f2/core_cm3.h **** 
+ 987:src/libstm32f2/core_cm3.h **** /* TPI DEVID Register Definitions */
+ 988:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_NRZVALID_Pos             11                                          /*!< TPI DEV
+ 989:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_NRZVALID_Msk             (0x1UL << TPI_DEVID_NRZVALID_Pos)           /*!< TPI DEV
+ 990:src/libstm32f2/core_cm3.h **** 
+ 991:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_MANCVALID_Pos            10                                          /*!< TPI DEV
+ 992:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_MANCVALID_Msk            (0x1UL << TPI_DEVID_MANCVALID_Pos)          /*!< TPI DEV
+ 993:src/libstm32f2/core_cm3.h **** 
+ 994:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_PTINVALID_Pos             9                                          /*!< TPI DEV
+ 995:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_PTINVALID_Msk            (0x1UL << TPI_DEVID_PTINVALID_Pos)          /*!< TPI DEV
+ 996:src/libstm32f2/core_cm3.h **** 
+ 997:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_MinBufSz_Pos              6                                          /*!< TPI DEV
+ 998:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_MinBufSz_Msk             (0x7UL << TPI_DEVID_MinBufSz_Pos)           /*!< TPI DEV
+ 999:src/libstm32f2/core_cm3.h **** 
+1000:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_AsynClkIn_Pos             5                                          /*!< TPI DEV
+1001:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_AsynClkIn_Msk            (0x1UL << TPI_DEVID_AsynClkIn_Pos)          /*!< TPI DEV
+1002:src/libstm32f2/core_cm3.h **** 
+1003:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_NrTraceInput_Pos          0                                          /*!< TPI DEV
+1004:src/libstm32f2/core_cm3.h **** #define TPI_DEVID_NrTraceInput_Msk         (0x1FUL << TPI_DEVID_NrTraceInput_Pos)      /*!< TPI DEV
+1005:src/libstm32f2/core_cm3.h **** 
+1006:src/libstm32f2/core_cm3.h **** /* TPI DEVTYPE Register Definitions */
+1007:src/libstm32f2/core_cm3.h **** #define TPI_DEVTYPE_SubType_Pos             0                                          /*!< TPI DEV
+1008:src/libstm32f2/core_cm3.h **** #define TPI_DEVTYPE_SubType_Msk            (0xFUL << TPI_DEVTYPE_SubType_Pos)          /*!< TPI DEV
+1009:src/libstm32f2/core_cm3.h **** 
+1010:src/libstm32f2/core_cm3.h **** #define TPI_DEVTYPE_MajorType_Pos           4                                          /*!< TPI DEV
+1011:src/libstm32f2/core_cm3.h **** #define TPI_DEVTYPE_MajorType_Msk          (0xFUL << TPI_DEVTYPE_MajorType_Pos)        /*!< TPI DEV
+1012:src/libstm32f2/core_cm3.h **** 
+1013:src/libstm32f2/core_cm3.h **** /*@}*/ /* end of group CMSIS_TPI */
+1014:src/libstm32f2/core_cm3.h **** 
+1015:src/libstm32f2/core_cm3.h **** 
+1016:src/libstm32f2/core_cm3.h **** #if (__MPU_PRESENT == 1)
+1017:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+1018:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_MPU     Memory Protection Unit (MPU)
+1019:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the Memory Protection Unit (MPU)
+1020:src/libstm32f2/core_cm3.h ****   @{
+1021:src/libstm32f2/core_cm3.h ****  */
+1022:src/libstm32f2/core_cm3.h **** 
+1023:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the Memory Protection Unit (MPU).
+1024:src/libstm32f2/core_cm3.h ****  */
+1025:src/libstm32f2/core_cm3.h **** typedef struct
+1026:src/libstm32f2/core_cm3.h **** {
+1027:src/libstm32f2/core_cm3.h ****   __I  uint32_t TYPE;                    /*!< Offset: 0x000 (R/ )  MPU Type Register               
+1028:src/libstm32f2/core_cm3.h ****   __IO uint32_t CTRL;                    /*!< Offset: 0x004 (R/W)  MPU Control Register            
+1029:src/libstm32f2/core_cm3.h ****   __IO uint32_t RNR;                     /*!< Offset: 0x008 (R/W)  MPU Region RNRber Register      
+1030:src/libstm32f2/core_cm3.h ****   __IO uint32_t RBAR;                    /*!< Offset: 0x00C (R/W)  MPU Region Base Address Register
+1031:src/libstm32f2/core_cm3.h ****   __IO uint32_t RASR;                    /*!< Offset: 0x010 (R/W)  MPU Region Attribute and Size Re
+1032:src/libstm32f2/core_cm3.h ****   __IO uint32_t RBAR_A1;                 /*!< Offset: 0x014 (R/W)  MPU Alias 1 Region Base Address 
+1033:src/libstm32f2/core_cm3.h ****   __IO uint32_t RASR_A1;                 /*!< Offset: 0x018 (R/W)  MPU Alias 1 Region Attribute and
+1034:src/libstm32f2/core_cm3.h ****   __IO uint32_t RBAR_A2;                 /*!< Offset: 0x01C (R/W)  MPU Alias 2 Region Base Address 
+1035:src/libstm32f2/core_cm3.h ****   __IO uint32_t RASR_A2;                 /*!< Offset: 0x020 (R/W)  MPU Alias 2 Region Attribute and
+1036:src/libstm32f2/core_cm3.h ****   __IO uint32_t RBAR_A3;                 /*!< Offset: 0x024 (R/W)  MPU Alias 3 Region Base Address 
+1037:src/libstm32f2/core_cm3.h ****   __IO uint32_t RASR_A3;                 /*!< Offset: 0x028 (R/W)  MPU Alias 3 Region Attribute and
+1038:src/libstm32f2/core_cm3.h **** } MPU_Type;
+1039:src/libstm32f2/core_cm3.h **** 
+1040:src/libstm32f2/core_cm3.h **** /* MPU Type Register */
+1041:src/libstm32f2/core_cm3.h **** #define MPU_TYPE_IREGION_Pos               16                                             /*!< MPU 
+1042:src/libstm32f2/core_cm3.h **** #define MPU_TYPE_IREGION_Msk               (0xFFUL << MPU_TYPE_IREGION_Pos)               /*!< MPU 
+1043:src/libstm32f2/core_cm3.h **** 
+1044:src/libstm32f2/core_cm3.h **** #define MPU_TYPE_DREGION_Pos                8                                             /*!< MPU 
+1045:src/libstm32f2/core_cm3.h **** #define MPU_TYPE_DREGION_Msk               (0xFFUL << MPU_TYPE_DREGION_Pos)               /*!< MPU 
+1046:src/libstm32f2/core_cm3.h **** 
+1047:src/libstm32f2/core_cm3.h **** #define MPU_TYPE_SEPARATE_Pos               0                                             /*!< MPU 
+1048:src/libstm32f2/core_cm3.h **** #define MPU_TYPE_SEPARATE_Msk              (1UL << MPU_TYPE_SEPARATE_Pos)                 /*!< MPU 
+1049:src/libstm32f2/core_cm3.h **** 
+1050:src/libstm32f2/core_cm3.h **** /* MPU Control Register */
+1051:src/libstm32f2/core_cm3.h **** #define MPU_CTRL_PRIVDEFENA_Pos             2                                             /*!< MPU 
+1052:src/libstm32f2/core_cm3.h **** #define MPU_CTRL_PRIVDEFENA_Msk            (1UL << MPU_CTRL_PRIVDEFENA_Pos)               /*!< MPU 
+1053:src/libstm32f2/core_cm3.h **** 
+1054:src/libstm32f2/core_cm3.h **** #define MPU_CTRL_HFNMIENA_Pos               1                                             /*!< MPU 
+1055:src/libstm32f2/core_cm3.h **** #define MPU_CTRL_HFNMIENA_Msk              (1UL << MPU_CTRL_HFNMIENA_Pos)                 /*!< MPU 
+1056:src/libstm32f2/core_cm3.h **** 
+1057:src/libstm32f2/core_cm3.h **** #define MPU_CTRL_ENABLE_Pos                 0                                             /*!< MPU 
+1058:src/libstm32f2/core_cm3.h **** #define MPU_CTRL_ENABLE_Msk                (1UL << MPU_CTRL_ENABLE_Pos)                   /*!< MPU 
+1059:src/libstm32f2/core_cm3.h **** 
+1060:src/libstm32f2/core_cm3.h **** /* MPU Region Number Register */
+1061:src/libstm32f2/core_cm3.h **** #define MPU_RNR_REGION_Pos                  0                                             /*!< MPU 
+1062:src/libstm32f2/core_cm3.h **** #define MPU_RNR_REGION_Msk                 (0xFFUL << MPU_RNR_REGION_Pos)                 /*!< MPU 
+1063:src/libstm32f2/core_cm3.h **** 
+1064:src/libstm32f2/core_cm3.h **** /* MPU Region Base Address Register */
+1065:src/libstm32f2/core_cm3.h **** #define MPU_RBAR_ADDR_Pos                   5                                             /*!< MPU 
+1066:src/libstm32f2/core_cm3.h **** #define MPU_RBAR_ADDR_Msk                  (0x7FFFFFFUL << MPU_RBAR_ADDR_Pos)             /*!< MPU 
+1067:src/libstm32f2/core_cm3.h **** 
+1068:src/libstm32f2/core_cm3.h **** #define MPU_RBAR_VALID_Pos                  4                                             /*!< MPU 
+1069:src/libstm32f2/core_cm3.h **** #define MPU_RBAR_VALID_Msk                 (1UL << MPU_RBAR_VALID_Pos)                    /*!< MPU 
+1070:src/libstm32f2/core_cm3.h **** 
+1071:src/libstm32f2/core_cm3.h **** #define MPU_RBAR_REGION_Pos                 0                                             /*!< MPU 
+1072:src/libstm32f2/core_cm3.h **** #define MPU_RBAR_REGION_Msk                (0xFUL << MPU_RBAR_REGION_Pos)                 /*!< MPU 
+1073:src/libstm32f2/core_cm3.h **** 
+1074:src/libstm32f2/core_cm3.h **** /* MPU Region Attribute and Size Register */
+1075:src/libstm32f2/core_cm3.h **** #define MPU_RASR_ATTRS_Pos                 16                                             /*!< MPU 
+1076:src/libstm32f2/core_cm3.h **** #define MPU_RASR_ATTRS_Msk                 (0xFFFFUL << MPU_RASR_ATTRS_Pos)               /*!< MPU 
+1077:src/libstm32f2/core_cm3.h **** 
+1078:src/libstm32f2/core_cm3.h **** #define MPU_RASR_XN_Pos                    28                                             /*!< MPU 
+1079:src/libstm32f2/core_cm3.h **** #define MPU_RASR_XN_Msk                    (1UL << MPU_RASR_XN_Pos)                       /*!< MPU 
+1080:src/libstm32f2/core_cm3.h **** 
+1081:src/libstm32f2/core_cm3.h **** #define MPU_RASR_AP_Pos                    24                                             /*!< MPU 
+1082:src/libstm32f2/core_cm3.h **** #define MPU_RASR_AP_Msk                    (0x7UL << MPU_RASR_AP_Pos)                     /*!< MPU 
+1083:src/libstm32f2/core_cm3.h **** 
+1084:src/libstm32f2/core_cm3.h **** #define MPU_RASR_TEX_Pos                   19                                             /*!< MPU 
+1085:src/libstm32f2/core_cm3.h **** #define MPU_RASR_TEX_Msk                   (0x7UL << MPU_RASR_TEX_Pos)                    /*!< MPU 
+1086:src/libstm32f2/core_cm3.h **** 
+1087:src/libstm32f2/core_cm3.h **** #define MPU_RASR_S_Pos                     18                                             /*!< MPU 
+1088:src/libstm32f2/core_cm3.h **** #define MPU_RASR_S_Msk                     (1UL << MPU_RASR_S_Pos)                        /*!< MPU 
+1089:src/libstm32f2/core_cm3.h **** 
+1090:src/libstm32f2/core_cm3.h **** #define MPU_RASR_C_Pos                     17                                             /*!< MPU 
+1091:src/libstm32f2/core_cm3.h **** #define MPU_RASR_C_Msk                     (1UL << MPU_RASR_C_Pos)                        /*!< MPU 
+1092:src/libstm32f2/core_cm3.h **** 
+1093:src/libstm32f2/core_cm3.h **** #define MPU_RASR_B_Pos                     16                                             /*!< MPU 
+1094:src/libstm32f2/core_cm3.h **** #define MPU_RASR_B_Msk                     (1UL << MPU_RASR_B_Pos)                        /*!< MPU 
+1095:src/libstm32f2/core_cm3.h **** 
+1096:src/libstm32f2/core_cm3.h **** #define MPU_RASR_SRD_Pos                    8                                             /*!< MPU 
+1097:src/libstm32f2/core_cm3.h **** #define MPU_RASR_SRD_Msk                   (0xFFUL << MPU_RASR_SRD_Pos)                   /*!< MPU 
+1098:src/libstm32f2/core_cm3.h **** 
+1099:src/libstm32f2/core_cm3.h **** #define MPU_RASR_SIZE_Pos                   1                                             /*!< MPU 
+1100:src/libstm32f2/core_cm3.h **** #define MPU_RASR_SIZE_Msk                  (0x1FUL << MPU_RASR_SIZE_Pos)                  /*!< MPU 
+1101:src/libstm32f2/core_cm3.h **** 
+1102:src/libstm32f2/core_cm3.h **** #define MPU_RASR_ENABLE_Pos                 0                                             /*!< MPU 
+1103:src/libstm32f2/core_cm3.h **** #define MPU_RASR_ENABLE_Msk                (1UL << MPU_RASR_ENABLE_Pos)                   /*!< MPU 
+1104:src/libstm32f2/core_cm3.h **** 
+1105:src/libstm32f2/core_cm3.h **** /*@} end of group CMSIS_MPU */
+1106:src/libstm32f2/core_cm3.h **** #endif
+1107:src/libstm32f2/core_cm3.h **** 
+1108:src/libstm32f2/core_cm3.h **** 
+1109:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_core_register
+1110:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_CoreDebug       Core Debug Registers (CoreDebug)
+1111:src/libstm32f2/core_cm3.h ****     \brief      Type definitions for the Core Debug Registers
+1112:src/libstm32f2/core_cm3.h ****   @{
+1113:src/libstm32f2/core_cm3.h ****  */
+1114:src/libstm32f2/core_cm3.h **** 
+1115:src/libstm32f2/core_cm3.h **** /** \brief  Structure type to access the Core Debug Register (CoreDebug).
+1116:src/libstm32f2/core_cm3.h ****  */
+1117:src/libstm32f2/core_cm3.h **** typedef struct
+1118:src/libstm32f2/core_cm3.h **** {
+1119:src/libstm32f2/core_cm3.h ****   __IO uint32_t DHCSR;                   /*!< Offset: 0x000 (R/W)  Debug Halting Control and Status
+1120:src/libstm32f2/core_cm3.h ****   __O  uint32_t DCRSR;                   /*!< Offset: 0x004 ( /W)  Debug Core Register Selector Reg
+1121:src/libstm32f2/core_cm3.h ****   __IO uint32_t DCRDR;                   /*!< Offset: 0x008 (R/W)  Debug Core Register Data Registe
+1122:src/libstm32f2/core_cm3.h ****   __IO uint32_t DEMCR;                   /*!< Offset: 0x00C (R/W)  Debug Exception and Monitor Cont
+1123:src/libstm32f2/core_cm3.h **** } CoreDebug_Type;
+1124:src/libstm32f2/core_cm3.h **** 
+1125:src/libstm32f2/core_cm3.h **** /* Debug Halting Control and Status Register */
+1126:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_DBGKEY_Pos         16                                             /*!< Core
+1127:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_DBGKEY_Msk         (0xFFFFUL << CoreDebug_DHCSR_DBGKEY_Pos)       /*!< Core
+1128:src/libstm32f2/core_cm3.h **** 
+1129:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_RESET_ST_Pos     25                                             /*!< Core
+1130:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_RESET_ST_Msk     (1UL << CoreDebug_DHCSR_S_RESET_ST_Pos)        /*!< Core
+1131:src/libstm32f2/core_cm3.h **** 
+1132:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Pos    24                                             /*!< Core
+1133:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Msk    (1UL << CoreDebug_DHCSR_S_RETIRE_ST_Pos)       /*!< Core
+1134:src/libstm32f2/core_cm3.h **** 
+1135:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_LOCKUP_Pos       19                                             /*!< Core
+1136:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_LOCKUP_Msk       (1UL << CoreDebug_DHCSR_S_LOCKUP_Pos)          /*!< Core
+1137:src/libstm32f2/core_cm3.h **** 
+1138:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_SLEEP_Pos        18                                             /*!< Core
+1139:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_SLEEP_Msk        (1UL << CoreDebug_DHCSR_S_SLEEP_Pos)           /*!< Core
+1140:src/libstm32f2/core_cm3.h **** 
+1141:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_HALT_Pos         17                                             /*!< Core
+1142:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_HALT_Msk         (1UL << CoreDebug_DHCSR_S_HALT_Pos)            /*!< Core
+1143:src/libstm32f2/core_cm3.h **** 
+1144:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_REGRDY_Pos       16                                             /*!< Core
+1145:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_S_REGRDY_Msk       (1UL << CoreDebug_DHCSR_S_REGRDY_Pos)          /*!< Core
+1146:src/libstm32f2/core_cm3.h **** 
+1147:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Pos     5                                             /*!< Core
+1148:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Msk    (1UL << CoreDebug_DHCSR_C_SNAPSTALL_Pos)       /*!< Core
+1149:src/libstm32f2/core_cm3.h **** 
+1150:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_MASKINTS_Pos      3                                             /*!< Core
+1151:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_MASKINTS_Msk     (1UL << CoreDebug_DHCSR_C_MASKINTS_Pos)        /*!< Core
+1152:src/libstm32f2/core_cm3.h **** 
+1153:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_STEP_Pos          2                                             /*!< Core
+1154:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_STEP_Msk         (1UL << CoreDebug_DHCSR_C_STEP_Pos)            /*!< Core
+1155:src/libstm32f2/core_cm3.h **** 
+1156:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_HALT_Pos          1                                             /*!< Core
+1157:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_HALT_Msk         (1UL << CoreDebug_DHCSR_C_HALT_Pos)            /*!< Core
+1158:src/libstm32f2/core_cm3.h **** 
+1159:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Pos       0                                             /*!< Core
+1160:src/libstm32f2/core_cm3.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Msk      (1UL << CoreDebug_DHCSR_C_DEBUGEN_Pos)         /*!< Core
+1161:src/libstm32f2/core_cm3.h **** 
+1162:src/libstm32f2/core_cm3.h **** /* Debug Core Register Selector Register */
+1163:src/libstm32f2/core_cm3.h **** #define CoreDebug_DCRSR_REGWnR_Pos         16                                             /*!< Core
+1164:src/libstm32f2/core_cm3.h **** #define CoreDebug_DCRSR_REGWnR_Msk         (1UL << CoreDebug_DCRSR_REGWnR_Pos)            /*!< Core
+1165:src/libstm32f2/core_cm3.h **** 
+1166:src/libstm32f2/core_cm3.h **** #define CoreDebug_DCRSR_REGSEL_Pos          0                                             /*!< Core
+1167:src/libstm32f2/core_cm3.h **** #define CoreDebug_DCRSR_REGSEL_Msk         (0x1FUL << CoreDebug_DCRSR_REGSEL_Pos)         /*!< Core
+1168:src/libstm32f2/core_cm3.h **** 
+1169:src/libstm32f2/core_cm3.h **** /* Debug Exception and Monitor Control Register */
+1170:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_TRCENA_Pos         24                                             /*!< Core
+1171:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_TRCENA_Msk         (1UL << CoreDebug_DEMCR_TRCENA_Pos)            /*!< Core
+1172:src/libstm32f2/core_cm3.h **** 
+1173:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_REQ_Pos        19                                             /*!< Core
+1174:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_REQ_Msk        (1UL << CoreDebug_DEMCR_MON_REQ_Pos)           /*!< Core
+1175:src/libstm32f2/core_cm3.h **** 
+1176:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_STEP_Pos       18                                             /*!< Core
+1177:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_STEP_Msk       (1UL << CoreDebug_DEMCR_MON_STEP_Pos)          /*!< Core
+1178:src/libstm32f2/core_cm3.h **** 
+1179:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_PEND_Pos       17                                             /*!< Core
+1180:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_PEND_Msk       (1UL << CoreDebug_DEMCR_MON_PEND_Pos)          /*!< Core
+1181:src/libstm32f2/core_cm3.h **** 
+1182:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_EN_Pos         16                                             /*!< Core
+1183:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_MON_EN_Msk         (1UL << CoreDebug_DEMCR_MON_EN_Pos)            /*!< Core
+1184:src/libstm32f2/core_cm3.h **** 
+1185:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_HARDERR_Pos     10                                             /*!< Core
+1186:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_HARDERR_Msk     (1UL << CoreDebug_DEMCR_VC_HARDERR_Pos)        /*!< Core
+1187:src/libstm32f2/core_cm3.h **** 
+1188:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_INTERR_Pos       9                                             /*!< Core
+1189:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_INTERR_Msk      (1UL << CoreDebug_DEMCR_VC_INTERR_Pos)         /*!< Core
+1190:src/libstm32f2/core_cm3.h **** 
+1191:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_BUSERR_Pos       8                                             /*!< Core
+1192:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_BUSERR_Msk      (1UL << CoreDebug_DEMCR_VC_BUSERR_Pos)         /*!< Core
+1193:src/libstm32f2/core_cm3.h **** 
+1194:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_STATERR_Pos      7                                             /*!< Core
+1195:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_STATERR_Msk     (1UL << CoreDebug_DEMCR_VC_STATERR_Pos)        /*!< Core
+1196:src/libstm32f2/core_cm3.h **** 
+1197:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_CHKERR_Pos       6                                             /*!< Core
+1198:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_CHKERR_Msk      (1UL << CoreDebug_DEMCR_VC_CHKERR_Pos)         /*!< Core
+1199:src/libstm32f2/core_cm3.h **** 
+1200:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Pos      5                                             /*!< Core
+1201:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Msk     (1UL << CoreDebug_DEMCR_VC_NOCPERR_Pos)        /*!< Core
+1202:src/libstm32f2/core_cm3.h **** 
+1203:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_MMERR_Pos        4                                             /*!< Core
+1204:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_MMERR_Msk       (1UL << CoreDebug_DEMCR_VC_MMERR_Pos)          /*!< Core
+1205:src/libstm32f2/core_cm3.h **** 
+1206:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_CORERESET_Pos    0                                             /*!< Core
+1207:src/libstm32f2/core_cm3.h **** #define CoreDebug_DEMCR_VC_CORERESET_Msk   (1UL << CoreDebug_DEMCR_VC_CORERESET_Pos)      /*!< Core
+1208:src/libstm32f2/core_cm3.h **** 
+1209:src/libstm32f2/core_cm3.h **** /*@} end of group CMSIS_CoreDebug */
+1210:src/libstm32f2/core_cm3.h **** 
+1211:src/libstm32f2/core_cm3.h **** 
+1212:src/libstm32f2/core_cm3.h **** /** \ingroup    CMSIS_core_register
+1213:src/libstm32f2/core_cm3.h ****     \defgroup   CMSIS_core_base     Core Definitions
+1214:src/libstm32f2/core_cm3.h ****     \brief      Definitions for base addresses, unions, and structures.
+1215:src/libstm32f2/core_cm3.h ****   @{
+1216:src/libstm32f2/core_cm3.h ****  */
+1217:src/libstm32f2/core_cm3.h **** 
+1218:src/libstm32f2/core_cm3.h **** /* Memory mapping of Cortex-M3 Hardware */
+1219:src/libstm32f2/core_cm3.h **** #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Bas
+1220:src/libstm32f2/core_cm3.h **** #define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address        
+1221:src/libstm32f2/core_cm3.h **** #define DWT_BASE            (0xE0001000UL)                            /*!< DWT Base Address        
+1222:src/libstm32f2/core_cm3.h **** #define TPI_BASE            (0xE0040000UL)                            /*!< TPI Base Address        
+1223:src/libstm32f2/core_cm3.h **** #define CoreDebug_BASE      (0xE000EDF0UL)                            /*!< Core Debug Base Address 
+1224:src/libstm32f2/core_cm3.h **** #define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address    
+1225:src/libstm32f2/core_cm3.h **** #define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address       
+1226:src/libstm32f2/core_cm3.h **** #define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Bas
+1227:src/libstm32f2/core_cm3.h **** 
+1228:src/libstm32f2/core_cm3.h **** #define SCnSCB              ((SCnSCB_Type    *)     SCS_BASE      )   /*!< System control Register 
+1229:src/libstm32f2/core_cm3.h **** #define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct
+1230:src/libstm32f2/core_cm3.h **** #define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration st
+1231:src/libstm32f2/core_cm3.h **** #define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struc
+1232:src/libstm32f2/core_cm3.h **** #define ITM                 ((ITM_Type       *)     ITM_BASE      )   /*!< ITM configuration struct
+1233:src/libstm32f2/core_cm3.h **** #define DWT                 ((DWT_Type       *)     DWT_BASE      )   /*!< DWT configuration struct
+1234:src/libstm32f2/core_cm3.h **** #define TPI                 ((TPI_Type       *)     TPI_BASE      )   /*!< TPI configuration struct
+1235:src/libstm32f2/core_cm3.h **** #define CoreDebug           ((CoreDebug_Type *)     CoreDebug_BASE)   /*!< Core Debug configuration
+1236:src/libstm32f2/core_cm3.h **** 
+1237:src/libstm32f2/core_cm3.h **** #if (__MPU_PRESENT == 1)
+1238:src/libstm32f2/core_cm3.h ****   #define MPU_BASE          (SCS_BASE +  0x0D90UL)                    /*!< Memory Protection Unit  
+1239:src/libstm32f2/core_cm3.h ****   #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit  
+1240:src/libstm32f2/core_cm3.h **** #endif
+1241:src/libstm32f2/core_cm3.h **** 
+1242:src/libstm32f2/core_cm3.h **** /*@} */
+1243:src/libstm32f2/core_cm3.h **** 
+1244:src/libstm32f2/core_cm3.h **** 
+1245:src/libstm32f2/core_cm3.h **** 
+1246:src/libstm32f2/core_cm3.h **** /*******************************************************************************
+1247:src/libstm32f2/core_cm3.h ****  *                Hardware Abstraction Layer
+1248:src/libstm32f2/core_cm3.h ****   Core Function Interface contains:
+1249:src/libstm32f2/core_cm3.h ****   - Core NVIC Functions
+1250:src/libstm32f2/core_cm3.h ****   - Core SysTick Functions
+1251:src/libstm32f2/core_cm3.h ****   - Core Debug Functions
+1252:src/libstm32f2/core_cm3.h ****   - Core Register Access Functions
+1253:src/libstm32f2/core_cm3.h ****  ******************************************************************************/
+1254:src/libstm32f2/core_cm3.h **** /** \defgroup CMSIS_Core_FunctionInterface Functions and Instructions Reference
+1255:src/libstm32f2/core_cm3.h **** */
+1256:src/libstm32f2/core_cm3.h **** 
+1257:src/libstm32f2/core_cm3.h **** 
+1258:src/libstm32f2/core_cm3.h **** 
+1259:src/libstm32f2/core_cm3.h **** /* ##########################   NVIC functions  #################################### */
+1260:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+1261:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_Core_NVICFunctions NVIC Functions
+1262:src/libstm32f2/core_cm3.h ****     \brief      Functions that manage interrupts and exceptions via the NVIC.
+1263:src/libstm32f2/core_cm3.h ****     @{
+1264:src/libstm32f2/core_cm3.h ****  */
+1265:src/libstm32f2/core_cm3.h **** 
+1266:src/libstm32f2/core_cm3.h **** /** \brief  Set Priority Grouping
+1267:src/libstm32f2/core_cm3.h **** 
+1268:src/libstm32f2/core_cm3.h ****   The function sets the priority grouping field using the required unlock sequence.
+1269:src/libstm32f2/core_cm3.h ****   The parameter PriorityGroup is assigned to the field SCB->AIRCR [10:8] PRIGROUP field.
+1270:src/libstm32f2/core_cm3.h ****   Only values from 0..7 are used.
+1271:src/libstm32f2/core_cm3.h ****   In case of a conflict between priority grouping and available
+1272:src/libstm32f2/core_cm3.h ****   priority bits (__NVIC_PRIO_BITS), the smallest possible priority group is set.
+1273:src/libstm32f2/core_cm3.h **** 
+1274:src/libstm32f2/core_cm3.h ****     \param [in]      PriorityGroup  Priority grouping field.
+1275:src/libstm32f2/core_cm3.h ****  */
+1276:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
+1277:src/libstm32f2/core_cm3.h **** {
+1278:src/libstm32f2/core_cm3.h ****   uint32_t reg_value;
+1279:src/libstm32f2/core_cm3.h ****   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07);               /* only values 0..7 a
+1280:src/libstm32f2/core_cm3.h **** 
+1281:src/libstm32f2/core_cm3.h ****   reg_value  =  SCB->AIRCR;                                                   /* read old register 
+1282:src/libstm32f2/core_cm3.h ****   reg_value &= ~(SCB_AIRCR_VECTKEY_Msk | SCB_AIRCR_PRIGROUP_Msk);             /* clear bits to chan
+1283:src/libstm32f2/core_cm3.h ****   reg_value  =  (reg_value                                 |
+1284:src/libstm32f2/core_cm3.h ****                 ((uint32_t)0x5FA << SCB_AIRCR_VECTKEY_Pos) |
+1285:src/libstm32f2/core_cm3.h ****                 (PriorityGroupTmp << 8));                                     /* Insert write key a
+1286:src/libstm32f2/core_cm3.h ****   SCB->AIRCR =  reg_value;
+1287:src/libstm32f2/core_cm3.h **** }
+1288:src/libstm32f2/core_cm3.h **** 
+1289:src/libstm32f2/core_cm3.h **** 
+1290:src/libstm32f2/core_cm3.h **** /** \brief  Get Priority Grouping
+1291:src/libstm32f2/core_cm3.h **** 
+1292:src/libstm32f2/core_cm3.h ****   The function reads the priority grouping field from the NVIC Interrupt Controller.
+1293:src/libstm32f2/core_cm3.h **** 
+1294:src/libstm32f2/core_cm3.h ****     \return                Priority grouping field (SCB->AIRCR [10:8] PRIGROUP field).
+1295:src/libstm32f2/core_cm3.h ****  */
+1296:src/libstm32f2/core_cm3.h **** __STATIC_INLINE uint32_t NVIC_GetPriorityGrouping(void)
+1297:src/libstm32f2/core_cm3.h **** {
+1298:src/libstm32f2/core_cm3.h ****   return ((SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) >> SCB_AIRCR_PRIGROUP_Pos);   /* read priority grou
+1299:src/libstm32f2/core_cm3.h **** }
+1300:src/libstm32f2/core_cm3.h **** 
+1301:src/libstm32f2/core_cm3.h **** 
+1302:src/libstm32f2/core_cm3.h **** /** \brief  Enable External Interrupt
+1303:src/libstm32f2/core_cm3.h **** 
+1304:src/libstm32f2/core_cm3.h ****     The function enables a device-specific interrupt in the NVIC interrupt controller.
+1305:src/libstm32f2/core_cm3.h **** 
+1306:src/libstm32f2/core_cm3.h ****     \param [in]      IRQn  External interrupt number. Value cannot be negative.
+1307:src/libstm32f2/core_cm3.h ****  */
+1308:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
+1309:src/libstm32f2/core_cm3.h **** {
+1310:src/libstm32f2/core_cm3.h ****   NVIC->ISER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* enable interrupt */
+1311:src/libstm32f2/core_cm3.h **** }
+1312:src/libstm32f2/core_cm3.h **** 
+1313:src/libstm32f2/core_cm3.h **** 
+1314:src/libstm32f2/core_cm3.h **** /** \brief  Disable External Interrupt
+1315:src/libstm32f2/core_cm3.h **** 
+1316:src/libstm32f2/core_cm3.h ****     The function disables a device-specific interrupt in the NVIC interrupt controller.
+1317:src/libstm32f2/core_cm3.h **** 
+1318:src/libstm32f2/core_cm3.h ****     \param [in]      IRQn  External interrupt number. Value cannot be negative.
+1319:src/libstm32f2/core_cm3.h ****  */
+1320:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_DisableIRQ(IRQn_Type IRQn)
+1321:src/libstm32f2/core_cm3.h **** {
+1322:src/libstm32f2/core_cm3.h ****   NVIC->ICER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* disable interrupt */
+1323:src/libstm32f2/core_cm3.h **** }
+1324:src/libstm32f2/core_cm3.h **** 
+1325:src/libstm32f2/core_cm3.h **** 
+1326:src/libstm32f2/core_cm3.h **** /** \brief  Get Pending Interrupt
+1327:src/libstm32f2/core_cm3.h **** 
+1328:src/libstm32f2/core_cm3.h ****     The function reads the pending register in the NVIC and returns the pending bit
+1329:src/libstm32f2/core_cm3.h ****     for the specified interrupt.
+1330:src/libstm32f2/core_cm3.h **** 
+1331:src/libstm32f2/core_cm3.h ****     \param [in]      IRQn  Interrupt number.
+1332:src/libstm32f2/core_cm3.h **** 
+1333:src/libstm32f2/core_cm3.h ****     \return             0  Interrupt status is not pending.
+1334:src/libstm32f2/core_cm3.h ****     \return             1  Interrupt status is pending.
+1335:src/libstm32f2/core_cm3.h ****  */
+1336:src/libstm32f2/core_cm3.h **** __STATIC_INLINE uint32_t NVIC_GetPendingIRQ(IRQn_Type IRQn)
+1337:src/libstm32f2/core_cm3.h **** {
+1338:src/libstm32f2/core_cm3.h ****   return((uint32_t) ((NVIC->ISPR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0)); 
+1339:src/libstm32f2/core_cm3.h **** }
+1340:src/libstm32f2/core_cm3.h **** 
+1341:src/libstm32f2/core_cm3.h **** 
+1342:src/libstm32f2/core_cm3.h **** /** \brief  Set Pending Interrupt
+1343:src/libstm32f2/core_cm3.h **** 
+1344:src/libstm32f2/core_cm3.h ****     The function sets the pending bit of an external interrupt.
+1345:src/libstm32f2/core_cm3.h **** 
+1346:src/libstm32f2/core_cm3.h ****     \param [in]      IRQn  Interrupt number. Value cannot be negative.
+1347:src/libstm32f2/core_cm3.h ****  */
+1348:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_SetPendingIRQ(IRQn_Type IRQn)
+1349:src/libstm32f2/core_cm3.h **** {
+1350:src/libstm32f2/core_cm3.h ****   NVIC->ISPR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* set interrupt pending 
+1351:src/libstm32f2/core_cm3.h **** }
+1352:src/libstm32f2/core_cm3.h **** 
+1353:src/libstm32f2/core_cm3.h **** 
+1354:src/libstm32f2/core_cm3.h **** /** \brief  Clear Pending Interrupt
+1355:src/libstm32f2/core_cm3.h **** 
+1356:src/libstm32f2/core_cm3.h ****     The function clears the pending bit of an external interrupt.
+1357:src/libstm32f2/core_cm3.h **** 
+1358:src/libstm32f2/core_cm3.h ****     \param [in]      IRQn  External interrupt number. Value cannot be negative.
+1359:src/libstm32f2/core_cm3.h ****  */
+1360:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+1361:src/libstm32f2/core_cm3.h **** {
+1362:src/libstm32f2/core_cm3.h ****   NVIC->ICPR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* Clear pending interrup
+1363:src/libstm32f2/core_cm3.h **** }
+1364:src/libstm32f2/core_cm3.h **** 
+1365:src/libstm32f2/core_cm3.h **** 
+1366:src/libstm32f2/core_cm3.h **** /** \brief  Get Active Interrupt
+1367:src/libstm32f2/core_cm3.h **** 
+1368:src/libstm32f2/core_cm3.h ****     The function reads the active register in NVIC and returns the active bit.
+1369:src/libstm32f2/core_cm3.h **** 
+1370:src/libstm32f2/core_cm3.h ****     \param [in]      IRQn  Interrupt number.
+1371:src/libstm32f2/core_cm3.h **** 
+1372:src/libstm32f2/core_cm3.h ****     \return             0  Interrupt status is not active.
+1373:src/libstm32f2/core_cm3.h ****     \return             1  Interrupt status is active.
+1374:src/libstm32f2/core_cm3.h ****  */
+1375:src/libstm32f2/core_cm3.h **** __STATIC_INLINE uint32_t NVIC_GetActive(IRQn_Type IRQn)
+1376:src/libstm32f2/core_cm3.h **** {
+1377:src/libstm32f2/core_cm3.h ****   return((uint32_t)((NVIC->IABR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0)); /
+1378:src/libstm32f2/core_cm3.h **** }
+1379:src/libstm32f2/core_cm3.h **** 
+1380:src/libstm32f2/core_cm3.h **** 
+1381:src/libstm32f2/core_cm3.h **** /** \brief  Set Interrupt Priority
+1382:src/libstm32f2/core_cm3.h **** 
+1383:src/libstm32f2/core_cm3.h ****     The function sets the priority of an interrupt.
+1384:src/libstm32f2/core_cm3.h **** 
+1385:src/libstm32f2/core_cm3.h ****     \note The priority cannot be set for every core interrupt.
+1386:src/libstm32f2/core_cm3.h **** 
+1387:src/libstm32f2/core_cm3.h ****     \param [in]      IRQn  Interrupt number.
+1388:src/libstm32f2/core_cm3.h ****     \param [in]  priority  Priority to set.
+1389:src/libstm32f2/core_cm3.h ****  */
+1390:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+1391:src/libstm32f2/core_cm3.h **** {
+1392:src/libstm32f2/core_cm3.h ****   if(IRQn < 0) {
+1393:src/libstm32f2/core_cm3.h ****     SCB->SHP[((uint32_t)(IRQn) & 0xF)-4] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff); } /* set 
+1394:src/libstm32f2/core_cm3.h ****   else {
+1395:src/libstm32f2/core_cm3.h ****     NVIC->IP[(uint32_t)(IRQn)] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff);    }        /* set 
+1396:src/libstm32f2/core_cm3.h **** }
+1397:src/libstm32f2/core_cm3.h **** 
+1398:src/libstm32f2/core_cm3.h **** 
+1399:src/libstm32f2/core_cm3.h **** /** \brief  Get Interrupt Priority
+1400:src/libstm32f2/core_cm3.h **** 
+1401:src/libstm32f2/core_cm3.h ****     The function reads the priority of an interrupt. The interrupt
+1402:src/libstm32f2/core_cm3.h ****     number can be positive to specify an external (device specific)
+1403:src/libstm32f2/core_cm3.h ****     interrupt, or negative to specify an internal (core) interrupt.
+1404:src/libstm32f2/core_cm3.h **** 
+1405:src/libstm32f2/core_cm3.h **** 
+1406:src/libstm32f2/core_cm3.h ****     \param [in]   IRQn  Interrupt number.
+1407:src/libstm32f2/core_cm3.h ****     \return             Interrupt Priority. Value is aligned automatically to the implemented
+1408:src/libstm32f2/core_cm3.h ****                         priority bits of the microcontroller.
+1409:src/libstm32f2/core_cm3.h ****  */
+1410:src/libstm32f2/core_cm3.h **** __STATIC_INLINE uint32_t NVIC_GetPriority(IRQn_Type IRQn)
+1411:src/libstm32f2/core_cm3.h **** {
+1412:src/libstm32f2/core_cm3.h **** 
+1413:src/libstm32f2/core_cm3.h ****   if(IRQn < 0) {
+1414:src/libstm32f2/core_cm3.h ****     return((uint32_t)(SCB->SHP[((uint32_t)(IRQn) & 0xF)-4] >> (8 - __NVIC_PRIO_BITS)));  } /* get p
+1415:src/libstm32f2/core_cm3.h ****   else {
+1416:src/libstm32f2/core_cm3.h ****     return((uint32_t)(NVIC->IP[(uint32_t)(IRQn)]           >> (8 - __NVIC_PRIO_BITS)));  } /* get p
+1417:src/libstm32f2/core_cm3.h **** }
+1418:src/libstm32f2/core_cm3.h **** 
+1419:src/libstm32f2/core_cm3.h **** 
+1420:src/libstm32f2/core_cm3.h **** /** \brief  Encode Priority
+1421:src/libstm32f2/core_cm3.h **** 
+1422:src/libstm32f2/core_cm3.h ****     The function encodes the priority for an interrupt with the given priority group,
+1423:src/libstm32f2/core_cm3.h ****     preemptive priority value, and subpriority value.
+1424:src/libstm32f2/core_cm3.h ****     In case of a conflict between priority grouping and available
+1425:src/libstm32f2/core_cm3.h ****     priority bits (__NVIC_PRIO_BITS), the samllest possible priority group is set.
+1426:src/libstm32f2/core_cm3.h **** 
+1427:src/libstm32f2/core_cm3.h ****     \param [in]     PriorityGroup  Used priority group.
+1428:src/libstm32f2/core_cm3.h ****     \param [in]   PreemptPriority  Preemptive priority value (starting from 0).
+1429:src/libstm32f2/core_cm3.h ****     \param [in]       SubPriority  Subpriority value (starting from 0).
+1430:src/libstm32f2/core_cm3.h ****     \return                        Encoded priority. Value can be used in the function \ref NVIC_Se
+1431:src/libstm32f2/core_cm3.h ****  */
+1432:src/libstm32f2/core_cm3.h **** __STATIC_INLINE uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t PreemptPriority, uin
+1433:src/libstm32f2/core_cm3.h **** {
+1434:src/libstm32f2/core_cm3.h ****   uint32_t PriorityGroupTmp = (PriorityGroup & 0x07);          /* only values 0..7 are used        
+1435:src/libstm32f2/core_cm3.h ****   uint32_t PreemptPriorityBits;
+1436:src/libstm32f2/core_cm3.h ****   uint32_t SubPriorityBits;
+1437:src/libstm32f2/core_cm3.h **** 
+1438:src/libstm32f2/core_cm3.h ****   PreemptPriorityBits = ((7 - PriorityGroupTmp) > __NVIC_PRIO_BITS) ? __NVIC_PRIO_BITS : 7 - Priori
+1439:src/libstm32f2/core_cm3.h ****   SubPriorityBits     = ((PriorityGroupTmp + __NVIC_PRIO_BITS) < 7) ? 0 : PriorityGroupTmp - 7 + __
+1440:src/libstm32f2/core_cm3.h **** 
+1441:src/libstm32f2/core_cm3.h ****   return (
+1442:src/libstm32f2/core_cm3.h ****            ((PreemptPriority & ((1 << (PreemptPriorityBits)) - 1)) << SubPriorityBits) |
+1443:src/libstm32f2/core_cm3.h ****            ((SubPriority     & ((1 << (SubPriorityBits    )) - 1)))
+1444:src/libstm32f2/core_cm3.h ****          );
+1445:src/libstm32f2/core_cm3.h **** }
+1446:src/libstm32f2/core_cm3.h **** 
+1447:src/libstm32f2/core_cm3.h **** 
+1448:src/libstm32f2/core_cm3.h **** /** \brief  Decode Priority
+1449:src/libstm32f2/core_cm3.h **** 
+1450:src/libstm32f2/core_cm3.h ****     The function decodes an interrupt priority value with a given priority group to
+1451:src/libstm32f2/core_cm3.h ****     preemptive priority value and subpriority value.
+1452:src/libstm32f2/core_cm3.h ****     In case of a conflict between priority grouping and available
+1453:src/libstm32f2/core_cm3.h ****     priority bits (__NVIC_PRIO_BITS) the samllest possible priority group is set.
+1454:src/libstm32f2/core_cm3.h **** 
+1455:src/libstm32f2/core_cm3.h ****     \param [in]         Priority   Priority value, which can be retrieved with the function \ref NV
+1456:src/libstm32f2/core_cm3.h ****     \param [in]     PriorityGroup  Used priority group.
+1457:src/libstm32f2/core_cm3.h ****     \param [out] pPreemptPriority  Preemptive priority value (starting from 0).
+1458:src/libstm32f2/core_cm3.h ****     \param [out]     pSubPriority  Subpriority value (starting from 0).
+1459:src/libstm32f2/core_cm3.h ****  */
+1460:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_DecodePriority (uint32_t Priority, uint32_t PriorityGroup, uint32_t* pPre
+1461:src/libstm32f2/core_cm3.h **** {
+1462:src/libstm32f2/core_cm3.h ****   uint32_t PriorityGroupTmp = (PriorityGroup & 0x07);          /* only values 0..7 are used        
+1463:src/libstm32f2/core_cm3.h ****   uint32_t PreemptPriorityBits;
+1464:src/libstm32f2/core_cm3.h ****   uint32_t SubPriorityBits;
+1465:src/libstm32f2/core_cm3.h **** 
+1466:src/libstm32f2/core_cm3.h ****   PreemptPriorityBits = ((7 - PriorityGroupTmp) > __NVIC_PRIO_BITS) ? __NVIC_PRIO_BITS : 7 - Priori
+1467:src/libstm32f2/core_cm3.h ****   SubPriorityBits     = ((PriorityGroupTmp + __NVIC_PRIO_BITS) < 7) ? 0 : PriorityGroupTmp - 7 + __
+1468:src/libstm32f2/core_cm3.h **** 
+1469:src/libstm32f2/core_cm3.h ****   *pPreemptPriority = (Priority >> SubPriorityBits) & ((1 << (PreemptPriorityBits)) - 1);
+1470:src/libstm32f2/core_cm3.h ****   *pSubPriority     = (Priority                   ) & ((1 << (SubPriorityBits    )) - 1);
+1471:src/libstm32f2/core_cm3.h **** }
+1472:src/libstm32f2/core_cm3.h **** 
+1473:src/libstm32f2/core_cm3.h **** 
+1474:src/libstm32f2/core_cm3.h **** /** \brief  System Reset
+1475:src/libstm32f2/core_cm3.h **** 
+1476:src/libstm32f2/core_cm3.h ****     The function initiates a system reset request to reset the MCU.
+1477:src/libstm32f2/core_cm3.h ****  */
+1478:src/libstm32f2/core_cm3.h **** __STATIC_INLINE void NVIC_SystemReset(void)
+1479:src/libstm32f2/core_cm3.h **** {
+1480:src/libstm32f2/core_cm3.h ****   __DSB();                                                     /* Ensure all outstanding memory acc
+1481:src/libstm32f2/core_cm3.h ****                                                                   buffered write are completed befo
+1482:src/libstm32f2/core_cm3.h ****   SCB->AIRCR  = ((0x5FA << SCB_AIRCR_VECTKEY_Pos)      |
+1483:src/libstm32f2/core_cm3.h ****                  (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) |
+1484:src/libstm32f2/core_cm3.h ****                  SCB_AIRCR_SYSRESETREQ_Msk);                   /* Keep priority group unchanged */
+1485:src/libstm32f2/core_cm3.h ****   __DSB();                                                     /* Ensure completion of memory acces
+1486:src/libstm32f2/core_cm3.h ****   while(1);                                                    /* wait until reset */
+1487:src/libstm32f2/core_cm3.h **** }
+1488:src/libstm32f2/core_cm3.h **** 
+1489:src/libstm32f2/core_cm3.h **** /*@} end of CMSIS_Core_NVICFunctions */
+1490:src/libstm32f2/core_cm3.h **** 
+1491:src/libstm32f2/core_cm3.h **** 
+1492:src/libstm32f2/core_cm3.h **** 
+1493:src/libstm32f2/core_cm3.h **** /* ##################################    SysTick function  ########################################
+1494:src/libstm32f2/core_cm3.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+1495:src/libstm32f2/core_cm3.h ****     \defgroup CMSIS_Core_SysTickFunctions SysTick Functions
+1496:src/libstm32f2/core_cm3.h ****     \brief      Functions that configure the System.
+1497:src/libstm32f2/core_cm3.h ****   @{
+1498:src/libstm32f2/core_cm3.h ****  */
+1499:src/libstm32f2/core_cm3.h **** 
+1500:src/libstm32f2/core_cm3.h **** #if (__Vendor_SysTickConfig == 0)
+1501:src/libstm32f2/core_cm3.h **** 
+1502:src/libstm32f2/core_cm3.h **** /** \brief  System Tick Configuration
+1503:src/libstm32f2/core_cm3.h **** 
+1504:src/libstm32f2/core_cm3.h ****     The function initializes the System Timer and its interrupt, and starts the System Tick Timer.
+1505:src/libstm32f2/core_cm3.h ****     Counter is in free running mode to generate periodic interrupts.
+1506:src/libstm32f2/core_cm3.h **** 
+1507:src/libstm32f2/core_cm3.h ****     \param [in]  ticks  Number of ticks between two interrupts.
+1508:src/libstm32f2/core_cm3.h **** 
+1509:src/libstm32f2/core_cm3.h ****     \return          0  Function succeeded.
+1510:src/libstm32f2/core_cm3.h ****     \return          1  Function failed.
+1511:src/libstm32f2/core_cm3.h **** 
+1512:src/libstm32f2/core_cm3.h ****     \note     When the variable <b>__Vendor_SysTickConfig</b> is set to 1, then the
+1513:src/libstm32f2/core_cm3.h ****     function <b>SysTick_Config</b> is not included. In this case, the file <b><i>device</i>.h</b>
+1514:src/libstm32f2/core_cm3.h ****     must contain a vendor-specific implementation of this function.
+1515:src/libstm32f2/core_cm3.h **** 
+1516:src/libstm32f2/core_cm3.h ****  */
+1517:src/libstm32f2/core_cm3.h **** __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
+1518:src/libstm32f2/core_cm3.h **** {
+1519:src/libstm32f2/core_cm3.h ****   if (ticks > SysTick_LOAD_RELOAD_Msk)  return (1);            /* Reload value impossible */
+1520:src/libstm32f2/core_cm3.h **** 
+1521:src/libstm32f2/core_cm3.h ****   SysTick->LOAD  = (ticks & SysTick_LOAD_RELOAD_Msk) - 1;      /* set reload register */
+ 111              		.loc 3 1521 0
+ 112 004c 194B     		ldr	r3, .L16+8
+ 113              	.LVL13:
+ 114              	.LBE19:
+ 115              	.LBE18:
+ 116              		.loc 1 53 0
+ 117 004e B2FBF1F0 		udiv	r0, r2, r1
+ 118              	.LVL14:
+ 119              	.LBB25:
+ 120              	.LBB24:
+ 121              		.loc 3 1521 0
+ 122 0052 421E     		subs	r2, r0, #1
+ 123              	.LBB20:
+ 124              	.LBB21:
+1393:src/libstm32f2/core_cm3.h ****     SCB->SHP[((uint32_t)(IRQn) & 0xF)-4] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff); } /* set 
+ 125              		.loc 3 1393 0
+ 126 0054 1848     		ldr	r0, .L16+12
+ 127              	.LVL15:
+ 128 0056 F021     		movs	r1, #240
+ 129              	.LBE21:
+ 130              	.LBE20:
+ 131              		.loc 3 1521 0
+ 132 0058 5A60     		str	r2, [r3, #4]
+ 133              	.LVL16:
+ 134              	.LBB23:
+ 135              	.LBB22:
+1393:src/libstm32f2/core_cm3.h ****     SCB->SHP[((uint32_t)(IRQn) & 0xF)-4] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff); } /* set 
+ 136              		.loc 3 1393 0
+ 137 005a 80F82310 		strb	r1, [r0, #35]
+ 138              	.LBE22:
+ 139              	.LBE23:
+1522:src/libstm32f2/core_cm3.h ****   NVIC_SetPriority (SysTick_IRQn, (1<<__NVIC_PRIO_BITS) - 1);  /* set Priority for Systick Interrup
+1523:src/libstm32f2/core_cm3.h ****   SysTick->VAL   = 0;                                          /* Load the SysTick Counter Value */
+ 140              		.loc 3 1523 0
+ 141 005e 0022     		movs	r2, #0
+ 142              	.LVL17:
+1524:src/libstm32f2/core_cm3.h ****   SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
+ 143              		.loc 3 1524 0
+ 144 0060 0721     		movs	r1, #7
+1523:src/libstm32f2/core_cm3.h ****   SysTick->VAL   = 0;                                          /* Load the SysTick Counter Value */
+ 145              		.loc 3 1523 0
+ 146 0062 9A60     		str	r2, [r3, #8]
+ 147              		.loc 3 1524 0
+ 148 0064 1960     		str	r1, [r3, #0]
+ 149              	.LBE24:
+ 150              	.LBE25:
+ 151              	.LBB26:
+ 152              	.LBB27:
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** }
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Nested interrupt disable
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void sei(void) {
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   __ASM volatile ("cpsid i");
+ 153              		.loc 2 94 0
+ 154              	@ 94 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h" 1
+ 155 0066 72B6     		cpsid i
+ 156              	@ 0 "" 2
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   if(!--int_ctr) {__ASM volatile ("cpsie i");}
+ 157              		.loc 2 95 0
+ 158              		.thumb
+ 159 0068 1048     		ldr	r0, .L16
+ 160 006a 0388     		ldrh	r3, [r0, #0]
+ 161              	.LVL18:
+ 162 006c 5A1E     		subs	r2, r3, #1
+ 163 006e 91B2     		uxth	r1, r2
+ 164 0070 0180     		strh	r1, [r0, #0]	@ movhi
+ 165 0072 C9B9     		cbnz	r1, .L1
+ 166              	.L4:
+ 167              	@ 95 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h" 1
+ 168 0074 62B6     		cpsie i
+ 169              	@ 0 "" 2
+ 170              		.thumb
+ 171 0076 17E0     		b	.L1
+ 172              	.LVL19:
+ 173              	.L3:
+ 174              	.LBE27:
+ 175              	.LBE26:
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     RCC_PLLConfig(RCC_PLLCFGR_PLLSRC_HSE, clk->m, clk->n, clk->p, clk->q);
+ 176              		.loc 1 41 0
+ 177 0078 6089     		ldrh	r0, [r4, #10]
+ 178 007a E288     		ldrh	r2, [r4, #6]
+ 179 007c 0090     		str	r0, [sp, #0]
+ 180 007e 2389     		ldrh	r3, [r4, #8]
+ 181 0080 4FF48000 		mov	r0, #4194304
+ 182 0084 FFF7FEFF 		bl	RCC_PLLConfig
+ 183              	.LVL20:
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     RCC_PLLCmd(ENABLE);
+ 184              		.loc 1 43 0
+ 185 0088 0120     		movs	r0, #1
+ 186 008a FFF7FEFF 		bl	RCC_PLLCmd
+ 187              	.LVL21:
+ 188              	.L6:
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
+ 189              		.loc 1 45 0 discriminator 1
+ 190 008e 3920     		movs	r0, #57
+ 191 0090 FFF7FEFF 		bl	RCC_GetFlagStatus
+ 192              	.LVL22:
+ 193 0094 0028     		cmp	r0, #0
+ 194 0096 FAD0     		beq	.L6
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+ 195              		.loc 1 47 0
+ 196 0098 0220     		movs	r0, #2
+ 197 009a FFF7FEFF 		bl	RCC_SYSCLKConfig
+ 198              	.LVL23:
+ 199              	.L7:
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     while (RCC_GetSYSCLKSource() != (uint32_t)RCC_CFGR_SWS_PLL); // Wait for completion
+ 200              		.loc 1 48 0 discriminator 1
+ 201 009e FFF7FEFF 		bl	RCC_GetSYSCLKSource
+ 202              	.LVL24:
+ 203 00a2 0828     		cmp	r0, #8
+ 204 00a4 FBD1     		bne	.L7
+ 205 00a6 CBE7     		b	.L8
+ 206              	.LVL25:
+ 207              	.L1:
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   sei();
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** }
+ 208              		.loc 1 56 0
+ 209 00a8 1CBD     		pop	{r2, r3, r4, pc}
+ 210              	.L17:
+ 211 00aa 00BF     		.align	2
+ 212              	.L16:
+ 213 00ac 00000000 		.word	int_ctr
+ 214 00b0 00000000 		.word	SystemCoreClock
+ 215 00b4 10E000E0 		.word	-536813552
+ 216 00b8 00ED00E0 		.word	-536810240
+ 217              		.cfi_endproc
+ 218              	.LFE58:
+ 220              		.section	.text.cpu_init,"ax",%progbits
+ 221              		.align	1
+ 222              		.global	cpu_init
+ 223              		.thumb
+ 224              		.thumb_func
+ 226              	cpu_init:
+ 227              	.LFB59:
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** void cpu_init(void) {
+ 228              		.loc 1 58 0
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232 0000 10B5     		push	{r4, lr}
+ 233              	.LCFI1:
+ 234              		.cfi_def_cfa_offset 8
+ 235              		.cfi_offset 4, -8
+ 236              		.cfi_offset 14, -4
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   RCC_DeInit();
+ 237              		.loc 1 59 0
+ 238 0002 FFF7FEFF 		bl	RCC_DeInit
+ 239              	.LVL26:
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   RCC_HSEConfig(RCC_HSE_ON);
+ 240              		.loc 1 61 0
+ 241 0006 0120     		movs	r0, #1
+ 242 0008 FFF7FEFF 		bl	RCC_HSEConfig
+ 243              	.LVL27:
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   ErrorStatus HSEStartUpStatus = RCC_WaitForHSEStartUp();
+ 244              		.loc 1 62 0
+ 245 000c FFF7FEFF 		bl	RCC_WaitForHSEStartUp
+ 246              	.LVL28:
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if (HSEStartUpStatus == SUCCESS) {
+ 247              		.loc 1 64 0
+ 248 0010 0128     		cmp	r0, #1
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   ErrorStatus HSEStartUpStatus = RCC_WaitForHSEStartUp();
+ 249              		.loc 1 62 0
+ 250 0012 0446     		mov	r4, r0
+ 251              	.LVL29:
+ 252              		.loc 1 64 0
+ 253 0014 0CD1     		bne	.L18
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Enable flash buffers and prefetching
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     FLASH_PrefetchBufferCmd(ENABLE);
+ 254              		.loc 1 67 0
+ 255 0016 FFF7FEFF 		bl	FLASH_PrefetchBufferCmd
+ 256              	.LVL30:
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     FLASH_InstructionCacheCmd(ENABLE);
+ 257              		.loc 1 68 0
+ 258 001a 2046     		mov	r0, r4
+ 259 001c FFF7FEFF 		bl	FLASH_InstructionCacheCmd
+ 260              	.LVL31:
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     FLASH_DataCacheCmd(ENABLE);
+ 261              		.loc 1 69 0
+ 262 0020 2046     		mov	r0, r4
+ 263 0022 FFF7FEFF 		bl	FLASH_DataCacheCmd
+ 264              	.LVL32:
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Set startup speed
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     cpu_reclock(&sysclock_120m);
+ 265              		.loc 1 72 0
+ 266 0026 0348     		ldr	r0, .L20
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   }
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** }
+ 267              		.loc 1 74 0
+ 268 0028 BDE81040 		pop	{r4, lr}
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     cpu_reclock(&sysclock_120m);
+ 269              		.loc 1 72 0
+ 270 002c FFF7FEBF 		b	cpu_reclock
+ 271              	.LVL33:
+ 272              	.L18:
+ 273 0030 10BD     		pop	{r4, pc}
+ 274              	.L21:
+ 275 0032 00BF     		.align	2
+ 276              	.L20:
+ 277 0034 00000000 		.word	.LANCHOR0
+ 278              		.cfi_endproc
+ 279              	.LFE59:
+ 281              		.section	.text.pmu_init,"ax",%progbits
+ 282              		.align	1
+ 283              		.global	pmu_init
+ 284              		.thumb
+ 285              		.thumb_func
+ 287              	pmu_init:
+ 288              	.LFB60:
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** static bool pmu_init_ok;
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** // Initializes PMU (Power Management Unit)
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** bool pmu_init(void) {
+ 289              		.loc 1 79 0
+ 290              		.cfi_startproc
+ 291              		@ args = 0, pretend = 0, frame = 8
+ 292              		@ frame_needed = 0, uses_anonymous_args = 0
+ 293 0000 13B5     		push	{r0, r1, r4, lr}
+ 294              	.LCFI2:
+ 295              		.cfi_def_cfa_offset 16
+ 296              		.cfi_offset 0, -16
+ 297              		.cfi_offset 1, -12
+ 298              		.cfi_offset 4, -8
+ 299              		.cfi_offset 14, -4
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Only initialize once
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     if(pmu_init_ok) return false;
+ 300              		.loc 1 81 0
+ 301 0002 1B4C     		ldr	r4, .L26
+ 302 0004 2378     		ldrb	r3, [r4, #0]	@ zero_extendqisi2
+ 303 0006 0BB1     		cbz	r3, .L23
+ 304              	.LVL34:
+ 305              	.L25:
+ 306 0008 0020     		movs	r0, #0
+ 307 000a 30E0     		b	.L24
+ 308              	.LVL35:
+ 309              	.L23:
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Write default configuration
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     uint8_t config0 = VSYS_4_4V | ACIC_100mA_DPPM_ENABLE | TH_LOOP | DYN_TMR | TERM_EN | CH_EN;
+ 310              		.loc 1 84 0
+ 311 000c 4F20     		movs	r0, #79
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     uint8_t config1 = I_TERM_10 | ISET_100 | I_PRE_10;
+ 312              		.loc 1 85 0
+ 313 000e 7421     		movs	r1, #116
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     uint8_t config2 = SFTY_TMR_5h | PRE_TMR_30m | NTC_10k | V_DPPM_4_3_V | VBAT_COMP_ENABLE;
+ 314              		.loc 1 86 0
+ 315 0010 4E22     		movs	r2, #78
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     uint8_t defdcdc = DCDC_DISCH | DCDC1_DEFAULT;
+ 316              		.loc 1 87 0
+ 317 0012 6923     		movs	r3, #105
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     uint8_t config0 = VSYS_4_4V | ACIC_100mA_DPPM_ENABLE | TH_LOOP | DYN_TMR | TERM_EN | CH_EN;
+ 318              		.loc 1 84 0
+ 319 0014 8DF80400 		strb	r0, [sp, #4]
+ 320              	.LVL36:
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     uint8_t config1 = I_TERM_10 | ISET_100 | I_PRE_10;
+ 321              		.loc 1 85 0
+ 322 0018 8DF80510 		strb	r1, [sp, #5]
+ 323              	.LVL37:
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     uint8_t config2 = SFTY_TMR_5h | PRE_TMR_30m | NTC_10k | V_DPPM_4_3_V | VBAT_COMP_ENABLE;
+ 324              		.loc 1 86 0
+ 325 001c 8DF80620 		strb	r2, [sp, #6]
+ 326              	.LVL38:
+ 327              		.loc 1 87 0
+ 328 0020 8DF80730 		strb	r3, [sp, #7]
+ 329              	.LVL39:
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     if(i2c_write(PMU_ADDRESS, CHGCONFIG0, &config0, 1)) return false;
+ 330              		.loc 1 88 0
+ 331 0024 9020     		movs	r0, #144
+ 332 0026 0221     		movs	r1, #2
+ 333 0028 01AA     		add	r2, sp, #4
+ 334 002a 0123     		movs	r3, #1
+ 335 002c FFF7FEFF 		bl	i2c_write
+ 336              	.LVL40:
+ 337 0030 0028     		cmp	r0, #0
+ 338 0032 E9D1     		bne	.L25
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     if(i2c_write(PMU_ADDRESS, CHGCONFIG1, &config1, 1)) return false;
+ 339              		.loc 1 89 0
+ 340 0034 9020     		movs	r0, #144
+ 341 0036 0321     		movs	r1, #3
+ 342 0038 0DF10502 		add	r2, sp, #5
+ 343 003c 0123     		movs	r3, #1
+ 344 003e FFF7FEFF 		bl	i2c_write
+ 345              	.LVL41:
+ 346 0042 0028     		cmp	r0, #0
+ 347 0044 E0D1     		bne	.L25
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     if(i2c_write(PMU_ADDRESS, CHGCONFIG2, &config2, 1)) return false;
+ 348              		.loc 1 90 0
+ 349 0046 9020     		movs	r0, #144
+ 350 0048 0421     		movs	r1, #4
+ 351 004a 0DF10602 		add	r2, sp, #6
+ 352 004e 0123     		movs	r3, #1
+ 353 0050 FFF7FEFF 		bl	i2c_write
+ 354              	.LVL42:
+ 355 0054 0028     		cmp	r0, #0
+ 356 0056 D7D1     		bne	.L25
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     if(i2c_write(PMU_ADDRESS, DEFDCDC,    &defdcdc, 1)) return false;
+ 357              		.loc 1 91 0
+ 358 0058 0721     		movs	r1, #7
+ 359 005a 9020     		movs	r0, #144
+ 360 005c 0DEB0102 		add	r2, sp, r1
+ 361 0060 0123     		movs	r3, #1
+ 362 0062 FFF7FEFF 		bl	i2c_write
+ 363              	.LVL43:
+ 364 0066 0028     		cmp	r0, #0
+ 365 0068 CED1     		bne	.L25
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****       
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     // Success
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     return pmu_init_ok = true;
+ 366              		.loc 1 94 0
+ 367 006a 0120     		movs	r0, #1
+ 368 006c 2070     		strb	r0, [r4, #0]
+ 369              	.L24:
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** }
+ 370              		.loc 1 95 0
+ 371 006e 1CBD     		pop	{r2, r3, r4, pc}
+ 372              	.L27:
+ 373              		.align	2
+ 374              	.L26:
+ 375 0070 00000000 		.word	.LANCHOR1
+ 376              		.cfi_endproc
+ 377              	.LFE60:
+ 379              		.section	.text.pmu_charge,"ax",%progbits
+ 380              		.align	1
+ 381              		.global	pmu_charge
+ 382              		.thumb
+ 383              		.thumb_func
+ 385              	pmu_charge:
+ 386              	.LFB61:
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** // Enables or disables charging of the battery
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** // Enabling ALLOWS the PMU to charge the battery, to find out if it actually IS
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** // actively charging the battery, you need to call pmu_charging.
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** bool pmu_charge(bool enable) {
+ 387              		.loc 1 100 0
+ 388              		.cfi_startproc
+ 389              		@ args = 0, pretend = 0, frame = 8
+ 390              		@ frame_needed = 0, uses_anonymous_args = 0
+ 391              	.LVL44:
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Only if initialized
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if(!pmu_init_ok) return false;
+ 392              		.loc 1 102 0
+ 393 0000 124B     		ldr	r3, .L34
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** bool pmu_charge(bool enable) {
+ 394              		.loc 1 100 0
+ 395 0002 13B5     		push	{r0, r1, r4, lr}
+ 396              	.LCFI3:
+ 397              		.cfi_def_cfa_offset 16
+ 398              		.cfi_offset 0, -16
+ 399              		.cfi_offset 1, -12
+ 400              		.cfi_offset 4, -8
+ 401              		.cfi_offset 14, -4
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** bool pmu_charge(bool enable) {
+ 402              		.loc 1 100 0
+ 403 0004 0446     		mov	r4, r0
+ 404              		.loc 1 102 0
+ 405 0006 1878     		ldrb	r0, [r3, #0]	@ zero_extendqisi2
+ 406              	.LVL45:
+ 407 0008 08B9     		cbnz	r0, .L29
+ 408              	.L31:
+ 409 000a 0020     		movs	r0, #0
+ 410 000c 1CE0     		b	.L30
+ 411              	.L29:
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Read current configuration
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   uint8_t config0;
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if(i2c_read(PMU_ADDRESS, CHGSTATUS, &config0, 1)) return false;
+ 412              		.loc 1 106 0
+ 413 000e 0121     		movs	r1, #1
+ 414 0010 9020     		movs	r0, #144
+ 415 0012 0DF10702 		add	r2, sp, #7
+ 416 0016 0B46     		mov	r3, r1
+ 417 0018 FFF7FEFF 		bl	i2c_read
+ 418              	.LVL46:
+ 419 001c 0028     		cmp	r0, #0
+ 420 001e F4D1     		bne	.L31
+ 421              	.LVL47:
+ 422 0020 9DF80710 		ldrb	r1, [sp, #7]	@ zero_extendqisi2
+ 423              	.LVL48:
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Set/clear charge enable and write configuration
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   config0 = enable ? (config0 | CH_EN) : (config0 & ~CH_EN);
+ 424              		.loc 1 109 0
+ 425 0024 14B1     		cbz	r4, .L32
+ 426              		.loc 1 109 0 is_stmt 0 discriminator 1
+ 427 0026 41F00103 		orr	r3, r1, #1
+ 428              	.LVL49:
+ 429 002a 01E0     		b	.L33
+ 430              	.L32:
+ 431              	.LVL50:
+ 432              		.loc 1 109 0 discriminator 2
+ 433 002c 01F0FE03 		and	r3, r1, #254
+ 434              	.LVL51:
+ 435              	.L33:
+ 436              		.loc 1 109 0 discriminator 3
+ 437 0030 02AA     		add	r2, sp, #8
+ 438              	.LVL52:
+ 439 0032 02F8013D 		strb	r3, [r2, #-1]!
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if(i2c_write(PMU_ADDRESS, CHGCONFIG0, &config0, 1)) return false;
+ 440              		.loc 1 110 0 is_stmt 1 discriminator 3
+ 441 0036 9020     		movs	r0, #144
+ 442 0038 0221     		movs	r1, #2
+ 443 003a 0123     		movs	r3, #1
+ 444              	.LVL53:
+ 445 003c FFF7FEFF 		bl	i2c_write
+ 446              	.LVL54:
+ 447 0040 D0F10100 		rsbs	r0, r0, #1
+ 448 0044 38BF     		it	cc
+ 449 0046 0020     		movcc	r0, #0
+ 450              	.L30:
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****     
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   // Success
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   return true;
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** }
+ 451              		.loc 1 114 0
+ 452 0048 1CBD     		pop	{r2, r3, r4, pc}
+ 453              	.L35:
+ 454 004a 00BF     		.align	2
+ 455              	.L34:
+ 456 004c 00000000 		.word	.LANCHOR1
+ 457              		.cfi_endproc
+ 458              	.LFE61:
+ 460              		.section	.text.pmu_charging,"ax",%progbits
+ 461              		.align	1
+ 462              		.global	pmu_charging
+ 463              		.thumb
+ 464              		.thumb_func
+ 466              	pmu_charging:
+ 467              	.LFB62:
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** // Checks if the PMU is actively charging the battery
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** bool pmu_charging(bool *charging) {
+ 468              		.loc 1 117 0
+ 469              		.cfi_startproc
+ 470              		@ args = 0, pretend = 0, frame = 8
+ 471              		@ frame_needed = 0, uses_anonymous_args = 0
+ 472              	.LVL55:
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if(!pmu_init_ok) return false;
+ 473              		.loc 1 118 0
+ 474 0000 114B     		ldr	r3, .L40
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** bool pmu_charging(bool *charging) {
+ 475              		.loc 1 117 0
+ 476 0002 37B5     		push	{r0, r1, r2, r4, r5, lr}
+ 477              	.LCFI4:
+ 478              		.cfi_def_cfa_offset 24
+ 479              		.cfi_offset 0, -24
+ 480              		.cfi_offset 1, -20
+ 481              		.cfi_offset 2, -16
+ 482              		.cfi_offset 4, -12
+ 483              		.cfi_offset 5, -8
+ 484              		.cfi_offset 14, -4
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** bool pmu_charging(bool *charging) {
+ 485              		.loc 1 117 0
+ 486 0004 0446     		mov	r4, r0
+ 487              		.loc 1 118 0
+ 488 0006 1878     		ldrb	r0, [r3, #0]	@ zero_extendqisi2
+ 489              	.LVL56:
+ 490 0008 08B9     		cbnz	r0, .L37
+ 491              	.L39:
+ 492 000a 0020     		movs	r0, #0
+ 493 000c 1BE0     		b	.L38
+ 494              	.L37:
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   static bool last_charging;
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   uint8_t config0, status;
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   *charging = last_charging;
+ 495              		.loc 1 123 0
+ 496 000e 0F4D     		ldr	r5, .L40+4
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if(i2c_read(PMU_ADDRESS, CHGCONFIG0, &config0, 1)) return false;
+ 497              		.loc 1 124 0
+ 498 0010 9020     		movs	r0, #144
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   *charging = last_charging;
+ 499              		.loc 1 123 0
+ 500 0012 2978     		ldrb	r1, [r5, #0]	@ zero_extendqisi2
+ 501              		.loc 1 124 0
+ 502 0014 0DF10602 		add	r2, sp, #6
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   *charging = last_charging;
+ 503              		.loc 1 123 0
+ 504 0018 2170     		strb	r1, [r4, #0]
+ 505              		.loc 1 124 0
+ 506 001a 0123     		movs	r3, #1
+ 507 001c 0221     		movs	r1, #2
+ 508 001e FFF7FEFF 		bl	i2c_read
+ 509              	.LVL57:
+ 510 0022 0028     		cmp	r0, #0
+ 511 0024 F1D1     		bne	.L39
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   if(i2c_read(PMU_ADDRESS, CHGSTATUS, &status, 1)) return false;
+ 512              		.loc 1 125 0
+ 513 0026 0121     		movs	r1, #1
+ 514 0028 9020     		movs	r0, #144
+ 515 002a 0DF10702 		add	r2, sp, #7
+ 516 002e 0B46     		mov	r3, r1
+ 517 0030 FFF7FEFF 		bl	i2c_read
+ 518              	.LVL58:
+ 519 0034 0028     		cmp	r0, #0
+ 520 0036 E8D1     		bne	.L39
+ 521              	.LVL59:
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****  
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   *charging = last_charging = (status & CH_ACTIVE_MSK) != 0;
+ 522              		.loc 1 127 0
+ 523 0038 9DF80720 		ldrb	r2, [sp, #7]	@ zero_extendqisi2
+ 524              	.LVL60:
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   return true;
+ 525              		.loc 1 128 0
+ 526 003c 0120     		movs	r0, #1
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c ****   *charging = last_charging = (status & CH_ACTIVE_MSK) != 0;
+ 527              		.loc 1 127 0
+ 528 003e C2F3C003 		ubfx	r3, r2, #3, #1
+ 529              	.LVL61:
+ 530 0042 2B70     		strb	r3, [r5, #0]
+ 531 0044 2370     		strb	r3, [r4, #0]
+ 532              	.L38:
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_power.c **** }...
+ 533              		.loc 1 129 0
+ 534 0046 3EBD     		pop	{r1, r2, r3, r4, r5, pc}
+ 535              	.L41:
+ 536              		.align	2
+ 537              	.L40:
+ 538 0048 00000000 		.word	.LANCHOR1
+ 539 004c 00000000 		.word	.LANCHOR2
+ 540              		.cfi_endproc
+ 541              	.LFE62:
+ 543              		.global	sysclock_120m
+ 544              		.global	sysclock_26m
+ 545              		.global	sysclock_15m
+ 546              		.global	sysclock_3m25
+ 547              		.section	.rodata.sysclock_15m,"a",%progbits
+ 548              		.align	2
+ 551              	sysclock_15m:
+ 552 0000 C0E1E400 		.word	15000000
+ 553 0004 1A00     		.short	26
+ 554 0006 F000     		.short	240
+ 555 0008 0200     		.short	2
+ 556 000a 0500     		.short	5
+ 557 000c 00000000 		.word	0
+ 558 0010 A0000000 		.word	160
+ 559 0014 00000000 		.word	0
+ 560 0018 00000000 		.word	0
+ 561              		.section	.rodata.sysclock_120m,"a",%progbits
+ 562              		.align	2
+ 563              		.set	.LANCHOR0,. + 0
+ 566              	sysclock_120m:
+ 567 0000 000E2707 		.word	120000000
+ 568 0004 1A00     		.short	26
+ 569 0006 F000     		.short	240
+ 570 0008 0200     		.short	2
+ 571 000a 0500     		.short	5
+ 572 000c 07000000 		.word	7
+ 573 0010 00000000 		.word	0
+ 574 0014 00100000 		.word	4096
+ 575 0018 00140000 		.word	5120
+ 576              		.section	.rodata.sysclock_26m,"a",%progbits
+ 577              		.align	2
+ 580              	sysclock_26m:
+ 581 0000 80BA8C01 		.word	26000000
+ 582 0004 0000     		.short	0
+ 583 0006 0000     		.short	0
+ 584 0008 0000     		.short	0
+ 585 000a 0000     		.short	0
+ 586 000c 01000000 		.word	1
+ 587 0010 00000000 		.word	0
+ 588 0014 00000000 		.word	0
+ 589 0018 00000000 		.word	0
+ 590              		.section	.rodata.sysclock_3m25,"a",%progbits
+ 591              		.align	2
+ 594              	sysclock_3m25:
+ 595 0000 50973100 		.word	3250000
+ 596 0004 0000     		.short	0
+ 597 0006 0000     		.short	0
+ 598 0008 0000     		.short	0
+ 599 000a 0000     		.short	0
+ 600 000c 00000000 		.word	0
+ 601 0010 A0000000 		.word	160
+ 602 0014 00000000 		.word	0
+ 603 0018 00000000 		.word	0
+ 604              		.section	.bss.last_charging.7217,"aw",%nobits
+ 605              		.set	.LANCHOR2,. + 0
+ 608              	last_charging.7217:
+ 609 0000 00       		.space	1
+ 610              		.section	.bss.pmu_init_ok,"aw",%nobits
+ 611              		.set	.LANCHOR1,. + 0
+ 614              	pmu_init_ok:
+ 615 0000 00       		.space	1
+ 616              		.text
+ 617              	.Letext0:
+ 618              		.file 4 "src/libstm32f2/stm32f2xx.h"
+ 619              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 620              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/driver_power.h"
+ 621              		.file 7 "src/libstm32f2/system_stm32f2xx.h"
+ 622              		.file 8 "src/libstm32f2/stm32f2xx_rcc.h"
+ 623              		.file 9 "src/libstm32f2/stm32f2xx_flash.h"
+ 624              		.file 10 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/driver_i2c.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 driver_power.c
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:19     .text.cpu_reclock:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:24     .text.cpu_reclock:00000000 cpu_reclock
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:213    .text.cpu_reclock:000000ac $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:221    .text.cpu_init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:226    .text.cpu_init:00000000 cpu_init
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:277    .text.cpu_init:00000034 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:282    .text.pmu_init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:287    .text.pmu_init:00000000 pmu_init
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:375    .text.pmu_init:00000070 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:380    .text.pmu_charge:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:385    .text.pmu_charge:00000000 pmu_charge
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:456    .text.pmu_charge:0000004c $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:461    .text.pmu_charging:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:466    .text.pmu_charging:00000000 pmu_charging
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:538    .text.pmu_charging:00000048 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:566    .rodata.sysclock_120m:00000000 sysclock_120m
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:580    .rodata.sysclock_26m:00000000 sysclock_26m
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:551    .rodata.sysclock_15m:00000000 sysclock_15m
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:594    .rodata.sysclock_3m25:00000000 sysclock_3m25
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:548    .rodata.sysclock_15m:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:562    .rodata.sysclock_120m:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:577    .rodata.sysclock_26m:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:591    .rodata.sysclock_3m25:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:608    .bss.last_charging.7217:00000000 last_charging.7217
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:609    .bss.last_charging.7217:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:614    .bss.pmu_init_ok:00000000 pmu_init_ok
+C:\Users\STINA\AppData\Local\Temp\ccQSP1Zd.s:615    .bss.pmu_init_ok:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_SYSCLKConfig
+RCC_GetSYSCLKSource
+RCC_PLLCmd
+RCC_HCLKConfig
+RCC_PCLK2Config
+RCC_PCLK1Config
+FLASH_SetLatency
+SystemCoreClockUpdate
+RCC_PLLConfig
+RCC_GetFlagStatus
+int_ctr
+SystemCoreClock
+RCC_DeInit
+RCC_HSEConfig
+RCC_WaitForHSEStartUp
+FLASH_PrefetchBufferCmd
+FLASH_InstructionCacheCmd
+FLASH_DataCacheCmd
+i2c_write
+i2c_read

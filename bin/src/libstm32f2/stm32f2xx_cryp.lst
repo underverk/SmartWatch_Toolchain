@@ -1,0 +1,1666 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_cryp.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.CRYP_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	CRYP_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	CRYP_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_cryp.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @file    stm32f2xx_cryp.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          functionalities of the  Cryptographic processor (CRYP) peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           - Initialization and Configuration functions
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           - Data treatment functions 
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           - Context swapping functions     
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           - DMA interface function       
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           - Interrupts and flags management       
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *  @verbatim
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *                               
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          ===================================================================      
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *                                 How to use this driver
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          =================================================================== 
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          1. Enable the CRYP controller clock using 
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *              RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_CRYP, ENABLE); function.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          2. Initialise the CRYP using CRYP_Init(), CRYP_KeyInit() and if 
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *             needed CRYP_IVInit(). 
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          3. Flush the IN and OUT FIFOs by using CRYP_FIFOFlush() function.
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          4. Enable the CRYP controller using the CRYP_Cmd() function. 
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          5. If using DMA for Data input and output transfer, 
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *             Activate the needed DMA Requests using CRYP_DMACmd() function 
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          6. If DMA is not used for data transfer, use CRYP_DataIn() and 
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *             CRYP_DataOut() functions to enter data to IN FIFO and get result
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *             from OUT FIFO.
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          7. To control CRYP events you can use one of the following 
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *              two methods:
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *               - Check on CRYP flags using the CRYP_GetFlagStatus() function.  
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *               - Use CRYP interrupts through the function CRYP_ITConfig() at 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *                 initialization phase and CRYP_GetITStatus() function into 
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *                 interrupt routines in processing phase.
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          8. Save and restore Cryptographic processor context using  
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *             CRYP_SaveContext() and CRYP_RestoreContext() functions.     
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          ===================================================================  
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *                Procedure to perform an encryption or a decryption
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          ===================================================================  
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *      Initialization
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *      ===============  
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *     1. Initialize the peripheral using CRYP_Init(), CRYP_KeyInit() and 
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        CRYP_IVInit functions:
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        - Configure the key size (128-, 192- or 256-bit, in the AES only) 
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        - Enter the symmetric key 
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        - Configure the data type
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        - In case of decryption in AES-ECB or AES-CBC, you must prepare 
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          the key: configure the key preparation mode. Then Enable the CRYP 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          peripheral using CRYP_Cmd() function: the BUSY flag is set. 
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          Wait until BUSY flag is reset : the key is prepared for decryption
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       - Configure the algorithm and chaining (the DES/TDES in ECB/CBC, the 
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          AES in ECB/CBC/CTR) 
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       - Configure the direction (encryption/decryption).
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       - Write the initialization vectors (in CBC or CTR modes only)
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    2. Flush the IN and OUT FIFOs using the CRYP_FIFOFlush() function
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    Basic Processing mode (polling mode) 
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    ====================================  
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    1. Enable the cryptographic processor using CRYP_Cmd() function.
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    2. Write the first blocks in the input FIFO (2 to 8 words) using 
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       CRYP_DataIn() function.
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    3. Repeat the following sequence until the complete message has been 
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       processed:
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       a) Wait for flag CRYP_FLAG_OFNE occurs (using CRYP_GetFlagStatus() 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          function), then read the OUT-FIFO using CRYP_DataOut() function
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          (1 block or until the FIFO is empty)
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       b) Wait for flag CRYP_FLAG_IFNF occurs, (using CRYP_GetFlagStatus() 
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          function then write the IN FIFO using CRYP_DataIn() function 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          (1 block or until the FIFO is full)
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    4. At the end of the processing, CRYP_FLAG_BUSY flag will be reset and 
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        both FIFOs are empty (CRYP_FLAG_IFEM is set and CRYP_FLAG_OFNE is 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        reset). You can disable the peripheral using CRYP_Cmd() function.
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    Interrupts Processing mode 
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    ===========================
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    In this mode, Processing is done when the data are transferred by the 
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    CPU during interrupts.
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    1. Enable the interrupts CRYP_IT_INI and CRYP_IT_OUTI using 
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       CRYP_ITConfig() function.
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    2. Enable the cryptographic processor using CRYP_Cmd() function.
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    3. In the CRYP_IT_INI interrupt handler : load the input message into the 
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       IN FIFO using CRYP_DataIn() function . You can load 2 or 4 words at a 
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       time, or load data until the IN FIFO is full. When the last word of
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       the message has been entered into the IN FIFO, disable the CRYP_IT_INI 
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       interrupt (using CRYP_ITConfig() function).
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    4. In the CRYP_IT_OUTI interrupt handler : read the output message from 
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       the OUT FIFO using CRYP_DataOut() function. You can read 1 block (2 or 
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       4 words) at a time or read data until the FIFO is empty.
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       When the last word has been read, INIM=0, BUSY=0 and both FIFOs are 
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       empty (CRYP_FLAG_IFEM is set and CRYP_FLAG_OFNE is reset). 
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       You can disable the CRYP_IT_OUTI interrupt (using CRYP_ITConfig() 
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       function) and you can disable the peripheral using CRYP_Cmd() function.
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    DMA Processing mode 
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    ====================
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    In this mode, Processing is done when the DMA is used to transfer the 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    data from/to the memory.
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    1. Configure the DMA controller to transfer the input data from the 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       memory using DMA_Init() function. 
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       The transfer length is the length of the message. 
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       As message padding is not managed by the peripheral, the message 
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       length must be an entire number of blocks. The data are transferred 
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       in burst mode. The burst length is 4 words in the AES and 2 or 4 
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       words in the DES/TDES. The DMA should be configured to set an 
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       interrupt on transfer completion of the output data to indicate that 
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       the processing is finished. 
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       Refer to DMA peripheral driver for more details.  
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    2. Enable the cryptographic processor using CRYP_Cmd() function. 
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       Enable the DMA requests CRYP_DMAReq_DataIN and CRYP_DMAReq_DataOUT 
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       using CRYP_DMACmd() function.
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *    3. All the transfers and processing are managed by the DMA and the 
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       cryptographic processor. The DMA transfer complete interrupt indicates 
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       that the processing is complete. Both FIFOs are normally empty and 
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *       CRYP_FLAG_BUSY flag is reset.
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *  @endverbatim
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ******************************************************************************
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @attention
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * You may not use this file except in compliance with the License.
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * You may obtain a copy of the License at:
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * Unless required by applicable law or agreed to in writing, software 
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * See the License for the specific language governing permissions and
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * limitations under the License.
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ******************************************************************************
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /* Includes ------------------------------------------------------------------*/
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** #include "stm32f2xx_cryp.h"
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** #include "stm32f2xx_rcc.h"
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @defgroup CRYP 
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief CRYP driver modules
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */ 
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /* Private typedef -----------------------------------------------------------*/
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /* Private define ------------------------------------------------------------*/
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** #define FLAG_MASK     ((uint8_t)0x20)
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** #define MAX_TIMEOUT   ((uint16_t)0xFFFF)
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /* Private macro -------------------------------------------------------------*/
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /* Private variables ---------------------------------------------------------*/
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /* Private function prototypes -----------------------------------------------*/
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /* Private functions ---------------------------------------------------------*/
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @defgroup CRYP_Private_Functions
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */ 
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @defgroup CRYP_Group1 Initialization and Configuration functions
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *  @brief    Initialization and Configuration functions 
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @verbatim    
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       Initialization and Configuration functions
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================  
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   This section provides functions allowing to 
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    - Initialize the cryptographic Processor using CRYP_Init() function 
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       -  Encrypt or Decrypt 
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       -  mode : TDES-ECB, TDES-CBC, 
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                 DES-ECB, DES-CBC, 
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                 AES-ECB, AES-CBC, AES-CTR, AES-Key 
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       - DataType :  32-bit data, 16-bit data, bit data or bit-string
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       - Key Size (only in AES modes)
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    - Configure the Encrypt or Decrypt Key using CRYP_KeyInit() function 
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    - Configure the Initialization Vectors(IV) for CBC and CTR modes using 
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      CRYP_IVInit() function.  
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    - Flushes the IN and OUT FIFOs : using CRYP_FIFOFlush() function.                         
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    - Enable or disable the CRYP Processor using CRYP_Cmd() function 
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @endverbatim
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Deinitializes the CRYP peripheral registers to their default reset values
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  None
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_DeInit(void)
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+  27              		.loc 1 222 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Enable CRYP reset state */
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_CRYP, ENABLE);
+  31              		.loc 1 224 0
+  32 0000 1020     		movs	r0, #16
+  33 0002 0121     		movs	r1, #1
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+  34              		.loc 1 222 0
+  35 0004 08B5     		push	{r3, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 3, -8
+  39              		.cfi_offset 14, -4
+  40              		.loc 1 224 0
+  41 0006 FFF7FEFF 		bl	RCC_AHB2PeriphResetCmd
+  42              	.LVL0:
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Release CRYP from reset state */
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_CRYP, DISABLE);
+  43              		.loc 1 227 0
+  44 000a 1020     		movs	r0, #16
+  45 000c 0021     		movs	r1, #0
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+  46              		.loc 1 228 0
+  47 000e BDE80840 		pop	{r3, lr}
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_CRYP, DISABLE);
+  48              		.loc 1 227 0
+  49 0012 FFF7FEBF 		b	RCC_AHB2PeriphResetCmd
+  50              	.LVL1:
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.CRYP_Init,"ax",%progbits
+  55              		.align	1
+  56              		.global	CRYP_Init
+  57              		.thumb
+  58              		.thumb_func
+  60              	CRYP_Init:
+  61              	.LFB57:
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Initializes the CRYP peripheral according to the specified parameters
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         in the CRYP_InitStruct.
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_InitStruct: pointer to a CRYP_InitTypeDef structure that contains
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         the configuration information for the CRYP peripheral.
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_Init(CRYP_InitTypeDef* CRYP_InitStruct)
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+  62              		.loc 1 238 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              	.LVL2:
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the parameters */
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_CRYP_ALGOMODE(CRYP_InitStruct->CRYP_AlgoMode));
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_CRYP_DATATYPE(CRYP_InitStruct->CRYP_DataType));
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_CRYP_ALGODIR(CRYP_InitStruct->CRYP_AlgoDir));
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Select Algorithm mode*/  
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR &= ~CRYP_CR_ALGOMODE;
+  67              		.loc 1 245 0
+  68 0000 174B     		ldr	r3, .L15
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+  69              		.loc 1 238 0
+  70 0002 10B5     		push	{r4, lr}
+  71              	.LCFI1:
+  72              		.cfi_def_cfa_offset 8
+  73              		.cfi_offset 4, -8
+  74              		.cfi_offset 14, -4
+  75              		.loc 1 245 0
+  76 0004 1A68     		ldr	r2, [r3, #0]
+  77 0006 22F03801 		bic	r1, r2, #56
+  78 000a 1960     		str	r1, [r3, #0]
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR |= CRYP_InitStruct->CRYP_AlgoMode;
+  79              		.loc 1 246 0
+  80 000c 1C68     		ldr	r4, [r3, #0]
+  81 000e 4288     		ldrh	r2, [r0, #2]
+  82 0010 42EA0401 		orr	r1, r2, r4
+  83 0014 1960     		str	r1, [r3, #0]
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Select dataType */ 
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR &= ~CRYP_CR_DATATYPE;
+  84              		.loc 1 249 0
+  85 0016 1C68     		ldr	r4, [r3, #0]
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR |= CRYP_InitStruct->CRYP_DataType;
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* select Key size (used only with AES algorithm) */
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if ((CRYP_InitStruct->CRYP_AlgoMode == CRYP_AlgoMode_AES_ECB) ||
+  86              		.loc 1 253 0
+  87 0018 202A     		cmp	r2, #32
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR &= ~CRYP_CR_DATATYPE;
+  88              		.loc 1 249 0
+  89 001a 24F0C001 		bic	r1, r4, #192
+  90 001e 1960     		str	r1, [r3, #0]
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR |= CRYP_InitStruct->CRYP_DataType;
+  91              		.loc 1 250 0
+  92 0020 1968     		ldr	r1, [r3, #0]
+  93 0022 8488     		ldrh	r4, [r0, #4]
+  94 0024 44EA0101 		orr	r1, r4, r1
+  95 0028 1960     		str	r1, [r3, #0]
+  96              		.loc 1 253 0
+  97 002a 05D0     		beq	.L3
+  98              		.loc 1 253 0 is_stmt 0 discriminator 1
+  99 002c 282A     		cmp	r2, #40
+ 100 002e 03D0     		beq	.L3
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       (CRYP_InitStruct->CRYP_AlgoMode == CRYP_AlgoMode_AES_CBC) ||
+ 101              		.loc 1 254 0 is_stmt 1
+ 102 0030 302A     		cmp	r2, #48
+ 103 0032 01D0     		beq	.L3
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       (CRYP_InitStruct->CRYP_AlgoMode == CRYP_AlgoMode_AES_CTR) ||
+ 104              		.loc 1 255 0
+ 105 0034 382A     		cmp	r2, #56
+ 106 0036 07D1     		bne	.L4
+ 107              	.L3:
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       (CRYP_InitStruct->CRYP_AlgoMode == CRYP_AlgoMode_AES_Key))
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     assert_param(IS_CRYP_KEYSIZE(CRYP_InitStruct->CRYP_KeySize));
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->CR &= ~CRYP_CR_KEYSIZE;
+ 108              		.loc 1 259 0
+ 109 0038 1A68     		ldr	r2, [r3, #0]
+ 110 003a 22F44071 		bic	r1, r2, #768
+ 111 003e 1960     		str	r1, [r3, #0]
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->CR |= CRYP_InitStruct->CRYP_KeySize; /* Key size and value must be 
+ 112              		.loc 1 260 0
+ 113 0040 1A68     		ldr	r2, [r3, #0]
+ 114 0042 C188     		ldrh	r1, [r0, #6]
+ 115 0044 0A43     		orrs	r2, r2, r1
+ 116 0046 1A60     		str	r2, [r3, #0]
+ 117              	.L4:
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                                                   configured once the key has 
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                                                   been prepared */
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Select data Direction */ 
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR &= ~CRYP_CR_ALGODIR;
+ 118              		.loc 1 266 0
+ 119 0048 054B     		ldr	r3, .L15
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR |= CRYP_InitStruct->CRYP_AlgoDir;
+ 120              		.loc 1 267 0
+ 121 004a 0088     		ldrh	r0, [r0, #0]
+ 122              	.LVL3:
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR &= ~CRYP_CR_ALGODIR;
+ 123              		.loc 1 266 0
+ 124 004c 1968     		ldr	r1, [r3, #0]
+ 125 004e 21F00402 		bic	r2, r1, #4
+ 126 0052 1A60     		str	r2, [r3, #0]
+ 127              		.loc 1 267 0
+ 128 0054 1A68     		ldr	r2, [r3, #0]
+ 129 0056 40EA0201 		orr	r1, r0, r2
+ 130 005a 1960     		str	r1, [r3, #0]
+ 131 005c 10BD     		pop	{r4, pc}
+ 132              	.L16:
+ 133 005e 00BF     		.align	2
+ 134              	.L15:
+ 135 0060 00000650 		.word	1342570496
+ 136              		.cfi_endproc
+ 137              	.LFE57:
+ 139              		.section	.text.CRYP_StructInit,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	CRYP_StructInit
+ 142              		.thumb
+ 143              		.thumb_func
+ 145              	CRYP_StructInit:
+ 146              	.LFB58:
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Fills each CRYP_InitStruct member with its default value.
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_InitStruct: pointer to a CRYP_InitTypeDef structure which will
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         be initialized.
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_StructInit(CRYP_InitTypeDef* CRYP_InitStruct)
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 147              		.loc 1 277 0
+ 148              		.cfi_startproc
+ 149              		@ args = 0, pretend = 0, frame = 0
+ 150              		@ frame_needed = 0, uses_anonymous_args = 0
+ 151              		@ link register save eliminated.
+ 152              	.LVL4:
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Initialize the CRYP_AlgoDir member */
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_InitStruct->CRYP_AlgoDir = CRYP_AlgoDir_Encrypt;
+ 153              		.loc 1 279 0
+ 154 0000 0023     		movs	r3, #0
+ 155 0002 0380     		strh	r3, [r0, #0]	@ movhi
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* initialize the CRYP_AlgoMode member */
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_InitStruct->CRYP_AlgoMode = CRYP_AlgoMode_TDES_ECB;
+ 156              		.loc 1 282 0
+ 157 0004 4380     		strh	r3, [r0, #2]	@ movhi
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* initialize the CRYP_DataType member */
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_InitStruct->CRYP_DataType = CRYP_DataType_32b;
+ 158              		.loc 1 285 0
+ 159 0006 8380     		strh	r3, [r0, #4]	@ movhi
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Initialize the CRYP_KeySize member */
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_InitStruct->CRYP_KeySize = CRYP_KeySize_128b;
+ 160              		.loc 1 288 0
+ 161 0008 C380     		strh	r3, [r0, #6]	@ movhi
+ 162 000a 7047     		bx	lr
+ 163              		.cfi_endproc
+ 164              	.LFE58:
+ 166              		.section	.text.CRYP_KeyInit,"ax",%progbits
+ 167              		.align	1
+ 168              		.global	CRYP_KeyInit
+ 169              		.thumb
+ 170              		.thumb_func
+ 172              	CRYP_KeyInit:
+ 173              	.LFB59:
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Initializes the CRYP Keys according to the specified parameters in
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         the CRYP_KeyInitStruct.
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_KeyInitStruct: pointer to a CRYP_KeyInitTypeDef structure that
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         contains the configuration information for the CRYP Keys.
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_KeyInit(CRYP_KeyInitTypeDef* CRYP_KeyInitStruct)
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 174              		.loc 1 299 0
+ 175              		.cfi_startproc
+ 176              		@ args = 0, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+ 178              		@ link register save eliminated.
+ 179              	.LVL5:
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Key Initialisation */
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K0LR = CRYP_KeyInitStruct->CRYP_Key0Left;
+ 180              		.loc 1 301 0
+ 181 0000 0268     		ldr	r2, [r0, #0]
+ 182 0002 084B     		ldr	r3, .L19
+ 183 0004 1A62     		str	r2, [r3, #32]
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K0RR = CRYP_KeyInitStruct->CRYP_Key0Right;
+ 184              		.loc 1 302 0
+ 185 0006 4168     		ldr	r1, [r0, #4]
+ 186 0008 5962     		str	r1, [r3, #36]
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K1LR = CRYP_KeyInitStruct->CRYP_Key1Left;
+ 187              		.loc 1 303 0
+ 188 000a 8268     		ldr	r2, [r0, #8]
+ 189 000c 9A62     		str	r2, [r3, #40]
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K1RR = CRYP_KeyInitStruct->CRYP_Key1Right;
+ 190              		.loc 1 304 0
+ 191 000e C168     		ldr	r1, [r0, #12]
+ 192 0010 D962     		str	r1, [r3, #44]
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K2LR = CRYP_KeyInitStruct->CRYP_Key2Left;
+ 193              		.loc 1 305 0
+ 194 0012 0269     		ldr	r2, [r0, #16]
+ 195 0014 1A63     		str	r2, [r3, #48]
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K2RR = CRYP_KeyInitStruct->CRYP_Key2Right;
+ 196              		.loc 1 306 0
+ 197 0016 4169     		ldr	r1, [r0, #20]
+ 198 0018 5963     		str	r1, [r3, #52]
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K3LR = CRYP_KeyInitStruct->CRYP_Key3Left;
+ 199              		.loc 1 307 0
+ 200 001a 8269     		ldr	r2, [r0, #24]
+ 201 001c 9A63     		str	r2, [r3, #56]
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K3RR = CRYP_KeyInitStruct->CRYP_Key3Right;
+ 202              		.loc 1 308 0
+ 203 001e C069     		ldr	r0, [r0, #28]
+ 204              	.LVL6:
+ 205 0020 D863     		str	r0, [r3, #60]
+ 206 0022 7047     		bx	lr
+ 207              	.L20:
+ 208              		.align	2
+ 209              	.L19:
+ 210 0024 00000650 		.word	1342570496
+ 211              		.cfi_endproc
+ 212              	.LFE59:
+ 214              		.section	.text.CRYP_KeyStructInit,"ax",%progbits
+ 215              		.align	1
+ 216              		.global	CRYP_KeyStructInit
+ 217              		.thumb
+ 218              		.thumb_func
+ 220              	CRYP_KeyStructInit:
+ 221              	.LFB60:
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Fills each CRYP_KeyInitStruct member with its default value.
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_KeyInitStruct: pointer to a CRYP_KeyInitTypeDef structure 
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         which will be initialized.
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_KeyStructInit(CRYP_KeyInitTypeDef* CRYP_KeyInitStruct)
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 222              		.loc 1 318 0
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 0
+ 225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226              		@ link register save eliminated.
+ 227              	.LVL7:
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key0Left  = 0;
+ 228              		.loc 1 319 0
+ 229 0000 0023     		movs	r3, #0
+ 230 0002 0360     		str	r3, [r0, #0]
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key0Right = 0;
+ 231              		.loc 1 320 0
+ 232 0004 4360     		str	r3, [r0, #4]
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key1Left  = 0;
+ 233              		.loc 1 321 0
+ 234 0006 8360     		str	r3, [r0, #8]
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key1Right = 0;
+ 235              		.loc 1 322 0
+ 236 0008 C360     		str	r3, [r0, #12]
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key2Left  = 0;
+ 237              		.loc 1 323 0
+ 238 000a 0361     		str	r3, [r0, #16]
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key2Right = 0;
+ 239              		.loc 1 324 0
+ 240 000c 4361     		str	r3, [r0, #20]
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key3Left  = 0;
+ 241              		.loc 1 325 0
+ 242 000e 8361     		str	r3, [r0, #24]
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_KeyInitStruct->CRYP_Key3Right = 0;
+ 243              		.loc 1 326 0
+ 244 0010 C361     		str	r3, [r0, #28]
+ 245 0012 7047     		bx	lr
+ 246              		.cfi_endproc
+ 247              	.LFE60:
+ 249              		.section	.text.CRYP_IVInit,"ax",%progbits
+ 250              		.align	1
+ 251              		.global	CRYP_IVInit
+ 252              		.thumb
+ 253              		.thumb_func
+ 255              	CRYP_IVInit:
+ 256              	.LFB61:
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Initializes the CRYP Initialization Vectors(IV) according to the
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         specified parameters in the CRYP_IVInitStruct.
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_IVInitStruct: pointer to a CRYP_IVInitTypeDef structure that contains
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         the configuration information for the CRYP Initialization Vectors(IV).
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_IVInit(CRYP_IVInitTypeDef* CRYP_IVInitStruct)
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 257              		.loc 1 336 0
+ 258              		.cfi_startproc
+ 259              		@ args = 0, pretend = 0, frame = 0
+ 260              		@ frame_needed = 0, uses_anonymous_args = 0
+ 261              		@ link register save eliminated.
+ 262              	.LVL8:
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV0LR = CRYP_IVInitStruct->CRYP_IV0Left;
+ 263              		.loc 1 337 0
+ 264 0000 0268     		ldr	r2, [r0, #0]
+ 265 0002 044B     		ldr	r3, .L23
+ 266 0004 1A64     		str	r2, [r3, #64]
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV0RR = CRYP_IVInitStruct->CRYP_IV0Right;
+ 267              		.loc 1 338 0
+ 268 0006 4168     		ldr	r1, [r0, #4]
+ 269 0008 5964     		str	r1, [r3, #68]
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV1LR = CRYP_IVInitStruct->CRYP_IV1Left;
+ 270              		.loc 1 339 0
+ 271 000a 8268     		ldr	r2, [r0, #8]
+ 272 000c 9A64     		str	r2, [r3, #72]
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV1RR = CRYP_IVInitStruct->CRYP_IV1Right;
+ 273              		.loc 1 340 0
+ 274 000e C068     		ldr	r0, [r0, #12]
+ 275              	.LVL9:
+ 276 0010 D864     		str	r0, [r3, #76]
+ 277 0012 7047     		bx	lr
+ 278              	.L24:
+ 279              		.align	2
+ 280              	.L23:
+ 281 0014 00000650 		.word	1342570496
+ 282              		.cfi_endproc
+ 283              	.LFE61:
+ 285              		.section	.text.CRYP_IVStructInit,"ax",%progbits
+ 286              		.align	1
+ 287              		.global	CRYP_IVStructInit
+ 288              		.thumb
+ 289              		.thumb_func
+ 291              	CRYP_IVStructInit:
+ 292              	.LFB62:
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Fills each CRYP_IVInitStruct member with its default value.
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_IVInitStruct: pointer to a CRYP_IVInitTypeDef Initialization 
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         Vectors(IV) structure which will be initialized.
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_IVStructInit(CRYP_IVInitTypeDef* CRYP_IVInitStruct)
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 293              		.loc 1 350 0
+ 294              		.cfi_startproc
+ 295              		@ args = 0, pretend = 0, frame = 0
+ 296              		@ frame_needed = 0, uses_anonymous_args = 0
+ 297              		@ link register save eliminated.
+ 298              	.LVL10:
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_IVInitStruct->CRYP_IV0Left  = 0;
+ 299              		.loc 1 351 0
+ 300 0000 0023     		movs	r3, #0
+ 301 0002 0360     		str	r3, [r0, #0]
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_IVInitStruct->CRYP_IV0Right = 0;
+ 302              		.loc 1 352 0
+ 303 0004 4360     		str	r3, [r0, #4]
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_IVInitStruct->CRYP_IV1Left  = 0;
+ 304              		.loc 1 353 0
+ 305 0006 8360     		str	r3, [r0, #8]
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP_IVInitStruct->CRYP_IV1Right = 0;
+ 306              		.loc 1 354 0
+ 307 0008 C360     		str	r3, [r0, #12]
+ 308 000a 7047     		bx	lr
+ 309              		.cfi_endproc
+ 310              	.LFE62:
+ 312              		.section	.text.CRYP_FIFOFlush,"ax",%progbits
+ 313              		.align	1
+ 314              		.global	CRYP_FIFOFlush
+ 315              		.thumb
+ 316              		.thumb_func
+ 318              	CRYP_FIFOFlush:
+ 319              	.LFB63:
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Flushes the IN and OUT FIFOs (that is read and write pointers of the 
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         FIFOs are reset)
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @note   The FIFOs must be flushed only when BUSY flag is reset.  
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  None
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_FIFOFlush(void)
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 320              		.loc 1 365 0
+ 321              		.cfi_startproc
+ 322              		@ args = 0, pretend = 0, frame = 0
+ 323              		@ frame_needed = 0, uses_anonymous_args = 0
+ 324              		@ link register save eliminated.
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Reset the read and write pointers of the FIFOs */
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR |= CRYP_CR_FFLUSH;
+ 325              		.loc 1 367 0
+ 326 0000 024B     		ldr	r3, .L27
+ 327 0002 1A68     		ldr	r2, [r3, #0]
+ 328 0004 42F48040 		orr	r0, r2, #16384
+ 329 0008 1860     		str	r0, [r3, #0]
+ 330 000a 7047     		bx	lr
+ 331              	.L28:
+ 332              		.align	2
+ 333              	.L27:
+ 334 000c 00000650 		.word	1342570496
+ 335              		.cfi_endproc
+ 336              	.LFE63:
+ 338              		.section	.text.CRYP_Cmd,"ax",%progbits
+ 339              		.align	1
+ 340              		.global	CRYP_Cmd
+ 341              		.thumb
+ 342              		.thumb_func
+ 344              	CRYP_Cmd:
+ 345              	.LFB64:
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Enables or disables the CRYP peripheral.
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  NewState: new state of the CRYP peripheral.
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_Cmd(FunctionalState NewState)
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 346              		.loc 1 377 0
+ 347              		.cfi_startproc
+ 348              		@ args = 0, pretend = 0, frame = 0
+ 349              		@ frame_needed = 0, uses_anonymous_args = 0
+ 350              		@ link register save eliminated.
+ 351              	.LVL11:
+ 352 0000 044B     		ldr	r3, .L33
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the parameters */
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if (NewState != DISABLE)
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Enable the Cryptographic processor */
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->CR |= CRYP_CR_CRYPEN;
+ 353              		.loc 1 384 0
+ 354 0002 1A68     		ldr	r2, [r3, #0]
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if (NewState != DISABLE)
+ 355              		.loc 1 381 0
+ 356 0004 10B1     		cbz	r0, .L30
+ 357              		.loc 1 384 0
+ 358 0006 42F40040 		orr	r0, r2, #32768
+ 359              	.LVL12:
+ 360 000a 01E0     		b	.L32
+ 361              	.LVL13:
+ 362              	.L30:
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Disable the Cryptographic processor */
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->CR &= ~CRYP_CR_CRYPEN;
+ 363              		.loc 1 389 0
+ 364 000c 22F40040 		bic	r0, r2, #32768
+ 365              	.LVL14:
+ 366              	.L32:
+ 367 0010 1860     		str	r0, [r3, #0]
+ 368 0012 7047     		bx	lr
+ 369              	.L34:
+ 370              		.align	2
+ 371              	.L33:
+ 372 0014 00000650 		.word	1342570496
+ 373              		.cfi_endproc
+ 374              	.LFE64:
+ 376              		.section	.text.CRYP_DataIn,"ax",%progbits
+ 377              		.align	1
+ 378              		.global	CRYP_DataIn
+ 379              		.thumb
+ 380              		.thumb_func
+ 382              	CRYP_DataIn:
+ 383              	.LFB65:
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @}
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @defgroup CRYP_Group2 CRYP Data processing functions
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *  @brief    CRYP Data processing functions
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @verbatim    
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       CRYP Data processing functions
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================  
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   This section provides functions allowing the encryption and decryption 
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   operations: 
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   - Enter data to be treated in the IN FIFO : using CRYP_DataIn() function.
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   - Get the data result from the OUT FIFO : using CRYP_DataOut() function.
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @endverbatim
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Writes data in the Data Input register (DIN).
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @note   After the DIN register has been read once or several times, 
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         the FIFO must be flushed (using CRYP_FIFOFlush() function).  
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  Data: data to write in Data Input register
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_DataIn(uint32_t Data)
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 384              		.loc 1 420 0
+ 385              		.cfi_startproc
+ 386              		@ args = 0, pretend = 0, frame = 0
+ 387              		@ frame_needed = 0, uses_anonymous_args = 0
+ 388              		@ link register save eliminated.
+ 389              	.LVL15:
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->DR = Data;
+ 390              		.loc 1 421 0
+ 391 0000 014B     		ldr	r3, .L36
+ 392 0002 9860     		str	r0, [r3, #8]
+ 393 0004 7047     		bx	lr
+ 394              	.L37:
+ 395 0006 00BF     		.align	2
+ 396              	.L36:
+ 397 0008 00000650 		.word	1342570496
+ 398              		.cfi_endproc
+ 399              	.LFE65:
+ 401              		.section	.text.CRYP_DataOut,"ax",%progbits
+ 402              		.align	1
+ 403              		.global	CRYP_DataOut
+ 404              		.thumb
+ 405              		.thumb_func
+ 407              	CRYP_DataOut:
+ 408              	.LFB66:
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Returns the last data entered into the output FIFO.
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  None
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval Last data entered into the output FIFO.
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** uint32_t CRYP_DataOut(void)
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 409              		.loc 1 430 0
+ 410              		.cfi_startproc
+ 411              		@ args = 0, pretend = 0, frame = 0
+ 412              		@ frame_needed = 0, uses_anonymous_args = 0
+ 413              		@ link register save eliminated.
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   return CRYP->DOUT;
+ 414              		.loc 1 431 0
+ 415 0000 014B     		ldr	r3, .L39
+ 416 0002 D868     		ldr	r0, [r3, #12]
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 417              		.loc 1 432 0
+ 418 0004 7047     		bx	lr
+ 419              	.L40:
+ 420 0006 00BF     		.align	2
+ 421              	.L39:
+ 422 0008 00000650 		.word	1342570496
+ 423              		.cfi_endproc
+ 424              	.LFE66:
+ 426              		.section	.text.CRYP_SaveContext,"ax",%progbits
+ 427              		.align	1
+ 428              		.global	CRYP_SaveContext
+ 429              		.thumb
+ 430              		.thumb_func
+ 432              	CRYP_SaveContext:
+ 433              	.LFB67:
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @}
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @defgroup CRYP_Group3 Context swapping functions
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *  @brief   Context swapping functions
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @verbatim   
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                              Context swapping functions
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================  
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   This section provides functions allowing to save and store CRYP Context
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   It is possible to interrupt an encryption/ decryption/ key generation process 
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   to perform another processing with a higher priority, and to complete the 
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   interrupted process later on, when the higher-priority task is complete. To do 
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   so, the context of the interrupted task must be saved from the CRYP registers 
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   to memory, and then be restored from memory to the CRYP registers.
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   1. To save the current context, use CRYP_SaveContext() function
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   2. To restore the saved context, use CRYP_RestoreContext() function 
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @endverbatim
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Saves the CRYP peripheral Context. 
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @note   This function stops DMA transfer before to save the context. After 
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         restoring the context, you have to enable the DMA again (if the DMA
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         was previously used).
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_ContextSave: pointer to a CRYP_Context structure that contains
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         the repository for current context.
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_KeyInitStruct: pointer to a CRYP_KeyInitTypeDef structure that 
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         contains the configuration information for the CRYP Keys.  
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** ErrorStatus CRYP_SaveContext(CRYP_Context* CRYP_ContextSave,
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                              CRYP_KeyInitTypeDef* CRYP_KeyInitStruct)
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 434              		.loc 1 474 0
+ 435              		.cfi_startproc
+ 436              		@ args = 0, pretend = 0, frame = 8
+ 437              		@ frame_needed = 0, uses_anonymous_args = 0
+ 438              	.LVL16:
+ 439 0000 73B5     		push	{r0, r1, r4, r5, r6, lr}
+ 440              	.LCFI2:
+ 441              		.cfi_def_cfa_offset 24
+ 442              		.cfi_offset 0, -24
+ 443              		.cfi_offset 1, -20
+ 444              		.cfi_offset 4, -16
+ 445              		.cfi_offset 5, -12
+ 446              		.cfi_offset 6, -8
+ 447              		.cfi_offset 14, -4
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   __IO uint32_t timeout = 0;
+ 448              		.loc 1 475 0
+ 449 0002 0023     		movs	r3, #0
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   uint32_t ckeckmask = 0, bitstatus;    
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ErrorStatus status = ERROR;
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Stop DMA transfers on the IN FIFO by clearing the DIEN bit in the CRYP_DMACR */
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->DMACR &= ~(uint32_t)CRYP_DMACR_DIEN;
+ 450              		.loc 1 480 0
+ 451 0004 234C     		ldr	r4, .L49
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   __IO uint32_t timeout = 0;
+ 452              		.loc 1 475 0
+ 453 0006 0193     		str	r3, [sp, #4]
+ 454              	.LVL17:
+ 455              		.loc 1 480 0
+ 456 0008 2269     		ldr	r2, [r4, #16]
+ 457 000a 22F00105 		bic	r5, r2, #1
+ 458 000e 2561     		str	r5, [r4, #16]
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Wait until both the IN and OUT FIFOs are empty  
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     (IFEM=1 and OFNE=0 in the CRYP_SR register) and the 
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      BUSY bit is cleared. */
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if ((CRYP->CR & (uint32_t)(CRYP_CR_ALGOMODE_TDES_ECB | CRYP_CR_ALGOMODE_TDES_CBC)) != (uint32_t)0
+ 459              		.loc 1 486 0
+ 460 0010 2668     		ldr	r6, [r4, #0]
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   { 
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     ckeckmask =  CRYP_SR_IFEM | CRYP_SR_BUSY ;
+ 461              		.loc 1 488 0
+ 462 0012 16F0080F 		tst	r6, #8
+ 463 0016 0CBF     		ite	eq
+ 464 0018 1522     		moveq	r2, #21
+ 465 001a 1122     		movne	r2, #17
+ 466              	.LVL18:
+ 467              	.L44:
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else /* AES or DES */
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     ckeckmask =  CRYP_SR_IFEM | CRYP_SR_BUSY | CRYP_SR_OFNE;
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }           
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   do 
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     bitstatus = CRYP->SR & ckeckmask;
+ 468              		.loc 1 497 0 discriminator 1
+ 469 001c 1D4B     		ldr	r3, .L49
+ 470 001e 5D68     		ldr	r5, [r3, #4]
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     timeout++;
+ 471              		.loc 1 498 0 discriminator 1
+ 472 0020 019C     		ldr	r4, [sp, #4]
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     bitstatus = CRYP->SR & ckeckmask;
+ 473              		.loc 1 497 0 discriminator 1
+ 474 0022 1540     		ands	r5, r5, r2
+ 475              	.LVL19:
+ 476              		.loc 1 498 0 discriminator 1
+ 477 0024 661C     		adds	r6, r4, #1
+ 478              	.LVL20:
+ 479 0026 0196     		str	r6, [sp, #4]
+ 480              	.LVL21:
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   while ((timeout != MAX_TIMEOUT) && (bitstatus != CRYP_SR_IFEM));
+ 481              		.loc 1 500 0 discriminator 1
+ 482 0028 019E     		ldr	r6, [sp, #4]
+ 483              	.LVL22:
+ 484 002a 4FF6FF74 		movw	r4, #65535
+ 485 002e A642     		cmp	r6, r4
+ 486 0030 1C46     		mov	r4, r3
+ 487 0032 01D0     		beq	.L43
+ 488 0034 012D     		cmp	r5, #1
+ 489 0036 F1D1     		bne	.L44
+ 490              	.L43:
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if ((CRYP->SR & ckeckmask) != CRYP_SR_IFEM)
+ 491              		.loc 1 502 0
+ 492 0038 6468     		ldr	r4, [r4, #4]
+ 493 003a 164B     		ldr	r3, .L49
+ 494 003c 2240     		ands	r2, r2, r4
+ 495              	.LVL23:
+ 496 003e 012A     		cmp	r2, #1
+ 497 0040 25D1     		bne	.L47
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     status = ERROR;
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {      
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Stop DMA transfers on the OUT FIFO by 
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****        - writing the DOEN bit to 0 in the CRYP_DMACR register 
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****        - and clear the CRYPEN bit. */
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->DMACR &= ~(uint32_t)CRYP_DMACR_DOEN;
+ 498              		.loc 1 512 0
+ 499 0042 1C69     		ldr	r4, [r3, #16]
+ 500 0044 24F00204 		bic	r4, r4, #2
+ 501 0048 1C61     		str	r4, [r3, #16]
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->CR &= ~(uint32_t)CRYP_CR_CRYPEN;
+ 502              		.loc 1 513 0
+ 503 004a 1C68     		ldr	r4, [r3, #0]
+ 504 004c 24F40044 		bic	r4, r4, #32768
+ 505 0050 1C60     		str	r4, [r3, #0]
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Save the current configuration (bits [9:2] in the CRYP_CR register) */
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CR_bits9to2  = CRYP->CR & (CRYP_CR_KEYSIZE  | 
+ 506              		.loc 1 516 0
+ 507 0052 1C68     		ldr	r4, [r3, #0]
+ 508 0054 04F47F74 		and	r4, r4, #1020
+ 509 0058 0460     		str	r4, [r0, #0]
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                                                  CRYP_CR_DATATYPE | 
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                                                  CRYP_CR_ALGOMODE |
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                                                  CRYP_CR_ALGODIR); 
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* and, if not in ECB mode, the initialization vectors. */
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_IV0LR = CRYP->IV0LR;
+ 510              		.loc 1 522 0
+ 511 005a 1C6C     		ldr	r4, [r3, #64]
+ 512 005c 4460     		str	r4, [r0, #4]
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_IV0RR = CRYP->IV0RR;
+ 513              		.loc 1 523 0
+ 514 005e 5C6C     		ldr	r4, [r3, #68]
+ 515 0060 8460     		str	r4, [r0, #8]
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_IV1LR = CRYP->IV1LR;
+ 516              		.loc 1 524 0
+ 517 0062 9C6C     		ldr	r4, [r3, #72]
+ 518 0064 C460     		str	r4, [r0, #12]
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_IV1RR = CRYP->IV1RR;
+ 519              		.loc 1 525 0
+ 520 0066 DB6C     		ldr	r3, [r3, #76]
+ 521 0068 0361     		str	r3, [r0, #16]
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* save The key value */
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K0LR = CRYP_KeyInitStruct->CRYP_Key0Left; 
+ 522              		.loc 1 528 0
+ 523 006a 0B68     		ldr	r3, [r1, #0]
+ 524 006c 4361     		str	r3, [r0, #20]
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K0RR = CRYP_KeyInitStruct->CRYP_Key0Right; 
+ 525              		.loc 1 529 0
+ 526 006e 4B68     		ldr	r3, [r1, #4]
+ 527 0070 8361     		str	r3, [r0, #24]
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K1LR = CRYP_KeyInitStruct->CRYP_Key1Left; 
+ 528              		.loc 1 530 0
+ 529 0072 8B68     		ldr	r3, [r1, #8]
+ 530 0074 C361     		str	r3, [r0, #28]
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K1RR = CRYP_KeyInitStruct->CRYP_Key1Right; 
+ 531              		.loc 1 531 0
+ 532 0076 CB68     		ldr	r3, [r1, #12]
+ 533 0078 0362     		str	r3, [r0, #32]
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K2LR = CRYP_KeyInitStruct->CRYP_Key2Left; 
+ 534              		.loc 1 532 0
+ 535 007a 0B69     		ldr	r3, [r1, #16]
+ 536 007c 4362     		str	r3, [r0, #36]
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K2RR = CRYP_KeyInitStruct->CRYP_Key2Right; 
+ 537              		.loc 1 533 0
+ 538 007e 4B69     		ldr	r3, [r1, #20]
+ 539 0080 8362     		str	r3, [r0, #40]
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K3LR = CRYP_KeyInitStruct->CRYP_Key3Left; 
+ 540              		.loc 1 534 0
+ 541 0082 8B69     		ldr	r3, [r1, #24]
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K3RR = CRYP_KeyInitStruct->CRYP_Key3Right; 
+ 542              		.loc 1 535 0
+ 543 0084 C969     		ldr	r1, [r1, #28]
+ 544              	.LVL24:
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP_ContextSave->CRYP_K3LR = CRYP_KeyInitStruct->CRYP_Key3Left; 
+ 545              		.loc 1 534 0
+ 546 0086 C362     		str	r3, [r0, #44]
+ 547              		.loc 1 535 0
+ 548 0088 0163     		str	r1, [r0, #48]
+ 549              	.LVL25:
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    /* When needed, save the DMA status (pointers for IN and OUT messages, 
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       number of remaining bytes, etc.) */
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     status = SUCCESS;
+ 550              		.loc 1 540 0
+ 551 008a 1046     		mov	r0, r2
+ 552              	.LVL26:
+ 553 008c 00E0     		b	.L45
+ 554              	.LVL27:
+ 555              	.L47:
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     status = ERROR;
+ 556              		.loc 1 504 0
+ 557 008e 0020     		movs	r0, #0
+ 558              	.LVL28:
+ 559              	.L45:
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    return status;
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 560              		.loc 1 544 0
+ 561 0090 7CBD     		pop	{r2, r3, r4, r5, r6, pc}
+ 562              	.L50:
+ 563 0092 00BF     		.align	2
+ 564              	.L49:
+ 565 0094 00000650 		.word	1342570496
+ 566              		.cfi_endproc
+ 567              	.LFE67:
+ 569              		.section	.text.CRYP_RestoreContext,"ax",%progbits
+ 570              		.align	1
+ 571              		.global	CRYP_RestoreContext
+ 572              		.thumb
+ 573              		.thumb_func
+ 575              	CRYP_RestoreContext:
+ 576              	.LFB68:
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Restores the CRYP peripheral Context.
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @note   Since teh DMA transfer is stopped in CRYP_SaveContext() function,
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         after restoring the context, you have to enable the DMA again (if the
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         DMA was previously used).  
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_ContextRestore: pointer to a CRYP_Context structure that contains
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         the repository for saved context.
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @note   The data that were saved during context saving must be rewrited into
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         the IN FIFO.
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_RestoreContext(CRYP_Context* CRYP_ContextRestore)  
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 577              		.loc 1 558 0
+ 578              		.cfi_startproc
+ 579              		@ args = 0, pretend = 0, frame = 0
+ 580              		@ frame_needed = 0, uses_anonymous_args = 0
+ 581              		@ link register save eliminated.
+ 582              	.LVL29:
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Configure the processor with the saved configuration */
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR = CRYP_ContextRestore->CR_bits9to2;
+ 583              		.loc 1 561 0
+ 584 0000 0268     		ldr	r2, [r0, #0]
+ 585 0002 0F4B     		ldr	r3, .L52
+ 586 0004 1A60     		str	r2, [r3, #0]
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* restore The key value */
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K0LR = CRYP_ContextRestore->CRYP_K0LR; 
+ 587              		.loc 1 564 0
+ 588 0006 4169     		ldr	r1, [r0, #20]
+ 589 0008 1962     		str	r1, [r3, #32]
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K0RR = CRYP_ContextRestore->CRYP_K0RR;
+ 590              		.loc 1 565 0
+ 591 000a 8269     		ldr	r2, [r0, #24]
+ 592 000c 5A62     		str	r2, [r3, #36]
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K1LR = CRYP_ContextRestore->CRYP_K1LR;
+ 593              		.loc 1 566 0
+ 594 000e C169     		ldr	r1, [r0, #28]
+ 595 0010 9962     		str	r1, [r3, #40]
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K1RR = CRYP_ContextRestore->CRYP_K1RR;
+ 596              		.loc 1 567 0
+ 597 0012 026A     		ldr	r2, [r0, #32]
+ 598 0014 DA62     		str	r2, [r3, #44]
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K2LR = CRYP_ContextRestore->CRYP_K2LR;
+ 599              		.loc 1 568 0
+ 600 0016 416A     		ldr	r1, [r0, #36]
+ 601 0018 1963     		str	r1, [r3, #48]
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K2RR = CRYP_ContextRestore->CRYP_K2RR;
+ 602              		.loc 1 569 0
+ 603 001a 826A     		ldr	r2, [r0, #40]
+ 604 001c 5A63     		str	r2, [r3, #52]
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K3LR = CRYP_ContextRestore->CRYP_K3LR;
+ 605              		.loc 1 570 0
+ 606 001e C16A     		ldr	r1, [r0, #44]
+ 607 0020 9963     		str	r1, [r3, #56]
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->K3RR = CRYP_ContextRestore->CRYP_K3RR;
+ 608              		.loc 1 571 0
+ 609 0022 026B     		ldr	r2, [r0, #48]
+ 610 0024 DA63     		str	r2, [r3, #60]
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* and the initialization vectors. */
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV0LR = CRYP_ContextRestore->CRYP_IV0LR;
+ 611              		.loc 1 574 0
+ 612 0026 4168     		ldr	r1, [r0, #4]
+ 613 0028 1964     		str	r1, [r3, #64]
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV0RR = CRYP_ContextRestore->CRYP_IV0RR;
+ 614              		.loc 1 575 0
+ 615 002a 8268     		ldr	r2, [r0, #8]
+ 616 002c 5A64     		str	r2, [r3, #68]
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV1LR = CRYP_ContextRestore->CRYP_IV1LR;
+ 617              		.loc 1 576 0
+ 618 002e C168     		ldr	r1, [r0, #12]
+ 619 0030 9964     		str	r1, [r3, #72]
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->IV1RR = CRYP_ContextRestore->CRYP_IV1RR;
+ 620              		.loc 1 577 0
+ 621 0032 0069     		ldr	r0, [r0, #16]
+ 622              	.LVL30:
+ 623 0034 D864     		str	r0, [r3, #76]
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Enable the cryptographic processor */
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP->CR |= CRYP_CR_CRYPEN;
+ 624              		.loc 1 580 0
+ 625 0036 1A68     		ldr	r2, [r3, #0]
+ 626 0038 42F40041 		orr	r1, r2, #32768
+ 627 003c 1960     		str	r1, [r3, #0]
+ 628 003e 7047     		bx	lr
+ 629              	.L53:
+ 630              		.align	2
+ 631              	.L52:
+ 632 0040 00000650 		.word	1342570496
+ 633              		.cfi_endproc
+ 634              	.LFE68:
+ 636              		.section	.text.CRYP_DMACmd,"ax",%progbits
+ 637              		.align	1
+ 638              		.global	CRYP_DMACmd
+ 639              		.thumb
+ 640              		.thumb_func
+ 642              	CRYP_DMACmd:
+ 643              	.LFB69:
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @}
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @defgroup CRYP_Group4 CRYP's DMA interface Configuration function
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *  @brief   CRYP's DMA interface Configuration function 
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @verbatim   
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                    CRYP's DMA interface Configuration function
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================  
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   This section provides functions allowing to configure the DMA interface for 
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   CRYP data input and output transfer.
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   When the DMA mode is enabled (using the CRYP_DMACmd() function), data can be 
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   transferred:
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   - From memory to the CRYP IN FIFO using the DMA peripheral by enabling 
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     the CRYP_DMAReq_DataIN request.
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   - From the CRYP OUT FIFO to the memory using the DMA peripheral by enabling 
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     the CRYP_DMAReq_DataOUT request.
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @endverbatim
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Enables or disables the CRYP DMA interface.
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_DMAReq: specifies the CRYP DMA transfer request to be enabled or disabled.
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           This parameter can be any combination of the following values:
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_DMAReq_DataOUT: DMA for outgoing(Tx) data transfer
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_DMAReq_DataIN: DMA for incoming(Rx) data transfer
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  NewState: new state of the selected CRYP DMA transfer request.
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_DMACmd(uint8_t CRYP_DMAReq, FunctionalState NewState)
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 644              		.loc 1 619 0
+ 645              		.cfi_startproc
+ 646              		@ args = 0, pretend = 0, frame = 0
+ 647              		@ frame_needed = 0, uses_anonymous_args = 0
+ 648              		@ link register save eliminated.
+ 649              	.LVL31:
+ 650 0000 054B     		ldr	r3, .L58
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the parameters */
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_CRYP_DMAREQ(CRYP_DMAReq));
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if (NewState != DISABLE)
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Enable the selected CRYP DMA request */
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->DMACR |= CRYP_DMAReq;
+ 651              		.loc 1 627 0
+ 652 0002 1A69     		ldr	r2, [r3, #16]
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if (NewState != DISABLE)
+ 653              		.loc 1 624 0
+ 654 0004 09B1     		cbz	r1, .L55
+ 655              		.loc 1 627 0
+ 656 0006 1043     		orrs	r0, r0, r2
+ 657              	.LVL32:
+ 658 0008 03E0     		b	.L57
+ 659              	.LVL33:
+ 660              	.L55:
+ 628:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 629:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 631:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Disable the selected CRYP DMA request */
+ 632:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->DMACR &= (uint8_t)~CRYP_DMAReq;
+ 661              		.loc 1 632 0
+ 662 000a 22EA0000 		bic	r0, r2, r0
+ 663              	.LVL34:
+ 664 000e 00F0FF00 		and	r0, r0, #255
+ 665              	.L57:
+ 666 0012 1861     		str	r0, [r3, #16]
+ 667 0014 7047     		bx	lr
+ 668              	.L59:
+ 669 0016 00BF     		.align	2
+ 670              	.L58:
+ 671 0018 00000650 		.word	1342570496
+ 672              		.cfi_endproc
+ 673              	.LFE69:
+ 675              		.section	.text.CRYP_ITConfig,"ax",%progbits
+ 676              		.align	1
+ 677              		.global	CRYP_ITConfig
+ 678              		.thumb
+ 679              		.thumb_func
+ 681              	CRYP_ITConfig:
+ 682              	.LFB70:
+ 633:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 634:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 635:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 636:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @}
+ 637:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 638:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 639:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /** @defgroup CRYP_Group5 Interrupts and flags management functions
+ 640:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *  @brief   Interrupts and flags management functions
+ 641:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  *
+ 642:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @verbatim   
+ 643:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================
+ 644:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                    Interrupts and flags management functions
+ 645:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****  ===============================================================================  
+ 646:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 647:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   This section provides functions allowing to configure the CRYP Interrupts and 
+ 648:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   to get the status and Interrupts pending bits.
+ 649:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 650:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   The CRYP provides 2 Interrupts sources and 7 Flags:
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   Flags :
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ------- 
+ 654:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                           
+ 655:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      1. CRYP_FLAG_IFEM :  Set when Input FIFO is empty.
+ 656:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                           This Flag is cleared only by hardware.
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      2. CRYP_FLAG_IFNF :  Set when Input FIFO is not full.
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                           This Flag is cleared only by hardware.
+ 660:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 661:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 662:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      3. CRYP_FLAG_INRIS  : Set when Input FIFO Raw interrupt is pending 
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            it gives the raw interrupt state prior to masking 
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            of the input FIFO service interrupt.
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            This Flag is cleared only by hardware.
+ 666:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      4. CRYP_FLAG_OFNE   : Set when Output FIFO not empty.
+ 668:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            This Flag is cleared only by hardware.
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****         
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      5. CRYP_FLAG_OFFU   : Set when Output FIFO is full.
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            This Flag is cleared only by hardware.
+ 672:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            
+ 673:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      6. CRYP_FLAG_OUTRIS : Set when Output FIFO Raw interrupt is pending 
+ 674:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            it gives the raw interrupt state prior to masking 
+ 675:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            of the output FIFO service interrupt.
+ 676:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            This Flag is cleared only by hardware.
+ 677:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                                
+ 678:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****      7. CRYP_FLAG_BUSY   : Set when the CRYP core is currently processing a 
+ 679:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            block of data or a key preparation (for AES 
+ 680:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            decryption).
+ 681:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            This Flag is cleared only by hardware.
+ 682:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            To clear it, the CRYP core must be disabled and the 
+ 683:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                            last processing has completed. 
+ 684:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 685:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   Interrupts :
+ 686:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ------------
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 688:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    1. CRYP_IT_INI   : The input FIFO service interrupt is asserted when there 
+ 689:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       are less than 4 words in the input FIFO.
+ 690:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       This interrupt is associated to CRYP_FLAG_INRIS flag.
+ 691:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 692:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                 @note This interrupt is cleared by performing write operations 
+ 693:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       to the input FIFO until it holds 4 or more words. The 
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       input FIFO service interrupt INMIS is enabled with the 
+ 695:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       CRYP enable bit. Consequently, when CRYP is disabled, the 
+ 696:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       INMIS signal is low even if the input FIFO is empty.
+ 697:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 698:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 699:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 700:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****    2. CRYP_IT_OUTI  : The output FIFO service interrupt is asserted when there 
+ 701:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       is one or more (32-bit word) data items in the output FIFO.
+ 702:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       This interrupt is associated to CRYP_FLAG_OUTRIS flag.
+ 703:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 704:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                 @note This interrupt is cleared by reading data from the output 
+ 705:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       FIFO until there is no valid (32-bit) word left (that is, 
+ 706:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       the interrupt follows the state of the OFNE (output FIFO 
+ 707:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****                       not empty) flag).
+ 708:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 709:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 710:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   Managing the CRYP controller events :
+ 711:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ------------------------------------ 
+ 712:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   The user should identify which mode will be used in his application to manage 
+ 713:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   the CRYP controller events: Polling mode or Interrupt mode.
+ 714:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 715:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   1.  In the Polling Mode it is advised to use the following functions:
+ 716:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       - CRYP_GetFlagStatus() : to check if flags events occur. 
+ 717:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 718:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   @note  The CRYPT flags do not need to be cleared since they are cleared as 
+ 719:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****          soon as the associated event are reset.   
+ 720:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 721:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 722:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   2.  In the Interrupt Mode it is advised to use the following functions:
+ 723:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       - CRYP_ITConfig()       : to enable or disable the interrupt source.
+ 724:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****       - CRYP_GetITStatus()    : to check if Interrupt occurs.
+ 725:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 726:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   @note  The CRYPT interrupts have no pending bits, the interrupt is cleared as 
+ 727:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****          soon as the associated event is reset. 
+ 728:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 729:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** @endverbatim
+ 730:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @{
+ 731:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */ 
+ 732:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 733:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 734:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Enables or disables the specified CRYP interrupts.
+ 735:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_IT: specifies the CRYP interrupt source to be enabled or disabled.
+ 736:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          This parameter can be any combination of the following values:
+ 737:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_IT_INI: Input FIFO interrupt
+ 738:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_IT_OUTI: Output FIFO interrupt
+ 739:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  NewState: new state of the specified CRYP interrupt.
+ 740:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           This parameter can be: ENABLE or DISABLE.
+ 741:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval None
+ 742:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 743:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** void CRYP_ITConfig(uint8_t CRYP_IT, FunctionalState NewState)
+ 744:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 683              		.loc 1 744 0
+ 684              		.cfi_startproc
+ 685              		@ args = 0, pretend = 0, frame = 0
+ 686              		@ frame_needed = 0, uses_anonymous_args = 0
+ 687              		@ link register save eliminated.
+ 688              	.LVL35:
+ 689 0000 054B     		ldr	r3, .L64
+ 745:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the parameters */
+ 746:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_CRYP_CONFIG_IT(CRYP_IT));
+ 747:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 748:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 749:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if (NewState != DISABLE)
+ 750:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 751:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Enable the selected CRYP interrupt */
+ 752:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->IMSCR |= CRYP_IT;
+ 690              		.loc 1 752 0
+ 691 0002 5A69     		ldr	r2, [r3, #20]
+ 749:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if (NewState != DISABLE)
+ 692              		.loc 1 749 0
+ 693 0004 09B1     		cbz	r1, .L61
+ 694              		.loc 1 752 0
+ 695 0006 1043     		orrs	r0, r0, r2
+ 696              	.LVL36:
+ 697 0008 03E0     		b	.L63
+ 698              	.LVL37:
+ 699              	.L61:
+ 753:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 754:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else
+ 755:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 756:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* Disable the selected CRYP interrupt */
+ 757:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     CRYP->IMSCR &= (uint8_t)~CRYP_IT;
+ 700              		.loc 1 757 0
+ 701 000a 22EA0000 		bic	r0, r2, r0
+ 702              	.LVL38:
+ 703 000e 00F0FF00 		and	r0, r0, #255
+ 704              	.L63:
+ 705 0012 5861     		str	r0, [r3, #20]
+ 706 0014 7047     		bx	lr
+ 707              	.L65:
+ 708 0016 00BF     		.align	2
+ 709              	.L64:
+ 710 0018 00000650 		.word	1342570496
+ 711              		.cfi_endproc
+ 712              	.LFE70:
+ 714              		.section	.text.CRYP_GetITStatus,"ax",%progbits
+ 715              		.align	1
+ 716              		.global	CRYP_GetITStatus
+ 717              		.thumb
+ 718              		.thumb_func
+ 720              	CRYP_GetITStatus:
+ 721              	.LFB71:
+ 758:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 759:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 760:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 761:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 762:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Checks whether the specified CRYP interrupt has occurred or not.
+ 763:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @note   This function checks the status of the masked interrupt (i.e the 
+ 764:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *         interrupt should be previously enabled).     
+ 765:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_IT: specifies the CRYP (masked) interrupt source to check.
+ 766:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *           This parameter can be one of the following values:
+ 767:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_IT_INI: Input FIFO interrupt
+ 768:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_IT_OUTI: Output FIFO interrupt
+ 769:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval The new state of CRYP_IT (SET or RESET).
+ 770:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 771:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** ITStatus CRYP_GetITStatus(uint8_t CRYP_IT)
+ 772:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 722              		.loc 1 772 0
+ 723              		.cfi_startproc
+ 724              		@ args = 0, pretend = 0, frame = 0
+ 725              		@ frame_needed = 0, uses_anonymous_args = 0
+ 726              		@ link register save eliminated.
+ 727              	.LVL39:
+ 773:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   ITStatus bitstatus = RESET;
+ 774:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the parameters */
+ 775:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_CRYP_GET_IT(CRYP_IT));
+ 776:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 777:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the status of the specified CRYP interrupt */
+ 778:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if ((CRYP->MISR &  CRYP_IT) != (uint8_t)RESET)
+ 728              		.loc 1 778 0
+ 729 0000 034B     		ldr	r3, .L67
+ 730 0002 D969     		ldr	r1, [r3, #28]
+ 731              	.LVL40:
+ 732 0004 0842     		tst	r0, r1
+ 779:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 780:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* CRYP_IT is set */
+ 781:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     bitstatus = SET;
+ 782:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 783:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else
+ 784:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 785:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* CRYP_IT is reset */
+ 786:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     bitstatus = RESET;
+ 787:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 788:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Return the CRYP_IT status */
+ 789:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   return bitstatus;
+ 790:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 733              		.loc 1 790 0
+ 734 0006 0CBF     		ite	eq
+ 735 0008 0020     		moveq	r0, #0
+ 736 000a 0120     		movne	r0, #1
+ 737              	.LVL41:
+ 738 000c 7047     		bx	lr
+ 739              	.L68:
+ 740 000e 00BF     		.align	2
+ 741              	.L67:
+ 742 0010 00000650 		.word	1342570496
+ 743              		.cfi_endproc
+ 744              	.LFE71:
+ 746              		.section	.text.CRYP_GetFlagStatus,"ax",%progbits
+ 747              		.align	1
+ 748              		.global	CRYP_GetFlagStatus
+ 749              		.thumb
+ 750              		.thumb_func
+ 752              	CRYP_GetFlagStatus:
+ 753              	.LFB72:
+ 791:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 792:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** /**
+ 793:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @brief  Checks whether the specified CRYP flag is set or not.
+ 794:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @param  CRYP_FLAG: specifies the CRYP flag to check.
+ 795:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *          This parameter can be one of the following values:
+ 796:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_FLAG_IFEM: Input FIFO Empty flag.
+ 797:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_FLAG_IFNF: Input FIFO Not Full flag.
+ 798:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_FLAG_OFNE: Output FIFO Not Empty flag.
+ 799:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_FLAG_OFFU: Output FIFO Full flag.
+ 800:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_FLAG_BUSY: Busy flag.
+ 801:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_FLAG_OUTRIS: Output FIFO raw interrupt flag.
+ 802:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   *            @arg CRYP_FLAG_INRIS: Input FIFO raw interrupt flag.
+ 803:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   * @retval The new state of CRYP_FLAG (SET or RESET).
+ 804:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   */
+ 805:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** FlagStatus CRYP_GetFlagStatus(uint8_t CRYP_FLAG)
+ 806:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** {
+ 754              		.loc 1 806 0
+ 755              		.cfi_startproc
+ 756              		@ args = 0, pretend = 0, frame = 0
+ 757              		@ frame_needed = 0, uses_anonymous_args = 0
+ 758              		@ link register save eliminated.
+ 759              	.LVL42:
+ 807:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   FlagStatus bitstatus = RESET;
+ 808:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   uint32_t tempreg = 0;
+ 809:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 810:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the parameters */
+ 811:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   assert_param(IS_CRYP_GET_FLAG(CRYP_FLAG));
+ 812:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 813:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* check if the FLAG is in RISR register */
+ 814:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if ((CRYP_FLAG & FLAG_MASK) != 0x00) 
+ 760              		.loc 1 814 0
+ 761 0000 00F02002 		and	r2, r0, #32
+ 762 0004 D1B2     		uxtb	r1, r2
+ 763 0006 054B     		ldr	r3, .L72
+ 764 0008 09B1     		cbz	r1, .L70
+ 815:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 816:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     tempreg = CRYP->RISR;
+ 765              		.loc 1 816 0
+ 766 000a 9A69     		ldr	r2, [r3, #24]
+ 767              	.LVL43:
+ 768 000c 00E0     		b	.L71
+ 769              	.LVL44:
+ 770              	.L70:
+ 817:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 818:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else  /* The FLAG is in SR register */
+ 819:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 820:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     tempreg = CRYP->SR;
+ 771              		.loc 1 820 0
+ 772 000e 5A68     		ldr	r2, [r3, #4]
+ 773              	.LVL45:
+ 774              	.L71:
+ 821:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 822:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 823:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 824:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Check the status of the specified CRYP flag */
+ 825:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   if ((tempreg & CRYP_FLAG ) != (uint8_t)RESET)
+ 775              		.loc 1 825 0
+ 776 0010 0242     		tst	r2, r0
+ 826:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 827:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* CRYP_FLAG is set */
+ 828:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     bitstatus = SET;
+ 829:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 830:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   else
+ 831:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   {
+ 832:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     /* CRYP_FLAG is reset */
+ 833:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****     bitstatus = RESET;
+ 834:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   }
+ 835:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** 
+ 836:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   /* Return the CRYP_FLAG status */
+ 837:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c ****   return  bitstatus;
+ 838:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp.c **** }
+ 777              		.loc 1 838 0
+ 778 0012 0CBF     		ite	eq
+ 779 0014 0020     		moveq	r0, #0
+ 780 0016 0120     		movne	r0, #1
+ 781              	.LVL46:
+ 782 0018 7047     		bx	lr
+ 783              	.L73:
+ 784 001a 00BF     		.align	2
+ 785              	.L72:
+ 786 001c 00000650 		.word	1342570496
+ 787              		.cfi_endproc
+ 788              	.LFE72:
+ 790              		.text
+ 791              	.Letext0:
+ 792              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 793              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 794              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_cryp.h"
+ 795              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 796              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_cryp.c
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:19     .text.CRYP_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:24     .text.CRYP_DeInit:00000000 CRYP_DeInit
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:55     .text.CRYP_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:60     .text.CRYP_Init:00000000 CRYP_Init
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:135    .text.CRYP_Init:00000060 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:140    .text.CRYP_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:145    .text.CRYP_StructInit:00000000 CRYP_StructInit
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:167    .text.CRYP_KeyInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:172    .text.CRYP_KeyInit:00000000 CRYP_KeyInit
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:210    .text.CRYP_KeyInit:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:215    .text.CRYP_KeyStructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:220    .text.CRYP_KeyStructInit:00000000 CRYP_KeyStructInit
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:250    .text.CRYP_IVInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:255    .text.CRYP_IVInit:00000000 CRYP_IVInit
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:281    .text.CRYP_IVInit:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:286    .text.CRYP_IVStructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:291    .text.CRYP_IVStructInit:00000000 CRYP_IVStructInit
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:313    .text.CRYP_FIFOFlush:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:318    .text.CRYP_FIFOFlush:00000000 CRYP_FIFOFlush
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:334    .text.CRYP_FIFOFlush:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:339    .text.CRYP_Cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:344    .text.CRYP_Cmd:00000000 CRYP_Cmd
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:372    .text.CRYP_Cmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:377    .text.CRYP_DataIn:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:382    .text.CRYP_DataIn:00000000 CRYP_DataIn
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:397    .text.CRYP_DataIn:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:402    .text.CRYP_DataOut:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:407    .text.CRYP_DataOut:00000000 CRYP_DataOut
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:422    .text.CRYP_DataOut:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:427    .text.CRYP_SaveContext:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:432    .text.CRYP_SaveContext:00000000 CRYP_SaveContext
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:565    .text.CRYP_SaveContext:00000094 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:570    .text.CRYP_RestoreContext:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:575    .text.CRYP_RestoreContext:00000000 CRYP_RestoreContext
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:632    .text.CRYP_RestoreContext:00000040 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:637    .text.CRYP_DMACmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:642    .text.CRYP_DMACmd:00000000 CRYP_DMACmd
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:671    .text.CRYP_DMACmd:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:676    .text.CRYP_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:681    .text.CRYP_ITConfig:00000000 CRYP_ITConfig
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:710    .text.CRYP_ITConfig:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:715    .text.CRYP_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:720    .text.CRYP_GetITStatus:00000000 CRYP_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:742    .text.CRYP_GetITStatus:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:747    .text.CRYP_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:752    .text.CRYP_GetFlagStatus:00000000 CRYP_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\cclhOEQ0.s:786    .text.CRYP_GetFlagStatus:0000001c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_AHB2PeriphResetCmd

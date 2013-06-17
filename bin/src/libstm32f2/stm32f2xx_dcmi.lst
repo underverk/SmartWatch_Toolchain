@@ -1,0 +1,1147 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_dcmi.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.DCMI_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	DCMI_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	DCMI_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_dcmi.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @file    stm32f2xx_dcmi.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          functionalities of the DCMI peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *           - Initialization and Configuration
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *           - Image capture functions  
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *           - Interrupts and flags management
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  @verbatim  
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *        
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          ===================================================================
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                                 How to use this driver
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          ===================================================================  
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         The sequence below describes how to use this driver to capture image
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         from a camera module connected to the DCMI Interface.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         This sequence does not take into account the configuration of the  
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         camera module, which should be made before to configure and enable
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         the DCMI to capture images.
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *           
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          1. Enable the clock for the DCMI and associated GPIOs using the following functions:
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          2. DCMI pins configuration 
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *             - Connect the involved DCMI pins to AF13 using the following function 
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_DCMI); 
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *             - Configure these DCMI pins in alternate function mode by calling the function
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 GPIO_Init();
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *    
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          3. Declare a DCMI_InitTypeDef structure, for example:
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 DCMI_InitTypeDef  DCMI_InitStructure;
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *             and fill the DCMI_InitStructure variable with the allowed values
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *             of the structure member.
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          4. Initialize the DCMI interface by calling the function
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 DCMI_Init(&DCMI_InitStructure); 
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          5. Configure the DMA2_Stream1 channel1 to transfer Data from DCMI DR
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *             register to the destination memory buffer.
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          6. Enable DCMI interface using the function
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 DCMI_Cmd(ENABLE);
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         7. Start the image capture using the function
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 DCMI_CaptureCmd(ENABLE);
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *                 
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         8. At this stage the DCMI interface waits for the first start of frame,
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            then a DMA request is generated continuously/once (depending on the
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            mode used, Continuous/Snapshot) to transfer the received data into
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            the destination memory. 
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *   
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  @note  If you need to capture only a rectangular window from the received
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         image, you have to use the DCMI_CROPConfig() function to configure 
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         the coordinates and size of the window to be captured, then enable 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         the Crop feature using DCMI_CROPCmd(ENABLE);  
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         In this case, the Crop configuration should be made before to enable
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         and start the DCMI interface. 
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *        
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  @endverbatim   
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *  
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   ******************************************************************************
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @attention
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * You may not use this file except in compliance with the License.
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * You may obtain a copy of the License at:
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * Unless required by applicable law or agreed to in writing, software 
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * See the License for the specific language governing permissions and
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * limitations under the License.
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   ******************************************************************************
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /* Includes ------------------------------------------------------------------*/
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** #include "stm32f2xx_dcmi.h"
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** #include "stm32f2xx_rcc.h"
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @{
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /** @defgroup DCMI 
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief DCMI driver modules
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @{
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */ 
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /* Private typedef -----------------------------------------------------------*/
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /* Private define ------------------------------------------------------------*/
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /* Private macro -------------------------------------------------------------*/
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /* Private variables ---------------------------------------------------------*/
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /* Private function prototypes -----------------------------------------------*/
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /* Private functions ---------------------------------------------------------*/
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /** @defgroup DCMI_Private_Functions
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @{
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */ 
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /** @defgroup DCMI_Group1 Initialization and Configuration functions
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  *  @brief   Initialization and Configuration functions 
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  *
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** @verbatim   
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  ===============================================================================
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                   Initialization and Configuration functions
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  ===============================================================================  
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** @endverbatim
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @{
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Deinitializes the DCMI registers to their default reset values.
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  None
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_DeInit(void)
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+  27              		.loc 1 129 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CR = 0x0;
+  32              		.loc 1 130 0
+  33 0000 054B     		ldr	r3, .L2
+  34 0002 0022     		movs	r2, #0
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->IER = 0x0;
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ICR = 0x1F;
+  35              		.loc 1 132 0
+  36 0004 1F21     		movs	r1, #31
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CR = 0x0;
+  37              		.loc 1 130 0
+  38 0006 1A60     		str	r2, [r3, #0]
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->IER = 0x0;
+  39              		.loc 1 131 0
+  40 0008 DA60     		str	r2, [r3, #12]
+  41              		.loc 1 132 0
+  42 000a 5961     		str	r1, [r3, #20]
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ESCR = 0x0;
+  43              		.loc 1 133 0
+  44 000c 9A61     		str	r2, [r3, #24]
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ESUR = 0x0;
+  45              		.loc 1 134 0
+  46 000e DA61     		str	r2, [r3, #28]
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CWSTRTR = 0x0;
+  47              		.loc 1 135 0
+  48 0010 1A62     		str	r2, [r3, #32]
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CWSIZER = 0x0;
+  49              		.loc 1 136 0
+  50 0012 5A62     		str	r2, [r3, #36]
+  51 0014 7047     		bx	lr
+  52              	.L3:
+  53 0016 00BF     		.align	2
+  54              	.L2:
+  55 0018 00000550 		.word	1342504960
+  56              		.cfi_endproc
+  57              	.LFE56:
+  59              		.section	.text.DCMI_Init,"ax",%progbits
+  60              		.align	1
+  61              		.global	DCMI_Init
+  62              		.thumb
+  63              		.thumb_func
+  65              	DCMI_Init:
+  66              	.LFB57:
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Initializes the DCMI according to the specified parameters in the DCMI_InitStruct.
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_InitStruct: pointer to a DCMI_InitTypeDef structure that contains 
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         the configuration information for the DCMI.
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_Init(DCMI_InitTypeDef* DCMI_InitStruct)
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+  67              		.loc 1 146 0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+  71              	.LVL0:
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   uint32_t temp = 0x0;
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_CAPTURE_MODE(DCMI_InitStruct->DCMI_CaptureMode));
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_SYNCHRO(DCMI_InitStruct->DCMI_SynchroMode));
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_PCKPOLARITY(DCMI_InitStruct->DCMI_PCKPolarity));
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_VSPOLARITY(DCMI_InitStruct->DCMI_VSPolarity));
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_HSPOLARITY(DCMI_InitStruct->DCMI_HSPolarity));
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_CAPTURE_RATE(DCMI_InitStruct->DCMI_CaptureRate));
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_EXTENDED_DATA(DCMI_InitStruct->DCMI_ExtendedDataMode));
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* The DCMI configuration registers should be programmed correctly before 
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   enabling the CR_ENABLE Bit and the CR_CAPTURE Bit */
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CR &= ~(DCMI_CR_ENABLE | DCMI_CR_CAPTURE);
+  72              		.loc 1 160 0
+  73 0000 0E4B     		ldr	r3, .L5
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+  74              		.loc 1 146 0
+  75 0002 10B5     		push	{r4, lr}
+  76              	.LCFI0:
+  77              		.cfi_def_cfa_offset 8
+  78              		.cfi_offset 4, -8
+  79              		.cfi_offset 14, -4
+  80              		.loc 1 160 0
+  81 0004 1A68     		ldr	r2, [r3, #0]
+  82 0006 22F48041 		bic	r1, r2, #16384
+  83 000a 21F00104 		bic	r4, r1, #1
+  84 000e 1C60     		str	r4, [r3, #0]
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****    
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Reset the old DCMI configuration */
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   temp = DCMI->CR;
+  85              		.loc 1 163 0
+  86 0010 1A68     		ldr	r2, [r3, #0]
+  87              	.LVL1:
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   temp &= ~((uint32_t)DCMI_CR_CM     | DCMI_CR_ESS   | DCMI_CR_PCKPOL |
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                       DCMI_CR_HSPOL  | DCMI_CR_VSPOL | DCMI_CR_FCRC_0 | 
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                       DCMI_CR_FCRC_1 | DCMI_CR_EDM_0 | DCMI_CR_EDM_1); 
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                   
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Sets the new configuration of the DCMI peripheral */
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   temp |= ((uint32_t)DCMI_InitStruct->DCMI_CaptureMode |
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                      DCMI_InitStruct->DCMI_SynchroMode |
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                      DCMI_InitStruct->DCMI_PCKPolarity |
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                      DCMI_InitStruct->DCMI_VSPolarity |
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                      DCMI_InitStruct->DCMI_HSPolarity |
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                      DCMI_InitStruct->DCMI_CaptureRate |
+  88              		.loc 1 175 0
+  89 0012 4488     		ldrh	r4, [r0, #2]
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   temp &= ~((uint32_t)DCMI_CR_CM     | DCMI_CR_ESS   | DCMI_CR_PCKPOL |
+  90              		.loc 1 165 0
+  91 0014 22F47F61 		bic	r1, r2, #4080
+  92              		.loc 1 175 0
+  93 0018 0288     		ldrh	r2, [r0, #0]
+  94              	.LVL2:
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   temp &= ~((uint32_t)DCMI_CR_CM     | DCMI_CR_ESS   | DCMI_CR_PCKPOL |
+  95              		.loc 1 165 0
+  96 001a 21F00201 		bic	r1, r1, #2
+  97              	.LVL3:
+  98              		.loc 1 175 0
+  99 001e 2243     		orrs	r2, r2, r4
+ 100 0020 8488     		ldrh	r4, [r0, #4]
+ 101 0022 2243     		orrs	r2, r2, r4
+ 102 0024 C488     		ldrh	r4, [r0, #6]
+ 103 0026 2243     		orrs	r2, r2, r4
+ 104 0028 0489     		ldrh	r4, [r0, #8]
+ 105 002a 2243     		orrs	r2, r2, r4
+ 106 002c 4489     		ldrh	r4, [r0, #10]
+ 107 002e 8089     		ldrh	r0, [r0, #12]
+ 108              	.LVL4:
+ 109 0030 2243     		orrs	r2, r2, r4
+ 110 0032 0243     		orrs	r2, r2, r0
+ 111 0034 92B2     		uxth	r2, r2
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   temp |= ((uint32_t)DCMI_InitStruct->DCMI_CaptureMode |
+ 112              		.loc 1 170 0
+ 113 0036 0A43     		orrs	r2, r2, r1
+ 114              	.LVL5:
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                      DCMI_InitStruct->DCMI_ExtendedDataMode);
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CR = temp;                              
+ 115              		.loc 1 178 0
+ 116 0038 1A60     		str	r2, [r3, #0]
+ 117 003a 10BD     		pop	{r4, pc}
+ 118              	.L6:
+ 119              		.align	2
+ 120              	.L5:
+ 121 003c 00000550 		.word	1342504960
+ 122              		.cfi_endproc
+ 123              	.LFE57:
+ 125              		.section	.text.DCMI_StructInit,"ax",%progbits
+ 126              		.align	1
+ 127              		.global	DCMI_StructInit
+ 128              		.thumb
+ 129              		.thumb_func
+ 131              	DCMI_StructInit:
+ 132              	.LFB58:
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Fills each DCMI_InitStruct member with its default value.
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_InitStruct : pointer to a DCMI_InitTypeDef structure which will
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         be initialized.
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_StructInit(DCMI_InitTypeDef* DCMI_InitStruct)
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 133              		.loc 1 188 0
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 0
+ 136              		@ frame_needed = 0, uses_anonymous_args = 0
+ 137              		@ link register save eliminated.
+ 138              	.LVL6:
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Set the default configuration */
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI_InitStruct->DCMI_CaptureMode = DCMI_CaptureMode_Continuous;
+ 139              		.loc 1 190 0
+ 140 0000 0023     		movs	r3, #0
+ 141 0002 0380     		strh	r3, [r0, #0]	@ movhi
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI_InitStruct->DCMI_SynchroMode = DCMI_SynchroMode_Hardware;
+ 142              		.loc 1 191 0
+ 143 0004 4380     		strh	r3, [r0, #2]	@ movhi
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI_InitStruct->DCMI_PCKPolarity = DCMI_PCKPolarity_Falling;
+ 144              		.loc 1 192 0
+ 145 0006 8380     		strh	r3, [r0, #4]	@ movhi
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI_InitStruct->DCMI_VSPolarity = DCMI_VSPolarity_Low;
+ 146              		.loc 1 193 0
+ 147 0008 C380     		strh	r3, [r0, #6]	@ movhi
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI_InitStruct->DCMI_HSPolarity = DCMI_HSPolarity_Low;
+ 148              		.loc 1 194 0
+ 149 000a 0381     		strh	r3, [r0, #8]	@ movhi
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI_InitStruct->DCMI_CaptureRate = DCMI_CaptureRate_All_Frame;
+ 150              		.loc 1 195 0
+ 151 000c 4381     		strh	r3, [r0, #10]	@ movhi
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI_InitStruct->DCMI_ExtendedDataMode = DCMI_ExtendedDataMode_8b;
+ 152              		.loc 1 196 0
+ 153 000e 8381     		strh	r3, [r0, #12]	@ movhi
+ 154 0010 7047     		bx	lr
+ 155              		.cfi_endproc
+ 156              	.LFE58:
+ 158              		.section	.text.DCMI_CROPConfig,"ax",%progbits
+ 159              		.align	1
+ 160              		.global	DCMI_CROPConfig
+ 161              		.thumb
+ 162              		.thumb_func
+ 164              	DCMI_CROPConfig:
+ 165              	.LFB59:
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Initializes the DCMI peripheral CROP mode according to the specified
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         parameters in the DCMI_CROPInitStruct.
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @note   This function should be called before to enable and start the DCMI interface.   
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_CROPInitStruct:  pointer to a DCMI_CROPInitTypeDef structure that 
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         contains the configuration information for the DCMI peripheral CROP mode.
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_CROPConfig(DCMI_CROPInitTypeDef* DCMI_CROPInitStruct)
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {  
+ 166              		.loc 1 208 0
+ 167              		.cfi_startproc
+ 168              		@ args = 0, pretend = 0, frame = 0
+ 169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 170              		@ link register save eliminated.
+ 171              	.LVL7:
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Sets the CROP window coordinates */
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CWSTRTR = (uint32_t)((uint32_t)DCMI_CROPInitStruct->DCMI_HorizontalOffsetCount |
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                   ((uint32_t)DCMI_CROPInitStruct->DCMI_VerticalStartLine << 16));
+ 172              		.loc 1 211 0
+ 173 0000 0288     		ldrh	r2, [r0, #0]
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CWSTRTR = (uint32_t)((uint32_t)DCMI_CROPInitStruct->DCMI_HorizontalOffsetCount |
+ 174              		.loc 1 210 0
+ 175 0002 4388     		ldrh	r3, [r0, #2]
+ 176 0004 43EA0241 		orr	r1, r3, r2, lsl #16
+ 177 0008 034B     		ldr	r3, .L9
+ 178 000a 1962     		str	r1, [r3, #32]
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Sets the CROP window size */
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CWSIZER = (uint32_t)(DCMI_CROPInitStruct->DCMI_CaptureCount |
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                   ((uint32_t)DCMI_CROPInitStruct->DCMI_VerticalLineCount << 16));
+ 179              		.loc 1 215 0
+ 180 000c 8188     		ldrh	r1, [r0, #4]
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->CWSIZER = (uint32_t)(DCMI_CROPInitStruct->DCMI_CaptureCount |
+ 181              		.loc 1 214 0
+ 182 000e C088     		ldrh	r0, [r0, #6]
+ 183              	.LVL8:
+ 184 0010 40EA0142 		orr	r2, r0, r1, lsl #16
+ 185 0014 5A62     		str	r2, [r3, #36]
+ 186 0016 7047     		bx	lr
+ 187              	.L10:
+ 188              		.align	2
+ 189              	.L9:
+ 190 0018 00000550 		.word	1342504960
+ 191              		.cfi_endproc
+ 192              	.LFE59:
+ 194              		.section	.text.DCMI_CROPCmd,"ax",%progbits
+ 195              		.align	1
+ 196              		.global	DCMI_CROPCmd
+ 197              		.thumb
+ 198              		.thumb_func
+ 200              	DCMI_CROPCmd:
+ 201              	.LFB60:
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Enables or disables the DCMI Crop feature.
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @note   This function should be called before to enable and start the DCMI interface.
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  NewState: new state of the DCMI Crop feature. 
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_CROPCmd(FunctionalState NewState)
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 202              		.loc 1 226 0
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 206              		@ link register save eliminated.
+ 207              	.LVL9:
+ 208 0000 044B     		ldr	r3, .L16
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Enable the DCMI Crop feature */
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR |= (uint32_t)DCMI_CR_CROP;
+ 209              		.loc 1 233 0
+ 210 0002 1A68     		ldr	r2, [r3, #0]
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 211              		.loc 1 230 0
+ 212 0004 10B1     		cbz	r0, .L12
+ 213              		.loc 1 233 0
+ 214 0006 42F00400 		orr	r0, r2, #4
+ 215              	.LVL10:
+ 216 000a 01E0     		b	.L14
+ 217              	.LVL11:
+ 218              	.L12:
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Disable the DCMI Crop feature */
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR &= ~(uint32_t)DCMI_CR_CROP;
+ 219              		.loc 1 238 0
+ 220 000c 22F00400 		bic	r0, r2, #4
+ 221              	.LVL12:
+ 222              	.L14:
+ 223 0010 1860     		str	r0, [r3, #0]
+ 224 0012 7047     		bx	lr
+ 225              	.L17:
+ 226              		.align	2
+ 227              	.L16:
+ 228 0014 00000550 		.word	1342504960
+ 229              		.cfi_endproc
+ 230              	.LFE60:
+ 232              		.section	.text.DCMI_SetEmbeddedSynchroCodes,"ax",%progbits
+ 233              		.align	1
+ 234              		.global	DCMI_SetEmbeddedSynchroCodes
+ 235              		.thumb
+ 236              		.thumb_func
+ 238              	DCMI_SetEmbeddedSynchroCodes:
+ 239              	.LFB61:
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Sets the embedded synchronization codes
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_CodesInitTypeDef: pointer to a DCMI_CodesInitTypeDef structure that
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *         contains the embedded synchronization codes for the DCMI peripheral.
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_SetEmbeddedSynchroCodes(DCMI_CodesInitTypeDef* DCMI_CodesInitStruct)
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 240              		.loc 1 249 0
+ 241              		.cfi_startproc
+ 242              		@ args = 0, pretend = 0, frame = 0
+ 243              		@ frame_needed = 0, uses_anonymous_args = 0
+ 244              		@ link register save eliminated.
+ 245              	.LVL13:
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ESCR = (uint32_t)(DCMI_CodesInitStruct->DCMI_FrameStartCode |
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                           ((uint32_t)DCMI_CodesInitStruct->DCMI_LineStartCode << 8)|
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                           ((uint32_t)DCMI_CodesInitStruct->DCMI_LineEndCode << 16)|
+ 246              		.loc 1 252 0
+ 247 0000 8278     		ldrb	r2, [r0, #2]	@ zero_extendqisi2
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                           ((uint32_t)DCMI_CodesInitStruct->DCMI_LineStartCode << 8)|
+ 248              		.loc 1 251 0
+ 249 0002 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
+ 250              		.loc 1 252 0
+ 251 0004 1104     		lsls	r1, r2, #16
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ESCR = (uint32_t)(DCMI_CodesInitStruct->DCMI_FrameStartCode |
+ 252              		.loc 1 250 0
+ 253 0006 41EA0322 		orr	r2, r1, r3, lsl #8
+ 254 000a 0378     		ldrb	r3, [r0, #0]	@ zero_extendqisi2
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                           ((uint32_t)DCMI_CodesInitStruct->DCMI_FrameEndCode << 24));
+ 255              		.loc 1 253 0
+ 256 000c C078     		ldrb	r0, [r0, #3]	@ zero_extendqisi2
+ 257              	.LVL14:
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                           ((uint32_t)DCMI_CodesInitStruct->DCMI_LineStartCode << 8)|
+ 258              		.loc 1 251 0
+ 259 000e 1A43     		orrs	r2, r2, r3
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ESCR = (uint32_t)(DCMI_CodesInitStruct->DCMI_FrameStartCode |
+ 260              		.loc 1 250 0
+ 261 0010 42EA0061 		orr	r1, r2, r0, lsl #24
+ 262 0014 014A     		ldr	r2, .L19
+ 263 0016 9161     		str	r1, [r2, #24]
+ 264 0018 7047     		bx	lr
+ 265              	.L20:
+ 266 001a 00BF     		.align	2
+ 267              	.L19:
+ 268 001c 00000550 		.word	1342504960
+ 269              		.cfi_endproc
+ 270              	.LFE61:
+ 272              		.section	.text.DCMI_JPEGCmd,"ax",%progbits
+ 273              		.align	1
+ 274              		.global	DCMI_JPEGCmd
+ 275              		.thumb
+ 276              		.thumb_func
+ 278              	DCMI_JPEGCmd:
+ 279              	.LFB62:
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Enables or disables the DCMI JPEG format.
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @note   The Crop and Embedded Synchronization features cannot be used in this mode.  
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  NewState: new state of the DCMI JPEG format. 
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_JPEGCmd(FunctionalState NewState)
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 280              		.loc 1 264 0
+ 281              		.cfi_startproc
+ 282              		@ args = 0, pretend = 0, frame = 0
+ 283              		@ frame_needed = 0, uses_anonymous_args = 0
+ 284              		@ link register save eliminated.
+ 285              	.LVL15:
+ 286 0000 044B     		ldr	r3, .L25
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Enable the DCMI JPEG format */
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR |= (uint32_t)DCMI_CR_JPEG;
+ 287              		.loc 1 271 0
+ 288 0002 1A68     		ldr	r2, [r3, #0]
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 289              		.loc 1 268 0
+ 290 0004 10B1     		cbz	r0, .L22
+ 291              		.loc 1 271 0
+ 292 0006 42F00800 		orr	r0, r2, #8
+ 293              	.LVL16:
+ 294 000a 01E0     		b	.L24
+ 295              	.LVL17:
+ 296              	.L22:
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Disable the DCMI JPEG format */
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR &= ~(uint32_t)DCMI_CR_JPEG;
+ 297              		.loc 1 276 0
+ 298 000c 22F00800 		bic	r0, r2, #8
+ 299              	.LVL18:
+ 300              	.L24:
+ 301 0010 1860     		str	r0, [r3, #0]
+ 302 0012 7047     		bx	lr
+ 303              	.L26:
+ 304              		.align	2
+ 305              	.L25:
+ 306 0014 00000550 		.word	1342504960
+ 307              		.cfi_endproc
+ 308              	.LFE62:
+ 310              		.section	.text.DCMI_Cmd,"ax",%progbits
+ 311              		.align	1
+ 312              		.global	DCMI_Cmd
+ 313              		.thumb
+ 314              		.thumb_func
+ 316              	DCMI_Cmd:
+ 317              	.LFB63:
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @}
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /** @defgroup DCMI_Group2 Image capture functions
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  *  @brief   Image capture functions
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  *
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** @verbatim   
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  ===============================================================================
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                                  Image capture functions
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  ===============================================================================  
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** @endverbatim
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @{
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Enables or disables the DCMI interface.
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  NewState: new state of the DCMI interface. 
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_Cmd(FunctionalState NewState)
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 318              		.loc 1 302 0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 0
+ 321              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322              		@ link register save eliminated.
+ 323              	.LVL19:
+ 324 0000 044B     		ldr	r3, .L31
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Enable the DCMI by setting ENABLE bit */
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR |= (uint32_t)DCMI_CR_ENABLE;
+ 325              		.loc 1 309 0
+ 326 0002 1A68     		ldr	r2, [r3, #0]
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 327              		.loc 1 306 0
+ 328 0004 10B1     		cbz	r0, .L28
+ 329              		.loc 1 309 0
+ 330 0006 42F48040 		orr	r0, r2, #16384
+ 331              	.LVL20:
+ 332 000a 01E0     		b	.L30
+ 333              	.LVL21:
+ 334              	.L28:
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Disable the DCMI by clearing ENABLE bit */
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR &= ~(uint32_t)DCMI_CR_ENABLE;
+ 335              		.loc 1 314 0
+ 336 000c 22F48040 		bic	r0, r2, #16384
+ 337              	.LVL22:
+ 338              	.L30:
+ 339 0010 1860     		str	r0, [r3, #0]
+ 340 0012 7047     		bx	lr
+ 341              	.L32:
+ 342              		.align	2
+ 343              	.L31:
+ 344 0014 00000550 		.word	1342504960
+ 345              		.cfi_endproc
+ 346              	.LFE63:
+ 348              		.section	.text.DCMI_CaptureCmd,"ax",%progbits
+ 349              		.align	1
+ 350              		.global	DCMI_CaptureCmd
+ 351              		.thumb
+ 352              		.thumb_func
+ 354              	DCMI_CaptureCmd:
+ 355              	.LFB64:
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Enables or disables the DCMI Capture.
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  NewState: new state of the DCMI capture. 
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_CaptureCmd(FunctionalState NewState)
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 356              		.loc 1 325 0
+ 357              		.cfi_startproc
+ 358              		@ args = 0, pretend = 0, frame = 0
+ 359              		@ frame_needed = 0, uses_anonymous_args = 0
+ 360              		@ link register save eliminated.
+ 361              	.LVL23:
+ 362 0000 044B     		ldr	r3, .L37
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Enable the DCMI Capture */
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR |= (uint32_t)DCMI_CR_CAPTURE;
+ 363              		.loc 1 332 0
+ 364 0002 1A68     		ldr	r2, [r3, #0]
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 365              		.loc 1 329 0
+ 366 0004 10B1     		cbz	r0, .L34
+ 367              		.loc 1 332 0
+ 368 0006 42F00100 		orr	r0, r2, #1
+ 369              	.LVL24:
+ 370 000a 01E0     		b	.L36
+ 371              	.LVL25:
+ 372              	.L34:
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Disable the DCMI Capture */
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->CR &= ~(uint32_t)DCMI_CR_CAPTURE;
+ 373              		.loc 1 337 0
+ 374 000c 22F00100 		bic	r0, r2, #1
+ 375              	.LVL26:
+ 376              	.L36:
+ 377 0010 1860     		str	r0, [r3, #0]
+ 378 0012 7047     		bx	lr
+ 379              	.L38:
+ 380              		.align	2
+ 381              	.L37:
+ 382 0014 00000550 		.word	1342504960
+ 383              		.cfi_endproc
+ 384              	.LFE64:
+ 386              		.section	.text.DCMI_ReadData,"ax",%progbits
+ 387              		.align	1
+ 388              		.global	DCMI_ReadData
+ 389              		.thumb
+ 390              		.thumb_func
+ 392              	DCMI_ReadData:
+ 393              	.LFB65:
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Reads the data stored in the DR register.
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  None 
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval Data register value
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** uint32_t DCMI_ReadData(void)
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 394              		.loc 1 347 0
+ 395              		.cfi_startproc
+ 396              		@ args = 0, pretend = 0, frame = 0
+ 397              		@ frame_needed = 0, uses_anonymous_args = 0
+ 398              		@ link register save eliminated.
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   return DCMI->DR;
+ 399              		.loc 1 348 0
+ 400 0000 014B     		ldr	r3, .L40
+ 401 0002 986A     		ldr	r0, [r3, #40]
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 402              		.loc 1 349 0
+ 403 0004 7047     		bx	lr
+ 404              	.L41:
+ 405 0006 00BF     		.align	2
+ 406              	.L40:
+ 407 0008 00000550 		.word	1342504960
+ 408              		.cfi_endproc
+ 409              	.LFE65:
+ 411              		.section	.text.DCMI_ITConfig,"ax",%progbits
+ 412              		.align	1
+ 413              		.global	DCMI_ITConfig
+ 414              		.thumb
+ 415              		.thumb_func
+ 417              	DCMI_ITConfig:
+ 418              	.LFB66:
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @}
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /** @defgroup DCMI_Group3 Interrupts and flags management functions
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  *  @brief   Interrupts and flags management functions
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  *
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** @verbatim   
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  ===============================================================================
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****                   Interrupts and flags management functions
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****  ===============================================================================  
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** @endverbatim
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @{
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Enables or disables the DCMI interface interrupts.
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_IT: specifies the DCMI interrupt sources to be enabled or disabled. 
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be any combination of the following values:
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_FRAME: Frame capture complete interrupt mask
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_OVF: Overflow interrupt mask
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_ERR: Synchronization error interrupt mask
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_VSYNC: VSYNC interrupt mask
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_LINE: Line interrupt mask
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  NewState: new state of the specified DCMI interrupts.
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_ITConfig(uint16_t DCMI_IT, FunctionalState NewState)
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 419              		.loc 1 380 0
+ 420              		.cfi_startproc
+ 421              		@ args = 0, pretend = 0, frame = 0
+ 422              		@ frame_needed = 0, uses_anonymous_args = 0
+ 423              		@ link register save eliminated.
+ 424              	.LVL27:
+ 425 0000 044B     		ldr	r3, .L46
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_CONFIG_IT(DCMI_IT));
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Enable the Interrupt sources */
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->IER |= DCMI_IT;
+ 426              		.loc 1 388 0
+ 427 0002 DA68     		ldr	r2, [r3, #12]
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (NewState != DISABLE)
+ 428              		.loc 1 385 0
+ 429 0004 09B1     		cbz	r1, .L43
+ 430              		.loc 1 388 0
+ 431 0006 1043     		orrs	r0, r0, r2
+ 432              	.LVL28:
+ 433 0008 02E0     		b	.L45
+ 434              	.LVL29:
+ 435              	.L43:
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     /* Disable the Interrupt sources */
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     DCMI->IER &= (uint16_t)(~DCMI_IT);
+ 436              		.loc 1 393 0
+ 437 000a C043     		mvns	r0, r0
+ 438              	.LVL30:
+ 439 000c 80B2     		uxth	r0, r0
+ 440 000e 1040     		ands	r0, r0, r2
+ 441              	.L45:
+ 442 0010 D860     		str	r0, [r3, #12]
+ 443 0012 7047     		bx	lr
+ 444              	.L47:
+ 445              		.align	2
+ 446              	.L46:
+ 447 0014 00000550 		.word	1342504960
+ 448              		.cfi_endproc
+ 449              	.LFE66:
+ 451              		.section	.text.DCMI_GetFlagStatus,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	DCMI_GetFlagStatus
+ 454              		.thumb
+ 455              		.thumb_func
+ 457              	DCMI_GetFlagStatus:
+ 458              	.LFB67:
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }  
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Checks whether the  DCMI interface flag is set or not.
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_FLAG: specifies the flag to check.
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be one of the following values:
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_FRAMERI: Frame capture complete Raw flag mask
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_OVFRI: Overflow Raw flag mask
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_ERRRI: Synchronization error Raw flag mask
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_VSYNCRI: VSYNC Raw flag mask
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_LINERI: Line Raw flag mask
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_FRAMEMI: Frame capture complete Masked flag mask
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_OVFMI: Overflow Masked flag mask
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_ERRMI: Synchronization error Masked flag mask
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_VSYNCMI: VSYNC Masked flag mask
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_LINEMI: Line Masked flag mask
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_HSYNC: HSYNC flag mask
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_VSYNC: VSYNC flag mask
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_FNE: Fifo not empty flag mask
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval The new state of DCMI_FLAG (SET or RESET).
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** FlagStatus DCMI_GetFlagStatus(uint16_t DCMI_FLAG)
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 459              		.loc 1 417 0
+ 460              		.cfi_startproc
+ 461              		@ args = 0, pretend = 0, frame = 0
+ 462              		@ frame_needed = 0, uses_anonymous_args = 0
+ 463              		@ link register save eliminated.
+ 464              	.LVL31:
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   FlagStatus bitstatus = RESET;
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   uint32_t dcmireg, tempreg = 0;
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_GET_FLAG(DCMI_FLAG));
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Get the DCMI register index */
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   dcmireg = (((uint16_t)DCMI_FLAG) >> 12);
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if (dcmireg == 0x00) /* The FLAG is in RISR register */
+ 465              		.loc 1 427 0
+ 466 0000 020B     		lsrs	r2, r0, #12
+ 467              	.LVL32:
+ 468 0002 064B     		ldr	r3, .L52
+ 469 0004 01D1     		bne	.L49
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     tempreg= DCMI->RISR;
+ 470              		.loc 1 429 0
+ 471 0006 9B68     		ldr	r3, [r3, #8]
+ 472              	.LVL33:
+ 473 0008 03E0     		b	.L50
+ 474              	.LVL34:
+ 475              	.L49:
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else if (dcmireg == 0x02) /* The FLAG is in SR register */
+ 476              		.loc 1 431 0
+ 477 000a 022A     		cmp	r2, #2
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     tempreg = DCMI->SR;
+ 478              		.loc 1 433 0
+ 479 000c 0CBF     		ite	eq
+ 480 000e 5B68     		ldreq	r3, [r3, #4]
+ 481              	.LVL35:
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else /* The FLAG is in MISR register */
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     tempreg = DCMI->MISR;
+ 482              		.loc 1 437 0
+ 483 0010 1B69     		ldrne	r3, [r3, #16]
+ 484              	.LVL36:
+ 485              	.L50:
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if ((tempreg & DCMI_FLAG) != (uint16_t)RESET )
+ 486              		.loc 1 440 0
+ 487 0012 0342     		tst	r3, r0
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     bitstatus = SET;
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     bitstatus = RESET;
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Return the DCMI_FLAG status */
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   return  bitstatus;
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 488              		.loc 1 450 0
+ 489 0014 0CBF     		ite	eq
+ 490 0016 0020     		moveq	r0, #0
+ 491 0018 0120     		movne	r0, #1
+ 492              	.LVL37:
+ 493 001a 7047     		bx	lr
+ 494              	.L53:
+ 495              		.align	2
+ 496              	.L52:
+ 497 001c 00000550 		.word	1342504960
+ 498              		.cfi_endproc
+ 499              	.LFE67:
+ 501              		.section	.text.DCMI_ClearFlag,"ax",%progbits
+ 502              		.align	1
+ 503              		.global	DCMI_ClearFlag
+ 504              		.thumb
+ 505              		.thumb_func
+ 507              	DCMI_ClearFlag:
+ 508              	.LFB68:
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Clears the DCMI's pending flags.
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_FLAG: specifies the flag to clear.
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be any combination of the following values:
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_FRAMERI: Frame capture complete Raw flag mask
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_OVFRI: Overflow Raw flag mask
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_ERRRI: Synchronization error Raw flag mask
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_VSYNCRI: VSYNC Raw flag mask
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_FLAG_LINERI: Line Raw flag mask
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_ClearFlag(uint16_t DCMI_FLAG)
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 509              		.loc 1 464 0
+ 510              		.cfi_startproc
+ 511              		@ args = 0, pretend = 0, frame = 0
+ 512              		@ frame_needed = 0, uses_anonymous_args = 0
+ 513              		@ link register save eliminated.
+ 514              	.LVL38:
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_CLEAR_FLAG(DCMI_FLAG));
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Clear the flag by writing in the ICR register 1 in the corresponding 
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   Flag position*/
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ICR = DCMI_FLAG;
+ 515              		.loc 1 471 0
+ 516 0000 014B     		ldr	r3, .L55
+ 517 0002 5861     		str	r0, [r3, #20]
+ 518 0004 7047     		bx	lr
+ 519              	.L56:
+ 520 0006 00BF     		.align	2
+ 521              	.L55:
+ 522 0008 00000550 		.word	1342504960
+ 523              		.cfi_endproc
+ 524              	.LFE68:
+ 526              		.section	.text.DCMI_GetITStatus,"ax",%progbits
+ 527              		.align	1
+ 528              		.global	DCMI_GetITStatus
+ 529              		.thumb
+ 530              		.thumb_func
+ 532              	DCMI_GetITStatus:
+ 533              	.LFB69:
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Checks whether the DCMI interrupt has occurred or not.
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_IT: specifies the DCMI interrupt source to check.
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be one of the following values:
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_FRAME: Frame capture complete interrupt mask
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_OVF: Overflow interrupt mask
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_ERR: Synchronization error interrupt mask
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_VSYNC: VSYNC interrupt mask
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_LINE: Line interrupt mask
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval The new state of DCMI_IT (SET or RESET).
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** ITStatus DCMI_GetITStatus(uint16_t DCMI_IT)
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 534              		.loc 1 486 0
+ 535              		.cfi_startproc
+ 536              		@ args = 0, pretend = 0, frame = 0
+ 537              		@ frame_needed = 0, uses_anonymous_args = 0
+ 538              		@ link register save eliminated.
+ 539              	.LVL39:
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   ITStatus bitstatus = RESET;
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   uint32_t itstatus = 0;
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Check the parameters */
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   assert_param(IS_DCMI_GET_IT(DCMI_IT));
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   itstatus = DCMI->MISR & DCMI_IT; /* Only masked interrupts are checked */
+ 540              		.loc 1 493 0
+ 541 0000 034B     		ldr	r3, .L58
+ 542 0002 1969     		ldr	r1, [r3, #16]
+ 543              	.LVL40:
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   if ((itstatus != (uint16_t)RESET))
+ 544              		.loc 1 495 0
+ 545 0004 0842     		tst	r0, r1
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     bitstatus = SET;
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   else
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   {
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****     bitstatus = RESET;
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   }
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   return bitstatus;
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** }
+ 546              		.loc 1 504 0
+ 547 0006 0CBF     		ite	eq
+ 548 0008 0020     		moveq	r0, #0
+ 549 000a 0120     		movne	r0, #1
+ 550              	.LVL41:
+ 551 000c 7047     		bx	lr
+ 552              	.L59:
+ 553 000e 00BF     		.align	2
+ 554              	.L58:
+ 555 0010 00000550 		.word	1342504960
+ 556              		.cfi_endproc
+ 557              	.LFE69:
+ 559              		.section	.text.DCMI_ClearITPendingBit,"ax",%progbits
+ 560              		.align	1
+ 561              		.global	DCMI_ClearITPendingBit
+ 562              		.thumb
+ 563              		.thumb_func
+ 565              	DCMI_ClearITPendingBit:
+ 566              	.LFB70:
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** 
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** /**
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @brief  Clears the DCMI's interrupt pending bits.
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @param  DCMI_IT: specifies the DCMI interrupt pending bit to clear.
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *          This parameter can be any combination of the following values:
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_FRAME: Frame capture complete interrupt mask
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_OVF: Overflow interrupt mask
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_ERR: Synchronization error interrupt mask
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_VSYNC: VSYNC interrupt mask
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   *            @arg DCMI_IT_LINE: Line interrupt mask
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   * @retval None
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   */
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** void DCMI_ClearITPendingBit(uint16_t DCMI_IT)
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c **** {
+ 567              		.loc 1 518 0
+ 568              		.cfi_startproc
+ 569              		@ args = 0, pretend = 0, frame = 0
+ 570              		@ frame_needed = 0, uses_anonymous_args = 0
+ 571              		@ link register save eliminated.
+ 572              	.LVL42:
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   /* Clear the interrupt pending Bit by writing in the ICR register 1 in the 
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   corresponding pending Bit position*/
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dcmi.c ****   DCMI->ICR = DCMI_IT;
+ 573              		.loc 1 522 0
+ 574 0000 014B     		ldr	r3, .L61
+ 575 0002 5861     		str	r0, [r3, #20]
+ 576 0004 7047     		bx	lr
+ 577              	.L62:
+ 578 0006 00BF     		.align	2
+ 579              	.L61:
+ 580 0008 00000550 		.word	1342504960
+ 581              		.cfi_endproc
+ 582              	.LFE70:
+ 584              		.text
+ 585              	.Letext0:
+ 586              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 587              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 588              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_dcmi.h"
+ 589              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_dcmi.c
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:19     .text.DCMI_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:24     .text.DCMI_DeInit:00000000 DCMI_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:55     .text.DCMI_DeInit:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:60     .text.DCMI_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:65     .text.DCMI_Init:00000000 DCMI_Init
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:121    .text.DCMI_Init:0000003c $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:126    .text.DCMI_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:131    .text.DCMI_StructInit:00000000 DCMI_StructInit
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:159    .text.DCMI_CROPConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:164    .text.DCMI_CROPConfig:00000000 DCMI_CROPConfig
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:190    .text.DCMI_CROPConfig:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:195    .text.DCMI_CROPCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:200    .text.DCMI_CROPCmd:00000000 DCMI_CROPCmd
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:228    .text.DCMI_CROPCmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:233    .text.DCMI_SetEmbeddedSynchroCodes:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:238    .text.DCMI_SetEmbeddedSynchroCodes:00000000 DCMI_SetEmbeddedSynchroCodes
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:268    .text.DCMI_SetEmbeddedSynchroCodes:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:273    .text.DCMI_JPEGCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:278    .text.DCMI_JPEGCmd:00000000 DCMI_JPEGCmd
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:306    .text.DCMI_JPEGCmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:311    .text.DCMI_Cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:316    .text.DCMI_Cmd:00000000 DCMI_Cmd
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:344    .text.DCMI_Cmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:349    .text.DCMI_CaptureCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:354    .text.DCMI_CaptureCmd:00000000 DCMI_CaptureCmd
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:382    .text.DCMI_CaptureCmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:387    .text.DCMI_ReadData:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:392    .text.DCMI_ReadData:00000000 DCMI_ReadData
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:407    .text.DCMI_ReadData:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:412    .text.DCMI_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:417    .text.DCMI_ITConfig:00000000 DCMI_ITConfig
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:447    .text.DCMI_ITConfig:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:452    .text.DCMI_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:457    .text.DCMI_GetFlagStatus:00000000 DCMI_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:497    .text.DCMI_GetFlagStatus:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:502    .text.DCMI_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:507    .text.DCMI_ClearFlag:00000000 DCMI_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:522    .text.DCMI_ClearFlag:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:527    .text.DCMI_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:532    .text.DCMI_GetITStatus:00000000 DCMI_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:555    .text.DCMI_GetITStatus:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:560    .text.DCMI_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:565    .text.DCMI_ClearITPendingBit:00000000 DCMI_ClearITPendingBit
+C:\Users\STINA\AppData\Local\Temp\ccCSmOSe.s:580    .text.DCMI_ClearITPendingBit:00000008 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

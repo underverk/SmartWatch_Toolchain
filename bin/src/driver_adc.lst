@@ -1,0 +1,317 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"driver_adc.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.adc_init,"ax",%progbits
+  19              		.align	1
+  20              		.global	adc_init
+  21              		.thumb
+  22              		.thumb_func
+  24              	adc_init:
+  25              	.LFB58:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/driver_adc.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** // Davey Taylor, Arduino Verkstad AB
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** // ADC driver
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** #include <stm32f2xx_rcc.h>
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** #include "pins.h"
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** #include "driver_adc.h"
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** void adc_init(void) {
+  27              		.loc 1 8 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 40
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 30B5     		push	{r4, r5, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 12
+  34              		.cfi_offset 4, -12
+  35              		.cfi_offset 5, -8
+  36              		.cfi_offset 14, -4
+  37 0002 8BB0     		sub	sp, sp, #44
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 56
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   // Initialize ADC
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_CommonInitTypeDef ConfigCADC;
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_CommonStructInit(&ConfigCADC);
+  40              		.loc 1 11 0
+  41 0004 6846     		mov	r0, sp
+  42 0006 FFF7FEFF 		bl	ADC_CommonStructInit
+  43              	.LVL0:
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_CommonInit(&ConfigCADC);
+  44              		.loc 1 12 0
+  45 000a 6846     		mov	r0, sp
+  46 000c FFF7FEFF 		bl	ADC_CommonInit
+  47              	.LVL1:
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   // Initialize ADC1 & ADC2
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 | RCC_APB2Periph_ADC2, ENABLE);
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_InitTypeDef ConfigADC;
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_StructInit(&ConfigADC);
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_Init(ADC1, &ConfigADC);
+  48              		.loc 1 18 0
+  49 0010 134D     		ldr	r5, .L2
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 | RCC_APB2Periph_ADC2, ENABLE);
+  50              		.loc 1 15 0
+  51 0012 0121     		movs	r1, #1
+  52 0014 4FF44070 		mov	r0, #768
+  53 0018 FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+  54              	.LVL2:
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_Init(ADC2, &ConfigADC);
+  55              		.loc 1 19 0
+  56 001c 114C     		ldr	r4, .L2+4
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_StructInit(&ConfigADC);
+  57              		.loc 1 17 0
+  58 001e 04A8     		add	r0, sp, #16
+  59 0020 FFF7FEFF 		bl	ADC_StructInit
+  60              	.LVL3:
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_Init(ADC1, &ConfigADC);
+  61              		.loc 1 18 0
+  62 0024 2846     		mov	r0, r5
+  63 0026 04A9     		add	r1, sp, #16
+  64 0028 FFF7FEFF 		bl	ADC_Init
+  65              	.LVL4:
+  66              		.loc 1 19 0
+  67 002c 2046     		mov	r0, r4
+  68 002e 04A9     		add	r1, sp, #16
+  69 0030 FFF7FEFF 		bl	ADC_Init
+  70              	.LVL5:
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** /*#define ADC_Channel_TempSensor                      ((uint8_t)ADC_Channel_16)
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** #define ADC_Channel_Vrefint                         ((uint8_t)ADC_Channel_17)
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** #define ADC_Channel_Vbat                            ((uint8_t)ADC_Channel_18)
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** */
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   // Configure channels
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_RegularChannelConfig(ADC1, ADC_Channel_2,  1, ADC_SampleTime_15Cycles); // Battery voltage
+  71              		.loc 1 26 0
+  72 0034 0122     		movs	r2, #1
+  73 0036 2846     		mov	r0, r5
+  74 0038 0221     		movs	r1, #2
+  75 003a 1346     		mov	r3, r2
+  76 003c FFF7FEFF 		bl	ADC_RegularChannelConfig
+  77              	.LVL6:
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_RegularChannelConfig(ADC2, ADC_Channel_14, 1, ADC_SampleTime_15Cycles); // Light sensor
+  78              		.loc 1 27 0
+  79 0040 0122     		movs	r2, #1
+  80 0042 2046     		mov	r0, r4
+  81 0044 0E21     		movs	r1, #14
+  82 0046 1346     		mov	r3, r2
+  83 0048 FFF7FEFF 		bl	ADC_RegularChannelConfig
+  84              	.LVL7:
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   // Enable ADC1 & 2
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_Cmd(ADC1, ENABLE);
+  85              		.loc 1 30 0
+  86 004c 2846     		mov	r0, r5
+  87 004e 0121     		movs	r1, #1
+  88 0050 FFF7FEFF 		bl	ADC_Cmd
+  89              	.LVL8:
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_Cmd(ADC2, ENABLE);
+  90              		.loc 1 31 0
+  91 0054 2046     		mov	r0, r4
+  92 0056 0121     		movs	r1, #1
+  93 0058 FFF7FEFF 		bl	ADC_Cmd
+  94              	.LVL9:
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** }
+  95              		.loc 1 33 0
+  96 005c 0BB0     		add	sp, sp, #44
+  97 005e 30BD     		pop	{r4, r5, pc}
+  98              	.L3:
+  99              		.align	2
+ 100              	.L2:
+ 101 0060 00200140 		.word	1073815552
+ 102 0064 00210140 		.word	1073815808
+ 103              		.cfi_endproc
+ 104              	.LFE58:
+ 106              		.section	.text.adc_battery,"ax",%progbits
+ 107              		.align	1
+ 108              		.global	adc_battery
+ 109              		.thumb
+ 110              		.thumb_func
+ 112              	adc_battery:
+ 113              	.LFB59:
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** uint16_t adc_battery(void) {
+ 114              		.loc 1 35 0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   digitalWrite(ADC_BATTERY_ENABLE, HIGH);
+ 118              		.loc 1 36 0
+ 119 0000 0848     		ldr	r0, .L8
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** uint16_t adc_battery(void) {
+ 120              		.loc 1 35 0
+ 121 0002 08B5     		push	{r3, lr}
+ 122              	.LCFI2:
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 3, -8
+ 125              		.cfi_offset 14, -4
+ 126              		.loc 1 36 0
+ 127 0004 0121     		movs	r1, #1
+ 128 0006 FFF7FEFF 		bl	digitalWrite
+ 129              	.LVL10:
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_SoftwareStartConv(ADC1);
+ 130              		.loc 1 37 0
+ 131 000a 0748     		ldr	r0, .L8+4
+ 132 000c FFF7FEFF 		bl	ADC_SoftwareStartConv
+ 133              	.LVL11:
+ 134              	.L5:
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   while(ADC_GetSoftwareStartConvStatus(ADC1));
+ 135              		.loc 1 38 0 discriminator 1
+ 136 0010 0548     		ldr	r0, .L8+4
+ 137 0012 FFF7FEFF 		bl	ADC_GetSoftwareStartConvStatus
+ 138              	.LVL12:
+ 139 0016 0028     		cmp	r0, #0
+ 140 0018 FAD1     		bne	.L5
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   return ADC_GetConversionValue(ADC1);
+ 141              		.loc 1 39 0
+ 142 001a 0348     		ldr	r0, .L8+4
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   digitalWrite(ADC_BATTERY_ENABLE, LOW);
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** }
+ 143              		.loc 1 41 0
+ 144 001c BDE80840 		pop	{r3, lr}
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   return ADC_GetConversionValue(ADC1);
+ 145              		.loc 1 39 0
+ 146 0020 FFF7FEBF 		b	ADC_GetConversionValue
+ 147              	.LVL13:
+ 148              	.L9:
+ 149              		.align	2
+ 150              	.L8:
+ 151 0024 00000000 		.word	PIN_PA1
+ 152 0028 00200140 		.word	1073815552
+ 153              		.cfi_endproc
+ 154              	.LFE59:
+ 156              		.section	.text.adc_lightsensor,"ax",%progbits
+ 157              		.align	1
+ 158              		.global	adc_lightsensor
+ 159              		.thumb
+ 160              		.thumb_func
+ 162              	adc_lightsensor:
+ 163              	.LFB60:
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** uint16_t adc_lightsensor(void) {
+ 164              		.loc 1 43 0
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 0
+ 167              		@ frame_needed = 0, uses_anonymous_args = 0
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   digitalWrite(ADC_LIGHTSENSOR_ENABLE, HIGH);
+ 168              		.loc 1 44 0
+ 169 0000 0848     		ldr	r0, .L13
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** uint16_t adc_lightsensor(void) {
+ 170              		.loc 1 43 0
+ 171 0002 08B5     		push	{r3, lr}
+ 172              	.LCFI3:
+ 173              		.cfi_def_cfa_offset 8
+ 174              		.cfi_offset 3, -8
+ 175              		.cfi_offset 14, -4
+ 176              		.loc 1 44 0
+ 177 0004 0121     		movs	r1, #1
+ 178 0006 FFF7FEFF 		bl	digitalWrite
+ 179              	.LVL14:
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_SoftwareStartConv(ADC2);
+ 180              		.loc 1 45 0
+ 181 000a 0748     		ldr	r0, .L13+4
+ 182 000c FFF7FEFF 		bl	ADC_SoftwareStartConv
+ 183              	.LVL15:
+ 184              	.L11:
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   while(ADC_GetSoftwareStartConvStatus(ADC2));
+ 185              		.loc 1 46 0 discriminator 1
+ 186 0010 0548     		ldr	r0, .L13+4
+ 187 0012 FFF7FEFF 		bl	ADC_GetSoftwareStartConvStatus
+ 188              	.LVL16:
+ 189 0016 0028     		cmp	r0, #0
+ 190 0018 FAD1     		bne	.L11
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   return ADC_GetConversionValue(ADC2);
+ 191              		.loc 1 47 0
+ 192 001a 0348     		ldr	r0, .L13+4
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   digitalWrite(ADC_LIGHTSENSOR_ENABLE, LOW);
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** }
+ 193              		.loc 1 49 0
+ 194 001c BDE80840 		pop	{r3, lr}
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   return ADC_GetConversionValue(ADC2);
+ 195              		.loc 1 47 0
+ 196 0020 FFF7FEBF 		b	ADC_GetConversionValue
+ 197              	.LVL17:
+ 198              	.L14:
+ 199              		.align	2
+ 200              	.L13:
+ 201 0024 00000000 		.word	PIN_PB4
+ 202 0028 00210140 		.word	1073815808
+ 203              		.cfi_endproc
+ 204              	.LFE60:
+ 206              		.section	.text.adc_deinit,"ax",%progbits
+ 207              		.align	1
+ 208              		.global	adc_deinit
+ 209              		.thumb
+ 210              		.thumb_func
+ 212              	adc_deinit:
+ 213              	.LFB61:
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** void adc_deinit(void) {
+ 214              		.loc 1 51 0
+ 215              		.cfi_startproc
+ 216              		@ args = 0, pretend = 0, frame = 0
+ 217              		@ frame_needed = 0, uses_anonymous_args = 0
+ 218              		@ link register save eliminated.
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_DeInit();
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c **** }
+ 219              		.loc 1 53 0
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_adc.c ****   ADC_DeInit();
+ 220              		.loc 1 52 0
+ 221 0000 FFF7FEBF 		b	ADC_DeInit
+ 222              	.LVL18:
+ 223              		.cfi_endproc
+ 224              	.LFE61:
+ 226              		.text
+ 227              	.Letext0:
+ 228              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 229              		.file 3 "src/libstm32f2/stm32f2xx.h"
+ 230              		.file 4 "src/libstm32f2/stm32f2xx_adc.h"
+ 231              		.file 5 "src/libstm32f2/stm32f2xx_gpio.h"
+ 232              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h"
+ 233              		.file 7 "src/libstm32f2/core_cm3.h"
+ 234              		.file 8 "src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 driver_adc.c
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:19     .text.adc_init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:24     .text.adc_init:00000000 adc_init
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:101    .text.adc_init:00000060 $d
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:107    .text.adc_battery:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:112    .text.adc_battery:00000000 adc_battery
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:151    .text.adc_battery:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:157    .text.adc_lightsensor:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:162    .text.adc_lightsensor:00000000 adc_lightsensor
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:201    .text.adc_lightsensor:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:207    .text.adc_deinit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccF2oh6v.s:212    .text.adc_deinit:00000000 adc_deinit
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+ADC_CommonStructInit
+ADC_CommonInit
+RCC_APB2PeriphClockCmd
+ADC_StructInit
+ADC_Init
+ADC_RegularChannelConfig
+ADC_Cmd
+digitalWrite
+ADC_SoftwareStartConv
+ADC_GetSoftwareStartConvStatus
+ADC_GetConversionValue
+PIN_PA1
+PIN_PB4
+ADC_DeInit

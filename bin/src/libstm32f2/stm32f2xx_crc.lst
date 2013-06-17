@@ -1,0 +1,331 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_crc.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.CRC_ResetDR,"ax",%progbits
+  19              		.align	1
+  20              		.global	CRC_ResetDR
+  21              		.thumb
+  22              		.thumb_func
+  24              	CRC_ResetDR:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_crc.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @file    stm32f2xx_crc.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief   This file provides all the CRC firmware functions.
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   ******************************************************************************
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @attention
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   *
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   *
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * You may not use this file except in compliance with the License.
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * You may obtain a copy of the License at:
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   *
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   *
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * Unless required by applicable law or agreed to in writing, software 
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * See the License for the specific language governing permissions and
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * limitations under the License.
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   *
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   ******************************************************************************
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /* Includes ------------------------------------------------------------------*/
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** #include "stm32f2xx_crc.h"
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @{
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /** @defgroup CRC 
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief CRC driver modules
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @{
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /* Private typedef -----------------------------------------------------------*/
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /* Private define ------------------------------------------------------------*/
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /* Private macro -------------------------------------------------------------*/
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /* Private variables ---------------------------------------------------------*/
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /* Private function prototypes -----------------------------------------------*/
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /* Private functions ---------------------------------------------------------*/
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /** @defgroup CRC_Private_Functions
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @{
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /**
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief  Resets the CRC Data register (DR).
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @param  None
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @retval None
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** void CRC_ResetDR(void)
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** {
+  27              		.loc 1 57 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   /* Reset CRC generator */
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   CRC->CR = CRC_CR_RESET;
+  32              		.loc 1 59 0
+  33 0000 014B     		ldr	r3, .L2
+  34 0002 0122     		movs	r2, #1
+  35 0004 9A60     		str	r2, [r3, #8]
+  36 0006 7047     		bx	lr
+  37              	.L3:
+  38              		.align	2
+  39              	.L2:
+  40 0008 00300240 		.word	1073885184
+  41              		.cfi_endproc
+  42              	.LFE56:
+  44              		.section	.text.CRC_CalcCRC,"ax",%progbits
+  45              		.align	1
+  46              		.global	CRC_CalcCRC
+  47              		.thumb
+  48              		.thumb_func
+  50              	CRC_CalcCRC:
+  51              	.LFB57:
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** }
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /**
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief  Computes the 32-bit CRC of a given data word(32-bit).
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @param  Data: data word(32-bit) to compute its CRC
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @retval 32-bit CRC
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** uint32_t CRC_CalcCRC(uint32_t Data)
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** {
+  52              		.loc 1 68 0
+  53              		.cfi_startproc
+  54              		@ args = 0, pretend = 0, frame = 0
+  55              		@ frame_needed = 0, uses_anonymous_args = 0
+  56              		@ link register save eliminated.
+  57              	.LVL0:
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   CRC->DR = Data;
+  58              		.loc 1 69 0
+  59 0000 014B     		ldr	r3, .L5
+  60 0002 1860     		str	r0, [r3, #0]
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   return (CRC->DR);
+  61              		.loc 1 71 0
+  62 0004 1868     		ldr	r0, [r3, #0]
+  63              	.LVL1:
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** }
+  64              		.loc 1 72 0
+  65 0006 7047     		bx	lr
+  66              	.L6:
+  67              		.align	2
+  68              	.L5:
+  69 0008 00300240 		.word	1073885184
+  70              		.cfi_endproc
+  71              	.LFE57:
+  73              		.section	.text.CRC_CalcBlockCRC,"ax",%progbits
+  74              		.align	1
+  75              		.global	CRC_CalcBlockCRC
+  76              		.thumb
+  77              		.thumb_func
+  79              	CRC_CalcBlockCRC:
+  80              	.LFB58:
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /**
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief  Computes the 32-bit CRC of a given buffer of data word(32-bit).
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @param  pBuffer: pointer to the buffer containing the data to be computed
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @param  BufferLength: length of the buffer to be computed					
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @retval 32-bit CRC
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** uint32_t CRC_CalcBlockCRC(uint32_t pBuffer[], uint32_t BufferLength)
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** {
+  81              		.loc 1 81 0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 0
+  84              		@ frame_needed = 0, uses_anonymous_args = 0
+  85              	.LVL2:
+  86 0000 10B5     		push	{r4, lr}
+  87              	.LCFI0:
+  88              		.cfi_def_cfa_offset 8
+  89              		.cfi_offset 4, -8
+  90              		.cfi_offset 14, -4
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   uint32_t index = 0;
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   for(index = 0; index < BufferLength; index++)
+  91              		.loc 1 84 0
+  92 0002 0023     		movs	r3, #0
+  93              	.LVL3:
+  94              	.L8:
+  95              		.loc 1 84 0 is_stmt 0 discriminator 1
+  96 0004 8B42     		cmp	r3, r1
+  97 0006 044A     		ldr	r2, .L12
+  98 0008 04D0     		beq	.L11
+  99              	.L9:
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   {
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****     CRC->DR = pBuffer[index];
+ 100              		.loc 1 86 0 is_stmt 1 discriminator 2
+ 101 000a 50F82340 		ldr	r4, [r0, r3, lsl #2]
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   for(index = 0; index < BufferLength; index++)
+ 102              		.loc 1 84 0 discriminator 2
+ 103 000e 0133     		adds	r3, r3, #1
+ 104              	.LVL4:
+ 105              		.loc 1 86 0 discriminator 2
+ 106 0010 1460     		str	r4, [r2, #0]
+ 107 0012 F7E7     		b	.L8
+ 108              	.L11:
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   }
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   return (CRC->DR);
+ 109              		.loc 1 88 0
+ 110 0014 1068     		ldr	r0, [r2, #0]
+ 111              	.LVL5:
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** }
+ 112              		.loc 1 89 0
+ 113 0016 10BD     		pop	{r4, pc}
+ 114              	.L13:
+ 115              		.align	2
+ 116              	.L12:
+ 117 0018 00300240 		.word	1073885184
+ 118              		.cfi_endproc
+ 119              	.LFE58:
+ 121              		.section	.text.CRC_GetCRC,"ax",%progbits
+ 122              		.align	1
+ 123              		.global	CRC_GetCRC
+ 124              		.thumb
+ 125              		.thumb_func
+ 127              	CRC_GetCRC:
+ 128              	.LFB59:
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /**
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief  Returns the current CRC value.
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @param  None
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @retval 32-bit CRC
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** uint32_t CRC_GetCRC(void)
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** {
+ 129              		.loc 1 97 0
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 0, uses_anonymous_args = 0
+ 133              		@ link register save eliminated.
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   return (CRC->DR);
+ 134              		.loc 1 98 0
+ 135 0000 014B     		ldr	r3, .L15
+ 136 0002 1868     		ldr	r0, [r3, #0]
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** }
+ 137              		.loc 1 99 0
+ 138 0004 7047     		bx	lr
+ 139              	.L16:
+ 140 0006 00BF     		.align	2
+ 141              	.L15:
+ 142 0008 00300240 		.word	1073885184
+ 143              		.cfi_endproc
+ 144              	.LFE59:
+ 146              		.section	.text.CRC_SetIDRegister,"ax",%progbits
+ 147              		.align	1
+ 148              		.global	CRC_SetIDRegister
+ 149              		.thumb
+ 150              		.thumb_func
+ 152              	CRC_SetIDRegister:
+ 153              	.LFB60:
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /**
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief  Stores a 8-bit data in the Independent Data(ID) register.
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @param  IDValue: 8-bit value to be stored in the ID register 					
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @retval None
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** void CRC_SetIDRegister(uint8_t IDValue)
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** {
+ 154              		.loc 1 107 0
+ 155              		.cfi_startproc
+ 156              		@ args = 0, pretend = 0, frame = 0
+ 157              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158              		@ link register save eliminated.
+ 159              	.LVL6:
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   CRC->IDR = IDValue;
+ 160              		.loc 1 108 0
+ 161 0000 014B     		ldr	r3, .L18
+ 162 0002 1871     		strb	r0, [r3, #4]
+ 163 0004 7047     		bx	lr
+ 164              	.L19:
+ 165 0006 00BF     		.align	2
+ 166              	.L18:
+ 167 0008 00300240 		.word	1073885184
+ 168              		.cfi_endproc
+ 169              	.LFE60:
+ 171              		.section	.text.CRC_GetIDRegister,"ax",%progbits
+ 172              		.align	1
+ 173              		.global	CRC_GetIDRegister
+ 174              		.thumb
+ 175              		.thumb_func
+ 177              	CRC_GetIDRegister:
+ 178              	.LFB61:
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** }
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** 
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** /**
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @brief  Returns the 8-bit data stored in the Independent Data(ID) register
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @param  None
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   * @retval 8-bit value of the ID register 
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   */
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** uint8_t CRC_GetIDRegister(void)
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** {
+ 179              		.loc 1 117 0
+ 180              		.cfi_startproc
+ 181              		@ args = 0, pretend = 0, frame = 0
+ 182              		@ frame_needed = 0, uses_anonymous_args = 0
+ 183              		@ link register save eliminated.
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c ****   return (CRC->IDR);
+ 184              		.loc 1 118 0
+ 185 0000 014B     		ldr	r3, .L21
+ 186 0002 1879     		ldrb	r0, [r3, #4]	@ zero_extendqisi2
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_crc.c **** }
+ 187              		.loc 1 119 0
+ 188 0004 7047     		bx	lr
+ 189              	.L22:
+ 190 0006 00BF     		.align	2
+ 191              	.L21:
+ 192 0008 00300240 		.word	1073885184
+ 193              		.cfi_endproc
+ 194              	.LFE61:
+ 196              		.text
+ 197              	.Letext0:
+ 198              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 199              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 200              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_crc.c
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:19     .text.CRC_ResetDR:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:24     .text.CRC_ResetDR:00000000 CRC_ResetDR
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:40     .text.CRC_ResetDR:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:45     .text.CRC_CalcCRC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:50     .text.CRC_CalcCRC:00000000 CRC_CalcCRC
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:69     .text.CRC_CalcCRC:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:74     .text.CRC_CalcBlockCRC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:79     .text.CRC_CalcBlockCRC:00000000 CRC_CalcBlockCRC
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:117    .text.CRC_CalcBlockCRC:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:122    .text.CRC_GetCRC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:127    .text.CRC_GetCRC:00000000 CRC_GetCRC
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:142    .text.CRC_GetCRC:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:147    .text.CRC_SetIDRegister:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:152    .text.CRC_SetIDRegister:00000000 CRC_SetIDRegister
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:167    .text.CRC_SetIDRegister:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:172    .text.CRC_GetIDRegister:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:177    .text.CRC_GetIDRegister:00000000 CRC_GetIDRegister
+C:\Users\STINA\AppData\Local\Temp\ccLKqGNH.s:192    .text.CRC_GetIDRegister:00000008 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

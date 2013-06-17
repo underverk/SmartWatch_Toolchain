@@ -1,0 +1,367 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_dbgmcu.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.DBGMCU_GetREVID,"ax",%progbits
+  19              		.align	1
+  20              		.global	DBGMCU_GetREVID
+  21              		.thumb
+  22              		.thumb_func
+  24              	DBGMCU_GetREVID:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_dbgmcu.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @file    stm32f2xx_dbgmcu.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @brief   This file provides all the DBGMCU firmware functions.
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   ******************************************************************************
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @attention
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * You may not use this file except in compliance with the License.
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * You may obtain a copy of the License at:
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * Unless required by applicable law or agreed to in writing, software 
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * See the License for the specific language governing permissions and
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * limitations under the License.
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   ******************************************************************************
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /* Includes ------------------------------------------------------------------*/
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** #include "stm32f2xx_dbgmcu.h"
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @{
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /** @defgroup DBGMCU 
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @brief DBGMCU driver modules
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @{
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */ 
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /* Private typedef -----------------------------------------------------------*/
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /* Private define ------------------------------------------------------------*/
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** #define IDCODE_DEVID_MASK    ((uint32_t)0x00000FFF)
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /* Private macro -------------------------------------------------------------*/
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /* Private variables ---------------------------------------------------------*/
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /* Private function prototypes -----------------------------------------------*/
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /* Private functions ---------------------------------------------------------*/
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /** @defgroup DBGMCU_Private_Functions
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @{
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */ 
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /**
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @brief  Returns the device revision identifier.
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @param  None
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @retval Device revision identifier
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** uint32_t DBGMCU_GetREVID(void)
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** {
+  27              		.loc 1 59 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****    return(DBGMCU->IDCODE >> 16);
+  32              		.loc 1 60 0
+  33 0000 014B     		ldr	r3, .L2
+  34 0002 1868     		ldr	r0, [r3, #0]
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** }
+  35              		.loc 1 61 0
+  36 0004 000C     		lsrs	r0, r0, #16
+  37 0006 7047     		bx	lr
+  38              	.L3:
+  39              		.align	2
+  40              	.L2:
+  41 0008 002004E0 		.word	-536600576
+  42              		.cfi_endproc
+  43              	.LFE56:
+  45              		.section	.text.DBGMCU_GetDEVID,"ax",%progbits
+  46              		.align	1
+  47              		.global	DBGMCU_GetDEVID
+  48              		.thumb
+  49              		.thumb_func
+  51              	DBGMCU_GetDEVID:
+  52              	.LFB57:
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /**
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @brief  Returns the device identifier.
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @param  None
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @retval Device identifier
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** uint32_t DBGMCU_GetDEVID(void)
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** {
+  53              		.loc 1 69 0
+  54              		.cfi_startproc
+  55              		@ args = 0, pretend = 0, frame = 0
+  56              		@ frame_needed = 0, uses_anonymous_args = 0
+  57              		@ link register save eliminated.
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****    return(DBGMCU->IDCODE & IDCODE_DEVID_MASK);
+  58              		.loc 1 70 0
+  59 0000 024B     		ldr	r3, .L5
+  60 0002 1868     		ldr	r0, [r3, #0]
+  61 0004 0105     		lsls	r1, r0, #20
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** }
+  62              		.loc 1 71 0
+  63 0006 080D     		lsrs	r0, r1, #20
+  64 0008 7047     		bx	lr
+  65              	.L6:
+  66 000a 00BF     		.align	2
+  67              	.L5:
+  68 000c 002004E0 		.word	-536600576
+  69              		.cfi_endproc
+  70              	.LFE57:
+  72              		.section	.text.DBGMCU_Config,"ax",%progbits
+  73              		.align	1
+  74              		.global	DBGMCU_Config
+  75              		.thumb
+  76              		.thumb_func
+  78              	DBGMCU_Config:
+  79              	.LFB58:
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /**
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @brief  Configures low power mode behavior when the MCU is in Debug mode.
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @param  DBGMCU_Periph: specifies the low power mode.
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *   This parameter can be any combination of the following values:
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_SLEEP: Keep debugger connection during SLEEP mode              
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_STOP: Keep debugger connection during STOP mode               
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_STANDBY: Keep debugger connection during STANDBY mode        
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @param  NewState: new state of the specified low power mode in Debug mode.
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *   This parameter can be: ENABLE or DISABLE.
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @retval None
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** void DBGMCU_Config(uint32_t DBGMCU_Periph, FunctionalState NewState)
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** {
+  80              		.loc 1 85 0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 0
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84              		@ link register save eliminated.
+  85              	.LVL0:
+  86 0000 044B     		ldr	r3, .L12
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   /* Check the parameters */
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   assert_param(IS_DBGMCU_PERIPH(DBGMCU_Periph));
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   if (NewState != DISABLE)
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   {
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****     DBGMCU->CR |= DBGMCU_Periph;
+  87              		.loc 1 91 0
+  88 0002 5A68     		ldr	r2, [r3, #4]
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   if (NewState != DISABLE)
+  89              		.loc 1 89 0
+  90 0004 09B1     		cbz	r1, .L8
+  91              		.loc 1 91 0
+  92 0006 1043     		orrs	r0, r0, r2
+  93              	.LVL1:
+  94 0008 01E0     		b	.L10
+  95              	.LVL2:
+  96              	.L8:
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   }
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   else
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   {
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****     DBGMCU->CR &= ~DBGMCU_Periph;
+  97              		.loc 1 95 0
+  98 000a 22EA0000 		bic	r0, r2, r0
+  99              	.LVL3:
+ 100              	.L10:
+ 101 000e 5860     		str	r0, [r3, #4]
+ 102 0010 7047     		bx	lr
+ 103              	.L13:
+ 104 0012 00BF     		.align	2
+ 105              	.L12:
+ 106 0014 002004E0 		.word	-536600576
+ 107              		.cfi_endproc
+ 108              	.LFE58:
+ 110              		.section	.text.DBGMCU_APB1PeriphConfig,"ax",%progbits
+ 111              		.align	1
+ 112              		.global	DBGMCU_APB1PeriphConfig
+ 113              		.thumb
+ 114              		.thumb_func
+ 116              	DBGMCU_APB1PeriphConfig:
+ 117              	.LFB59:
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   }
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** }
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /**
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @brief  Configures APB1 peripheral behavior when the MCU is in Debug mode.
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @param  DBGMCU_Periph: specifies the APB1 peripheral.
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *   This parameter can be any combination of the following values:        
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM2_STOP: TIM2 counter stopped when Core is halted          
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM3_STOP: TIM3 counter stopped when Core is halted          
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM4_STOP: TIM4 counter stopped when Core is halted
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM5_STOP: TIM5 counter stopped when Core is halted          
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM6_STOP: TIM6 counter stopped when Core is halted          
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM7_STOP: TIM7 counter stopped when Core is halted
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM12_STOP: TIM12 counter stopped when Core is halted  
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM13_STOP: TIM13 counter stopped when Core is halted  
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM14_STOP: TIM14 counter stopped when Core is halted 
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_RTC_STOP: RTC Wakeup counter stopped when Core is halted.                      
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_WWDG_STOP: Debug WWDG stopped when Core is halted
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_IWDG_STOP: Debug IWDG stopped when Core is halted        
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_I2C1_SMBUS_TIMEOUT: I2C1 SMBUS timeout mode stopped when Core is halted
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_I2C2_SMBUS_TIMEOUT: I2C2 SMBUS timeout mode stopped when Core is halted
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_I2C3_SMBUS_TIMEOUT: I2C3 SMBUS timeout mode stopped when Core is halted
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_CAN2_STOP: Debug CAN1 stopped when Core is halted           
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_CAN1_STOP: Debug CAN2 stopped when Core is halted        
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *   This parameter can be: ENABLE or DISABLE.
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @retval None
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** void DBGMCU_APB1PeriphConfig(uint32_t DBGMCU_Periph, FunctionalState NewState)
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** {
+ 118              		.loc 1 124 0
+ 119              		.cfi_startproc
+ 120              		@ args = 0, pretend = 0, frame = 0
+ 121              		@ frame_needed = 0, uses_anonymous_args = 0
+ 122              		@ link register save eliminated.
+ 123              	.LVL4:
+ 124 0000 044B     		ldr	r3, .L18
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   /* Check the parameters */
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   assert_param(IS_DBGMCU_APB1PERIPH(DBGMCU_Periph));
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   if (NewState != DISABLE)
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   {
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****     DBGMCU->APB1FZ |= DBGMCU_Periph;
+ 125              		.loc 1 131 0
+ 126 0002 9A68     		ldr	r2, [r3, #8]
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   if (NewState != DISABLE)
+ 127              		.loc 1 129 0
+ 128 0004 09B1     		cbz	r1, .L15
+ 129              		.loc 1 131 0
+ 130 0006 1043     		orrs	r0, r0, r2
+ 131              	.LVL5:
+ 132 0008 01E0     		b	.L17
+ 133              	.LVL6:
+ 134              	.L15:
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   }
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   else
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   {
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****     DBGMCU->APB1FZ &= ~DBGMCU_Periph;
+ 135              		.loc 1 135 0
+ 136 000a 22EA0000 		bic	r0, r2, r0
+ 137              	.LVL7:
+ 138              	.L17:
+ 139 000e 9860     		str	r0, [r3, #8]
+ 140 0010 7047     		bx	lr
+ 141              	.L19:
+ 142 0012 00BF     		.align	2
+ 143              	.L18:
+ 144 0014 002004E0 		.word	-536600576
+ 145              		.cfi_endproc
+ 146              	.LFE59:
+ 148              		.section	.text.DBGMCU_APB2PeriphConfig,"ax",%progbits
+ 149              		.align	1
+ 150              		.global	DBGMCU_APB2PeriphConfig
+ 151              		.thumb
+ 152              		.thumb_func
+ 154              	DBGMCU_APB2PeriphConfig:
+ 155              	.LFB60:
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   }
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** }
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** /**
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @brief  Configures APB2 peripheral behavior when the MCU is in Debug mode.
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @param  DBGMCU_Periph: specifies the APB2 peripheral.
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *   This parameter can be any combination of the following values:       
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM1_STOP: TIM1 counter stopped when Core is halted                
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM8_STOP: TIM8 counter stopped when Core is halted
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM9_STOP: TIM9 counter stopped when Core is halted   
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM10_STOP: TIM10 counter stopped when Core is halted   
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *     @arg DBGMCU_TIM11_STOP: TIM11 counter stopped when Core is halted                          
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @param  NewState: new state of the specified peripheral in Debug mode.
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   *   This parameter can be: ENABLE or DISABLE.
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   * @retval None
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   */
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** void DBGMCU_APB2PeriphConfig(uint32_t DBGMCU_Periph, FunctionalState NewState)
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** {
+ 156              		.loc 1 153 0
+ 157              		.cfi_startproc
+ 158              		@ args = 0, pretend = 0, frame = 0
+ 159              		@ frame_needed = 0, uses_anonymous_args = 0
+ 160              		@ link register save eliminated.
+ 161              	.LVL8:
+ 162 0000 044B     		ldr	r3, .L24
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   /* Check the parameters */
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   assert_param(IS_DBGMCU_APB2PERIPH(DBGMCU_Periph));
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c **** 
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   if (NewState != DISABLE)
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   {
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****     DBGMCU->APB2FZ |= DBGMCU_Periph;
+ 163              		.loc 1 160 0
+ 164 0002 DA68     		ldr	r2, [r3, #12]
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   if (NewState != DISABLE)
+ 165              		.loc 1 158 0
+ 166 0004 09B1     		cbz	r1, .L21
+ 167              		.loc 1 160 0
+ 168 0006 1043     		orrs	r0, r0, r2
+ 169              	.LVL9:
+ 170 0008 01E0     		b	.L23
+ 171              	.LVL10:
+ 172              	.L21:
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   }
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   else
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****   {
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_dbgmcu.c ****     DBGMCU->APB2FZ &= ~DBGMCU_Periph;
+ 173              		.loc 1 164 0
+ 174 000a 22EA0000 		bic	r0, r2, r0
+ 175              	.LVL11:
+ 176              	.L23:
+ 177 000e D860     		str	r0, [r3, #12]
+ 178 0010 7047     		bx	lr
+ 179              	.L25:
+ 180 0012 00BF     		.align	2
+ 181              	.L24:
+ 182 0014 002004E0 		.word	-536600576
+ 183              		.cfi_endproc
+ 184              	.LFE60:
+ 186              		.text
+ 187              	.Letext0:
+ 188              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 189              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 190              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_dbgmcu.c
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:19     .text.DBGMCU_GetREVID:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:24     .text.DBGMCU_GetREVID:00000000 DBGMCU_GetREVID
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:41     .text.DBGMCU_GetREVID:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:46     .text.DBGMCU_GetDEVID:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:51     .text.DBGMCU_GetDEVID:00000000 DBGMCU_GetDEVID
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:68     .text.DBGMCU_GetDEVID:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:73     .text.DBGMCU_Config:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:78     .text.DBGMCU_Config:00000000 DBGMCU_Config
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:106    .text.DBGMCU_Config:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:111    .text.DBGMCU_APB1PeriphConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:116    .text.DBGMCU_APB1PeriphConfig:00000000 DBGMCU_APB1PeriphConfig
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:144    .text.DBGMCU_APB1PeriphConfig:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:149    .text.DBGMCU_APB2PeriphConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:154    .text.DBGMCU_APB2PeriphConfig:00000000 DBGMCU_APB2PeriphConfig
+C:\Users\STINA\AppData\Local\Temp\ccJcEAVa.s:182    .text.DBGMCU_APB2PeriphConfig:00000014 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

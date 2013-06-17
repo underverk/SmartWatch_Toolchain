@@ -1,0 +1,1406 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"driver_display.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.oled_wait_dma,"ax",%progbits
+  19              		.align	1
+  20              		.thumb
+  21              		.thumb_func
+  23              	oled_wait_dma:
+  24              	.LFB58:
+  25              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/driver_display.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Davey Taylor, Arduino Verkstad AB
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // OLED Display Driver
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** #include "driver_display.h"
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** #include <stm32f2xx_rcc.h>
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** #include <stm32f2xx_dma.h>
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** #include <stm32f2xx_spi.h>
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** #include <string.h>
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Waits for DMA transfer to complete
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** static void oled_wait_dma(void) {
+  26              		.loc 1 11 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30 0000 10B5     		push	{r4, lr}
+  31              	.LCFI0:
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 4, -8
+  34              		.cfi_offset 14, -4
+  35              	.L2:
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   while(!DMA_GetFlagStatus(DMA2_Stream3, DMA_FLAG_TCIF3)) {
+  36              		.loc 1 12 0 discriminator 1
+  37 0002 0C4C     		ldr	r4, .L9
+  38 0004 4FF0C051 		mov	r1, #402653184
+  39 0008 2046     		mov	r0, r4
+  40 000a FFF7FEFF 		bl	DMA_GetFlagStatus
+  41              	.LVL0:
+  42 000e 10B9     		cbnz	r0, .L3
+  43              	.L4:
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     if(!DMA2_Stream3->NDTR) break;
+  44              		.loc 1 13 0
+  45 0010 6368     		ldr	r3, [r4, #4]
+  46 0012 002B     		cmp	r3, #0
+  47 0014 F5D1     		bne	.L2
+  48              	.L3:
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA_ClearITPendingBit(DMA2_Stream3, DMA_IT_TCIF3);
+  49              		.loc 1 15 0
+  50 0016 0748     		ldr	r0, .L9
+  51 0018 0749     		ldr	r1, .L9+4
+  52 001a FFF7FEFF 		bl	DMA_ClearITPendingBit
+  53              	.LVL1:
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA_Cmd(DMA2_Stream3, DISABLE);
+  54              		.loc 1 16 0
+  55 001e 0021     		movs	r1, #0
+  56 0020 0448     		ldr	r0, .L9
+  57 0022 FFF7FEFF 		bl	DMA_Cmd
+  58              	.LVL2:
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_DMACmd(OLED_SPI, SPI_I2S_DMAReq_Tx, DISABLE);
+  59              		.loc 1 17 0
+  60 0026 0548     		ldr	r0, .L9+8
+  61 0028 0221     		movs	r1, #2
+  62 002a 0022     		movs	r2, #0
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+  63              		.loc 1 18 0
+  64 002c BDE81040 		pop	{r4, lr}
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_DMACmd(OLED_SPI, SPI_I2S_DMAReq_Tx, DISABLE);
+  65              		.loc 1 17 0
+  66 0030 FFF7FEBF 		b	SPI_I2S_DMACmd
+  67              	.LVL3:
+  68              	.L10:
+  69              		.align	2
+  70              	.L9:
+  71 0034 58640240 		.word	1073898584
+  72 0038 00800018 		.word	402685952
+  73 003c 00300140 		.word	1073819648
+  74              		.cfi_endproc
+  75              	.LFE58:
+  77              		.section	.text.oled_wait_spi,"ax",%progbits
+  78              		.align	1
+  79              		.thumb
+  80              		.thumb_func
+  82              	oled_wait_spi:
+  83              	.LFB59:
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Waits for SPI transfer to complete
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** static void oled_wait_spi(void) {
+  84              		.loc 1 21 0
+  85              		.cfi_startproc
+  86              		@ args = 0, pretend = 0, frame = 0
+  87              		@ frame_needed = 0, uses_anonymous_args = 0
+  88 0000 08B5     		push	{r3, lr}
+  89              	.LCFI1:
+  90              		.cfi_def_cfa_offset 8
+  91              		.cfi_offset 3, -8
+  92              		.cfi_offset 14, -4
+  93              	.L12:
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   while(SPI_I2S_GetFlagStatus(OLED_SPI, SPI_I2S_FLAG_TXE) == 0);
+  94              		.loc 1 22 0 discriminator 1
+  95 0002 0648     		ldr	r0, .L23
+  96 0004 0221     		movs	r1, #2
+  97 0006 FFF7FEFF 		bl	SPI_I2S_GetFlagStatus
+  98              	.LVL4:
+  99 000a 0028     		cmp	r0, #0
+ 100 000c F9D0     		beq	.L12
+ 101              	.L18:
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   while(SPI_I2S_GetFlagStatus(OLED_SPI, SPI_I2S_FLAG_BSY) == 1);
+ 102              		.loc 1 23 0
+ 103 000e 8021     		movs	r1, #128
+ 104 0010 0248     		ldr	r0, .L23
+ 105 0012 FFF7FEFF 		bl	SPI_I2S_GetFlagStatus
+ 106              	.LVL5:
+ 107 0016 0128     		cmp	r0, #1
+ 108 0018 F9D0     		beq	.L18
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 109              		.loc 1 24 0
+ 110 001a 08BD     		pop	{r3, pc}
+ 111              	.L24:
+ 112              		.align	2
+ 113              	.L23:
+ 114 001c 00300140 		.word	1073819648
+ 115              		.cfi_endproc
+ 116              	.LFE59:
+ 118              		.section	.text.oled_cmd,"ax",%progbits
+ 119              		.align	1
+ 120              		.thumb
+ 121              		.thumb_func
+ 123              	oled_cmd:
+ 124              	.LFB61:
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Starts a DMA transfer to OLED
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** static void oled_dma(uint8_t *data, uint32_t count) {
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->NDTR = count;
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->M0AR = (uint32_t)data;
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA_Cmd(DMA2_Stream3, ENABLE);
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_DMACmd(OLED_SPI, SPI_I2S_DMAReq_Tx, ENABLE);
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Sends a command to OLED
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** static void oled_cmd(uint8_t cmd, uint32_t count, uint8_t *data) {
+ 125              		.loc 1 35 0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129              	.LVL6:
+ 130 0000 70B5     		push	{r4, r5, r6, lr}
+ 131              	.LCFI2:
+ 132              		.cfi_def_cfa_offset 16
+ 133              		.cfi_offset 4, -16
+ 134              		.cfi_offset 5, -12
+ 135              		.cfi_offset 6, -8
+ 136              		.cfi_offset 14, -4
+ 137              		.loc 1 35 0
+ 138 0002 0646     		mov	r6, r0
+ 139 0004 0C46     		mov	r4, r1
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, LOW);
+ 140              		.loc 1 36 0
+ 141 0006 1448     		ldr	r0, .L30
+ 142              	.LVL7:
+ 143 0008 0021     		movs	r1, #0
+ 144              	.LVL8:
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** static void oled_cmd(uint8_t cmd, uint32_t count, uint8_t *data) {
+ 145              		.loc 1 35 0
+ 146 000a 1546     		mov	r5, r2
+ 147              		.loc 1 36 0
+ 148 000c FFF7FEFF 		bl	digitalWrite
+ 149              	.LVL9:
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, LOW);
+ 150              		.loc 1 37 0
+ 151 0010 1248     		ldr	r0, .L30+4
+ 152 0012 0021     		movs	r1, #0
+ 153 0014 FFF7FEFF 		bl	digitalWrite
+ 154              	.LVL10:
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_SendData(OLED_SPI, cmd);
+ 155              		.loc 1 38 0
+ 156 0018 1148     		ldr	r0, .L30+8
+ 157 001a 3146     		mov	r1, r6
+ 158 001c FFF7FEFF 		bl	SPI_I2S_SendData
+ 159              	.LVL11:
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_wait_spi();
+ 160              		.loc 1 39 0
+ 161 0020 FFF7FEFF 		bl	oled_wait_spi
+ 162              	.LVL12:
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, HIGH);
+ 163              		.loc 1 40 0
+ 164 0024 0D48     		ldr	r0, .L30+4
+ 165 0026 0121     		movs	r1, #1
+ 166 0028 FFF7FEFF 		bl	digitalWrite
+ 167              	.LVL13:
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   if(count) {
+ 168              		.loc 1 41 0
+ 169 002c 74B1     		cbz	r4, .L26
+ 170              	.LVL14:
+ 171              	.LBB4:
+ 172              	.LBB5:
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->NDTR = count;
+ 173              		.loc 1 28 0
+ 174 002e 0D48     		ldr	r0, .L30+12
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA_Cmd(DMA2_Stream3, ENABLE);
+ 175              		.loc 1 30 0
+ 176 0030 0121     		movs	r1, #1
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->NDTR = count;
+ 177              		.loc 1 28 0
+ 178 0032 4460     		str	r4, [r0, #4]
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->M0AR = (uint32_t)data;
+ 179              		.loc 1 29 0
+ 180 0034 C560     		str	r5, [r0, #12]
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA_Cmd(DMA2_Stream3, ENABLE);
+ 181              		.loc 1 30 0
+ 182 0036 FFF7FEFF 		bl	DMA_Cmd
+ 183              	.LVL15:
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_DMACmd(OLED_SPI, SPI_I2S_DMAReq_Tx, ENABLE);
+ 184              		.loc 1 31 0
+ 185 003a 0948     		ldr	r0, .L30+8
+ 186 003c 0221     		movs	r1, #2
+ 187 003e 0122     		movs	r2, #1
+ 188 0040 FFF7FEFF 		bl	SPI_I2S_DMACmd
+ 189              	.LVL16:
+ 190              	.LBE5:
+ 191              	.LBE4:
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_dma(data, count);
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_wait_dma();
+ 192              		.loc 1 43 0
+ 193 0044 FFF7FEFF 		bl	oled_wait_dma
+ 194              	.LVL17:
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_wait_spi();
+ 195              		.loc 1 44 0
+ 196 0048 FFF7FEFF 		bl	oled_wait_spi
+ 197              	.LVL18:
+ 198              	.L26:
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, HIGH);
+ 199              		.loc 1 46 0
+ 200 004c 0248     		ldr	r0, .L30
+ 201 004e 0121     		movs	r1, #1
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 202              		.loc 1 47 0
+ 203 0050 BDE87040 		pop	{r4, r5, r6, lr}
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, HIGH);
+ 204              		.loc 1 46 0
+ 205 0054 FFF7FEBF 		b	digitalWrite
+ 206              	.LVL19:
+ 207              	.L31:
+ 208              		.align	2
+ 209              	.L30:
+ 210 0058 00000000 		.word	PIN_PA4
+ 211 005c 00000000 		.word	PIN_PC0
+ 212 0060 00300140 		.word	1073819648
+ 213 0064 58640240 		.word	1073898584
+ 214              		.cfi_endproc
+ 215              	.LFE61:
+ 217              		.section	.text.oled_window,"ax",%progbits
+ 218              		.align	1
+ 219              		.global	oled_window
+ 220              		.thumb
+ 221              		.thumb_func
+ 223              	oled_window:
+ 224              	.LFB65:
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Ramps up the 1.8V (directly on = unstable behaviour)
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** static void oled_vramp(void) {
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   const uint32_t count = 2000; // Sony says minimum 500
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint32_t outer = 0; outer < count; outer++) {
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     digitalWrite(OLED_VEN, HIGH);
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     for(uint32_t inner = 0; inner < count; inner++) {
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****       if(inner == outer) digitalWrite(OLED_VEN, LOW);
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     }
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_VEN, HIGH);
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Initializes and turns on screen
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_init(void) {
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Set initial pin states
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_VEN, LOW);
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(ENABLE_2V8, HIGH);
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, HIGH);
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, HIGH);
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // SPI config
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   {
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     // Enable peripheral clock
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     RCC_AHB1PeriphClockCmd(OLED_SPI_SCK->clock | OLED_SPI_MOSI->clock, ENABLE);
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     // Enable SPI clock
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     RCC_APB2PeriphClockCmd(OLED_SPI_CLK, ENABLE);
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     //pinInit(OLED_SPI_SCK);
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     //pinInit(OLED_SPI_MOSI);
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_I2S_DeInit(OLED_SPI);
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_InitTypeDef ConfigSPI;
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_Mode = SPI_Mode_Master;
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_DataSize = SPI_DataSize_8b;
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_CPOL = SPI_CPOL_High;
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_CPHA = SPI_CPHA_2Edge;
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_NSS = SPI_NSS_Soft;
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_FirstBit = SPI_FirstBit_MSB;
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_Init(OLED_SPI, &ConfigSPI);
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_Cmd(OLED_SPI, ENABLE);
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // DMA config
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   {
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     DMA_InitTypeDef ConfigDMA;
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Channel = DMA_Channel_3;
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Memory0BaseAddr = 0;
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_DIR = DMA_DIR_MemoryToPeripheral;
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_BufferSize = 0;
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_MemoryInc = DMA_MemoryInc_Enable;
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Mode = DMA_Mode_Normal;
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Priority = DMA_Priority_High;
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_FIFOMode = DMA_FIFOMode_Enable;
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_FIFOThreshold = DMA_FIFOThreshold_1QuarterFull;
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     DMA_Init(DMA2_Stream3, &ConfigDMA);    
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Cycle reset
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, LOW);
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   delay(10);
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, HIGH);
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   delay(10);
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Do software reset
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_cmd(0x01, 0, 0);
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   delay(10);
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Initialization command list
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t init_cmds[] = {
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x03, 0x01, 0x00, // Stand-by OFF
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x07, 0x08, 0x00, 0x00, 0x07, 0x0F, 0x01, 0x0C, 0x09, 0x0C, // Set display size
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x05, 0x01, 0x0A, // Set RAM write "direction"
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x06, 0x01, 0x01, // Set RAM scanning "direction"
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x04, 0x01, 0x02, // Set internal oscillator to 90Hz
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x1F, 0x01, 0x30, // Set row scan operations = ALL
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x30, 0x01, 0x12, // Set regulator to ???
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x1C, 0x01, 0x0F, // Set pre-charge width
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x1E, 0x01, 0x00, // Set peak pulse delay
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x0F, 0x03, 0x0A, 0x0A, 0x0A, // Set peak currents (RGB)
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x1D, 0x03, 0x05, 0x05, 0x05, // Set peak pulse widths (RGB)
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x08, 0x01, 0x01, // Set interface type to 8-bit
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     0x00 // END
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   };
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Send initializiation commands
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t *p_cmds = init_cmds;
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   while(*p_cmds != 0x00) {
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     uint8_t cmd = *p_cmds++;
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     uint8_t args = *p_cmds++;
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_cmd(cmd, args, p_cmds);
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     p_cmds += args;
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Set initial power
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_power(40);
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Clear screen
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint16_t blank_line[128];
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   memset(blank_line, 0, sizeof(blank_line));
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint8_t y = 0; y < 128; y++) {
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_blit(0, y, 128, 1, blank_line);
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Turn on display
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t init_on[] = {0x01};
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_cmd(0x02, 1, init_on);
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   // Power up LEDs
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_vramp();
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Shut down display completely (lowest power mode)
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_deinit(void) {
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_power(0);
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_VEN, LOW);
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(ENABLE_2V8, LOW);
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, LOW);
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Sets the memory window
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_window(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
+ 225              		.loc 1 188 0
+ 226              		.cfi_startproc
+ 227              		@ args = 0, pretend = 0, frame = 8
+ 228              		@ frame_needed = 0, uses_anonymous_args = 0
+ 229              	.LVL20:
+ 230 0000 13B5     		push	{r0, r1, r4, lr}
+ 231              	.LCFI3:
+ 232              		.cfi_def_cfa_offset 16
+ 233              		.cfi_offset 0, -16
+ 234              		.cfi_offset 1, -12
+ 235              		.cfi_offset 4, -8
+ 236              		.cfi_offset 14, -4
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t window[8];
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   y0 += 0x1C; // TODO: Pretty sure it's possible to configure the display
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   y1 += 0x1C; // to get rid of this offset... but at least it works now!
+ 237              		.loc 1 191 0
+ 238 0002 1C33     		adds	r3, r3, #28
+ 239              	.LVL21:
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   window[0] = x0 >> 4; window[1] = x0 & 15;
+ 240              		.loc 1 192 0
+ 241 0004 0409     		lsrs	r4, r0, #4
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   y0 += 0x1C; // TODO: Pretty sure it's possible to configure the display
+ 242              		.loc 1 190 0
+ 243 0006 1C31     		adds	r1, r1, #28
+ 244              	.LVL22:
+ 245              		.loc 1 192 0
+ 246 0008 00F00F00 		and	r0, r0, #15
+ 247              	.LVL23:
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   y0 += 0x1C; // TODO: Pretty sure it's possible to configure the display
+ 248              		.loc 1 190 0
+ 249 000c C9B2     		uxtb	r1, r1
+ 250              	.LVL24:
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   y1 += 0x1C; // to get rid of this offset... but at least it works now!
+ 251              		.loc 1 191 0
+ 252 000e DBB2     		uxtb	r3, r3
+ 253              	.LVL25:
+ 254              		.loc 1 192 0
+ 255 0010 8DF80100 		strb	r0, [sp, #1]
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   window[2] = x1 >> 4; window[3] = x1 & 15;
+ 256              		.loc 1 193 0
+ 257 0014 1009     		lsrs	r0, r2, #4
+ 258 0016 02F00F02 		and	r2, r2, #15
+ 259              	.LVL26:
+ 260 001a 8DF80200 		strb	r0, [sp, #2]
+ 261 001e 8DF80320 		strb	r2, [sp, #3]
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   window[4] = y0 >> 4; window[5] = y0 & 15;
+ 262              		.loc 1 194 0
+ 263 0022 0809     		lsrs	r0, r1, #4
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   window[6] = y1 >> 4; window[7] = y1 & 15;
+ 264              		.loc 1 195 0
+ 265 0024 1A09     		lsrs	r2, r3, #4
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   window[4] = y0 >> 4; window[5] = y0 & 15;
+ 266              		.loc 1 194 0
+ 267 0026 01F00F01 		and	r1, r1, #15
+ 268              	.LVL27:
+ 269 002a 8DF80400 		strb	r0, [sp, #4]
+ 270 002e 8DF80510 		strb	r1, [sp, #5]
+ 271              		.loc 1 195 0
+ 272 0032 8DF80620 		strb	r2, [sp, #6]
+ 273 0036 03F00F03 		and	r3, r3, #15
+ 274              	.LVL28:
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_cmd(0x0A, 0x08, window);
+ 275              		.loc 1 196 0
+ 276 003a 0A20     		movs	r0, #10
+ 277 003c 0821     		movs	r1, #8
+ 278 003e 6A46     		mov	r2, sp
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   window[0] = x0 >> 4; window[1] = x0 & 15;
+ 279              		.loc 1 192 0
+ 280 0040 8DF80040 		strb	r4, [sp, #0]
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   window[6] = y1 >> 4; window[7] = y1 & 15;
+ 281              		.loc 1 195 0
+ 282 0044 8DF80730 		strb	r3, [sp, #7]
+ 283              		.loc 1 196 0
+ 284 0048 FFF7FEFF 		bl	oled_cmd
+ 285              	.LVL29:
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 286              		.loc 1 197 0
+ 287 004c 1CBD     		pop	{r2, r3, r4, pc}
+ 288              		.cfi_endproc
+ 289              	.LFE65:
+ 291              		.section	.text.oled_push,"ax",%progbits
+ 292              		.align	1
+ 293              		.global	oled_push
+ 294              		.thumb
+ 295              		.thumb_func
+ 297              	oled_push:
+ 298              	.LFB66:
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Pushes n pixels of specific color (to the window)
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_push(uint16_t pixel, uint16_t count) {
+ 299              		.loc 1 200 0
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 0
+ 302              		@ frame_needed = 0, uses_anonymous_args = 0
+ 303              	.LVL30:
+ 304 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 305              	.LCFI4:
+ 306              		.cfi_def_cfa_offset 24
+ 307              		.cfi_offset 3, -24
+ 308              		.cfi_offset 4, -20
+ 309              		.cfi_offset 5, -16
+ 310              		.cfi_offset 6, -12
+ 311              		.cfi_offset 7, -8
+ 312              		.cfi_offset 14, -4
+ 313              		.loc 1 200 0
+ 314 0002 0546     		mov	r5, r0
+ 315 0004 0E46     		mov	r6, r1
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, LOW);
+ 316              		.loc 1 201 0
+ 317 0006 1548     		ldr	r0, .L37
+ 318              	.LVL31:
+ 319 0008 0021     		movs	r1, #0
+ 320              	.LVL32:
+ 321 000a FFF7FEFF 		bl	digitalWrite
+ 322              	.LVL33:
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, LOW);
+ 323              		.loc 1 202 0
+ 324 000e 1448     		ldr	r0, .L37+4
+ 325 0010 0021     		movs	r1, #0
+ 326 0012 FFF7FEFF 		bl	digitalWrite
+ 327              	.LVL34:
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_SendData(OLED_SPI, 0xC);
+ 328              		.loc 1 203 0
+ 329 0016 1348     		ldr	r0, .L37+8
+ 330 0018 0C21     		movs	r1, #12
+ 331 001a FFF7FEFF 		bl	SPI_I2S_SendData
+ 332              	.LVL35:
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_wait_spi();
+ 333              		.loc 1 204 0
+ 334 001e FFF7FEFF 		bl	oled_wait_spi
+ 335              	.LVL36:
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, HIGH);
+ 336              		.loc 1 205 0
+ 337 0022 0F48     		ldr	r0, .L37+4
+ 338 0024 0121     		movs	r1, #1
+ 339 0026 FFF7FEFF 		bl	digitalWrite
+ 340              	.LVL37:
+ 341              	.LBB6:
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint16_t n = 0; n < count; n++) {
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_I2S_SendData(OLED_SPI, pixel >> 8);
+ 342              		.loc 1 207 0
+ 343 002a 2F0A     		lsrs	r7, r5, #8
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint16_t n = 0; n < count; n++) {
+ 344              		.loc 1 206 0
+ 345 002c 0024     		movs	r4, #0
+ 346              	.LVL38:
+ 347              	.L34:
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint16_t n = 0; n < count; n++) {
+ 348              		.loc 1 206 0 is_stmt 0 discriminator 1
+ 349 002e B442     		cmp	r4, r6
+ 350 0030 0ED0     		beq	.L36
+ 351              	.L35:
+ 352              		.loc 1 207 0 is_stmt 1 discriminator 2
+ 353 0032 0C48     		ldr	r0, .L37+8
+ 354 0034 3946     		mov	r1, r7
+ 355 0036 FFF7FEFF 		bl	SPI_I2S_SendData
+ 356              	.LVL39:
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint16_t n = 0; n < count; n++) {
+ 357              		.loc 1 206 0 discriminator 2
+ 358 003a 0134     		adds	r4, r4, #1
+ 359              	.LVL40:
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_wait_spi();
+ 360              		.loc 1 208 0 discriminator 2
+ 361 003c FFF7FEFF 		bl	oled_wait_spi
+ 362              	.LVL41:
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_I2S_SendData(OLED_SPI, pixel & 255);
+ 363              		.loc 1 209 0 discriminator 2
+ 364 0040 0848     		ldr	r0, .L37+8
+ 365 0042 E9B2     		uxtb	r1, r5
+ 366 0044 FFF7FEFF 		bl	SPI_I2S_SendData
+ 367              	.LVL42:
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint16_t n = 0; n < count; n++) {
+ 368              		.loc 1 206 0 discriminator 2
+ 369 0048 A4B2     		uxth	r4, r4
+ 370              	.LVL43:
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_wait_spi();
+ 371              		.loc 1 210 0 discriminator 2
+ 372 004a FFF7FEFF 		bl	oled_wait_spi
+ 373              	.LVL44:
+ 374 004e EEE7     		b	.L34
+ 375              	.L36:
+ 376              	.LBE6:
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   }
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, HIGH);
+ 377              		.loc 1 212 0
+ 378 0050 0248     		ldr	r0, .L37
+ 379 0052 0121     		movs	r1, #1
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 380              		.loc 1 213 0
+ 381 0054 BDE8F840 		pop	{r3, r4, r5, r6, r7, lr}
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, HIGH);
+ 382              		.loc 1 212 0
+ 383 0058 FFF7FEBF 		b	digitalWrite
+ 384              	.LVL45:
+ 385              	.L38:
+ 386              		.align	2
+ 387              	.L37:
+ 388 005c 00000000 		.word	PIN_PA4
+ 389 0060 00000000 		.word	PIN_PC0
+ 390 0064 00300140 		.word	1073819648
+ 391              		.cfi_endproc
+ 392              	.LFE66:
+ 394              		.section	.text.oled_blit,"ax",%progbits
+ 395              		.align	1
+ 396              		.global	oled_blit
+ 397              		.thumb
+ 398              		.thumb_func
+ 400              	oled_blit:
+ 401              	.LFB67:
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Blit a sprite to screen
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_blit(uint8_t x, uint8_t y, uint8_t w, uint8_t h, void *buffer) {
+ 402              		.loc 1 216 0
+ 403              		.cfi_startproc
+ 404              		@ args = 4, pretend = 0, frame = 0
+ 405              		@ frame_needed = 0, uses_anonymous_args = 0
+ 406              	.LVL46:
+ 407 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 408              	.LCFI5:
+ 409              		.cfi_def_cfa_offset 32
+ 410              		.cfi_offset 3, -32
+ 411              		.cfi_offset 4, -28
+ 412              		.cfi_offset 5, -24
+ 413              		.cfi_offset 6, -20
+ 414              		.cfi_offset 7, -16
+ 415              		.cfi_offset 8, -12
+ 416              		.cfi_offset 9, -8
+ 417              		.cfi_offset 14, -4
+ 418              		.loc 1 216 0
+ 419 0004 1446     		mov	r4, r2
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_window(x, y, x + w - 1, y + h - 1);
+ 420              		.loc 1 217 0
+ 421 0006 421E     		subs	r2, r0, #1
+ 422              	.LVL47:
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_blit(uint8_t x, uint8_t y, uint8_t w, uint8_t h, void *buffer) {
+ 423              		.loc 1 216 0
+ 424 0008 1D46     		mov	r5, r3
+ 425              		.loc 1 217 0
+ 426 000a A618     		adds	r6, r4, r2
+ 427 000c 4B1E     		subs	r3, r1, #1
+ 428              	.LVL48:
+ 429 000e F2B2     		uxtb	r2, r6
+ 430 0010 EF18     		adds	r7, r5, r3
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, LOW);
+ 431              		.loc 1 219 0
+ 432 0012 194E     		ldr	r6, .L40
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_window(x, y, x + w - 1, y + h - 1);
+ 433              		.loc 1 217 0
+ 434 0014 FBB2     		uxtb	r3, r7
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, LOW);
+ 435              		.loc 1 221 0
+ 436 0016 DFF86C80 		ldr	r8, .L40+12
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_blit(uint8_t x, uint8_t y, uint8_t w, uint8_t h, void *buffer) {
+ 437              		.loc 1 216 0
+ 438 001a DDF82090 		ldr	r9, [sp, #32]
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_SendData(OLED_SPI, 0xC);
+ 439              		.loc 1 222 0
+ 440 001e 174F     		ldr	r7, .L40+4
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_window(x, y, x + w - 1, y + h - 1);
+ 441              		.loc 1 217 0
+ 442 0020 FFF7FEFF 		bl	oled_window
+ 443              	.LVL49:
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, LOW);
+ 444              		.loc 1 219 0
+ 445 0024 3046     		mov	r0, r6
+ 446 0026 0021     		movs	r1, #0
+ 447 0028 FFF7FEFF 		bl	digitalWrite
+ 448              	.LVL50:
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_wait_spi();
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, HIGH);
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_dma((uint8_t*)buffer, (w * h) << 1);
+ 449              		.loc 1 226 0
+ 450 002c 6C43     		muls	r4, r5, r4
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, LOW);
+ 451              		.loc 1 221 0
+ 452 002e 4046     		mov	r0, r8
+ 453 0030 0021     		movs	r1, #0
+ 454 0032 FFF7FEFF 		bl	digitalWrite
+ 455              	.LVL51:
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_SendData(OLED_SPI, 0xC);
+ 456              		.loc 1 222 0
+ 457 0036 3846     		mov	r0, r7
+ 458 0038 0C21     		movs	r1, #12
+ 459 003a FFF7FEFF 		bl	SPI_I2S_SendData
+ 460              	.LVL52:
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_wait_spi();
+ 461              		.loc 1 223 0
+ 462 003e FFF7FEFF 		bl	oled_wait_spi
+ 463              	.LVL53:
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, HIGH);
+ 464              		.loc 1 224 0
+ 465 0042 4046     		mov	r0, r8
+ 466 0044 0121     		movs	r1, #1
+ 467 0046 FFF7FEFF 		bl	digitalWrite
+ 468              	.LVL54:
+ 469              	.LBB9:
+ 470              	.LBB10:
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->NDTR = count;
+ 471              		.loc 1 28 0
+ 472 004a 0D48     		ldr	r0, .L40+8
+ 473              	.LBE10:
+ 474              	.LBE9:
+ 475              		.loc 1 226 0
+ 476 004c 6400     		lsls	r4, r4, #1
+ 477              	.LVL55:
+ 478              	.LBB12:
+ 479              	.LBB11:
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->NDTR = count;
+ 480              		.loc 1 28 0
+ 481 004e 4460     		str	r4, [r0, #4]
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA_Cmd(DMA2_Stream3, ENABLE);
+ 482              		.loc 1 30 0
+ 483 0050 0121     		movs	r1, #1
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA2_Stream3->M0AR = (uint32_t)data;
+ 484              		.loc 1 29 0
+ 485 0052 C0F80C90 		str	r9, [r0, #12]
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   DMA_Cmd(DMA2_Stream3, ENABLE);
+ 486              		.loc 1 30 0
+ 487 0056 FFF7FEFF 		bl	DMA_Cmd
+ 488              	.LVL56:
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   SPI_I2S_DMACmd(OLED_SPI, SPI_I2S_DMAReq_Tx, ENABLE);
+ 489              		.loc 1 31 0
+ 490 005a 3846     		mov	r0, r7
+ 491 005c 0221     		movs	r1, #2
+ 492 005e 0122     		movs	r2, #1
+ 493 0060 FFF7FEFF 		bl	SPI_I2S_DMACmd
+ 494              	.LVL57:
+ 495              	.LBE11:
+ 496              	.LBE12:
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_wait_dma();
+ 497              		.loc 1 227 0
+ 498 0064 FFF7FEFF 		bl	oled_wait_dma
+ 499              	.LVL58:
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_wait_spi();
+ 500              		.loc 1 228 0
+ 501 0068 FFF7FEFF 		bl	oled_wait_spi
+ 502              	.LVL59:
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, HIGH);
+ 503              		.loc 1 230 0
+ 504 006c 3046     		mov	r0, r6
+ 505 006e 0121     		movs	r1, #1
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 506              		.loc 1 231 0
+ 507 0070 BDE8F843 		pop	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_NCS, HIGH);
+ 508              		.loc 1 230 0
+ 509 0074 FFF7FEBF 		b	digitalWrite
+ 510              	.LVL60:
+ 511              	.L41:
+ 512              		.align	2
+ 513              	.L40:
+ 514 0078 00000000 		.word	PIN_PA4
+ 515 007c 00300140 		.word	1073819648
+ 516 0080 58640240 		.word	1073898584
+ 517 0084 00000000 		.word	PIN_PC0
+ 518              		.cfi_endproc
+ 519              	.LFE67:
+ 521              		.section	.text.oled_power,"ax",%progbits
+ 522              		.align	1
+ 523              		.global	oled_power
+ 524              		.thumb
+ 525              		.thumb_func
+ 527              	oled_power:
+ 528              	.LFB68:
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** 
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** // Changes OLED power (brightness)
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_power(uint8_t level) {
+ 529              		.loc 1 234 0
+ 530              		.cfi_startproc
+ 531              		@ args = 0, pretend = 0, frame = 8
+ 532              		@ frame_needed = 0, uses_anonymous_args = 0
+ 533              	.LVL61:
+ 534 0000 07B5     		push	{r0, r1, r2, lr}
+ 535              	.LCFI6:
+ 536              		.cfi_def_cfa_offset 16
+ 537              		.cfi_offset 0, -16
+ 538              		.cfi_offset 1, -12
+ 539              		.cfi_offset 2, -8
+ 540              		.cfi_offset 14, -4
+ 541 0002 5A28     		cmp	r0, #90
+ 542 0004 28BF     		it	cs
+ 543 0006 5A20     		movcs	r0, #90
+ 544              	.LVL62:
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t p[6];
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   if(level > 90) level = 90;
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   p[0] = p[2] = p[4] = level >> 4;
+ 545              		.loc 1 237 0
+ 546 0008 0309     		lsrs	r3, r0, #4
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   p[1] = p[3] = p[5] = level & 15;
+ 547              		.loc 1 238 0
+ 548 000a 00F00F00 		and	r0, r0, #15
+ 549              	.LVL63:
+ 550 000e 8DF80500 		strb	r0, [sp, #5]
+ 551 0012 8DF80300 		strb	r0, [sp, #3]
+ 552 0016 8DF80100 		strb	r0, [sp, #1]
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_cmd(0x0E, 6, p);
+ 553              		.loc 1 239 0
+ 554 001a 0621     		movs	r1, #6
+ 555 001c 0E20     		movs	r0, #14
+ 556 001e 6A46     		mov	r2, sp
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   p[0] = p[2] = p[4] = level >> 4;
+ 557              		.loc 1 237 0
+ 558 0020 8DF80430 		strb	r3, [sp, #4]
+ 559 0024 8DF80230 		strb	r3, [sp, #2]
+ 560 0028 8DF80030 		strb	r3, [sp, #0]
+ 561              		.loc 1 239 0
+ 562 002c FFF7FEFF 		bl	oled_cmd
+ 563              	.LVL64:
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 564              		.loc 1 240 0
+ 565 0030 0EBD     		pop	{r1, r2, r3, pc}
+ 566              		.cfi_endproc
+ 567              	.LFE68:
+ 569              		.section	.text.oled_deinit,"ax",%progbits
+ 570              		.align	1
+ 571              		.global	oled_deinit
+ 572              		.thumb
+ 573              		.thumb_func
+ 575              	oled_deinit:
+ 576              	.LFB64:
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_deinit(void) {
+ 577              		.loc 1 180 0
+ 578              		.cfi_startproc
+ 579              		@ args = 0, pretend = 0, frame = 0
+ 580              		@ frame_needed = 0, uses_anonymous_args = 0
+ 581 0000 08B5     		push	{r3, lr}
+ 582              	.LCFI7:
+ 583              		.cfi_def_cfa_offset 8
+ 584              		.cfi_offset 3, -8
+ 585              		.cfi_offset 14, -4
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_power(0);
+ 586              		.loc 1 181 0
+ 587 0002 0020     		movs	r0, #0
+ 588 0004 FFF7FEFF 		bl	oled_power
+ 589              	.LVL65:
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_VEN, LOW);
+ 590              		.loc 1 182 0
+ 591 0008 0021     		movs	r1, #0
+ 592 000a 0648     		ldr	r0, .L44
+ 593 000c FFF7FEFF 		bl	digitalWrite
+ 594              	.LVL66:
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(ENABLE_2V8, LOW);
+ 595              		.loc 1 183 0
+ 596 0010 0021     		movs	r1, #0
+ 597 0012 0548     		ldr	r0, .L44+4
+ 598 0014 FFF7FEFF 		bl	digitalWrite
+ 599              	.LVL67:
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, LOW);
+ 600              		.loc 1 184 0
+ 601 0018 0448     		ldr	r0, .L44+8
+ 602 001a 0021     		movs	r1, #0
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 603              		.loc 1 185 0
+ 604 001c BDE80840 		pop	{r3, lr}
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, LOW);
+ 605              		.loc 1 184 0
+ 606 0020 FFF7FEBF 		b	digitalWrite
+ 607              	.LVL68:
+ 608              	.L45:
+ 609              		.align	2
+ 610              	.L44:
+ 611 0024 00000000 		.word	PIN_PC1
+ 612 0028 00000000 		.word	PIN_PB3
+ 613 002c 00000000 		.word	PIN_PB5
+ 614              		.cfi_endproc
+ 615              	.LFE64:
+ 617              		.section	.text.oled_init,"ax",%progbits
+ 618              		.align	1
+ 619              		.global	oled_init
+ 620              		.thumb
+ 621              		.thumb_func
+ 623              	oled_init:
+ 624              	.LFB63:
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_init(void) {
+ 625              		.loc 1 62 0
+ 626              		.cfi_startproc
+ 627              		@ args = 0, pretend = 0, frame = 336
+ 628              		@ frame_needed = 0, uses_anonymous_args = 0
+ 629 0000 70B5     		push	{r4, r5, r6, lr}
+ 630              	.LCFI8:
+ 631              		.cfi_def_cfa_offset 16
+ 632              		.cfi_offset 4, -16
+ 633              		.cfi_offset 5, -12
+ 634              		.cfi_offset 6, -8
+ 635              		.cfi_offset 14, -4
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_VEN, LOW);
+ 636              		.loc 1 65 0
+ 637 0002 6248     		ldr	r0, .L59
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** void oled_init(void) {
+ 638              		.loc 1 62 0
+ 639 0004 D6B0     		sub	sp, sp, #344
+ 640              	.LCFI9:
+ 641              		.cfi_def_cfa_offset 360
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_VEN, LOW);
+ 642              		.loc 1 65 0
+ 643 0006 0021     		movs	r1, #0
+ 644 0008 FFF7FEFF 		bl	digitalWrite
+ 645              	.LVL69:
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(ENABLE_2V8, HIGH);
+ 646              		.loc 1 66 0
+ 647 000c 6048     		ldr	r0, .L59+4
+ 648 000e 0121     		movs	r1, #1
+ 649 0010 FFF7FEFF 		bl	digitalWrite
+ 650              	.LVL70:
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, HIGH);
+ 651              		.loc 1 67 0
+ 652 0014 5F48     		ldr	r0, .L59+8
+ 653 0016 0121     		movs	r1, #1
+ 654 0018 FFF7FEFF 		bl	digitalWrite
+ 655              	.LVL71:
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_A0, HIGH);
+ 656              		.loc 1 68 0
+ 657 001c 5E48     		ldr	r0, .L59+12
+ 658 001e 0121     		movs	r1, #1
+ 659 0020 FFF7FEFF 		bl	digitalWrite
+ 660              	.LVL72:
+ 661              	.LBB21:
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     RCC_AHB1PeriphClockCmd(OLED_SPI_SCK->clock | OLED_SPI_MOSI->clock, ENABLE);
+ 662              		.loc 1 73 0
+ 663 0024 5D4A     		ldr	r2, .L59+16
+ 664 0026 5E4B     		ldr	r3, .L59+20
+ 665 0028 D068     		ldr	r0, [r2, #12]
+ 666 002a D968     		ldr	r1, [r3, #12]
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_CPOL = SPI_CPOL_High;
+ 667              		.loc 1 88 0
+ 668 002c 0225     		movs	r5, #2
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     RCC_AHB1PeriphClockCmd(OLED_SPI_SCK->clock | OLED_SPI_MOSI->clock, ENABLE);
+ 669              		.loc 1 73 0
+ 670 002e 0843     		orrs	r0, r0, r1
+ 671 0030 0121     		movs	r1, #1
+ 672 0032 FFF7FEFF 		bl	RCC_AHB1PeriphClockCmd
+ 673              	.LVL73:
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     RCC_APB2PeriphClockCmd(OLED_SPI_CLK, ENABLE);
+ 674              		.loc 1 76 0
+ 675 0036 0121     		movs	r1, #1
+ 676 0038 4FF48050 		mov	r0, #4096
+ 677 003c FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+ 678              	.LVL74:
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_I2S_DeInit(OLED_SPI);
+ 679              		.loc 1 81 0
+ 680 0040 5848     		ldr	r0, .L59+24
+ 681 0042 FFF7FEFF 		bl	SPI_I2S_DeInit
+ 682              	.LVL75:
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_Mode = SPI_Mode_Master;
+ 683              		.loc 1 86 0
+ 684 0046 4FF48270 		mov	r0, #260
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+ 685              		.loc 1 85 0
+ 686 004a 0024     		movs	r4, #0
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_NSS = SPI_NSS_Soft;
+ 687              		.loc 1 90 0
+ 688 004c 4FF40073 		mov	r3, #512
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_Mode = SPI_Mode_Master;
+ 689              		.loc 1 86 0
+ 690 0050 ADF80A00 		strh	r0, [sp, #10]	@ movhi
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_CPOL = SPI_CPOL_High;
+ 691              		.loc 1 88 0
+ 692 0054 ADF80E50 		strh	r5, [sp, #14]	@ movhi
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_Init(OLED_SPI, &ConfigSPI);
+ 693              		.loc 1 94 0
+ 694 0058 5248     		ldr	r0, .L59+24
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_CPHA = SPI_CPHA_2Edge;
+ 695              		.loc 1 89 0
+ 696 005a 0125     		movs	r5, #1
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_Init(OLED_SPI, &ConfigSPI);
+ 697              		.loc 1 94 0
+ 698 005c 02A9     		add	r1, sp, #8
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_NSS = SPI_NSS_Soft;
+ 699              		.loc 1 90 0
+ 700 005e ADF81230 		strh	r3, [sp, #18]	@ movhi
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_CPHA = SPI_CPHA_2Edge;
+ 701              		.loc 1 89 0
+ 702 0062 ADF81050 		strh	r5, [sp, #16]	@ movhi
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+ 703              		.loc 1 85 0
+ 704 0066 ADF80840 		strh	r4, [sp, #8]	@ movhi
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_DataSize = SPI_DataSize_8b;
+ 705              		.loc 1 87 0
+ 706 006a ADF80C40 		strh	r4, [sp, #12]	@ movhi
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+ 707              		.loc 1 91 0
+ 708 006e ADF81440 		strh	r4, [sp, #20]	@ movhi
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigSPI.SPI_FirstBit = SPI_FirstBit_MSB;
+ 709              		.loc 1 92 0
+ 710 0072 ADF81640 		strh	r4, [sp, #22]	@ movhi
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_Init(OLED_SPI, &ConfigSPI);
+ 711              		.loc 1 94 0
+ 712 0076 FFF7FEFF 		bl	SPI_Init
+ 713              	.LVL76:
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     SPI_Cmd(OLED_SPI, ENABLE);
+ 714              		.loc 1 96 0
+ 715 007a 2946     		mov	r1, r5
+ 716 007c 4948     		ldr	r0, .L59+24
+ 717 007e FFF7FEFF 		bl	SPI_Cmd
+ 718              	.LVL77:
+ 719              	.LBE21:
+ 720              	.LBB22:
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
+ 721              		.loc 1 101 0
+ 722 0082 2946     		mov	r1, r5
+ 723 0084 4FF48000 		mov	r0, #4194304
+ 724 0088 FFF7FEFF 		bl	RCC_AHB1PeriphClockCmd
+ 725              	.LVL78:
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Channel = DMA_Channel_3;
+ 726              		.loc 1 104 0
+ 727 008c 4FF0C061 		mov	r1, #100663296
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
+ 728              		.loc 1 105 0
+ 729 0090 454A     		ldr	r2, .L59+28
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Channel = DMA_Channel_3;
+ 730              		.loc 1 104 0
+ 731 0092 0791     		str	r1, [sp, #28]
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_DIR = DMA_DIR_MemoryToPeripheral;
+ 732              		.loc 1 107 0
+ 733 0094 4020     		movs	r0, #64
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Priority = DMA_Priority_High;
+ 734              		.loc 1 114 0
+ 735 0096 4FF40031 		mov	r1, #131072
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_MemoryInc = DMA_MemoryInc_Enable;
+ 736              		.loc 1 110 0
+ 737 009a 4FF48063 		mov	r3, #1024
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
+ 738              		.loc 1 105 0
+ 739 009e 0892     		str	r2, [sp, #32]
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_DIR = DMA_DIR_MemoryToPeripheral;
+ 740              		.loc 1 107 0
+ 741 00a0 0A90     		str	r0, [sp, #40]
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_FIFOMode = DMA_FIFOMode_Enable;
+ 742              		.loc 1 115 0
+ 743 00a2 0422     		movs	r2, #4
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Priority = DMA_Priority_High;
+ 744              		.loc 1 114 0
+ 745 00a4 1191     		str	r1, [sp, #68]
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     DMA_Init(DMA2_Stream3, &ConfigDMA);    
+ 746              		.loc 1 120 0
+ 747 00a6 4148     		ldr	r0, .L59+32
+ 748 00a8 07A9     		add	r1, sp, #28
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_MemoryInc = DMA_MemoryInc_Enable;
+ 749              		.loc 1 110 0
+ 750 00aa 0D93     		str	r3, [sp, #52]
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_FIFOMode = DMA_FIFOMode_Enable;
+ 751              		.loc 1 115 0
+ 752 00ac 1292     		str	r2, [sp, #72]
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Memory0BaseAddr = 0;
+ 753              		.loc 1 106 0
+ 754 00ae 0994     		str	r4, [sp, #36]
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_BufferSize = 0;
+ 755              		.loc 1 108 0
+ 756 00b0 0B94     		str	r4, [sp, #44]
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+ 757              		.loc 1 109 0
+ 758 00b2 0C94     		str	r4, [sp, #48]
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+ 759              		.loc 1 111 0
+ 760 00b4 0E94     		str	r4, [sp, #56]
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+ 761              		.loc 1 112 0
+ 762 00b6 0F94     		str	r4, [sp, #60]
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_Mode = DMA_Mode_Normal;
+ 763              		.loc 1 113 0
+ 764 00b8 1094     		str	r4, [sp, #64]
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_FIFOThreshold = DMA_FIFOThreshold_1QuarterFull;
+ 765              		.loc 1 116 0
+ 766 00ba 1394     		str	r4, [sp, #76]
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+ 767              		.loc 1 117 0
+ 768 00bc 1494     		str	r4, [sp, #80]
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     ConfigDMA.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+ 769              		.loc 1 118 0
+ 770 00be 1594     		str	r4, [sp, #84]
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     DMA_Init(DMA2_Stream3, &ConfigDMA);    
+ 771              		.loc 1 120 0
+ 772 00c0 FFF7FEFF 		bl	DMA_Init
+ 773              	.LVL79:
+ 774              	.LBE22:
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, LOW);
+ 775              		.loc 1 124 0
+ 776 00c4 2146     		mov	r1, r4
+ 777 00c6 3348     		ldr	r0, .L59+8
+ 778 00c8 FFF7FEFF 		bl	digitalWrite
+ 779              	.LVL80:
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   delay(10);
+ 780              		.loc 1 125 0
+ 781 00cc 0A20     		movs	r0, #10
+ 782 00ce FFF7FEFF 		bl	delay
+ 783              	.LVL81:
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_RESET, HIGH);
+ 784              		.loc 1 126 0
+ 785 00d2 2946     		mov	r1, r5
+ 786 00d4 2F48     		ldr	r0, .L59+8
+ 787 00d6 FFF7FEFF 		bl	digitalWrite
+ 788              	.LVL82:
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   delay(10);
+ 789              		.loc 1 127 0
+ 790 00da 0A20     		movs	r0, #10
+ 791 00dc FFF7FEFF 		bl	delay
+ 792              	.LVL83:
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_cmd(0x01, 0, 0);
+ 793              		.loc 1 130 0
+ 794 00e0 2846     		mov	r0, r5
+ 795 00e2 2146     		mov	r1, r4
+ 796 00e4 2246     		mov	r2, r4
+ 797 00e6 FFF7FEFF 		bl	oled_cmd
+ 798              	.LVL84:
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   delay(10);
+ 799              		.loc 1 131 0
+ 800 00ea 0A20     		movs	r0, #10
+ 801 00ec FFF7FEFF 		bl	delay
+ 802              	.LVL85:
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t init_cmds[] = {
+ 803              		.loc 1 134 0
+ 804 00f0 2F4B     		ldr	r3, .L59+36
+ 805 00f2 07A8     		add	r0, sp, #28
+ 806 00f4 03F13005 		add	r5, r3, #48
+ 807              	.L47:
+ 808 00f8 0446     		mov	r4, r0
+ 809 00fa 5968     		ldr	r1, [r3, #4]	@ unaligned
+ 810 00fc 1868     		ldr	r0, [r3, #0]	@ unaligned
+ 811 00fe 0833     		adds	r3, r3, #8
+ 812 0100 03C4     		stmia	r4!, {r0, r1}
+ 813 0102 AB42     		cmp	r3, r5
+ 814 0104 2046     		mov	r0, r4
+ 815 0106 F7D1     		bne	.L47
+ 816              	.LVL86:
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t *p_cmds = init_cmds;
+ 817              		.loc 1 151 0
+ 818 0108 07AB     		add	r3, sp, #28
+ 819              	.LVL87:
+ 820              	.L48:
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   while(*p_cmds != 0x00) {
+ 821              		.loc 1 152 0 discriminator 1
+ 822 010a 1C78     		ldrb	r4, [r3, #0]	@ zero_extendqisi2
+ 823 010c 44B1     		cbz	r4, .L58
+ 824              	.L49:
+ 825              	.LVL88:
+ 826              	.LBB23:
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_cmd(cmd, args, p_cmds);
+ 827              		.loc 1 155 0
+ 828 010e 5D78     		ldrb	r5, [r3, #1]	@ zero_extendqisi2
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     uint8_t args = *p_cmds++;
+ 829              		.loc 1 154 0
+ 830 0110 9E1C     		adds	r6, r3, #2
+ 831              	.LVL89:
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_cmd(cmd, args, p_cmds);
+ 832              		.loc 1 155 0
+ 833 0112 2046     		mov	r0, r4
+ 834 0114 2946     		mov	r1, r5
+ 835 0116 3246     		mov	r2, r6
+ 836 0118 FFF7FEFF 		bl	oled_cmd
+ 837              	.LVL90:
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     p_cmds += args;
+ 838              		.loc 1 156 0
+ 839 011c 7319     		adds	r3, r6, r5
+ 840              	.LVL91:
+ 841 011e F4E7     		b	.L48
+ 842              	.LVL92:
+ 843              	.L58:
+ 844              	.LBE23:
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_power(40);
+ 845              		.loc 1 160 0
+ 846 0120 2820     		movs	r0, #40
+ 847 0122 FFF7FEFF 		bl	oled_power
+ 848              	.LVL93:
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   memset(blank_line, 0, sizeof(blank_line));
+ 849              		.loc 1 164 0
+ 850 0126 16A8     		add	r0, sp, #88
+ 851 0128 2146     		mov	r1, r4
+ 852 012a 4FF48072 		mov	r2, #256
+ 853 012e FFF7FEFF 		bl	memset
+ 854              	.LVL94:
+ 855              	.L50:
+ 856              	.LBB24:
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     oled_blit(0, y, 128, 1, blank_line);
+ 857              		.loc 1 166 0 discriminator 2
+ 858 0132 16A9     		add	r1, sp, #88
+ 859 0134 8022     		movs	r2, #128
+ 860 0136 0091     		str	r1, [sp, #0]
+ 861 0138 0020     		movs	r0, #0
+ 862 013a 2146     		mov	r1, r4
+ 863 013c 0123     		movs	r3, #1
+ 864 013e FFF7FEFF 		bl	oled_blit
+ 865              	.LVL95:
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint8_t y = 0; y < 128; y++) {
+ 866              		.loc 1 165 0 discriminator 2
+ 867 0142 621C     		adds	r2, r4, #1
+ 868 0144 D4B2     		uxtb	r4, r2
+ 869              	.LVL96:
+ 870 0146 802C     		cmp	r4, #128
+ 871 0148 F3D1     		bne	.L50
+ 872              	.LBE24:
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t init_on[] = {0x01};
+ 873              		.loc 1 171 0
+ 874 014a 0121     		movs	r1, #1
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_cmd(0x02, 1, init_on);
+ 875              		.loc 1 172 0
+ 876 014c 0220     		movs	r0, #2
+ 877 014e 02AA     		add	r2, sp, #8
+ 878              	.LVL97:
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   uint8_t init_on[] = {0x01};
+ 879              		.loc 1 171 0
+ 880 0150 8DF80810 		strb	r1, [sp, #8]
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   oled_cmd(0x02, 1, init_on);
+ 881              		.loc 1 172 0
+ 882 0154 FFF7FEFF 		bl	oled_cmd
+ 883              	.LVL98:
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint32_t outer = 0; outer < count; outer++) {
+ 884              		.loc 1 52 0
+ 885 0158 0024     		movs	r4, #0
+ 886              	.LVL99:
+ 887              	.L53:
+ 888              	.LBB25:
+ 889              	.LBB26:
+ 890              	.LBB27:
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     digitalWrite(OLED_VEN, HIGH);
+ 891              		.loc 1 53 0
+ 892 015a 0C48     		ldr	r0, .L59
+ 893 015c 0121     		movs	r1, #1
+ 894 015e FFF7FEFF 		bl	digitalWrite
+ 895              	.LVL100:
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     for(uint32_t inner = 0; inner < count; inner++) {
+ 896              		.loc 1 54 0
+ 897 0162 0025     		movs	r5, #0
+ 898              	.LVL101:
+ 899              	.L52:
+ 900              	.LBB28:
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****       if(inner == outer) digitalWrite(OLED_VEN, LOW);
+ 901              		.loc 1 55 0
+ 902 0164 A542     		cmp	r5, r4
+ 903 0166 03D1     		bne	.L51
+ 904 0168 0848     		ldr	r0, .L59
+ 905 016a 0021     		movs	r1, #0
+ 906 016c FFF7FEFF 		bl	digitalWrite
+ 907              	.LVL102:
+ 908              	.L51:
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****     for(uint32_t inner = 0; inner < count; inner++) {
+ 909              		.loc 1 54 0
+ 910 0170 0135     		adds	r5, r5, #1
+ 911              	.LVL103:
+ 912 0172 B5F5FA6F 		cmp	r5, #2000
+ 913 0176 F5D1     		bne	.L52
+ 914              	.LBE28:
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   for(uint32_t outer = 0; outer < count; outer++) {
+ 915              		.loc 1 52 0
+ 916 0178 0134     		adds	r4, r4, #1
+ 917              	.LVL104:
+ 918 017a B4F5FA6F 		cmp	r4, #2000
+ 919 017e ECD1     		bne	.L53
+ 920              	.LBE27:
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c ****   digitalWrite(OLED_VEN, HIGH);
+ 921              		.loc 1 58 0
+ 922 0180 0248     		ldr	r0, .L59
+ 923 0182 0121     		movs	r1, #1
+ 924 0184 FFF7FEFF 		bl	digitalWrite
+ 925              	.LVL105:
+ 926              	.LBE26:
+ 927              	.LBE25:
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_display.c **** }
+ 928              		.loc 1 177 0
+ 929 0188 56B0     		add	sp, sp, #344
+ 930 018a 70BD     		pop	{r4, r5, r6, pc}
+ 931              	.L60:
+ 932              		.align	2
+ 933              	.L59:
+ 934 018c 00000000 		.word	PIN_PC1
+ 935 0190 00000000 		.word	PIN_PB3
+ 936 0194 00000000 		.word	PIN_PB5
+ 937 0198 00000000 		.word	PIN_PC0
+ 938 019c 00000000 		.word	PIN_PA7
+ 939 01a0 00000000 		.word	PIN_PA5
+ 940 01a4 00300140 		.word	1073819648
+ 941 01a8 0C300140 		.word	1073819660
+ 942 01ac 58640240 		.word	1073898584
+ 943 01b0 00000000 		.word	.LANCHOR0
+ 944              		.cfi_endproc
+ 945              	.LFE63:
+ 947              		.section	.rodata
+ 948              		.set	.LANCHOR0,. + 0
+ 949              	.LC0:
+ 950 0000 03       		.byte	3
+ 951 0001 01       		.byte	1
+ 952 0002 00       		.byte	0
+ 953 0003 07       		.byte	7
+ 954 0004 08       		.byte	8
+ 955 0005 00       		.byte	0
+ 956 0006 00       		.byte	0
+ 957 0007 07       		.byte	7
+ 958 0008 0F       		.byte	15
+ 959 0009 01       		.byte	1
+ 960 000a 0C       		.byte	12
+ 961 000b 09       		.byte	9
+ 962 000c 0C       		.byte	12
+ 963 000d 05       		.byte	5
+ 964 000e 01       		.byte	1
+ 965 000f 0A       		.byte	10
+ 966 0010 06       		.byte	6
+ 967 0011 01       		.byte	1
+ 968 0012 01       		.byte	1
+ 969 0013 04       		.byte	4
+ 970 0014 01       		.byte	1
+ 971 0015 02       		.byte	2
+ 972 0016 1F       		.byte	31
+ 973 0017 01       		.byte	1
+ 974 0018 30       		.byte	48
+ 975 0019 30       		.byte	48
+ 976 001a 01       		.byte	1
+ 977 001b 12       		.byte	18
+ 978 001c 1C       		.byte	28
+ 979 001d 01       		.byte	1
+ 980 001e 0F       		.byte	15
+ 981 001f 1E       		.byte	30
+ 982 0020 01       		.byte	1
+ 983 0021 00       		.byte	0
+ 984 0022 0F       		.byte	15
+ 985 0023 03       		.byte	3
+ 986 0024 0A       		.byte	10
+ 987 0025 0A       		.byte	10
+ 988 0026 0A       		.byte	10
+ 989 0027 1D       		.byte	29
+ 990 0028 03       		.byte	3
+ 991 0029 05       		.byte	5
+ 992 002a 05       		.byte	5
+ 993 002b 05       		.byte	5
+ 994 002c 08       		.byte	8
+ 995 002d 01       		.byte	1
+ 996 002e 01       		.byte	1
+ 997 002f 00       		.byte	0
+ 998              		.text
+ 999              	.Letext0:
+ 1000              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 1001              		.file 3 "src/libstm32f2/stm32f2xx.h"
+ 1002              		.file 4 "src/libstm32f2/stm32f2xx_dma.h"
+ 1003              		.file 5 "src/libstm32f2/stm32f2xx_spi.h"
+ 1004              		.file 6 "src/libstm32f2/stm32f2xx_gpio.h"
+ 1005              		.file 7 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h"
+ 1006              		.file 8 "src/libstm32f2/core_cm3.h"
+ 1007              		.file 9 "src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 driver_display.c
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:19     .text.oled_wait_dma:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:23     .text.oled_wait_dma:00000000 oled_wait_dma
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:71     .text.oled_wait_dma:00000034 $d
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:78     .text.oled_wait_spi:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:82     .text.oled_wait_spi:00000000 oled_wait_spi
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:114    .text.oled_wait_spi:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:119    .text.oled_cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:123    .text.oled_cmd:00000000 oled_cmd
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:210    .text.oled_cmd:00000058 $d
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:218    .text.oled_window:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:223    .text.oled_window:00000000 oled_window
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:292    .text.oled_push:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:297    .text.oled_push:00000000 oled_push
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:388    .text.oled_push:0000005c $d
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:395    .text.oled_blit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:400    .text.oled_blit:00000000 oled_blit
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:514    .text.oled_blit:00000078 $d
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:522    .text.oled_power:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:527    .text.oled_power:00000000 oled_power
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:570    .text.oled_deinit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:575    .text.oled_deinit:00000000 oled_deinit
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:611    .text.oled_deinit:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:618    .text.oled_init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:623    .text.oled_init:00000000 oled_init
+C:\Users\STINA\AppData\Local\Temp\cc37TUok.s:934    .text.oled_init:0000018c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+DMA_GetFlagStatus
+DMA_ClearITPendingBit
+DMA_Cmd
+SPI_I2S_DMACmd
+SPI_I2S_GetFlagStatus
+digitalWrite
+SPI_I2S_SendData
+PIN_PA4
+PIN_PC0
+PIN_PC1
+PIN_PB3
+PIN_PB5
+RCC_AHB1PeriphClockCmd
+RCC_APB2PeriphClockCmd
+SPI_I2S_DeInit
+SPI_Init
+SPI_Cmd
+DMA_Init
+delay
+memset
+PIN_PA7
+PIN_PA5

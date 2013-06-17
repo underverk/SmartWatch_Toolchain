@@ -1,0 +1,2262 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_spi.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.SPI_I2S_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	SPI_I2S_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	SPI_I2S_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_spi.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @file    stm32f2xx_spi.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          functionalities of the Serial peripheral interface (SPI):           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *           - Initialization and Configuration
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *           - Data transfers functions
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *           - Hardware CRC Calculation
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *           - DMA transfers management
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *           - Interrupts and flags management 
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *           
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *  @verbatim
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                    
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          ===================================================================
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                                 How to use this driver
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          ===================================================================
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          1. Enable peripheral clock using the following functions 
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE) for SPI1
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE) for SPI2
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE) for SPI3.
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          2. Enable SCK, MOSI, MISO and NSS GPIO clocks using RCC_AHB1PeriphClockCmd()
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             function.
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             In I2S mode, if an external clock source is used then the I2S CKIN pin GPIO
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             clock should also be enabled.
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          3. Peripherals alternate function: 
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                 - Connect the pin to the desired peripherals' Alternate 
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                   Function (AF) using GPIO_PinAFConfig() function
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                 - Configure the desired pin in alternate function by:
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                   GPIO_InitStruct->GPIO_Mode = GPIO_Mode_AF
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                 - Select the type, pull-up/pull-down and output speed via 
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                   GPIO_PuPd, GPIO_OType and GPIO_Speed members
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                 - Call GPIO_Init() function
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              In I2S mode, if an external clock source is used then the I2S CKIN pin
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              should be also configured in Alternate function Push-pull pull-up mode. 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *        
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          4. Program the Polarity, Phase, First Data, Baud Rate Prescaler, Slave 
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             Management, Peripheral Mode and CRC Polynomial values using the SPI_Init()
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             function.
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             In I2S mode, program the Mode, Standard, Data Format, MCLK Output, Audio 
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             frequency and Polarity using I2S_Init() function.
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             For I2S mode, make sure that either:
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              - I2S PLL is configured using the functions RCC_I2SCLKConfig(RCC_I2S2CLKSource_PLL
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                RCC_PLLI2SCmd(ENABLE) and RCC_GetFlagStatus(RCC_FLAG_PLLI2SRDY).
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              or 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              - External clock source is configured using the function 
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                RCC_I2SCLKConfig(RCC_I2S2CLKSource_Ext) and after setting correctly the define c
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                I2S_EXTERNAL_CLOCK_VAL in the stm32f2xx_conf.h file. 
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          5. Enable the NVIC and the corresponding interrupt using the function 
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             SPI_ITConfig() if you need to use interrupt mode. 
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          6. When using the DMA mode 
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                   - Configure the DMA using DMA_Init() function
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                   - Active the needed channel Request using SPI_I2S_DMACmd() function
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * 
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          7. Enable the SPI using the SPI_Cmd() function or enable the I2S using
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             I2S_Cmd().
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * 
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          8. Enable the DMA using the DMA_Cmd() function when using DMA mode. 
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          9. Optionally, you can enable/configure the following parameters without
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *             re-initialization (i.e there is no need to call again SPI_Init() function):
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              - When bidirectional mode (SPI_Direction_1Line_Rx or SPI_Direction_1Line_Tx)
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                is programmed as Data direction parameter using the SPI_Init() function
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                it can be possible to switch between SPI_Direction_Tx or SPI_Direction_Rx
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                using the SPI_BiDirectionalLineConfig() function.
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              - When SPI_NSS_Soft is selected as Slave Select Management parameter 
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                using the SPI_Init() function it can be possible to manage the 
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                NSS internal signal using the SPI_NSSInternalSoftwareConfig() function.
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              - Reconfigure the data size using the SPI_DataSizeConfig() function  
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              - Enable or disable the SS output using the SPI_SSOutputCmd() function  
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          10. To use the CRC Hardware calculation feature refer to the Peripheral 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *              CRC hardware Calculation subsection.
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *   
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note    This driver supports only the I2S clock scheme available in Silicon
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          RevisionB and RevisionY.
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *     
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note    In I2S mode: if an external clock is used as source clock for the I2S,  
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          then the define I2S_EXTERNAL_CLOCK_VAL in file stm32f2xx_conf.h should 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          be enabled and set to the value of the source clock frequency (in Hz).
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * 
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note    In SPI mode: To use the SPI TI mode, call the function SPI_TIModeCmd() 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          just after calling the function SPI_Init().
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *  @endverbatim  
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *                                  
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   ******************************************************************************
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @attention
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * You may not use this file except in compliance with the License.
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * You may obtain a copy of the License at:
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * Unless required by applicable law or agreed to in writing, software 
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * See the License for the specific language governing permissions and
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * limitations under the License.
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   ******************************************************************************
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* Includes ------------------------------------------------------------------*/
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #include "stm32f2xx_spi.h"
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #include "stm32f2xx_rcc.h"
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @defgroup SPI 
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief SPI driver modules
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */ 
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* Private typedef -----------------------------------------------------------*/
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* Private define ------------------------------------------------------------*/
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* SPI registers Masks */
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #define CR1_CLEAR_MASK            ((uint16_t)0x3040)
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #define I2SCFGR_CLEAR_MASK        ((uint16_t)0xF040)
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* RCC PLLs masks */
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #define PLLCFGR_PPLR_MASK         ((uint32_t)0x70000000)
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #define PLLCFGR_PPLN_MASK         ((uint32_t)0x00007FC0)
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #define SPI_CR2_FRF               ((uint16_t)0x0010)
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #define SPI_SR_TIFRFE             ((uint16_t)0x0100)
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* Private macro -------------------------------------------------------------*/
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* Private variables ---------------------------------------------------------*/
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* Private function prototypes -----------------------------------------------*/
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /* Private functions ---------------------------------------------------------*/
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @defgroup SPI_Private_Functions
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @defgroup SPI_Group1 Initialization and Configuration functions
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *  @brief   Initialization and Configuration functions 
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @verbatim   
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                   Initialization and Configuration functions
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================  
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   This section provides a set of functions allowing to initialize the SPI Direction,
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI Mode, SPI Data Size, SPI Polarity, SPI Phase, SPI NSS Management, SPI Baud
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   Rate Prescaler, SPI First Bit and SPI CRC Polynomial.
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   The SPI_Init() function follows the SPI configuration procedures for Master mode
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   and Slave mode (details for these procedures are available in reference manual
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   (RM0033)).
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @endverbatim
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Deinitialize the SPIx peripheral registers to their default reset values.
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode.   
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_I2S_DeInit(SPI_TypeDef* SPIx)
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+  27              		.loc 1 178 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 08B5     		push	{r3, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (SPIx == SPI1)
+  37              		.loc 1 182 0
+  38 0002 154B     		ldr	r3, .L7
+  39 0004 9842     		cmp	r0, r3
+  40 0006 0BD1     		bne	.L2
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable SPI1 reset state */
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, ENABLE);
+  41              		.loc 1 185 0
+  42 0008 0121     		movs	r1, #1
+  43 000a 4FF48050 		mov	r0, #4096
+  44              	.LVL1:
+  45 000e FFF7FEFF 		bl	RCC_APB2PeriphResetCmd
+  46              	.LVL2:
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Release SPI1 from reset state */
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, DISABLE);
+  47              		.loc 1 187 0
+  48 0012 4FF48050 		mov	r0, #4096
+  49 0016 0021     		movs	r1, #0
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else if (SPIx == SPI2)
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable SPI2 reset state */
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE);
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Release SPI2 from reset state */
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     if (SPIx == SPI3)
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     {
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       /* Enable SPI3 reset state */
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE);
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       /* Release SPI3 from reset state */
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, DISABLE);
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+  50              		.loc 1 206 0
+  51 0018 BDE80840 		pop	{r3, lr}
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, DISABLE);
+  52              		.loc 1 187 0
+  53 001c FFF7FEBF 		b	RCC_APB2PeriphResetCmd
+  54              	.LVL3:
+  55              	.L2:
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else if (SPIx == SPI2)
+  56              		.loc 1 189 0
+  57 0020 0E49     		ldr	r1, .L7+4
+  58 0022 8842     		cmp	r0, r1
+  59 0024 07D1     		bne	.L3
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE);
+  60              		.loc 1 192 0
+  61 0026 4FF48040 		mov	r0, #16384
+  62              	.LVL4:
+  63 002a 0121     		movs	r1, #1
+  64 002c FFF7FEFF 		bl	RCC_APB1PeriphResetCmd
+  65              	.LVL5:
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);
+  66              		.loc 1 194 0
+  67 0030 4FF48040 		mov	r0, #16384
+  68 0034 09E0     		b	.L5
+  69              	.LVL6:
+  70              	.L3:
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     if (SPIx == SPI3)
+  71              		.loc 1 198 0
+  72 0036 0A4A     		ldr	r2, .L7+8
+  73 0038 9042     		cmp	r0, r2
+  74 003a 0BD1     		bne	.L1
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE);
+  75              		.loc 1 201 0
+  76 003c 4FF40040 		mov	r0, #32768
+  77              	.LVL7:
+  78 0040 0121     		movs	r1, #1
+  79 0042 FFF7FEFF 		bl	RCC_APB1PeriphResetCmd
+  80              	.LVL8:
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, DISABLE);
+  81              		.loc 1 203 0
+  82 0046 4FF40040 		mov	r0, #32768
+  83              	.L5:
+  84 004a 0021     		movs	r1, #0
+  85              		.loc 1 206 0
+  86 004c BDE80840 		pop	{r3, lr}
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, DISABLE);
+  87              		.loc 1 203 0
+  88 0050 FFF7FEBF 		b	RCC_APB1PeriphResetCmd
+  89              	.LVL9:
+  90              	.L1:
+  91 0054 08BD     		pop	{r3, pc}
+  92              	.L8:
+  93 0056 00BF     		.align	2
+  94              	.L7:
+  95 0058 00300140 		.word	1073819648
+  96 005c 00380040 		.word	1073756160
+  97 0060 003C0040 		.word	1073757184
+  98              		.cfi_endproc
+  99              	.LFE56:
+ 101              		.section	.text.SPI_Init,"ax",%progbits
+ 102              		.align	1
+ 103              		.global	SPI_Init
+ 104              		.thumb
+ 105              		.thumb_func
+ 107              	SPI_Init:
+ 108              	.LFB57:
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Initializes the SPIx peripheral according to the specified 
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         parameters in the SPI_InitStruct.
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_InitStruct: pointer to a SPI_InitTypeDef structure that
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         contains the configuration information for the specified SPI peripheral.
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_Init(SPI_TypeDef* SPIx, SPI_InitTypeDef* SPI_InitStruct)
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 109              		.loc 1 217 0
+ 110              		.cfi_startproc
+ 111              		@ args = 0, pretend = 0, frame = 0
+ 112              		@ frame_needed = 0, uses_anonymous_args = 0
+ 113              	.LVL10:
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint16_t tmpreg = 0;
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* check the parameters */
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the SPI parameters */
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_DIRECTION_MODE(SPI_InitStruct->SPI_Direction));
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_MODE(SPI_InitStruct->SPI_Mode));
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_DATASIZE(SPI_InitStruct->SPI_DataSize));
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_CPOL(SPI_InitStruct->SPI_CPOL));
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_CPHA(SPI_InitStruct->SPI_CPHA));
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_NSS(SPI_InitStruct->SPI_NSS));
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_BAUDRATE_PRESCALER(SPI_InitStruct->SPI_BaudRatePrescaler));
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_FIRST_BIT(SPI_InitStruct->SPI_FirstBit));
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_CRC_POLYNOMIAL(SPI_InitStruct->SPI_CRCPolynomial));
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /*---------------------------- SPIx CR1 Configuration ------------------------*/
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Get the SPIx CR1 value */
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg = SPIx->CR1;
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Clear BIDIMode, BIDIOE, RxONLY, SSM, SSI, LSBFirst, BR, MSTR, CPOL and CPHA bits */
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg &= CR1_CLEAR_MASK;
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Configure SPIx: direction, NSS management, first transmitted bit, BaudRate prescaler
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      master/salve mode, CPOL and CPHA */
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set BIDImode, BIDIOE and RxONLY bits according to SPI_Direction value */
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set SSM, SSI and MSTR bits according to SPI_Mode and SPI_NSS values */
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set LSBFirst bit according to SPI_FirstBit value */
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set BR bits according to SPI_BaudRatePrescaler value */
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set CPOL bit according to SPI_CPOL value */
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set CPHA bit according to SPI_CPHA value */
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg |= (uint16_t)((uint32_t)SPI_InitStruct->SPI_Direction | SPI_InitStruct->SPI_Mode |
+ 114              		.loc 1 247 0
+ 115 0000 0B88     		ldrh	r3, [r1, #0]
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 116              		.loc 1 217 0
+ 117 0002 10B5     		push	{r4, lr}
+ 118              	.LCFI1:
+ 119              		.cfi_def_cfa_offset 8
+ 120              		.cfi_offset 4, -8
+ 121              		.cfi_offset 14, -4
+ 122              		.loc 1 247 0
+ 123 0004 4C88     		ldrh	r4, [r1, #2]
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg = SPIx->CR1;
+ 124              		.loc 1 236 0
+ 125 0006 0288     		ldrh	r2, [r0, #0]
+ 126              	.LVL11:
+ 127              		.loc 1 247 0
+ 128 0008 2343     		orrs	r3, r3, r4
+ 129 000a 8C88     		ldrh	r4, [r1, #4]
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg &= CR1_CLEAR_MASK;
+ 130              		.loc 1 238 0
+ 131 000c 02F44152 		and	r2, r2, #12352
+ 132              	.LVL12:
+ 133              		.loc 1 247 0
+ 134 0010 2343     		orrs	r3, r3, r4
+ 135 0012 CC88     		ldrh	r4, [r1, #6]
+ 136 0014 2343     		orrs	r3, r3, r4
+ 137 0016 0C89     		ldrh	r4, [r1, #8]
+ 138 0018 2343     		orrs	r3, r3, r4
+ 139 001a 4C89     		ldrh	r4, [r1, #10]
+ 140 001c 2343     		orrs	r3, r3, r4
+ 141 001e 8C89     		ldrh	r4, [r1, #12]
+ 142 0020 2343     		orrs	r3, r3, r4
+ 143 0022 CC89     		ldrh	r4, [r1, #14]
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                   SPI_InitStruct->SPI_DataSize | SPI_InitStruct->SPI_CPOL |  
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                   SPI_InitStruct->SPI_CPHA | SPI_InitStruct->SPI_NSS |  
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                   SPI_InitStruct->SPI_BaudRatePrescaler | SPI_InitStruct->SPI_FirstBit);
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Write to SPIx CR1 */
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->CR1 = tmpreg;
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Activate the SPI mode (Reset I2SMOD bit in I2SCFGR register) */
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SCFGR &= (uint16_t)~((uint16_t)SPI_I2SCFGR_I2SMOD);
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /*---------------------------- SPIx CRCPOLY Configuration --------------------*/
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Write to SPIx CRCPOLY */
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->CRCPR = SPI_InitStruct->SPI_CRCPolynomial;
+ 144              		.loc 1 258 0
+ 145 0024 098A     		ldrh	r1, [r1, #16]
+ 146              	.LVL13:
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg |= (uint16_t)((uint32_t)SPI_InitStruct->SPI_Direction | SPI_InitStruct->SPI_Mode |
+ 147              		.loc 1 247 0
+ 148 0026 2343     		orrs	r3, r3, r4
+ 149 0028 1A43     		orrs	r2, r2, r3
+ 150              	.LVL14:
+ 151 002a 93B2     		uxth	r3, r2
+ 152              	.LVL15:
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->CR1 = tmpreg;
+ 153              		.loc 1 252 0
+ 154 002c 0380     		strh	r3, [r0, #0]	@ movhi
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SCFGR &= (uint16_t)~((uint16_t)SPI_I2SCFGR_I2SMOD);
+ 155              		.loc 1 255 0
+ 156 002e 828B     		ldrh	r2, [r0, #28]
+ 157              	.LVL16:
+ 158 0030 22F40063 		bic	r3, r2, #2048
+ 159              	.LVL17:
+ 160 0034 1A04     		lsls	r2, r3, #16
+ 161 0036 130C     		lsrs	r3, r2, #16
+ 162 0038 8383     		strh	r3, [r0, #28]	@ movhi
+ 163              		.loc 1 258 0
+ 164 003a 0182     		strh	r1, [r0, #16]	@ movhi
+ 165 003c 10BD     		pop	{r4, pc}
+ 166              		.cfi_endproc
+ 167              	.LFE57:
+ 169              		.section	.text.I2S_Init,"ax",%progbits
+ 170              		.align	1
+ 171              		.global	I2S_Init
+ 172              		.thumb
+ 173              		.thumb_func
+ 175              	I2S_Init:
+ 176              	.LFB58:
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Initializes the SPIx peripheral according to the specified 
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         parameters in the I2S_InitStruct.
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be  2 or 3 to select the SPI peripheral (configured in I2S mode).
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  I2S_InitStruct: pointer to an I2S_InitTypeDef structure that
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         contains the configuration information for the specified SPI peripheral
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         configured in I2S mode.
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *           
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   The function calculates the optimal prescaler needed to obtain the most 
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         accurate audio frequency (depending on the I2S clock source, the PLL values 
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         and the product configuration). But in case the prescaler value is greater 
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         than 511, the default value (0x02) will be configured instead.    
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * 
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   if an external clock is used as source clock for the I2S, then the define
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         I2S_EXTERNAL_CLOCK_VAL in file stm32f2xx_conf.h should be enabled and set
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         to the value of the the source clock frequency (in Hz).
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *  
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void I2S_Init(SPI_TypeDef* SPIx, I2S_InitTypeDef* I2S_InitStruct)
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 177              		.loc 1 281 0
+ 178              		.cfi_startproc
+ 179              		@ args = 0, pretend = 0, frame = 0
+ 180              		@ frame_needed = 0, uses_anonymous_args = 0
+ 181              	.LVL18:
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint16_t tmpreg = 0, i2sdiv = 2, i2sodd = 0, packetlength = 1;
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint32_t tmp = 0, i2sclk = 0;
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #ifndef I2S_EXTERNAL_CLOCK_VAL
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint32_t pllm = 0, plln = 0, pllr = 0;
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** #endif /* I2S_EXTERNAL_CLOCK_VAL */
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the I2S parameters */
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_23_PERIPH(SPIx));
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_I2S_MODE(I2S_InitStruct->I2S_Mode));
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_I2S_STANDARD(I2S_InitStruct->I2S_Standard));
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_I2S_DATA_FORMAT(I2S_InitStruct->I2S_DataFormat));
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_I2S_MCLK_OUTPUT(I2S_InitStruct->I2S_MCLKOutput));
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_I2S_AUDIO_FREQ(I2S_InitStruct->I2S_AudioFreq));
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_I2S_CPOL(I2S_InitStruct->I2S_CPOL));  
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /*----------------------- SPIx I2SCFGR & I2SPR Configuration -----------------*/
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Clear I2SMOD, I2SE, I2SCFG, PCMSYNC, I2SSTD, CKPOL, DATLEN and CHLEN bits */
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SCFGR &= I2SCFGR_CLEAR_MASK; 
+ 182              		.loc 1 299 0
+ 183 0000 838B     		ldrh	r3, [r0, #28]
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 184              		.loc 1 281 0
+ 185 0002 F0B5     		push	{r4, r5, r6, r7, lr}
+ 186              	.LCFI2:
+ 187              		.cfi_def_cfa_offset 20
+ 188              		.cfi_offset 4, -20
+ 189              		.cfi_offset 5, -16
+ 190              		.cfi_offset 6, -12
+ 191              		.cfi_offset 7, -8
+ 192              		.cfi_offset 14, -4
+ 193              		.loc 1 299 0
+ 194 0004 23F47B62 		bic	r2, r3, #4016
+ 195 0008 22F00F04 		bic	r4, r2, #15
+ 196 000c 2504     		lsls	r5, r4, #16
+ 197 000e 2B0C     		lsrs	r3, r5, #16
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SPR = 0x0002;
+ 198              		.loc 1 300 0
+ 199 0010 0224     		movs	r4, #2
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SCFGR &= I2SCFGR_CLEAR_MASK; 
+ 200              		.loc 1 299 0
+ 201 0012 8383     		strh	r3, [r0, #28]	@ movhi
+ 202              		.loc 1 300 0
+ 203 0014 0484     		strh	r4, [r0, #32]	@ movhi
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Get the I2SCFGR register value */
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg = SPIx->I2SCFGR;
+ 204              		.loc 1 303 0
+ 205 0016 828B     		ldrh	r2, [r0, #28]
+ 206 0018 95B2     		uxth	r5, r2
+ 207              	.LVL19:
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* If the default value has to be written, reinitialize i2sdiv and i2sodd*/
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if(I2S_InitStruct->I2S_AudioFreq == I2S_AudioFreq_Default)
+ 208              		.loc 1 306 0
+ 209 001a 8A68     		ldr	r2, [r1, #8]
+ 210              	.LVL20:
+ 211 001c A242     		cmp	r2, r4
+ 212 001e 38D0     		beq	.L17
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sodd = (uint16_t)0;
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sdiv = (uint16_t)2;   
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* If the requested audio frequency is not the default, compute the prescaler */
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Check the frame length (For the Prescaler computing) *******************/
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     if(I2S_InitStruct->I2S_DataFormat == I2S_DataFormat_16b)
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     {
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       /* Packet length is 16 bits */
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       packetlength = 1;
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     else
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     {
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       /* Packet length is 32 bits */
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       packetlength = 2;
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get I2S source Clock frequency (only in Silicon RevisionB and RevisionY) */
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* If an external I2S clock has to be used, this define should be set  
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****        in the project configuration or in the stm32f2xx_conf.h file */
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   #ifdef I2S_EXTERNAL_CLOCK_VAL     
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Set external clock as I2S clock source */
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     if ((RCC->CFGR & RCC_CFGR_I2SSRC) == 0)
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     {
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       RCC->CFGR |= (uint32_t)RCC_CFGR_I2SSRC;
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Set the I2S clock to the external clock  value */
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sclk = I2S_EXTERNAL_CLOCK_VAL;
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   #else /* There is no define for External I2S clock source */
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Set PLLI2S as I2S clock source */
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     if ((RCC->CFGR & RCC_CFGR_I2SSRC) != 0)
+ 213              		.loc 1 342 0
+ 214 0020 294B     		ldr	r3, .L24
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     if(I2S_InitStruct->I2S_DataFormat == I2S_DataFormat_16b)
+ 215              		.loc 1 315 0
+ 216 0022 8E88     		ldrh	r6, [r1, #4]
+ 217              		.loc 1 342 0
+ 218 0024 9F68     		ldr	r7, [r3, #8]
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       packetlength = 1;
+ 219              		.loc 1 318 0
+ 220 0026 002E     		cmp	r6, #0
+ 221 0028 14BF     		ite	ne
+ 222 002a 2646     		movne	r6, r4
+ 223 002c 0126     		moveq	r6, #1
+ 224              	.LVL21:
+ 225              		.loc 1 342 0
+ 226 002e 3C02     		lsls	r4, r7, #8
+ 227 0030 03D5     		bpl	.L13
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     {
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       RCC->CFGR &= ~(uint32_t)RCC_CFGR_I2SSRC;
+ 228              		.loc 1 344 0
+ 229 0032 9C68     		ldr	r4, [r3, #8]
+ 230 0034 24F40007 		bic	r7, r4, #8388608
+ 231 0038 9F60     		str	r7, [r3, #8]
+ 232              	.L13:
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }    
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get the PLLI2SN value */
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     plln = (uint32_t)(((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6) & \
+ 233              		.loc 1 348 0
+ 234 003a D3F88440 		ldr	r4, [r3, #132]
+ 235              	.LVL22:
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                       (RCC_PLLI2SCFGR_PLLI2SN >> 6));
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get the PLLI2SR value */
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     pllr = (uint32_t)(((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SR) >> 28) & \
+ 236              		.loc 1 352 0
+ 237 003e D3F88470 		ldr	r7, [r3, #132]
+ 238              	.LVL23:
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                       (RCC_PLLI2SCFGR_PLLI2SR >> 28));
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get the PLLM value */
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     pllm = (uint32_t)(RCC->PLLCFGR & RCC_PLLCFGR_PLLM);      
+ 239              		.loc 1 356 0
+ 240 0042 5B68     		ldr	r3, [r3, #4]
+ 241              	.LVL24:
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get the I2S source clock value */
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sclk = (uint32_t)(((HSE_VALUE / pllm) * plln) / pllr);
+ 242              		.loc 1 359 0
+ 243 0044 DFF884C0 		ldr	ip, .L24+4
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     pllm = (uint32_t)(RCC->PLLCFGR & RCC_PLLCFGR_PLLM);      
+ 244              		.loc 1 356 0
+ 245 0048 03F03F03 		and	r3, r3, #63
+ 246              	.LVL25:
+ 247              		.loc 1 359 0
+ 248 004c BCFBF3F3 		udiv	r3, ip, r3
+ 249              	.LVL26:
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     plln = (uint32_t)(((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6) & \
+ 250              		.loc 1 348 0
+ 251 0050 C4F38814 		ubfx	r4, r4, #6, #9
+ 252              	.LVL27:
+ 253              		.loc 1 359 0
+ 254 0054 5C43     		muls	r4, r3, r4
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     pllr = (uint32_t)(((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SR) >> 28) & \
+ 255              		.loc 1 352 0
+ 256 0056 C7F30273 		ubfx	r3, r7, #28, #3
+ 257              		.loc 1 359 0
+ 258 005a B4FBF3F4 		udiv	r4, r4, r3
+ 259              	.LVL28:
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   #endif /* I2S_EXTERNAL_CLOCK_VAL */
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Compute the Real divider depending on the MCLK output state, with a floating point */
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     if(I2S_InitStruct->I2S_MCLKOutput == I2S_MCLKOutput_Enable)
+ 260              		.loc 1 363 0
+ 261 005e CB88     		ldrh	r3, [r1, #6]
+ 262 0060 B3F5007F 		cmp	r3, #512
+ 263 0064 4FF00A03 		mov	r3, #10
+ 264 0068 01D1     		bne	.L14
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     {
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       /* MCLK output is enabled */
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       tmp = (uint16_t)(((((i2sclk / 256) * 10) / I2S_InitStruct->I2S_AudioFreq)) + 5);
+ 265              		.loc 1 366 0
+ 266 006a 240A     		lsrs	r4, r4, #8
+ 267              	.LVL29:
+ 268 006c 02E0     		b	.L23
+ 269              	.LVL30:
+ 270              	.L14:
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     else
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     {
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       /* MCLK output is disabled */
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       tmp = (uint16_t)(((((i2sclk / (32 * packetlength)) *10 ) / I2S_InitStruct->I2S_AudioFreq)) + 
+ 271              		.loc 1 371 0
+ 272 006e 7601     		lsls	r6, r6, #5
+ 273              	.LVL31:
+ 274 0070 B4FBF6F4 		udiv	r4, r4, r6
+ 275              	.LVL32:
+ 276              	.L23:
+ 277 0074 6343     		muls	r3, r4, r3
+ 278 0076 B3FBF2F2 		udiv	r2, r3, r2
+ 279 007a 531D     		adds	r3, r2, #5
+ 280 007c 9CB2     		uxth	r4, r3
+ 281              	.LVL33:
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     }
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Remove the flatting point */
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     tmp = tmp / 10;  
+ 282              		.loc 1 375 0
+ 283 007e 0A22     		movs	r2, #10
+ 284 0080 B4FBF2F4 		udiv	r4, r4, r2
+ 285              	.LVL34:
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Check the parity of the divider */
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sodd = (uint16_t)(tmp & (uint16_t)0x0001);
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****    
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Compute the i2sdiv prescaler */
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sdiv = (uint16_t)((tmp - i2sodd) / 2);
+ 286              		.loc 1 381 0
+ 287 0084 04F00103 		and	r3, r4, #1
+ 288 0088 C4F34F02 		ubfx	r2, r4, #1, #16
+ 289              	.LVL35:
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****    
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get the Mask for the Odd bit (SPI_I2SPR[8]) register */
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sodd = (uint16_t) (i2sodd << 8);
+ 290              		.loc 1 384 0
+ 291 008c 1C02     		lsls	r4, r3, #8
+ 292              	.LVL36:
+ 293 008e A3B2     		uxth	r3, r4
+ 294              	.LVL37:
+ 295 0090 00E0     		b	.L11
+ 296              	.LVL38:
+ 297              	.L17:
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sodd = (uint16_t)0;
+ 298              		.loc 1 308 0
+ 299 0092 0023     		movs	r3, #0
+ 300              	.LVL39:
+ 301              	.L11:
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Test if the divider is 1 or 0 or greater than 0xFF */
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if ((i2sdiv < 2) || (i2sdiv > 0xFF))
+ 302              		.loc 1 388 0
+ 303 0094 941E     		subs	r4, r2, #2
+ 304 0096 A4B2     		uxth	r4, r4
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Set the default values */
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sdiv = 2;
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sodd = 0;
+ 305              		.loc 1 392 0
+ 306 0098 FE2C     		cmp	r4, #254
+ 307 009a 28BF     		it	cs
+ 308 009c 0023     		movcs	r3, #0
+ 309              	.LVL40:
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Write to SPIx I2SPR register the computed value */
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SPR = (uint16_t)((uint16_t)i2sdiv | (uint16_t)(i2sodd | (uint16_t)I2S_InitStruct->I2S_MCL
+ 310              		.loc 1 396 0
+ 311 009e CC88     		ldrh	r4, [r1, #6]
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     i2sodd = 0;
+ 312              		.loc 1 392 0
+ 313 00a0 28BF     		it	cs
+ 314 00a2 0222     		movcs	r2, #2
+ 315              	.LVL41:
+ 316              		.loc 1 396 0
+ 317 00a4 1A43     		orrs	r2, r2, r3
+ 318 00a6 2243     		orrs	r2, r2, r4
+ 319 00a8 93B2     		uxth	r3, r2
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Configure the I2S with the SPI_InitStruct values */
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg |= (uint16_t)((uint16_t)SPI_I2SCFGR_I2SMOD | (uint16_t)(I2S_InitStruct->I2S_Mode | \
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                   (uint16_t)(I2S_InitStruct->I2S_Standard | (uint16_t)(I2S_InitStruct->I2S_DataForm
+ 320              		.loc 1 400 0
+ 321 00aa 0A88     		ldrh	r2, [r1, #0]
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SPR = (uint16_t)((uint16_t)i2sdiv | (uint16_t)(i2sodd | (uint16_t)I2S_InitStruct->I2S_MCL
+ 322              		.loc 1 396 0
+ 323 00ac 0384     		strh	r3, [r0, #32]	@ movhi
+ 324              		.loc 1 400 0
+ 325 00ae 45EA0203 		orr	r3, r5, r2
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg |= (uint16_t)((uint16_t)SPI_I2SCFGR_I2SMOD | (uint16_t)(I2S_InitStruct->I2S_Mode | \
+ 326              		.loc 1 399 0
+ 327 00b2 4A88     		ldrh	r2, [r1, #2]
+ 328              		.loc 1 400 0
+ 329 00b4 43F40063 		orr	r3, r3, #2048
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   tmpreg |= (uint16_t)((uint16_t)SPI_I2SCFGR_I2SMOD | (uint16_t)(I2S_InitStruct->I2S_Mode | \
+ 330              		.loc 1 399 0
+ 331 00b8 1343     		orrs	r3, r3, r2
+ 332 00ba 8A88     		ldrh	r2, [r1, #4]
+ 333 00bc 8989     		ldrh	r1, [r1, #12]
+ 334              	.LVL42:
+ 335 00be 1343     		orrs	r3, r3, r2
+ 336 00c0 0B43     		orrs	r3, r3, r1
+ 337 00c2 9BB2     		uxth	r3, r3
+ 338              	.LVL43:
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                   (uint16_t)I2S_InitStruct->I2S_CPOL))));
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Write to SPIx I2SCFGR */  
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->I2SCFGR = tmpreg;
+ 339              		.loc 1 404 0
+ 340 00c4 8383     		strh	r3, [r0, #28]	@ movhi
+ 341 00c6 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 342              	.L25:
+ 343              		.align	2
+ 344              	.L24:
+ 345 00c8 00380240 		.word	1073887232
+ 346 00cc 80BA8C01 		.word	26000000
+ 347              		.cfi_endproc
+ 348              	.LFE58:
+ 350              		.section	.text.SPI_StructInit,"ax",%progbits
+ 351              		.align	1
+ 352              		.global	SPI_StructInit
+ 353              		.thumb
+ 354              		.thumb_func
+ 356              	SPI_StructInit:
+ 357              	.LFB59:
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Fills each SPI_InitStruct member with its default value.
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_InitStruct: pointer to a SPI_InitTypeDef structure which will be initialized.
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_StructInit(SPI_InitTypeDef* SPI_InitStruct)
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 358              		.loc 1 413 0
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 0
+ 361              		@ frame_needed = 0, uses_anonymous_args = 0
+ 362              		@ link register save eliminated.
+ 363              	.LVL44:
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /*--------------- Reset SPI init structure parameters values -----------------*/
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the SPI_Direction member */
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+ 364              		.loc 1 416 0
+ 365 0000 0023     		movs	r3, #0
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* initialize the SPI_Mode member */
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_Mode = SPI_Mode_Slave;
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* initialize the SPI_DataSize member */
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_DataSize = SPI_DataSize_8b;
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the SPI_CPOL member */
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_CPOL = SPI_CPOL_Low;
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the SPI_CPHA member */
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_CPHA = SPI_CPHA_1Edge;
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the SPI_NSS member */
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_NSS = SPI_NSS_Hard;
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the SPI_BaudRatePrescaler member */
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the SPI_FirstBit member */
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_FirstBit = SPI_FirstBit_MSB;
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the SPI_CRCPolynomial member */
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_CRCPolynomial = 7;
+ 366              		.loc 1 432 0
+ 367 0002 0721     		movs	r1, #7
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+ 368              		.loc 1 416 0
+ 369 0004 0380     		strh	r3, [r0, #0]	@ movhi
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_Mode = SPI_Mode_Slave;
+ 370              		.loc 1 418 0
+ 371 0006 4380     		strh	r3, [r0, #2]	@ movhi
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_DataSize = SPI_DataSize_8b;
+ 372              		.loc 1 420 0
+ 373 0008 8380     		strh	r3, [r0, #4]	@ movhi
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_CPOL = SPI_CPOL_Low;
+ 374              		.loc 1 422 0
+ 375 000a C380     		strh	r3, [r0, #6]	@ movhi
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_CPHA = SPI_CPHA_1Edge;
+ 376              		.loc 1 424 0
+ 377 000c 0381     		strh	r3, [r0, #8]	@ movhi
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_NSS = SPI_NSS_Hard;
+ 378              		.loc 1 426 0
+ 379 000e 4381     		strh	r3, [r0, #10]	@ movhi
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+ 380              		.loc 1 428 0
+ 381 0010 8381     		strh	r3, [r0, #12]	@ movhi
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI_InitStruct->SPI_FirstBit = SPI_FirstBit_MSB;
+ 382              		.loc 1 430 0
+ 383 0012 C381     		strh	r3, [r0, #14]	@ movhi
+ 384              		.loc 1 432 0
+ 385 0014 0182     		strh	r1, [r0, #16]	@ movhi
+ 386 0016 7047     		bx	lr
+ 387              		.cfi_endproc
+ 388              	.LFE59:
+ 390              		.section	.text.I2S_StructInit,"ax",%progbits
+ 391              		.align	1
+ 392              		.global	I2S_StructInit
+ 393              		.thumb
+ 394              		.thumb_func
+ 396              	I2S_StructInit:
+ 397              	.LFB60:
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Fills each I2S_InitStruct member with its default value.
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  I2S_InitStruct: pointer to a I2S_InitTypeDef structure which will be initialized.
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void I2S_StructInit(I2S_InitTypeDef* I2S_InitStruct)
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 398              		.loc 1 441 0
+ 399              		.cfi_startproc
+ 400              		@ args = 0, pretend = 0, frame = 0
+ 401              		@ frame_needed = 0, uses_anonymous_args = 0
+ 402              		@ link register save eliminated.
+ 403              	.LVL45:
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /*--------------- Reset I2S init structure parameters values -----------------*/
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the I2S_Mode member */
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_Mode = I2S_Mode_SlaveTx;
+ 404              		.loc 1 444 0
+ 405 0000 0023     		movs	r3, #0
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the I2S_Standard member */
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_Standard = I2S_Standard_Phillips;
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the I2S_DataFormat member */
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_DataFormat = I2S_DataFormat_16b;
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the I2S_MCLKOutput member */
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_MCLKOutput = I2S_MCLKOutput_Disable;
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the I2S_AudioFreq member */
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_AudioFreq = I2S_AudioFreq_Default;
+ 406              		.loc 1 456 0
+ 407 0002 0222     		movs	r2, #2
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_Mode = I2S_Mode_SlaveTx;
+ 408              		.loc 1 444 0
+ 409 0004 0380     		strh	r3, [r0, #0]	@ movhi
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_Standard = I2S_Standard_Phillips;
+ 410              		.loc 1 447 0
+ 411 0006 4380     		strh	r3, [r0, #2]	@ movhi
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_DataFormat = I2S_DataFormat_16b;
+ 412              		.loc 1 450 0
+ 413 0008 8380     		strh	r3, [r0, #4]	@ movhi
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_MCLKOutput = I2S_MCLKOutput_Disable;
+ 414              		.loc 1 453 0
+ 415 000a C380     		strh	r3, [r0, #6]	@ movhi
+ 416              		.loc 1 456 0
+ 417 000c 8260     		str	r2, [r0, #8]
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Initialize the I2S_CPOL member */
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   I2S_InitStruct->I2S_CPOL = I2S_CPOL_Low;
+ 418              		.loc 1 459 0
+ 419 000e 8381     		strh	r3, [r0, #12]	@ movhi
+ 420 0010 7047     		bx	lr
+ 421              		.cfi_endproc
+ 422              	.LFE60:
+ 424              		.section	.text.SPI_Cmd,"ax",%progbits
+ 425              		.align	1
+ 426              		.global	SPI_Cmd
+ 427              		.thumb
+ 428              		.thumb_func
+ 430              	SPI_Cmd:
+ 431              	.LFB61:
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Enables or disables the specified SPI peripheral.
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  NewState: new state of the SPIx peripheral. 
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState)
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 432              		.loc 1 470 0
+ 433              		.cfi_startproc
+ 434              		@ args = 0, pretend = 0, frame = 0
+ 435              		@ frame_needed = 0, uses_anonymous_args = 0
+ 436              		@ link register save eliminated.
+ 437              	.LVL46:
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable the selected SPI peripheral */
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 |= SPI_CR1_SPE;
+ 438              		.loc 1 477 0
+ 439 0000 0388     		ldrh	r3, [r0, #0]
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 440              		.loc 1 474 0
+ 441 0002 19B1     		cbz	r1, .L29
+ 442              		.loc 1 477 0
+ 443 0004 99B2     		uxth	r1, r3
+ 444              	.LVL47:
+ 445 0006 41F04003 		orr	r3, r1, #64
+ 446 000a 03E0     		b	.L31
+ 447              	.LVL48:
+ 448              	.L29:
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Disable the selected SPI peripheral */
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 &= (uint16_t)~((uint16_t)SPI_CR1_SPE);
+ 449              		.loc 1 482 0
+ 450 000c 23F04001 		bic	r1, r3, #64
+ 451              	.LVL49:
+ 452 0010 0A04     		lsls	r2, r1, #16
+ 453 0012 130C     		lsrs	r3, r2, #16
+ 454              	.L31:
+ 455 0014 0380     		strh	r3, [r0, #0]	@ movhi
+ 456 0016 7047     		bx	lr
+ 457              		.cfi_endproc
+ 458              	.LFE61:
+ 460              		.section	.text.I2S_Cmd,"ax",%progbits
+ 461              		.align	1
+ 462              		.global	I2S_Cmd
+ 463              		.thumb
+ 464              		.thumb_func
+ 466              	I2S_Cmd:
+ 467              	.LFB62:
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Enables or disables the specified SPI peripheral (in I2S mode).
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 2 or 3 to select the SPI peripheral.
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  NewState: new state of the SPIx peripheral. 
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         This parameter can be: ENABLE or DISABLE.
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void I2S_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState)
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 468              		.loc 1 494 0
+ 469              		.cfi_startproc
+ 470              		@ args = 0, pretend = 0, frame = 0
+ 471              		@ frame_needed = 0, uses_anonymous_args = 0
+ 472              		@ link register save eliminated.
+ 473              	.LVL50:
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_23_PERIPH(SPIx));
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable the selected SPI peripheral (in I2S mode) */
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->I2SCFGR |= SPI_I2SCFGR_I2SE;
+ 474              		.loc 1 502 0
+ 475 0000 838B     		ldrh	r3, [r0, #28]
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 476              		.loc 1 499 0
+ 477 0002 19B1     		cbz	r1, .L33
+ 478              		.loc 1 502 0
+ 479 0004 99B2     		uxth	r1, r3
+ 480              	.LVL51:
+ 481 0006 41F48063 		orr	r3, r1, #1024
+ 482 000a 03E0     		b	.L35
+ 483              	.LVL52:
+ 484              	.L33:
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Disable the selected SPI peripheral in I2S mode */
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->I2SCFGR &= (uint16_t)~((uint16_t)SPI_I2SCFGR_I2SE);
+ 485              		.loc 1 507 0
+ 486 000c 23F48061 		bic	r1, r3, #1024
+ 487              	.LVL53:
+ 488 0010 0A04     		lsls	r2, r1, #16
+ 489 0012 130C     		lsrs	r3, r2, #16
+ 490              	.L35:
+ 491 0014 8383     		strh	r3, [r0, #28]	@ movhi
+ 492 0016 7047     		bx	lr
+ 493              		.cfi_endproc
+ 494              	.LFE62:
+ 496              		.section	.text.SPI_DataSizeConfig,"ax",%progbits
+ 497              		.align	1
+ 498              		.global	SPI_DataSizeConfig
+ 499              		.thumb
+ 500              		.thumb_func
+ 502              	SPI_DataSizeConfig:
+ 503              	.LFB63:
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Configures the data size for the selected SPI.
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_DataSize: specifies the SPI data size.
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be one of the following values:
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_DataSize_16b: Set data frame format to 16bit
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_DataSize_8b: Set data frame format to 8bit
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_DataSizeConfig(SPI_TypeDef* SPIx, uint16_t SPI_DataSize)
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 504              		.loc 1 521 0
+ 505              		.cfi_startproc
+ 506              		@ args = 0, pretend = 0, frame = 0
+ 507              		@ frame_needed = 0, uses_anonymous_args = 0
+ 508              		@ link register save eliminated.
+ 509              	.LVL54:
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_DATASIZE(SPI_DataSize));
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Clear DFF bit */
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->CR1 &= (uint16_t)~SPI_DataSize_16b;
+ 510              		.loc 1 526 0
+ 511 0000 0388     		ldrh	r3, [r0, #0]
+ 512 0002 23F40062 		bic	r2, r3, #2048
+ 513 0006 1304     		lsls	r3, r2, #16
+ 514 0008 1A0C     		lsrs	r2, r3, #16
+ 515 000a 0280     		strh	r2, [r0, #0]	@ movhi
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set new DFF bit value */
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->CR1 |= SPI_DataSize;
+ 516              		.loc 1 528 0
+ 517 000c 0388     		ldrh	r3, [r0, #0]
+ 518 000e 9AB2     		uxth	r2, r3
+ 519 0010 1143     		orrs	r1, r1, r2
+ 520              	.LVL55:
+ 521 0012 0180     		strh	r1, [r0, #0]	@ movhi
+ 522 0014 7047     		bx	lr
+ 523              		.cfi_endproc
+ 524              	.LFE63:
+ 526              		.section	.text.SPI_BiDirectionalLineConfig,"ax",%progbits
+ 527              		.align	1
+ 528              		.global	SPI_BiDirectionalLineConfig
+ 529              		.thumb
+ 530              		.thumb_func
+ 532              	SPI_BiDirectionalLineConfig:
+ 533              	.LFB64:
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Selects the data transfer direction in bidirectional mode for the specified SPI.
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_Direction: specifies the data transfer direction in bidirectional mode. 
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be one of the following values:
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_Direction_Tx: Selects Tx transmission direction
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_Direction_Rx: Selects Rx receive direction
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_BiDirectionalLineConfig(SPI_TypeDef* SPIx, uint16_t SPI_Direction)
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 534              		.loc 1 541 0
+ 535              		.cfi_startproc
+ 536              		@ args = 0, pretend = 0, frame = 0
+ 537              		@ frame_needed = 0, uses_anonymous_args = 0
+ 538              		@ link register save eliminated.
+ 539              	.LVL56:
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_DIRECTION(SPI_Direction));
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (SPI_Direction == SPI_Direction_Tx)
+ 540              		.loc 1 545 0
+ 541 0000 B1F5804F 		cmp	r1, #16384
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Set the Tx only mode */
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 |= SPI_Direction_Tx;
+ 542              		.loc 1 548 0
+ 543 0004 0388     		ldrh	r3, [r0, #0]
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (SPI_Direction == SPI_Direction_Tx)
+ 544              		.loc 1 545 0
+ 545 0006 03D1     		bne	.L38
+ 546              		.loc 1 548 0
+ 547 0008 99B2     		uxth	r1, r3
+ 548              	.LVL57:
+ 549 000a 41F48043 		orr	r3, r1, #16384
+ 550 000e 03E0     		b	.L40
+ 551              	.LVL58:
+ 552              	.L38:
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Set the Rx only mode */
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 &= SPI_Direction_Rx;
+ 553              		.loc 1 553 0
+ 554 0010 23F48041 		bic	r1, r3, #16384
+ 555              	.LVL59:
+ 556 0014 0A04     		lsls	r2, r1, #16
+ 557 0016 130C     		lsrs	r3, r2, #16
+ 558              	.L40:
+ 559 0018 0380     		strh	r3, [r0, #0]	@ movhi
+ 560 001a 7047     		bx	lr
+ 561              		.cfi_endproc
+ 562              	.LFE64:
+ 564              		.section	.text.SPI_NSSInternalSoftwareConfig,"ax",%progbits
+ 565              		.align	1
+ 566              		.global	SPI_NSSInternalSoftwareConfig
+ 567              		.thumb
+ 568              		.thumb_func
+ 570              	SPI_NSSInternalSoftwareConfig:
+ 571              	.LFB65:
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Configures internally by software the NSS pin for the selected SPI.
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_NSSInternalSoft: specifies the SPI NSS internal state.
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be one of the following values:
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_NSSInternalSoft_Set: Set NSS pin internally
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_NSSInternalSoft_Reset: Reset NSS pin internally
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_NSSInternalSoftwareConfig(SPI_TypeDef* SPIx, uint16_t SPI_NSSInternalSoft)
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 572              		.loc 1 567 0
+ 573              		.cfi_startproc
+ 574              		@ args = 0, pretend = 0, frame = 0
+ 575              		@ frame_needed = 0, uses_anonymous_args = 0
+ 576              		@ link register save eliminated.
+ 577              	.LVL60:
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_NSS_INTERNAL(SPI_NSSInternalSoft));
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (SPI_NSSInternalSoft != SPI_NSSInternalSoft_Reset)
+ 578              		.loc 1 571 0
+ 579 0000 4FF6FF63 		movw	r3, #65279
+ 580 0004 9942     		cmp	r1, r3
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Set NSS pin internally by software */
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 |= SPI_NSSInternalSoft_Set;
+ 581              		.loc 1 574 0
+ 582 0006 0188     		ldrh	r1, [r0, #0]
+ 583              	.LVL61:
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (SPI_NSSInternalSoft != SPI_NSSInternalSoft_Reset)
+ 584              		.loc 1 571 0
+ 585 0008 03D0     		beq	.L42
+ 586              		.loc 1 574 0
+ 587 000a 8AB2     		uxth	r2, r1
+ 588 000c 42F48071 		orr	r1, r2, #256
+ 589 0010 03E0     		b	.L44
+ 590              	.L42:
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Reset NSS pin internally by software */
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 &= SPI_NSSInternalSoft_Reset;
+ 591              		.loc 1 579 0
+ 592 0012 21F48072 		bic	r2, r1, #256
+ 593 0016 1304     		lsls	r3, r2, #16
+ 594 0018 190C     		lsrs	r1, r3, #16
+ 595              	.L44:
+ 596 001a 0180     		strh	r1, [r0, #0]	@ movhi
+ 597 001c 7047     		bx	lr
+ 598              		.cfi_endproc
+ 599              	.LFE65:
+ 601              		.section	.text.SPI_SSOutputCmd,"ax",%progbits
+ 602              		.align	1
+ 603              		.global	SPI_SSOutputCmd
+ 604              		.thumb
+ 605              		.thumb_func
+ 607              	SPI_SSOutputCmd:
+ 608              	.LFB66:
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Enables or disables the SS output for the selected SPI.
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  NewState: new state of the SPIx SS output. 
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_SSOutputCmd(SPI_TypeDef* SPIx, FunctionalState NewState)
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 609              		.loc 1 591 0
+ 610              		.cfi_startproc
+ 611              		@ args = 0, pretend = 0, frame = 0
+ 612              		@ frame_needed = 0, uses_anonymous_args = 0
+ 613              		@ link register save eliminated.
+ 614              	.LVL62:
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable the selected SPI SS output */
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 |= (uint16_t)SPI_CR2_SSOE;
+ 615              		.loc 1 598 0
+ 616 0000 8388     		ldrh	r3, [r0, #4]
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 617              		.loc 1 595 0
+ 618 0002 19B1     		cbz	r1, .L46
+ 619              		.loc 1 598 0
+ 620 0004 99B2     		uxth	r1, r3
+ 621              	.LVL63:
+ 622 0006 41F00403 		orr	r3, r1, #4
+ 623 000a 03E0     		b	.L48
+ 624              	.LVL64:
+ 625              	.L46:
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Disable the selected SPI SS output */
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 &= (uint16_t)~((uint16_t)SPI_CR2_SSOE);
+ 626              		.loc 1 603 0
+ 627 000c 23F00401 		bic	r1, r3, #4
+ 628              	.LVL65:
+ 629 0010 0A04     		lsls	r2, r1, #16
+ 630 0012 130C     		lsrs	r3, r2, #16
+ 631              	.L48:
+ 632 0014 8380     		strh	r3, [r0, #4]	@ movhi
+ 633 0016 7047     		bx	lr
+ 634              		.cfi_endproc
+ 635              	.LFE66:
+ 637              		.section	.text.SPI_TIModeCmd,"ax",%progbits
+ 638              		.align	1
+ 639              		.global	SPI_TIModeCmd
+ 640              		.thumb
+ 641              		.thumb_func
+ 643              	SPI_TIModeCmd:
+ 644              	.LFB67:
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Enables or disables the SPIx/I2Sx DMA interface.
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *   
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   This function can be called only after the SPI_Init() function has 
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         been called. 
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   When TI mode is selected, the control bits SSM, SSI, CPOL and CPHA 
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         are not taken into consideration and are configured by hardware
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         respectively to the TI mode requirements.  
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * 
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  NewState: new state of the selected SPI TI communication mode.
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_TIModeCmd(SPI_TypeDef* SPIx, FunctionalState NewState)
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 645              		.loc 1 622 0
+ 646              		.cfi_startproc
+ 647              		@ args = 0, pretend = 0, frame = 0
+ 648              		@ frame_needed = 0, uses_anonymous_args = 0
+ 649              		@ link register save eliminated.
+ 650              	.LVL66:
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 628:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 629:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable the TI mode for the selected SPI peripheral */
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 |= SPI_CR2_FRF;
+ 651              		.loc 1 630 0
+ 652 0000 8388     		ldrh	r3, [r0, #4]
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 653              		.loc 1 627 0
+ 654 0002 19B1     		cbz	r1, .L50
+ 655              		.loc 1 630 0
+ 656 0004 99B2     		uxth	r1, r3
+ 657              	.LVL67:
+ 658 0006 41F01003 		orr	r3, r1, #16
+ 659 000a 03E0     		b	.L52
+ 660              	.LVL68:
+ 661              	.L50:
+ 631:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 632:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 633:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 634:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Disable the TI mode for the selected SPI peripheral */
+ 635:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 &= (uint16_t)~SPI_CR2_FRF;
+ 662              		.loc 1 635 0
+ 663 000c 23F01001 		bic	r1, r3, #16
+ 664              	.LVL69:
+ 665 0010 0A04     		lsls	r2, r1, #16
+ 666 0012 130C     		lsrs	r3, r2, #16
+ 667              	.L52:
+ 668 0014 8380     		strh	r3, [r0, #4]	@ movhi
+ 669 0016 7047     		bx	lr
+ 670              		.cfi_endproc
+ 671              	.LFE67:
+ 673              		.section	.text.SPI_I2S_ReceiveData,"ax",%progbits
+ 674              		.align	1
+ 675              		.global	SPI_I2S_ReceiveData
+ 676              		.thumb
+ 677              		.thumb_func
+ 679              	SPI_I2S_ReceiveData:
+ 680              	.LFB68:
+ 636:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 637:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 638:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 639:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 640:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @}
+ 641:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 642:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 643:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @defgroup SPI_Group2 Data transfers functions
+ 644:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *  @brief   Data transfers functions
+ 645:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *
+ 646:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @verbatim   
+ 647:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================
+ 648:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                          Data transfers functions
+ 649:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================  
+ 650:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   This section provides a set of functions allowing to manage the SPI data transfers
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In reception, data are received and then stored into an internal Rx buffer while 
+ 654:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In transmission, data are first stored into an internal Tx buffer before being 
+ 655:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   transmitted.
+ 656:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   The read access of the SPI_DR register can be done using the SPI_I2S_ReceiveData()
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   function and returns the Rx buffered value. Whereas a write access to the SPI_DR 
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   can be done using SPI_I2S_SendData() function and stores the written data into 
+ 660:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   Tx buffer.
+ 661:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 662:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @endverbatim
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 666:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Returns the most recent received data by the SPIx/I2Sx peripheral. 
+ 668:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode. 
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval The value of the received data.
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 672:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** uint16_t SPI_I2S_ReceiveData(SPI_TypeDef* SPIx)
+ 673:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 681              		.loc 1 673 0
+ 682              		.cfi_startproc
+ 683              		@ args = 0, pretend = 0, frame = 0
+ 684              		@ frame_needed = 0, uses_anonymous_args = 0
+ 685              		@ link register save eliminated.
+ 686              	.LVL70:
+ 674:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 675:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 676:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 677:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Return the data in the DR register */
+ 678:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   return SPIx->DR;
+ 687              		.loc 1 678 0
+ 688 0000 8089     		ldrh	r0, [r0, #12]
+ 689              	.LVL71:
+ 679:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 690              		.loc 1 679 0
+ 691 0002 80B2     		uxth	r0, r0
+ 692 0004 7047     		bx	lr
+ 693              		.cfi_endproc
+ 694              	.LFE68:
+ 696              		.section	.text.SPI_I2S_SendData,"ax",%progbits
+ 697              		.align	1
+ 698              		.global	SPI_I2S_SendData
+ 699              		.thumb
+ 700              		.thumb_func
+ 702              	SPI_I2S_SendData:
+ 703              	.LFB69:
+ 680:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 681:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 682:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Transmits a Data through the SPIx/I2Sx peripheral.
+ 683:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+ 684:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode.     
+ 685:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  Data: Data to be transmitted.
+ 686:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 688:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_I2S_SendData(SPI_TypeDef* SPIx, uint16_t Data)
+ 689:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 704              		.loc 1 689 0
+ 705              		.cfi_startproc
+ 706              		@ args = 0, pretend = 0, frame = 0
+ 707              		@ frame_needed = 0, uses_anonymous_args = 0
+ 708              		@ link register save eliminated.
+ 709              	.LVL72:
+ 690:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 691:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 692:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 693:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Write in the DR register the data to be sent */
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->DR = Data;
+ 710              		.loc 1 694 0
+ 711 0000 8181     		strh	r1, [r0, #12]	@ movhi
+ 712 0002 7047     		bx	lr
+ 713              		.cfi_endproc
+ 714              	.LFE69:
+ 716              		.section	.text.SPI_CalculateCRC,"ax",%progbits
+ 717              		.align	1
+ 718              		.global	SPI_CalculateCRC
+ 719              		.thumb
+ 720              		.thumb_func
+ 722              	SPI_CalculateCRC:
+ 723              	.LFB70:
+ 695:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 696:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 697:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 698:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @}
+ 699:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 700:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 701:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @defgroup SPI_Group3 Hardware CRC Calculation functions
+ 702:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *  @brief   Hardware CRC Calculation functions
+ 703:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *
+ 704:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @verbatim   
+ 705:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================
+ 706:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                          Hardware CRC Calculation functions
+ 707:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================  
+ 708:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 709:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   This section provides a set of functions allowing to manage the SPI CRC hardware 
+ 710:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   calculation
+ 711:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 712:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPI communication using CRC is possible through the following procedure:
+ 713:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      1. Program the Data direction, Polarity, Phase, First Data, Baud Rate Prescaler, 
+ 714:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         Slave Management, Peripheral Mode and CRC Polynomial values using the SPI_Init()
+ 715:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         function.
+ 716:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      2. Enable the CRC calculation using the SPI_CalculateCRC() function.
+ 717:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      3. Enable the SPI using the SPI_Cmd() function
+ 718:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      4. Before writing the last data to the TX buffer, set the CRCNext bit using the 
+ 719:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       SPI_TransmitCRC() function to indicate that after transmission of the last 
+ 720:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       data, the CRC should be transmitted.
+ 721:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      5. After transmitting the last data, the SPI transmits the CRC. The SPI_CR1_CRCNEXT
+ 722:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         bit is reset. The CRC is also received and compared against the SPI_RXCRCR 
+ 723:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         value. 
+ 724:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         If the value does not match, the SPI_FLAG_CRCERR flag is set and an interrupt
+ 725:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         can be generated when the SPI_I2S_IT_ERR interrupt is enabled.
+ 726:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 727:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note It is advised not to read the calculated CRC values during the communication.
+ 728:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 729:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note When the SPI is in slave mode, be careful to enable CRC calculation only 
+ 730:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       when the clock is stable, that is, when the clock is in the steady state. 
+ 731:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       If not, a wrong CRC calculation may be done. In fact, the CRC is sensitive 
+ 732:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       to the SCK slave input clock as soon as CRCEN is set, and this, whatever 
+ 733:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       the value of the SPE bit.
+ 734:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 735:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note With high bitrate frequencies, be careful when transmitting the CRC.
+ 736:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       As the number of used CPU cycles has to be as low as possible in the CRC 
+ 737:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       transfer phase, it is forbidden to call software functions in the CRC 
+ 738:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       transmission sequence to avoid errors in the last data and CRC reception. 
+ 739:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       In fact, CRCNEXT bit has to be written before the end of the transmission/reception 
+ 740:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       of the last data.
+ 741:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 742:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note For high bit rate frequencies, it is advised to use the DMA mode to avoid the
+ 743:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       degradation of the SPI speed performance due to CPU accesses impacting the 
+ 744:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       SPI bandwidth.
+ 745:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 746:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note When the STM32F2xx is configured as slave and the NSS hardware mode is 
+ 747:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       used, the NSS pin needs to be kept low between the data phase and the CRC 
+ 748:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       phase.
+ 749:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 750:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note When the SPI is configured in slave mode with the CRC feature enabled, CRC
+ 751:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       calculation takes place even if a high level is applied on the NSS pin. 
+ 752:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       This may happen for example in case of a multi-slave environment where the 
+ 753:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       communication master addresses slaves alternately.
+ 754:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 755:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note Between a slave de-selection (high level on NSS) and a new slave selection 
+ 756:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       (low level on NSS), the CRC value should be cleared on both master and slave
+ 757:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       sides in order to resynchronize the master and slave for their respective 
+ 758:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       CRC calculation.
+ 759:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 760:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note To clear the CRC, follow the procedure below:
+ 761:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         1. Disable SPI using the SPI_Cmd() function
+ 762:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         2. Disable the CRC calculation using the SPI_CalculateCRC() function.
+ 763:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         3. Enable the CRC calculation using the SPI_CalculateCRC() function.
+ 764:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****         4. Enable SPI using the SPI_Cmd() function.
+ 765:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 766:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @endverbatim
+ 767:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 768:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 769:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 770:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 771:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Enables or disables the CRC value calculation of the transferred bytes.
+ 772:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 773:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  NewState: new state of the SPIx CRC value calculation.
+ 774:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 775:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 776:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 777:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_CalculateCRC(SPI_TypeDef* SPIx, FunctionalState NewState)
+ 778:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 724              		.loc 1 778 0
+ 725              		.cfi_startproc
+ 726              		@ args = 0, pretend = 0, frame = 0
+ 727              		@ frame_needed = 0, uses_anonymous_args = 0
+ 728              		@ link register save eliminated.
+ 729              	.LVL73:
+ 779:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 780:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 781:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 782:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 783:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 784:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable the selected SPI CRC calculation */
+ 785:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 |= SPI_CR1_CRCEN;
+ 730              		.loc 1 785 0
+ 731 0000 0388     		ldrh	r3, [r0, #0]
+ 782:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 732              		.loc 1 782 0
+ 733 0002 19B1     		cbz	r1, .L56
+ 734              		.loc 1 785 0
+ 735 0004 99B2     		uxth	r1, r3
+ 736              	.LVL74:
+ 737 0006 41F40053 		orr	r3, r1, #8192
+ 738 000a 03E0     		b	.L58
+ 739              	.LVL75:
+ 740              	.L56:
+ 786:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 787:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 788:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 789:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Disable the selected SPI CRC calculation */
+ 790:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR1 &= (uint16_t)~((uint16_t)SPI_CR1_CRCEN);
+ 741              		.loc 1 790 0
+ 742 000c 23F40051 		bic	r1, r3, #8192
+ 743              	.LVL76:
+ 744 0010 0A04     		lsls	r2, r1, #16
+ 745 0012 130C     		lsrs	r3, r2, #16
+ 746              	.L58:
+ 747 0014 0380     		strh	r3, [r0, #0]	@ movhi
+ 748 0016 7047     		bx	lr
+ 749              		.cfi_endproc
+ 750              	.LFE70:
+ 752              		.section	.text.SPI_TransmitCRC,"ax",%progbits
+ 753              		.align	1
+ 754              		.global	SPI_TransmitCRC
+ 755              		.thumb
+ 756              		.thumb_func
+ 758              	SPI_TransmitCRC:
+ 759              	.LFB71:
+ 791:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 792:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 793:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 794:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 795:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Transmit the SPIx CRC value.
+ 796:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 797:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 798:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 799:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_TransmitCRC(SPI_TypeDef* SPIx)
+ 800:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 760              		.loc 1 800 0
+ 761              		.cfi_startproc
+ 762              		@ args = 0, pretend = 0, frame = 0
+ 763              		@ frame_needed = 0, uses_anonymous_args = 0
+ 764              		@ link register save eliminated.
+ 765              	.LVL77:
+ 801:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 802:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 803:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 804:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Enable the selected SPI CRC transmission */
+ 805:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->CR1 |= SPI_CR1_CRCNEXT;
+ 766              		.loc 1 805 0
+ 767 0000 0388     		ldrh	r3, [r0, #0]
+ 768 0002 99B2     		uxth	r1, r3
+ 769 0004 41F48052 		orr	r2, r1, #4096
+ 770 0008 0280     		strh	r2, [r0, #0]	@ movhi
+ 771 000a 7047     		bx	lr
+ 772              		.cfi_endproc
+ 773              	.LFE71:
+ 775              		.section	.text.SPI_GetCRC,"ax",%progbits
+ 776              		.align	1
+ 777              		.global	SPI_GetCRC
+ 778              		.thumb
+ 779              		.thumb_func
+ 781              	SPI_GetCRC:
+ 782              	.LFB72:
+ 806:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 807:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 808:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 809:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Returns the transmit or the receive CRC register value for the specified SPI.
+ 810:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 811:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_CRC: specifies the CRC register to be read.
+ 812:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be one of the following values:
+ 813:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_CRC_Tx: Selects Tx CRC register
+ 814:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_CRC_Rx: Selects Rx CRC register
+ 815:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval The selected CRC register value..
+ 816:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 817:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** uint16_t SPI_GetCRC(SPI_TypeDef* SPIx, uint8_t SPI_CRC)
+ 818:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 783              		.loc 1 818 0
+ 784              		.cfi_startproc
+ 785              		@ args = 0, pretend = 0, frame = 0
+ 786              		@ frame_needed = 0, uses_anonymous_args = 0
+ 787              		@ link register save eliminated.
+ 788              	.LVL78:
+ 819:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint16_t crcreg = 0;
+ 820:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 821:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 822:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_CRC(SPI_CRC));
+ 823:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (SPI_CRC != SPI_CRC_Rx)
+ 789              		.loc 1 823 0
+ 790 0000 0129     		cmp	r1, #1
+ 824:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 825:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get the Tx CRC register */
+ 826:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     crcreg = SPIx->TXCRCR;
+ 791              		.loc 1 826 0
+ 792 0002 14BF     		ite	ne
+ 793 0004 008B     		ldrhne	r0, [r0, #24]
+ 794              	.LVL79:
+ 827:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 828:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 829:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 830:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Get the Rx CRC register */
+ 831:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     crcreg = SPIx->RXCRCR;
+ 795              		.loc 1 831 0
+ 796 0006 808A     		ldrheq	r0, [r0, #20]
+ 797 0008 80B2     		uxth	r0, r0
+ 798              	.LVL80:
+ 832:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 833:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Return the selected CRC register */
+ 834:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   return crcreg;
+ 835:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 799              		.loc 1 835 0
+ 800 000a 7047     		bx	lr
+ 801              		.cfi_endproc
+ 802              	.LFE72:
+ 804              		.section	.text.SPI_GetCRCPolynomial,"ax",%progbits
+ 805              		.align	1
+ 806              		.global	SPI_GetCRCPolynomial
+ 807              		.thumb
+ 808              		.thumb_func
+ 810              	SPI_GetCRCPolynomial:
+ 811              	.LFB73:
+ 836:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 837:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 838:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Returns the CRC Polynomial register value for the specified SPI.
+ 839:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: where x can be 1, 2 or 3 to select the SPI peripheral.
+ 840:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval The CRC Polynomial register value.
+ 841:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 842:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** uint16_t SPI_GetCRCPolynomial(SPI_TypeDef* SPIx)
+ 843:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 812              		.loc 1 843 0
+ 813              		.cfi_startproc
+ 814              		@ args = 0, pretend = 0, frame = 0
+ 815              		@ frame_needed = 0, uses_anonymous_args = 0
+ 816              		@ link register save eliminated.
+ 817              	.LVL81:
+ 844:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 845:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 846:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 847:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Return the CRC polynomial register */
+ 848:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   return SPIx->CRCPR;
+ 818              		.loc 1 848 0
+ 819 0000 008A     		ldrh	r0, [r0, #16]
+ 820              	.LVL82:
+ 849:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 821              		.loc 1 849 0
+ 822 0002 80B2     		uxth	r0, r0
+ 823 0004 7047     		bx	lr
+ 824              		.cfi_endproc
+ 825              	.LFE73:
+ 827              		.section	.text.SPI_I2S_DMACmd,"ax",%progbits
+ 828              		.align	1
+ 829              		.global	SPI_I2S_DMACmd
+ 830              		.thumb
+ 831              		.thumb_func
+ 833              	SPI_I2S_DMACmd:
+ 834              	.LFB74:
+ 850:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 851:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 852:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @}
+ 853:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 854:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 855:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @defgroup SPI_Group4 DMA transfers management functions
+ 856:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *  @brief   DMA transfers management functions
+ 857:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+ 858:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @verbatim   
+ 859:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================
+ 860:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                          DMA transfers management functions
+ 861:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================  
+ 862:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 863:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @endverbatim
+ 864:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 865:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 866:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 867:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 868:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Enables or disables the SPIx/I2Sx DMA interface.
+ 869:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+ 870:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode. 
+ 871:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_I2S_DMAReq: specifies the SPI DMA transfer request to be enabled or disabled. 
+ 872:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be any combination of the following values:
+ 873:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_DMAReq_Tx: Tx buffer DMA transfer request
+ 874:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_DMAReq_Rx: Rx buffer DMA transfer request
+ 875:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  NewState: new state of the selected SPI DMA transfer request.
+ 876:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 877:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 878:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 879:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState NewState)
+ 880:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 835              		.loc 1 880 0
+ 836              		.cfi_startproc
+ 837              		@ args = 0, pretend = 0, frame = 0
+ 838              		@ frame_needed = 0, uses_anonymous_args = 0
+ 839              		@ link register save eliminated.
+ 840              	.LVL83:
+ 881:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 882:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 883:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 884:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_I2S_DMAREQ(SPI_I2S_DMAReq));
+ 885:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 886:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 887:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 888:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable the selected SPI DMA requests */
+ 889:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 |= SPI_I2S_DMAReq;
+ 841              		.loc 1 889 0
+ 842 0000 8388     		ldrh	r3, [r0, #4]
+ 843 0002 9BB2     		uxth	r3, r3
+ 886:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 844              		.loc 1 886 0
+ 845 0004 0AB1     		cbz	r2, .L66
+ 846              		.loc 1 889 0
+ 847 0006 1943     		orrs	r1, r1, r3
+ 848              	.LVL84:
+ 849 0008 01E0     		b	.L68
+ 850              	.LVL85:
+ 851              	.L66:
+ 890:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 891:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+ 892:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+ 893:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Disable the selected SPI DMA requests */
+ 894:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 &= (uint16_t)~SPI_I2S_DMAReq;
+ 852              		.loc 1 894 0
+ 853 000a 23EA0101 		bic	r1, r3, r1
+ 854              	.LVL86:
+ 855              	.L68:
+ 856 000e 8180     		strh	r1, [r0, #4]	@ movhi
+ 857 0010 7047     		bx	lr
+ 858              		.cfi_endproc
+ 859              	.LFE74:
+ 861              		.section	.text.SPI_I2S_ITConfig,"ax",%progbits
+ 862              		.align	1
+ 863              		.global	SPI_I2S_ITConfig
+ 864              		.thumb
+ 865              		.thumb_func
+ 867              	SPI_I2S_ITConfig:
+ 868              	.LFB75:
+ 895:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+ 896:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 897:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 898:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 899:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @}
+ 900:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 901:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 902:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /** @defgroup SPI_Group5 Interrupts and flags management functions
+ 903:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  *  @brief   Interrupts and flags management functions
+ 904:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *
+ 905:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @verbatim   
+ 906:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================
+ 907:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                          Interrupts and flags management functions
+ 908:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****  ===============================================================================  
+ 909:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 910:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   This section provides a set of functions allowing to configure the SPI Interrupts 
+ 911:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   sources and check or clear the flags or pending bits status.
+ 912:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   The user should identify which mode will be used in his application to manage 
+ 913:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   the communication: Polling mode, Interrupt mode or DMA mode. 
+ 914:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+ 915:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   Polling Mode
+ 916:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   =============
+ 917:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In Polling Mode, the SPI/I2S communication can be managed by 9 flags:
+ 918:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      1. SPI_I2S_FLAG_TXE : to indicate the status of the transmit buffer register
+ 919:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      2. SPI_I2S_FLAG_RXNE : to indicate the status of the receive buffer register
+ 920:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      3. SPI_I2S_FLAG_BSY : to indicate the state of the communication layer of the SPI.
+ 921:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      4. SPI_FLAG_CRCERR : to indicate if a CRC Calculation error occur              
+ 922:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      5. SPI_FLAG_MODF : to indicate if a Mode Fault error occur
+ 923:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      6. SPI_I2S_FLAG_OVR : to indicate if an Overrun error occur
+ 924:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      7. I2S_FLAG_TIFRFE: to indicate a Frame Format error occurs.
+ 925:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      8. I2S_FLAG_UDR: to indicate an Underrun error occurs.
+ 926:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      9. I2S_FLAG_CHSIDE: to indicate Channel Side.
+ 927:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 928:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @note Do not use the BSY flag to handle each data transmission or reception.  It is
+ 929:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****       better to use the TXE and RXNE flags instead.
+ 930:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 931:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In this Mode it is advised to use the following functions:
+ 932:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      - FlagStatus SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG);
+ 933:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      - void SPI_I2S_ClearFlag(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG);
+ 934:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 935:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   Interrupt Mode
+ 936:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   ===============
+ 937:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In Interrupt Mode, the SPI communication can be managed by 3 interrupt sources
+ 938:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   and 7 pending bits: 
+ 939:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   Pending Bits:
+ 940:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   ------------- 
+ 941:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      1. SPI_I2S_IT_TXE : to indicate the status of the transmit buffer register
+ 942:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      2. SPI_I2S_IT_RXNE : to indicate the status of the receive buffer register
+ 943:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      3. SPI_IT_CRCERR : to indicate if a CRC Calculation error occur (available in SPI mode only)  
+ 944:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      4. SPI_IT_MODF : to indicate if a Mode Fault error occur (available in SPI mode only)
+ 945:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      5. SPI_I2S_IT_OVR : to indicate if an Overrun error occur
+ 946:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      6. I2S_IT_UDR : to indicate an Underrun Error occurs (available in I2S mode only).
+ 947:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      7. I2S_FLAG_TIFRFE : to indicate a Frame Format error occurs (available in TI mode only).
+ 948:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 949:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   Interrupt Source:
+ 950:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   -----------------
+ 951:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      1. SPI_I2S_IT_TXE: specifies the interrupt source for the Tx buffer empty 
+ 952:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                         interrupt.  
+ 953:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      2. SPI_I2S_IT_RXNE : specifies the interrupt source for the Rx buffer not 
+ 954:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****                           empty interrupt.
+ 955:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      3. SPI_I2S_IT_ERR : specifies the interrupt source for the errors interrupt.
+ 956:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 957:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In this Mode it is advised to use the following functions:
+ 958:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      - void SPI_I2S_ITConfig(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT, FunctionalState NewState);
+ 959:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      - ITStatus SPI_I2S_GetITStatus(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT);
+ 960:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      - void SPI_I2S_ClearITPendingBit(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT);
+ 961:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 962:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   DMA Mode
+ 963:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   ========
+ 964:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In DMA Mode, the SPI communication can be managed by 2 DMA Channel requests:
+ 965:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      1. SPI_I2S_DMAReq_Tx: specifies the Tx buffer DMA transfer request
+ 966:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****      2. SPI_I2S_DMAReq_Rx: specifies the Rx buffer DMA transfer request
+ 967:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 968:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   In this Mode it is advised to use the following function:
+ 969:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     - void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState NewState);
+ 970:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 971:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** @endverbatim
+ 972:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @{
+ 973:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 974:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 975:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+ 976:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Enables or disables the specified SPI/I2S interrupts.
+ 977:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+ 978:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode.  
+ 979:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_I2S_IT: specifies the SPI interrupt source to be enabled or disabled. 
+ 980:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be one of the following values:
+ 981:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_IT_TXE: Tx buffer empty interrupt mask
+ 982:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_IT_RXNE: Rx buffer not empty interrupt mask
+ 983:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_IT_ERR: Error interrupt mask
+ 984:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  NewState: new state of the specified SPI interrupt.
+ 985:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 986:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+ 987:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+ 988:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_I2S_ITConfig(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT, FunctionalState NewState)
+ 989:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 869              		.loc 1 989 0
+ 870              		.cfi_startproc
+ 871              		@ args = 0, pretend = 0, frame = 0
+ 872              		@ frame_needed = 0, uses_anonymous_args = 0
+ 873              		@ link register save eliminated.
+ 874              	.LVL87:
+ 990:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint16_t itpos = 0, itmask = 0 ;
+ 991:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+ 992:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+ 993:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+ 994:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 995:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_I2S_CONFIG_IT(SPI_I2S_IT));
+ 996:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+ 997:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Get the SPI IT index */
+ 998:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   itpos = SPI_I2S_IT >> 4;
+ 999:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1000:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set the IT mask */
+1001:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   itmask = (uint16_t)1 << (uint16_t)itpos;
+ 875              		.loc 1 1001 0
+ 876 0000 0909     		lsrs	r1, r1, #4
+ 877              	.LVL88:
+ 878 0002 0123     		movs	r3, #1
+ 879 0004 03FA01F3 		lsl	r3, r3, r1
+ 880 0008 9BB2     		uxth	r3, r3
+ 881              	.LVL89:
+1002:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1003:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (NewState != DISABLE)
+ 882              		.loc 1 1003 0
+ 883 000a 1AB1     		cbz	r2, .L70
+1004:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+1005:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Enable the selected SPI interrupt */
+1006:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 |= itmask;
+ 884              		.loc 1 1006 0
+ 885 000c 8288     		ldrh	r2, [r0, #4]
+ 886              	.LVL90:
+ 887 000e 91B2     		uxth	r1, r2
+ 888 0010 0B43     		orrs	r3, r3, r1
+ 889              	.LVL91:
+ 890 0012 03E0     		b	.L72
+ 891              	.LVL92:
+ 892              	.L70:
+1007:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+1008:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+1009:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+1010:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* Disable the selected SPI interrupt */
+1011:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     SPIx->CR2 &= (uint16_t)~itmask;
+ 893              		.loc 1 1011 0
+ 894 0014 8288     		ldrh	r2, [r0, #4]
+ 895              	.LVL93:
+ 896 0016 91B2     		uxth	r1, r2
+ 897 0018 21EA0303 		bic	r3, r1, r3
+ 898              	.LVL94:
+ 899              	.L72:
+ 900 001c 8380     		strh	r3, [r0, #4]	@ movhi
+ 901 001e 7047     		bx	lr
+ 902              		.cfi_endproc
+ 903              	.LFE75:
+ 905              		.section	.text.SPI_I2S_GetFlagStatus,"ax",%progbits
+ 906              		.align	1
+ 907              		.global	SPI_I2S_GetFlagStatus
+ 908              		.thumb
+ 909              		.thumb_func
+ 911              	SPI_I2S_GetFlagStatus:
+ 912              	.LFB76:
+1012:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+1013:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+1014:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1015:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+1016:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Checks whether the specified SPIx/I2Sx flag is set or not.
+1017:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+1018:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode. 
+1019:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_I2S_FLAG: specifies the SPI flag to check. 
+1020:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be one of the following values:
+1021:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_FLAG_TXE: Transmit buffer empty flag.
+1022:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_FLAG_RXNE: Receive buffer not empty flag.
+1023:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_FLAG_BSY: Busy flag.
+1024:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_FLAG_OVR: Overrun flag.
+1025:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_FLAG_MODF: Mode Fault flag.
+1026:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_FLAG_CRCERR: CRC Error flag.
+1027:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_FLAG_TIFRFE: Format Error.
+1028:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg I2S_FLAG_UDR: Underrun Error flag.
+1029:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg I2S_FLAG_CHSIDE: Channel Side flag.  
+1030:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval The new state of SPI_I2S_FLAG (SET or RESET).
+1031:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+1032:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** FlagStatus SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG)
+1033:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 913              		.loc 1 1033 0
+ 914              		.cfi_startproc
+ 915              		@ args = 0, pretend = 0, frame = 0
+ 916              		@ frame_needed = 0, uses_anonymous_args = 0
+ 917              		@ link register save eliminated.
+ 918              	.LVL95:
+1034:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   FlagStatus bitstatus = RESET;
+1035:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+1036:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+1037:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_I2S_GET_FLAG(SPI_I2S_FLAG));
+1038:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   
+1039:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the status of the specified SPI flag */
+1040:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if ((SPIx->SR & SPI_I2S_FLAG) != (uint16_t)RESET)
+ 919              		.loc 1 1040 0
+ 920 0000 0389     		ldrh	r3, [r0, #8]
+ 921              	.LVL96:
+ 922 0002 1942     		tst	r1, r3
+1041:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+1042:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* SPI_I2S_FLAG is set */
+1043:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     bitstatus = SET;
+1044:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+1045:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+1046:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+1047:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* SPI_I2S_FLAG is reset */
+1048:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     bitstatus = RESET;
+1049:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+1050:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Return the SPI_I2S_FLAG status */
+1051:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   return  bitstatus;
+1052:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 923              		.loc 1 1052 0
+ 924 0004 0CBF     		ite	eq
+ 925 0006 0020     		moveq	r0, #0
+ 926 0008 0120     		movne	r0, #1
+ 927              	.LVL97:
+ 928 000a 7047     		bx	lr
+ 929              		.cfi_endproc
+ 930              	.LFE76:
+ 932              		.section	.text.SPI_I2S_ClearFlag,"ax",%progbits
+ 933              		.align	1
+ 934              		.global	SPI_I2S_ClearFlag
+ 935              		.thumb
+ 936              		.thumb_func
+ 938              	SPI_I2S_ClearFlag:
+ 939              	.LFB77:
+1053:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1054:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+1055:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Clears the SPIx CRC Error (CRCERR) flag.
+1056:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+1057:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode. 
+1058:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_I2S_FLAG: specifies the SPI flag to clear. 
+1059:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This function clears only CRCERR flag.
+1060:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_FLAG_CRCERR: CRC Error flag.  
+1061:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *  
+1062:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   OVR (OverRun error) flag is cleared by software sequence: a read 
+1063:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          operation to SPI_DR register (SPI_I2S_ReceiveData()) followed by a read 
+1064:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          operation to SPI_SR register (SPI_I2S_GetFlagStatus()).
+1065:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   UDR (UnderRun error) flag is cleared by a read operation to 
+1066:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          SPI_SR register (SPI_I2S_GetFlagStatus()).   
+1067:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   MODF (Mode Fault) flag is cleared by software sequence: a read/write 
+1068:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          operation to SPI_SR register (SPI_I2S_GetFlagStatus()) followed by a 
+1069:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          write operation to SPI_CR1 register (SPI_Cmd() to enable the SPI).
+1070:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *  
+1071:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+1072:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+1073:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_I2S_ClearFlag(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG)
+1074:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 940              		.loc 1 1074 0
+ 941              		.cfi_startproc
+ 942              		@ args = 0, pretend = 0, frame = 0
+ 943              		@ frame_needed = 0, uses_anonymous_args = 0
+ 944              		@ link register save eliminated.
+ 945              	.LVL98:
+1075:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+1076:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+1077:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_I2S_CLEAR_FLAG(SPI_I2S_FLAG));
+1078:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     
+1079:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Clear the selected SPI CRC Error (CRCERR) flag */
+1080:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->SR = (uint16_t)~SPI_I2S_FLAG;
+ 946              		.loc 1 1080 0
+ 947 0000 C943     		mvns	r1, r1
+ 948              	.LVL99:
+ 949 0002 8AB2     		uxth	r2, r1
+ 950 0004 0281     		strh	r2, [r0, #8]	@ movhi
+ 951 0006 7047     		bx	lr
+ 952              		.cfi_endproc
+ 953              	.LFE77:
+ 955              		.section	.text.SPI_I2S_GetITStatus,"ax",%progbits
+ 956              		.align	1
+ 957              		.global	SPI_I2S_GetITStatus
+ 958              		.thumb
+ 959              		.thumb_func
+ 961              	SPI_I2S_GetITStatus:
+ 962              	.LFB78:
+1081:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+1082:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1083:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+1084:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Checks whether the specified SPIx/I2Sx interrupt has occurred or not.
+1085:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+1086:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode.   
+1087:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_I2S_IT: specifies the SPI interrupt source to check. 
+1088:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          This parameter can be one of the following values:
+1089:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_IT_TXE: Transmit buffer empty interrupt.
+1090:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_IT_RXNE: Receive buffer not empty interrupt.
+1091:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_IT_OVR: Overrun interrupt.
+1092:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_IT_MODF: Mode Fault interrupt.
+1093:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_IT_CRCERR: CRC Error interrupt.
+1094:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg I2S_IT_UDR: Underrun interrupt.  
+1095:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_I2S_IT_TIFRFE: Format Error interrupt.  
+1096:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval The new state of SPI_I2S_IT (SET or RESET).
+1097:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+1098:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** ITStatus SPI_I2S_GetITStatus(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT)
+1099:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 963              		.loc 1 1099 0
+ 964              		.cfi_startproc
+ 965              		@ args = 0, pretend = 0, frame = 0
+ 966              		@ frame_needed = 0, uses_anonymous_args = 0
+ 967              	.LVL100:
+1100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   ITStatus bitstatus = RESET;
+1101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint16_t itpos = 0, itmask = 0, enablestatus = 0;
+1102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+1104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+1105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_I2S_GET_IT(SPI_I2S_IT));
+1106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Get the SPI_I2S_IT index */
+1108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   itpos = 0x01 << (SPI_I2S_IT & 0x0F);
+ 968              		.loc 1 1108 0
+ 969 0000 0123     		movs	r3, #1
+ 970 0002 01F00F02 		and	r2, r1, #15
+ 971 0006 03FA02F2 		lsl	r2, r3, r2
+1099:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 972              		.loc 1 1099 0
+ 973 000a 10B5     		push	{r4, lr}
+ 974              	.LCFI3:
+ 975              		.cfi_def_cfa_offset 8
+ 976              		.cfi_offset 4, -8
+ 977              		.cfi_offset 14, -4
+1109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Get the SPI_I2S_IT IT mask */
+1111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   itmask = SPI_I2S_IT >> 4;
+1112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Set the IT mask */
+1114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   itmask = 0x01 << itmask;
+1115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Get the SPI_I2S_IT enable bit status */
+1117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   enablestatus = (SPIx->CR2 & itmask) ;
+ 978              		.loc 1 1117 0
+ 979 000c 8488     		ldrh	r4, [r0, #4]
+1118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the status of the specified SPI interrupt */
+1120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   if (((SPIx->SR & itpos) != (uint16_t)RESET) && enablestatus)
+ 980              		.loc 1 1120 0
+ 981 000e 0089     		ldrh	r0, [r0, #8]
+ 982              	.LVL101:
+1117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   enablestatus = (SPIx->CR2 & itmask) ;
+ 983              		.loc 1 1117 0
+ 984 0010 A4B2     		uxth	r4, r4
+ 985              	.LVL102:
+ 986              		.loc 1 1120 0
+ 987 0012 80B2     		uxth	r0, r0
+ 988 0014 1040     		ands	r0, r0, r2
+ 989 0016 06D0     		beq	.L76
+1114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   itmask = 0x01 << itmask;
+ 990              		.loc 1 1114 0 discriminator 1
+ 991 0018 0909     		lsrs	r1, r1, #4
+ 992              	.LVL103:
+ 993 001a 03FA01F3 		lsl	r3, r3, r1
+ 994              		.loc 1 1120 0 discriminator 1
+ 995 001e 1C42     		tst	r4, r3
+1121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+1122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* SPI_I2S_IT is set */
+1123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     bitstatus = SET;
+ 996              		.loc 1 1123 0 discriminator 1
+ 997 0020 0CBF     		ite	eq
+ 998 0022 0020     		moveq	r0, #0
+ 999 0024 0120     		movne	r0, #1
+ 1000              	.L76:
+ 1001              	.LVL104:
+1124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+1125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   else
+1126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   {
+1127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     /* SPI_I2S_IT is reset */
+1128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****     bitstatus = RESET;
+1129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   }
+1130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Return the SPI_I2S_IT status */
+1131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   return bitstatus;
+1132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** }
+ 1002              		.loc 1 1132 0
+ 1003 0026 10BD     		pop	{r4, pc}
+ 1004              		.cfi_endproc
+ 1005              	.LFE78:
+ 1007              		.section	.text.SPI_I2S_ClearITPendingBit,"ax",%progbits
+ 1008              		.align	1
+ 1009              		.global	SPI_I2S_ClearITPendingBit
+ 1010              		.thumb
+ 1011              		.thumb_func
+ 1013              	SPI_I2S_ClearITPendingBit:
+ 1014              	.LFB79:
+1133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** /**
+1135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @brief  Clears the SPIx CRC Error (CRCERR) interrupt pending bit.
+1136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPIx: To select the SPIx/I2Sx peripheral, where x can be: 1, 2 or 3 
+1137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         in SPI mode or 2 or 3 in I2S mode.  
+1138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @param  SPI_I2S_IT: specifies the SPI interrupt pending bit to clear.
+1139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *         This function clears only CRCERR interrupt pending bit.   
+1140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *            @arg SPI_IT_CRCERR: CRC Error interrupt.
+1141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *   
+1142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   OVR (OverRun Error) interrupt pending bit is cleared by software 
+1143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          sequence: a read operation to SPI_DR register (SPI_I2S_ReceiveData()) 
+1144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          followed by a read operation to SPI_SR register (SPI_I2S_GetITStatus()).
+1145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   UDR (UnderRun Error) interrupt pending bit is cleared by a read 
+1146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          operation to SPI_SR register (SPI_I2S_GetITStatus()).   
+1147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @note   MODF (Mode Fault) interrupt pending bit is cleared by software sequence:
+1148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          a read/write operation to SPI_SR register (SPI_I2S_GetITStatus()) 
+1149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          followed by a write operation to SPI_CR1 register (SPI_Cmd() to enable 
+1150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   *          the SPI).
+1151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   * @retval None
+1152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   */
+1153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** void SPI_I2S_ClearITPendingBit(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT)
+1154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** {
+ 1015              		.loc 1 1154 0
+ 1016              		.cfi_startproc
+ 1017              		@ args = 0, pretend = 0, frame = 0
+ 1018              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1019              		@ link register save eliminated.
+ 1020              	.LVL105:
+1155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   uint16_t itpos = 0;
+1156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Check the parameters */
+1157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_ALL_PERIPH(SPIx));
+1158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   assert_param(IS_SPI_I2S_CLEAR_IT(SPI_I2S_IT));
+1159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Get the SPI_I2S IT index */
+1161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   itpos = 0x01 << (SPI_I2S_IT & 0x0F);
+ 1021              		.loc 1 1161 0
+ 1022 0000 01F00F01 		and	r1, r1, #15
+ 1023              	.LVL106:
+ 1024 0004 0123     		movs	r3, #1
+ 1025 0006 03FA01F3 		lsl	r3, r3, r1
+1162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c **** 
+1163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   /* Clear the selected SPI CRC Error (CRCERR) interrupt pending bit */
+1164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_spi.c ****   SPIx->SR = (uint16_t)~itpos;
+ 1026              		.loc 1 1164 0
+ 1027 000a DA43     		mvns	r2, r3
+ 1028 000c 91B2     		uxth	r1, r2
+ 1029 000e 0181     		strh	r1, [r0, #8]	@ movhi
+ 1030 0010 7047     		bx	lr
+ 1031              		.cfi_endproc
+ 1032              	.LFE79:
+ 1034              		.text
+ 1035              	.Letext0:
+ 1036              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 1037              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 1038              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_spi.h"
+ 1039              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 1040              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_spi.c
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:19     .text.SPI_I2S_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:24     .text.SPI_I2S_DeInit:00000000 SPI_I2S_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:95     .text.SPI_I2S_DeInit:00000058 $d
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:102    .text.SPI_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:107    .text.SPI_Init:00000000 SPI_Init
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:170    .text.I2S_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:175    .text.I2S_Init:00000000 I2S_Init
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:345    .text.I2S_Init:000000c8 $d
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:351    .text.SPI_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:356    .text.SPI_StructInit:00000000 SPI_StructInit
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:391    .text.I2S_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:396    .text.I2S_StructInit:00000000 I2S_StructInit
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:425    .text.SPI_Cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:430    .text.SPI_Cmd:00000000 SPI_Cmd
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:461    .text.I2S_Cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:466    .text.I2S_Cmd:00000000 I2S_Cmd
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:497    .text.SPI_DataSizeConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:502    .text.SPI_DataSizeConfig:00000000 SPI_DataSizeConfig
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:527    .text.SPI_BiDirectionalLineConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:532    .text.SPI_BiDirectionalLineConfig:00000000 SPI_BiDirectionalLineConfig
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:565    .text.SPI_NSSInternalSoftwareConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:570    .text.SPI_NSSInternalSoftwareConfig:00000000 SPI_NSSInternalSoftwareConfig
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:602    .text.SPI_SSOutputCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:607    .text.SPI_SSOutputCmd:00000000 SPI_SSOutputCmd
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:638    .text.SPI_TIModeCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:643    .text.SPI_TIModeCmd:00000000 SPI_TIModeCmd
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:674    .text.SPI_I2S_ReceiveData:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:679    .text.SPI_I2S_ReceiveData:00000000 SPI_I2S_ReceiveData
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:697    .text.SPI_I2S_SendData:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:702    .text.SPI_I2S_SendData:00000000 SPI_I2S_SendData
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:717    .text.SPI_CalculateCRC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:722    .text.SPI_CalculateCRC:00000000 SPI_CalculateCRC
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:753    .text.SPI_TransmitCRC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:758    .text.SPI_TransmitCRC:00000000 SPI_TransmitCRC
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:776    .text.SPI_GetCRC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:781    .text.SPI_GetCRC:00000000 SPI_GetCRC
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:805    .text.SPI_GetCRCPolynomial:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:810    .text.SPI_GetCRCPolynomial:00000000 SPI_GetCRCPolynomial
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:828    .text.SPI_I2S_DMACmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:833    .text.SPI_I2S_DMACmd:00000000 SPI_I2S_DMACmd
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:862    .text.SPI_I2S_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:867    .text.SPI_I2S_ITConfig:00000000 SPI_I2S_ITConfig
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:906    .text.SPI_I2S_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:911    .text.SPI_I2S_GetFlagStatus:00000000 SPI_I2S_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:933    .text.SPI_I2S_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:938    .text.SPI_I2S_ClearFlag:00000000 SPI_I2S_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:956    .text.SPI_I2S_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:961    .text.SPI_I2S_GetITStatus:00000000 SPI_I2S_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:1008   .text.SPI_I2S_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccT2i78M.s:1013   .text.SPI_I2S_ClearITPendingBit:00000000 SPI_I2S_ClearITPendingBit
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_APB2PeriphResetCmd
+RCC_APB1PeriphResetCmd

@@ -1,0 +1,426 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_syscfg.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.SYSCFG_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	SYSCFG_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	SYSCFG_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_syscfg.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @file    stm32f2xx_syscfg.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief   This file provides firmware functions to manage the SYSCFG peripheral.
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *  @verbatim
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *  
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          ===================================================================
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *                                 How to use this driver
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          ===================================================================
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *                  
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          This driver provides functions for:
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          1. Remapping the memory accessible in the code area using SYSCFG_MemoryRemapConfig()
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *              
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          2. Manage the EXTI lines connection to the GPIOs using SYSCFG_EXTILineConfig()
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          3. Select the ETHERNET media interface (RMII/RII) using SYSCFG_ETH_MediaInterfaceConfi
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *  @note  SYSCFG APB clock must be enabled to get write access to SYSCFG registers,
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *         using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *                 
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *  @endverbatim
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *      
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   ******************************************************************************
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @attention
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * You may not use this file except in compliance with the License.
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * You may obtain a copy of the License at:
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * Unless required by applicable law or agreed to in writing, software 
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * See the License for the specific language governing permissions and
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * limitations under the License.
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   ******************************************************************************
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Includes ------------------------------------------------------------------*/
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #include "stm32f2xx_syscfg.h"
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #include "stm32f2xx_rcc.h"
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @{
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /** @defgroup SYSCFG 
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief SYSCFG driver modules
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @{
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */ 
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Private typedef -----------------------------------------------------------*/
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Private define ------------------------------------------------------------*/
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* ------------ RCC registers bit address in the alias region ----------- */
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #define SYSCFG_OFFSET             (SYSCFG_BASE - PERIPH_BASE)
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* ---  PMC Register ---*/ 
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Alias word address of MII_RMII_SEL bit */ 
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #define PMC_OFFSET                (SYSCFG_OFFSET + 0x04) 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #define MII_RMII_SEL_BitNumber    ((uint8_t)0x17) 
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #define PMC_MII_RMII_SEL_BB       (PERIPH_BB_BASE + (PMC_OFFSET * 32) + (MII_RMII_SEL_BitNumber * 4
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* ---  CMPCR Register ---*/ 
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Alias word address of CMP_PD bit */ 
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #define CMPCR_OFFSET              (SYSCFG_OFFSET + 0x20) 
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #define CMP_PD_BitNumber          ((uint8_t)0x00) 
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** #define CMPCR_CMP_PD_BB           (PERIPH_BB_BASE + (CMPCR_OFFSET * 32) + (CMP_PD_BitNumber * 4)) 
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Private macro -------------------------------------------------------------*/
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Private variables ---------------------------------------------------------*/
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Private function prototypes -----------------------------------------------*/
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /* Private functions ---------------------------------------------------------*/
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /** @defgroup SYSCFG_Private_Functions
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @{
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */ 
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /**
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief  Deinitializes the Alternate Functions (remap and EXTI configuration)
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *   registers to their default reset values.
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @param  None
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @retval None
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** void SYSCFG_DeInit(void)
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** {
+  27              		.loc 1 93 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+  31              		.loc 1 94 0
+  32 0000 0121     		movs	r1, #1
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** {
+  33              		.loc 1 93 0
+  34 0002 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+  39              		.loc 1 94 0
+  40 0004 4FF48040 		mov	r0, #16384
+  41 0008 FFF7FEFF 		bl	RCC_APB2PeriphResetCmd
+  42              	.LVL0:
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, DISABLE);
+  43              		.loc 1 95 0
+  44 000c 4FF48040 		mov	r0, #16384
+  45 0010 0021     		movs	r1, #0
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** }
+  46              		.loc 1 96 0
+  47 0012 BDE80840 		pop	{r3, lr}
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, DISABLE);
+  48              		.loc 1 95 0
+  49 0016 FFF7FEBF 		b	RCC_APB2PeriphResetCmd
+  50              	.LVL1:
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.SYSCFG_MemoryRemapConfig,"ax",%progbits
+  55              		.align	1
+  56              		.global	SYSCFG_MemoryRemapConfig
+  57              		.thumb
+  58              		.thumb_func
+  60              	SYSCFG_MemoryRemapConfig:
+  61              	.LFB57:
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /**
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief  Changes the mapping of the specified pin.
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @param  SYSCFG_Memory: selects the memory remapping.
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *         This parameter can be one of the following values:
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg SYSCFG_MemoryRemap_Flash:       Main Flash memory mapped at 0x00000000  
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg SYSCFG_MemoryRemap_SystemFlash: System Flash memory mapped at 0x00000000
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg SYSCFG_MemoryRemap_FSMC:        FSMC (Bank1 (NOR/PSRAM 1 and 2) mapped at 0x000
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg SYSCFG_MemoryRemap_SRAM:        Embedded SRAM (112kB) mapped at 0x00000000
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *  
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @note   In remap mode, the FSMC addressing is fixed to the remap address area only
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *        (Bank1 NOR/PSRAM 1 and NOR/PSRAM 2) and FSMC control registers are not
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *         accessible. The FSMC remap function must be disabled to allows addressing
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *         other memory devices through the FSMC and/or to access FSMC control
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *         registers. 
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *        
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @retval None
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** void SYSCFG_MemoryRemapConfig(uint8_t SYSCFG_MemoryRemap)
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** {
+  62              		.loc 1 116 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+  67              	.LVL2:
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   /* Check the parameters */
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   assert_param(IS_SYSCFG_MEMORY_REMAP_CONFING(SYSCFG_MemoryRemap));
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   SYSCFG->MEMRMP = SYSCFG_MemoryRemap;
+  68              		.loc 1 120 0
+  69 0000 014B     		ldr	r3, .L3
+  70 0002 1860     		str	r0, [r3, #0]
+  71 0004 7047     		bx	lr
+  72              	.L4:
+  73 0006 00BF     		.align	2
+  74              	.L3:
+  75 0008 00380140 		.word	1073821696
+  76              		.cfi_endproc
+  77              	.LFE57:
+  79              		.section	.text.SYSCFG_EXTILineConfig,"ax",%progbits
+  80              		.align	1
+  81              		.global	SYSCFG_EXTILineConfig
+  82              		.thumb
+  83              		.thumb_func
+  85              	SYSCFG_EXTILineConfig:
+  86              	.LFB58:
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** }
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /**
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief  Selects the GPIO pin used as EXTI Line.
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @param  EXTI_PortSourceGPIOx : selects the GPIO port to be used as source for
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          EXTI lines where x can be (A..I).
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @param  EXTI_PinSourcex: specifies the EXTI line to be configured.
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *           This parameter can be EXTI_PinSourcex where x can be (0..15, except
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *           for EXTI_PortSourceGPIOI x can be (0..11).
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @retval None
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** void SYSCFG_EXTILineConfig(uint8_t EXTI_PortSourceGPIOx, uint8_t EXTI_PinSourcex)
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** {
+  87              		.loc 1 133 0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91              	.LVL3:
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   uint32_t tmp = 0x00;
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   /* Check the parameters */
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   assert_param(IS_EXTI_PORT_SOURCE(EXTI_PortSourceGPIOx));
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   assert_param(IS_EXTI_PIN_SOURCE(EXTI_PinSourcex));
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   tmp = ((uint32_t)0x0F) << (0x04 * (EXTI_PinSourcex & (uint8_t)0x03));
+  92              		.loc 1 140 0
+  93 0000 01F00302 		and	r2, r1, #3
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** {
+  94              		.loc 1 133 0
+  95 0004 30B5     		push	{r4, r5, lr}
+  96              	.LCFI1:
+  97              		.cfi_def_cfa_offset 12
+  98              		.cfi_offset 4, -12
+  99              		.cfi_offset 5, -8
+ 100              		.cfi_offset 14, -4
+ 101              		.loc 1 140 0
+ 102 0006 9200     		lsls	r2, r2, #2
+ 103              	.LVL4:
+ 104 0008 0F24     		movs	r4, #15
+ 105 000a 04FA02F4 		lsl	r4, r4, r2
+ 106              	.LVL5:
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   SYSCFG->EXTICR[EXTI_PinSourcex >> 0x02] &= ~tmp;
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   SYSCFG->EXTICR[EXTI_PinSourcex >> 0x02] |= (((uint32_t)EXTI_PortSourceGPIOx) << (0x04 * (EXTI_Pin
+ 107              		.loc 1 142 0
+ 108 000e 00FA02F0 		lsl	r0, r0, r2
+ 109              	.LVL6:
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   SYSCFG->EXTICR[EXTI_PinSourcex >> 0x02] &= ~tmp;
+ 110              		.loc 1 141 0
+ 111 0012 074B     		ldr	r3, .L6
+ 112 0014 8908     		lsrs	r1, r1, #2
+ 113              	.LVL7:
+ 114 0016 0231     		adds	r1, r1, #2
+ 115 0018 53F82150 		ldr	r5, [r3, r1, lsl #2]
+ 116 001c 25EA0404 		bic	r4, r5, r4
+ 117              	.LVL8:
+ 118 0020 43F82140 		str	r4, [r3, r1, lsl #2]
+ 119              		.loc 1 142 0
+ 120 0024 53F82140 		ldr	r4, [r3, r1, lsl #2]
+ 121 0028 0443     		orrs	r4, r4, r0
+ 122 002a 43F82140 		str	r4, [r3, r1, lsl #2]
+ 123 002e 30BD     		pop	{r4, r5, pc}
+ 124              	.L7:
+ 125              		.align	2
+ 126              	.L6:
+ 127 0030 00380140 		.word	1073821696
+ 128              		.cfi_endproc
+ 129              	.LFE58:
+ 131              		.section	.text.SYSCFG_ETH_MediaInterfaceConfig,"ax",%progbits
+ 132              		.align	1
+ 133              		.global	SYSCFG_ETH_MediaInterfaceConfig
+ 134              		.thumb
+ 135              		.thumb_func
+ 137              	SYSCFG_ETH_MediaInterfaceConfig:
+ 138              	.LFB59:
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** }
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /**
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief  Selects the ETHERNET media interface 
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @param  SYSCFG_ETH_MediaInterface: specifies the Media Interface mode. 
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          This parameter can be one of the following values: 
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg SYSCFG_ETH_MediaInterface_MII: MII mode selected
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg SYSCFG_ETH_MediaInterface_RMII: RMII mode selected 
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @retval None 
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** void SYSCFG_ETH_MediaInterfaceConfig(uint32_t SYSCFG_ETH_MediaInterface) 
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** { 
+ 139              		.loc 1 154 0
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 0
+ 142              		@ frame_needed = 0, uses_anonymous_args = 0
+ 143              		@ link register save eliminated.
+ 144              	.LVL9:
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   assert_param(IS_SYSCFG_ETH_MEDIA_INTERFACE(SYSCFG_ETH_MediaInterface)); 
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   /* Configure MII_RMII selection bit */ 
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *(__IO uint32_t *) PMC_MII_RMII_SEL_BB = SYSCFG_ETH_MediaInterface; 
+ 145              		.loc 1 157 0
+ 146 0000 014B     		ldr	r3, .L9
+ 147 0002 1860     		str	r0, [r3, #0]
+ 148 0004 7047     		bx	lr
+ 149              	.L10:
+ 150 0006 00BF     		.align	2
+ 151              	.L9:
+ 152 0008 DC002742 		.word	1109852380
+ 153              		.cfi_endproc
+ 154              	.LFE59:
+ 156              		.section	.text.SYSCFG_CompensationCellCmd,"ax",%progbits
+ 157              		.align	1
+ 158              		.global	SYSCFG_CompensationCellCmd
+ 159              		.thumb
+ 160              		.thumb_func
+ 162              	SYSCFG_CompensationCellCmd:
+ 163              	.LFB60:
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** }
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /**
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief  Enables or disables the I/O Compensation Cell.
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @note   The I/O compensation cell can be used only when the device supply
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *         voltage ranges from 2.4 to 3.6 V.  
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @param  NewState: new state of the I/O Compensation Cell.
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *          This parameter can be one of the following values:
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg ENABLE: I/O compensation cell enabled  
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *            @arg DISABLE: I/O compensation cell power-down mode  
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @retval None
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** void SYSCFG_CompensationCellCmd(FunctionalState NewState)
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** {
+ 164              		.loc 1 171 0
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 0
+ 167              		@ frame_needed = 0, uses_anonymous_args = 0
+ 168              		@ link register save eliminated.
+ 169              	.LVL10:
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   /* Check the parameters */
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   *(__IO uint32_t *) CMPCR_CMP_PD_BB = (uint32_t)NewState;
+ 170              		.loc 1 175 0
+ 171 0000 014B     		ldr	r3, .L12
+ 172 0002 1860     		str	r0, [r3, #0]
+ 173 0004 7047     		bx	lr
+ 174              	.L13:
+ 175 0006 00BF     		.align	2
+ 176              	.L12:
+ 177 0008 00042742 		.word	1109853184
+ 178              		.cfi_endproc
+ 179              	.LFE60:
+ 181              		.section	.text.SYSCFG_GetCompensationCellStatus,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	SYSCFG_GetCompensationCellStatus
+ 184              		.thumb
+ 185              		.thumb_func
+ 187              	SYSCFG_GetCompensationCellStatus:
+ 188              	.LFB61:
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** }
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** 
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** /**
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @brief  Checks whether the I/O Compensation Cell ready flag is set or not.
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @param  None
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   * @retval The new state of the I/O Compensation Cell ready flag (SET or RESET)
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   */
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** FlagStatus SYSCFG_GetCompensationCellStatus(void)
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** {
+ 189              		.loc 1 184 0
+ 190              		.cfi_startproc
+ 191              		@ args = 0, pretend = 0, frame = 0
+ 192              		@ frame_needed = 0, uses_anonymous_args = 0
+ 193              		@ link register save eliminated.
+ 194              	.LVL11:
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   FlagStatus bitstatus = RESET;
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****     
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   if ((SYSCFG->CMPCR & SYSCFG_CMPCR_READY ) != (uint32_t)RESET)
+ 195              		.loc 1 187 0
+ 196 0000 024B     		ldr	r3, .L15
+ 197 0002 186A     		ldr	r0, [r3, #32]
+ 198              	.LVL12:
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   {
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****     bitstatus = SET;
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   }
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   else
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   {
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****     bitstatus = RESET;
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   }
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c ****   return bitstatus;
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_syscfg.c **** }
+ 199              		.loc 1 196 0
+ 200 0004 C0F30020 		ubfx	r0, r0, #8, #1
+ 201              	.LVL13:
+ 202 0008 7047     		bx	lr
+ 203              	.L16:
+ 204 000a 00BF     		.align	2
+ 205              	.L15:
+ 206 000c 00380140 		.word	1073821696
+ 207              		.cfi_endproc
+ 208              	.LFE61:
+ 210              		.text
+ 211              	.Letext0:
+ 212              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 213              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 214              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 215              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_syscfg.c
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:19     .text.SYSCFG_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:24     .text.SYSCFG_DeInit:00000000 SYSCFG_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:55     .text.SYSCFG_MemoryRemapConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:60     .text.SYSCFG_MemoryRemapConfig:00000000 SYSCFG_MemoryRemapConfig
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:75     .text.SYSCFG_MemoryRemapConfig:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:80     .text.SYSCFG_EXTILineConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:85     .text.SYSCFG_EXTILineConfig:00000000 SYSCFG_EXTILineConfig
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:127    .text.SYSCFG_EXTILineConfig:00000030 $d
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:132    .text.SYSCFG_ETH_MediaInterfaceConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:137    .text.SYSCFG_ETH_MediaInterfaceConfig:00000000 SYSCFG_ETH_MediaInterfaceConfig
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:152    .text.SYSCFG_ETH_MediaInterfaceConfig:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:157    .text.SYSCFG_CompensationCellCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:162    .text.SYSCFG_CompensationCellCmd:00000000 SYSCFG_CompensationCellCmd
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:177    .text.SYSCFG_CompensationCellCmd:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:182    .text.SYSCFG_GetCompensationCellStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:187    .text.SYSCFG_GetCompensationCellStatus:00000000 SYSCFG_GetCompensationCellStatus
+C:\Users\STINA\AppData\Local\Temp\ccql2Sjk.s:206    .text.SYSCFG_GetCompensationCellStatus:0000000c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_APB2PeriphResetCmd

@@ -1,0 +1,497 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_misc.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.NVIC_PriorityGroupConfig,"ax",%progbits
+  19              		.align	1
+  20              		.global	NVIC_PriorityGroupConfig
+  21              		.thumb
+  22              		.thumb_func
+  24              	NVIC_PriorityGroupConfig:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_misc.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @file    misc.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @brief   This file provides all the miscellaneous firmware functions (add-on
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *          to CMSIS functions).
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *          
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *  @verbatim   
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                               
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *          ===================================================================      
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                        How to configure Interrupts using driver 
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *          ===================================================================      
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * 
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *            This section provide functions allowing to configure the NVIC interrupts (IRQ).
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *            The Cortex-M3 exceptions are managed by CMSIS functions.
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *            1. Configure the NVIC Priority Grouping using NVIC_PriorityGroupConfig()
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                function according to the following table.
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****  
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *  The table below gives the allowed values of the pre-emption priority and subpriority according
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *  to the Priority Grouping configuration performed by NVIC_PriorityGroupConfig function
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *    ============================================================================================
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *      NVIC_PriorityGroup   | NVIC_IRQChannelPreemptionPriority | NVIC_IRQChannelSubPriority  |  
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *    ============================================================================================
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     NVIC_PriorityGroup_0  |                0                  |            0-15             | 0
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                           |                                   |                             | 4
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *    --------------------------------------------------------------------------------------------
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     NVIC_PriorityGroup_1  |                0-1                |            0-7              | 1
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                           |                                   |                             | 3
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *    --------------------------------------------------------------------------------------------
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     NVIC_PriorityGroup_2  |                0-3                |            0-3              | 2
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                           |                                   |                             | 2
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *    --------------------------------------------------------------------------------------------
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     NVIC_PriorityGroup_3  |                0-7                |            0-1              | 3
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                           |                                   |                             | 1
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *    --------------------------------------------------------------------------------------------
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     NVIC_PriorityGroup_4  |                0-15               |            0                | 4
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                           |                                   |                             | 0
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *    ============================================================================================
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *            2. Enable and Configure the priority of the selected IRQ Channels using NVIC_Init() 
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @note  When the NVIC_PriorityGroup_0 is selected, IRQ pre-emption is no more possible. 
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *        The pending IRQ priority will be managed only by the subpriority.
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @note  IRQ priority order (sorted by highest to lowest priority):
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *         - Lowest pre-emption priority
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *         - Lowest subpriority
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *         - Lowest hardware priority (IRQ number)
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *  @endverbatim
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   ******************************************************************************
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @attention
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * You may not use this file except in compliance with the License.
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * You may obtain a copy of the License at:
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * Unless required by applicable law or agreed to in writing, software 
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * See the License for the specific language governing permissions and
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * limitations under the License.
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   ******************************************************************************
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /* Includes ------------------------------------------------------------------*/
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** #include "misc.h"
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @{
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /** @defgroup MISC 
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @brief MISC driver modules
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @{
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /* Private typedef -----------------------------------------------------------*/
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /* Private define ------------------------------------------------------------*/
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** #define AIRCR_VECTKEY_MASK    ((uint32_t)0x05FA0000)
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /* Private macro -------------------------------------------------------------*/
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /* Private variables ---------------------------------------------------------*/
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /* Private function prototypes -----------------------------------------------*/
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /* Private functions ---------------------------------------------------------*/
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /** @defgroup MISC_Private_Functions
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @{
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /**
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @brief  Configures the priority grouping: pre-emption priority and subpriority.
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @param  NVIC_PriorityGroup: specifies the priority grouping bits length. 
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *   This parameter can be one of the following values:
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_PriorityGroup_0: 0 bits for pre-emption priority
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                                4 bits for subpriority
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_PriorityGroup_1: 1 bits for pre-emption priority
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                                3 bits for subpriority
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_PriorityGroup_2: 2 bits for pre-emption priority
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                                2 bits for subpriority
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_PriorityGroup_3: 3 bits for pre-emption priority
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                                1 bits for subpriority
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_PriorityGroup_4: 4 bits for pre-emption priority
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *                                0 bits for subpriority
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @note   When the NVIC_PriorityGroup_0 is selected, IRQ pre-emption is no more possible. 
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *         The pending IRQ priority will be managed only by the subpriority. 
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @retval None
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** {
+  27              		.loc 1 119 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   /* Check the parameters */
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_NVIC_PRIORITY_GROUP(NVIC_PriorityGroup));
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   /* Set the PRIGROUP[10:8] bits according to NVIC_PriorityGroup value */
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   SCB->AIRCR = AIRCR_VECTKEY_MASK | NVIC_PriorityGroup;
+  33              		.loc 1 124 0
+  34 0000 40F0BF60 		orr	r0, r0, #100139008
+  35              	.LVL1:
+  36 0004 024B     		ldr	r3, .L2
+  37 0006 40F40031 		orr	r1, r0, #131072
+  38 000a D960     		str	r1, [r3, #12]
+  39 000c 7047     		bx	lr
+  40              	.L3:
+  41 000e 00BF     		.align	2
+  42              	.L2:
+  43 0010 00ED00E0 		.word	-536810240
+  44              		.cfi_endproc
+  45              	.LFE56:
+  47              		.section	.text.NVIC_Init,"ax",%progbits
+  48              		.align	1
+  49              		.global	NVIC_Init
+  50              		.thumb
+  51              		.thumb_func
+  53              	NVIC_Init:
+  54              	.LFB57:
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** }
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /**
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @brief  Initializes the NVIC peripheral according to the specified
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *         parameters in the NVIC_InitStruct.
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @note   To configure interrupts priority correctly, the NVIC_PriorityGroupConfig()
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *         function should be called before. 
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @param  NVIC_InitStruct: pointer to a NVIC_InitTypeDef structure that contains
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *         the configuration information for the specified NVIC peripheral.
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @retval None
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** {
+  55              		.loc 1 137 0
+  56              		.cfi_startproc
+  57              		@ args = 0, pretend = 0, frame = 0
+  58              		@ frame_needed = 0, uses_anonymous_args = 0
+  59              		@ link register save eliminated.
+  60              	.LVL2:
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   uint8_t tmppriority = 0x00, tmppre = 0x00, tmpsub = 0x0F;
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   /* Check the parameters */
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_FUNCTIONAL_STATE(NVIC_InitStruct->NVIC_IRQChannelCmd));
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_NVIC_PREEMPTION_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority));  
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_NVIC_SUB_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelSubPriority));
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   if (NVIC_InitStruct->NVIC_IRQChannelCmd != DISABLE)
+  61              		.loc 1 145 0
+  62 0000 C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
+  63 0002 13B3     		cbz	r3, .L5
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   {
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     /* Compute the Corresponding IRQ Priority --------------------------------*/    
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppriority = (0x700 - ((SCB->AIRCR) & (uint32_t)0x700))>> 0x08;
+  64              		.loc 1 148 0
+  65 0004 1749     		ldr	r1, .L9
+  66 0006 CB68     		ldr	r3, [r1, #12]
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppre = (0x4 - tmppriority);
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmpsub = tmpsub >> tmppriority;
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppriority = NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority << tmppre;
+  67              		.loc 1 152 0
+  68 0008 4178     		ldrb	r1, [r0, #1]	@ zero_extendqisi2
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppriority = (0x700 - ((SCB->AIRCR) & (uint32_t)0x700))>> 0x08;
+  69              		.loc 1 148 0
+  70 000a DA43     		mvns	r2, r3
+  71 000c C2F30223 		ubfx	r3, r2, #8, #3
+  72              	.LVL3:
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppre = (0x4 - tmppriority);
+  73              		.loc 1 149 0
+  74 0010 C3F10402 		rsb	r2, r3, #4
+  75              		.loc 1 152 0
+  76 0014 D2B2     		uxtb	r2, r2
+  77 0016 01FA02F1 		lsl	r1, r1, r2
+  78 001a CAB2     		uxtb	r2, r1
+  79              	.LVL4:
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmpsub = tmpsub >> tmppriority;
+  80              		.loc 1 150 0
+  81 001c 0F21     		movs	r1, #15
+  82              	.LVL5:
+  83 001e 41FA03F3 		asr	r3, r1, r3
+  84              	.LVL6:
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppriority |=  (uint8_t)(NVIC_InitStruct->NVIC_IRQChannelSubPriority & tmpsub);
+  85              		.loc 1 153 0
+  86 0022 8178     		ldrb	r1, [r0, #2]	@ zero_extendqisi2
+  87 0024 0B40     		ands	r3, r3, r1
+  88 0026 1A43     		orrs	r2, r2, r3
+  89              	.LVL7:
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****         
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppriority = tmppriority << 0x04;
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****         
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     NVIC->IP[NVIC_InitStruct->NVIC_IRQChannel] = tmppriority;
+  90              		.loc 1 157 0
+  91 0028 0378     		ldrb	r3, [r0, #0]	@ zero_extendqisi2
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     tmppriority = tmppriority << 0x04;
+  92              		.loc 1 155 0
+  93 002a 1201     		lsls	r2, r2, #4
+  94              	.LVL8:
+  95 002c D1B2     		uxtb	r1, r2
+  96              	.LVL9:
+  97              		.loc 1 157 0
+  98 002e 03F16042 		add	r2, r3, #-536870912
+  99              	.LVL10:
+ 100 0032 02F56143 		add	r3, r2, #57600
+ 101 0036 83F80013 		strb	r1, [r3, #768]
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     /* Enable the Selected IRQ Channels --------------------------------------*/
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     NVIC->ISER[NVIC_InitStruct->NVIC_IRQChannel >> 0x05] =
+ 102              		.loc 1 160 0
+ 103 003a 0078     		ldrb	r0, [r0, #0]	@ zero_extendqisi2
+ 104              	.LVL11:
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****       (uint32_t)0x01 << (NVIC_InitStruct->NVIC_IRQChannel & (uint8_t)0x1F);
+ 105              		.loc 1 161 0
+ 106 003c 0122     		movs	r2, #1
+ 107 003e 00F01F03 		and	r3, r0, #31
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     NVIC->ISER[NVIC_InitStruct->NVIC_IRQChannel >> 0x05] =
+ 108              		.loc 1 160 0
+ 109 0042 4109     		lsrs	r1, r0, #5
+ 110              	.LVL12:
+ 111              		.loc 1 161 0
+ 112 0044 02FA03F0 		lsl	r0, r2, r3
+ 113 0048 07E0     		b	.L7
+ 114              	.LVL13:
+ 115              	.L5:
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   }
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   else
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   {
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     /* Disable the Selected IRQ Channels -------------------------------------*/
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     NVIC->ICER[NVIC_InitStruct->NVIC_IRQChannel >> 0x05] =
+ 116              		.loc 1 166 0
+ 117 004a 0078     		ldrb	r0, [r0, #0]	@ zero_extendqisi2
+ 118              	.LVL14:
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****       (uint32_t)0x01 << (NVIC_InitStruct->NVIC_IRQChannel & (uint8_t)0x1F);
+ 119              		.loc 1 167 0
+ 120 004c 0122     		movs	r2, #1
+ 121 004e 00F01F03 		and	r3, r0, #31
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     NVIC->ICER[NVIC_InitStruct->NVIC_IRQChannel >> 0x05] =
+ 122              		.loc 1 166 0
+ 123 0052 4109     		lsrs	r1, r0, #5
+ 124              		.loc 1 167 0
+ 125 0054 02FA03F0 		lsl	r0, r2, r3
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     NVIC->ICER[NVIC_InitStruct->NVIC_IRQChannel >> 0x05] =
+ 126              		.loc 1 166 0
+ 127 0058 2031     		adds	r1, r1, #32
+ 128              	.LVL15:
+ 129              	.L7:
+ 130 005a 034B     		ldr	r3, .L9+4
+ 131 005c 43F82100 		str	r0, [r3, r1, lsl #2]
+ 132 0060 7047     		bx	lr
+ 133              	.L10:
+ 134 0062 00BF     		.align	2
+ 135              	.L9:
+ 136 0064 00ED00E0 		.word	-536810240
+ 137 0068 00E100E0 		.word	-536813312
+ 138              		.cfi_endproc
+ 139              	.LFE57:
+ 141              		.section	.text.NVIC_SetVectorTable,"ax",%progbits
+ 142              		.align	1
+ 143              		.global	NVIC_SetVectorTable
+ 144              		.thumb
+ 145              		.thumb_func
+ 147              	NVIC_SetVectorTable:
+ 148              	.LFB58:
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   }
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** }
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /**
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @brief  Sets the vector table location and Offset.
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @param  NVIC_VectTab: specifies if the vector table is in RAM or FLASH memory.
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *   This parameter can be one of the following values:
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_VectTab_RAM: Vector Table in internal SRAM.
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_VectTab_FLASH: Vector Table in internal FLASH.
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @param  Offset: Vector Table base offset field. This value must be a multiple of 0x200.
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @retval None
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** { 
+ 149              		.loc 1 181 0
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 0
+ 152              		@ frame_needed = 0, uses_anonymous_args = 0
+ 153              		@ link register save eliminated.
+ 154              	.LVL16:
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   /* Check the parameters */
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_NVIC_VECTTAB(NVIC_VectTab));
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_NVIC_OFFSET(Offset));  
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****    
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   SCB->VTOR = NVIC_VectTab | (Offset & (uint32_t)0x1FFFFF80);
+ 155              		.loc 1 186 0
+ 156 0000 21F06041 		bic	r1, r1, #-536870912
+ 157              	.LVL17:
+ 158 0004 21F07F02 		bic	r2, r1, #127
+ 159 0008 014B     		ldr	r3, .L12
+ 160 000a 1043     		orrs	r0, r0, r2
+ 161              	.LVL18:
+ 162 000c 9860     		str	r0, [r3, #8]
+ 163 000e 7047     		bx	lr
+ 164              	.L13:
+ 165              		.align	2
+ 166              	.L12:
+ 167 0010 00ED00E0 		.word	-536810240
+ 168              		.cfi_endproc
+ 169              	.LFE58:
+ 171              		.section	.text.NVIC_SystemLPConfig,"ax",%progbits
+ 172              		.align	1
+ 173              		.global	NVIC_SystemLPConfig
+ 174              		.thumb
+ 175              		.thumb_func
+ 177              	NVIC_SystemLPConfig:
+ 178              	.LFB59:
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** }
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /**
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @brief  Selects the condition for the system to enter low power mode.
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @param  LowPowerMode: Specifies the new mode for the system to enter low power mode.
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *   This parameter can be one of the following values:
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_LP_SEVONPEND: Low Power SEV on Pend.
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_LP_SLEEPDEEP: Low Power DEEPSLEEP request.
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg NVIC_LP_SLEEPONEXIT: Low Power Sleep on Exit.
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @param  NewState: new state of LP condition. This parameter can be: ENABLE or DISABLE.
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @retval None
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** void NVIC_SystemLPConfig(uint8_t LowPowerMode, FunctionalState NewState)
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** {
+ 179              		.loc 1 200 0
+ 180              		.cfi_startproc
+ 181              		@ args = 0, pretend = 0, frame = 0
+ 182              		@ frame_needed = 0, uses_anonymous_args = 0
+ 183              		@ link register save eliminated.
+ 184              	.LVL19:
+ 185 0000 044B     		ldr	r3, .L18
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   /* Check the parameters */
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_NVIC_LP(LowPowerMode));
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));  
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   if (NewState != DISABLE)
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   {
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     SCB->SCR |= LowPowerMode;
+ 186              		.loc 1 207 0
+ 187 0002 1A69     		ldr	r2, [r3, #16]
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   if (NewState != DISABLE)
+ 188              		.loc 1 205 0
+ 189 0004 09B1     		cbz	r1, .L15
+ 190              		.loc 1 207 0
+ 191 0006 1043     		orrs	r0, r0, r2
+ 192              	.LVL20:
+ 193 0008 01E0     		b	.L17
+ 194              	.LVL21:
+ 195              	.L15:
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   }
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   else
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   {
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     SCB->SCR &= (uint32_t)(~(uint32_t)LowPowerMode);
+ 196              		.loc 1 211 0
+ 197 000a 22EA0000 		bic	r0, r2, r0
+ 198              	.LVL22:
+ 199              	.L17:
+ 200 000e 1861     		str	r0, [r3, #16]
+ 201 0010 7047     		bx	lr
+ 202              	.L19:
+ 203 0012 00BF     		.align	2
+ 204              	.L18:
+ 205 0014 00ED00E0 		.word	-536810240
+ 206              		.cfi_endproc
+ 207              	.LFE59:
+ 209              		.section	.text.SysTick_CLKSourceConfig,"ax",%progbits
+ 210              		.align	1
+ 211              		.global	SysTick_CLKSourceConfig
+ 212              		.thumb
+ 213              		.thumb_func
+ 215              	SysTick_CLKSourceConfig:
+ 216              	.LFB60:
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   }
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** }
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** 
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** /**
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @brief  Configures the SysTick clock source.
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @param  SysTick_CLKSource: specifies the SysTick clock source.
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *   This parameter can be one of the following values:
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg SysTick_CLKSource_HCLK_Div8: AHB clock divided by 8 selected as SysTick clock source.
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   *     @arg SysTick_CLKSource_HCLK: AHB clock selected as SysTick clock source.
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   * @retval None
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   */
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource)
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c **** {
+ 217              		.loc 1 224 0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 0
+ 220              		@ frame_needed = 0, uses_anonymous_args = 0
+ 221              		@ link register save eliminated.
+ 222              	.LVL23:
+ 223 0000 044B     		ldr	r3, .L24
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   /* Check the parameters */
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   assert_param(IS_SYSTICK_CLK_SOURCE(SysTick_CLKSource));
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   if (SysTick_CLKSource == SysTick_CLKSource_HCLK)
+ 224              		.loc 1 227 0
+ 225 0002 0428     		cmp	r0, #4
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   {
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     SysTick->CTRL |= SysTick_CLKSource_HCLK;
+ 226              		.loc 1 229 0
+ 227 0004 1A68     		ldr	r2, [r3, #0]
+ 228 0006 0CBF     		ite	eq
+ 229 0008 42F00402 		orreq	r2, r2, #4
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   }
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   else
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****   {
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_misc.c ****     SysTick->CTRL &= SysTick_CLKSource_HCLK_Div8;
+ 230              		.loc 1 233 0
+ 231 000c 22F00402 		bicne	r2, r2, #4
+ 232 0010 1A60     		str	r2, [r3, #0]
+ 233 0012 7047     		bx	lr
+ 234              	.L25:
+ 235              		.align	2
+ 236              	.L24:
+ 237 0014 10E000E0 		.word	-536813552
+ 238              		.cfi_endproc
+ 239              	.LFE60:
+ 241              		.text
+ 242              	.Letext0:
+ 243              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 244              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 245              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 246              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/misc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_misc.c
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:19     .text.NVIC_PriorityGroupConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:24     .text.NVIC_PriorityGroupConfig:00000000 NVIC_PriorityGroupConfig
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:43     .text.NVIC_PriorityGroupConfig:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:48     .text.NVIC_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:53     .text.NVIC_Init:00000000 NVIC_Init
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:136    .text.NVIC_Init:00000064 $d
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:142    .text.NVIC_SetVectorTable:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:147    .text.NVIC_SetVectorTable:00000000 NVIC_SetVectorTable
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:167    .text.NVIC_SetVectorTable:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:172    .text.NVIC_SystemLPConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:177    .text.NVIC_SystemLPConfig:00000000 NVIC_SystemLPConfig
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:205    .text.NVIC_SystemLPConfig:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:210    .text.SysTick_CLKSourceConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:215    .text.SysTick_CLKSourceConfig:00000000 SysTick_CLKSourceConfig
+C:\Users\STINA\AppData\Local\Temp\ccNzwdvb.s:237    .text.SysTick_CLKSourceConfig:00000014 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

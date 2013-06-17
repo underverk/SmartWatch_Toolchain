@@ -1,0 +1,1332 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_pwr.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.PWR_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	PWR_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	PWR_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_pwr.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @file    stm32f2xx_pwr.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          functionalities of the Power Controller (PWR) peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *           - Backup Domain Access
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *           - PVD configuration
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *           - WakeUp pin configuration
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *           - Backup Regulator configuration
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *           - FLASH Power Down configuration
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *           - Low Power modes configuration
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *           - Flags management
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *               
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   ******************************************************************************
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @attention
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * You may not use this file except in compliance with the License.
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * You may obtain a copy of the License at:
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * Unless required by applicable law or agreed to in writing, software 
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * See the License for the specific language governing permissions and
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * limitations under the License.
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   ******************************************************************************
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Includes ------------------------------------------------------------------*/
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #include "stm32f2xx_pwr.h"
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #include "stm32f2xx_rcc.h"
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR 
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief PWR driver modules
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */ 
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Private typedef -----------------------------------------------------------*/
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Private define ------------------------------------------------------------*/
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* --------- PWR registers bit address in the alias region ---------- */
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define PWR_OFFSET               (PWR_BASE - PERIPH_BASE)
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* --- CR Register ---*/
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Alias word address of DBP bit */
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CR_OFFSET                (PWR_OFFSET + 0x00)
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define DBP_BitNumber            0x08
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CR_DBP_BB                (PERIPH_BB_BASE + (CR_OFFSET * 32) + (DBP_BitNumber * 4))
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Alias word address of PVDE bit */
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define PVDE_BitNumber           0x04
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CR_PVDE_BB               (PERIPH_BB_BASE + (CR_OFFSET * 32) + (PVDE_BitNumber * 4))
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Alias word address of FPDS bit */
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define FPDS_BitNumber           0x09
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CR_FPDS_BB               (PERIPH_BB_BASE + (CR_OFFSET * 32) + (FPDS_BitNumber * 4))
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* --- CSR Register ---*/
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Alias word address of EWUP bit */
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CSR_OFFSET               (PWR_OFFSET + 0x04)
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define EWUP_BitNumber           0x08
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CSR_EWUP_BB              (PERIPH_BB_BASE + (CSR_OFFSET * 32) + (EWUP_BitNumber * 4))
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Alias word address of BRE bit */
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define BRE_BitNumber            0x09
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CSR_BRE_BB              (PERIPH_BB_BASE + (CSR_OFFSET * 32) + (BRE_BitNumber * 4))
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* ------------------ PWR registers bit mask ------------------------ */
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* CR register bit mask */
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CR_DS_MASK               ((uint32_t)0xFFFFFFFC)
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #define CR_PLS_MASK              ((uint32_t)0xFFFFFF1F)
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Private macro -------------------------------------------------------------*/
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Private variables ---------------------------------------------------------*/
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Private function prototypes -----------------------------------------------*/
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* Private functions ---------------------------------------------------------*/
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Private_Functions
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Group1 Backup Domain Access function 
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *  @brief   Backup Domain Access function  
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @verbatim   
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****                             Backup Domain Access function 
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================  
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   After reset, the backup domain (RTC registers, RTC backup data 
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   registers and backup SRAM) is protected against possible unwanted 
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   write accesses. 
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   To enable access to the RTC Domain and RTC registers, proceed as follows:
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Enable the Power Controller (PWR) APB1 interface clock using the
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       RCC_APB1PeriphClockCmd() function.
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Enable access to RTC domain using the PWR_BackupAccessCmd() function.
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @endverbatim
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Deinitializes the PWR peripheral registers to their default reset values.     
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  None
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_DeInit(void)
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+  27              		.loc 1 122 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, ENABLE);
+  31              		.loc 1 123 0
+  32 0000 0121     		movs	r1, #1
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+  33              		.loc 1 122 0
+  34 0002 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+  39              		.loc 1 123 0
+  40 0004 4FF08050 		mov	r0, #268435456
+  41 0008 FFF7FEFF 		bl	RCC_APB1PeriphResetCmd
+  42              	.LVL0:
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, DISABLE);
+  43              		.loc 1 124 0
+  44 000c 4FF08050 		mov	r0, #268435456
+  45 0010 0021     		movs	r1, #0
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+  46              		.loc 1 125 0
+  47 0012 BDE80840 		pop	{r3, lr}
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, DISABLE);
+  48              		.loc 1 124 0
+  49 0016 FFF7FEBF 		b	RCC_APB1PeriphResetCmd
+  50              	.LVL1:
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.PWR_BackupAccessCmd,"ax",%progbits
+  55              		.align	1
+  56              		.global	PWR_BackupAccessCmd
+  57              		.thumb
+  58              		.thumb_func
+  60              	PWR_BackupAccessCmd:
+  61              	.LFB57:
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Enables or disables access to the backup domain (RTC registers, RTC 
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         backup data registers and backup SRAM).
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @note   If the HSE divided by 2, 3, ..31 is used as the RTC clock, the 
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         Backup Domain Access should be kept enabled.
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  NewState: new state of the access to the backup domain.
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_BackupAccessCmd(FunctionalState NewState)
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+  62              		.loc 1 137 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+  67              	.LVL2:
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *(__IO uint32_t *) CR_DBP_BB = (uint32_t)NewState;
+  68              		.loc 1 141 0
+  69 0000 014B     		ldr	r3, .L3
+  70 0002 1860     		str	r0, [r3, #0]
+  71 0004 7047     		bx	lr
+  72              	.L4:
+  73 0006 00BF     		.align	2
+  74              	.L3:
+  75 0008 20000E42 		.word	1108213792
+  76              		.cfi_endproc
+  77              	.LFE57:
+  79              		.section	.text.PWR_PVDLevelConfig,"ax",%progbits
+  80              		.align	1
+  81              		.global	PWR_PVDLevelConfig
+  82              		.thumb
+  83              		.thumb_func
+  85              	PWR_PVDLevelConfig:
+  86              	.LFB58:
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @}
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Group2 PVD configuration functions
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *  @brief   PVD configuration functions 
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @verbatim   
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****                            PVD configuration functions
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================  
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - The PVD is used to monitor the VDD power supply by comparing it to a threshold
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    selected by the PVD Level (PLS[2:0] bits in the PWR_CR).
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - A PVDO flag is available to indicate if VDD/VDDA is higher or lower than the 
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    PVD threshold. This event is internally connected to the EXTI line16
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    and can generate an interrupt if enabled through the EXTI registers.
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - The PVD is stopped in Standby mode.
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @endverbatim
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Configures the voltage threshold detected by the Power Voltage Detector(PVD).
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  PWR_PVDLevel: specifies the PVD detection level
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be one of the following values:
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_0
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_1
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_2
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_3
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_4
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_5
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_6
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_PVDLevel_7
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @note   Refer to the electrical characteristics of your device datasheet for
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         more details about the voltage threshold corresponding to each 
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         detection level. 
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_PVDLevelConfig(uint32_t PWR_PVDLevel)
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+  87              		.loc 1 185 0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91              		@ link register save eliminated.
+  92              	.LVL3:
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   uint32_t tmpreg = 0;
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_PWR_PVD_LEVEL(PWR_PVDLevel));
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg = PWR->CR;
+  93              		.loc 1 191 0
+  94 0000 034B     		ldr	r3, .L6
+  95 0002 1A68     		ldr	r2, [r3, #0]
+  96              	.LVL4:
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Clear PLS[7:5] bits */
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg &= CR_PLS_MASK;
+  97              		.loc 1 194 0
+  98 0004 22F0E001 		bic	r1, r2, #224
+  99              	.LVL5:
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Set PLS[7:5] bits according to PWR_PVDLevel value */
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg |= PWR_PVDLevel;
+ 100              		.loc 1 197 0
+ 101 0008 0843     		orrs	r0, r0, r1
+ 102              	.LVL6:
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Store the new value */
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   PWR->CR = tmpreg;
+ 103              		.loc 1 200 0
+ 104 000a 1860     		str	r0, [r3, #0]
+ 105 000c 7047     		bx	lr
+ 106              	.L7:
+ 107 000e 00BF     		.align	2
+ 108              	.L6:
+ 109 0010 00700040 		.word	1073770496
+ 110              		.cfi_endproc
+ 111              	.LFE58:
+ 113              		.section	.text.PWR_PVDCmd,"ax",%progbits
+ 114              		.align	1
+ 115              		.global	PWR_PVDCmd
+ 116              		.thumb
+ 117              		.thumb_func
+ 119              	PWR_PVDCmd:
+ 120              	.LFB59:
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Enables or disables the Power Voltage Detector(PVD).
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  NewState: new state of the PVD.
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         This parameter can be: ENABLE or DISABLE.
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_PVDCmd(FunctionalState NewState)
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 121              		.loc 1 210 0
+ 122              		.cfi_startproc
+ 123              		@ args = 0, pretend = 0, frame = 0
+ 124              		@ frame_needed = 0, uses_anonymous_args = 0
+ 125              		@ link register save eliminated.
+ 126              	.LVL7:
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *(__IO uint32_t *) CR_PVDE_BB = (uint32_t)NewState;
+ 127              		.loc 1 214 0
+ 128 0000 014B     		ldr	r3, .L9
+ 129 0002 1860     		str	r0, [r3, #0]
+ 130 0004 7047     		bx	lr
+ 131              	.L10:
+ 132 0006 00BF     		.align	2
+ 133              	.L9:
+ 134 0008 10000E42 		.word	1108213776
+ 135              		.cfi_endproc
+ 136              	.LFE59:
+ 138              		.section	.text.PWR_WakeUpPinCmd,"ax",%progbits
+ 139              		.align	1
+ 140              		.global	PWR_WakeUpPinCmd
+ 141              		.thumb
+ 142              		.thumb_func
+ 144              	PWR_WakeUpPinCmd:
+ 145              	.LFB60:
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @}
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Group3 WakeUp pin configuration functions
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *  @brief   WakeUp pin configuration functions 
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @verbatim   
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****                     WakeUp pin configuration functions
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================  
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - WakeUp pin is used to wakeup the system from Standby mode. This pin is 
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    forced in input pull down configuration and is active on rising edges.
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - There is only one WakeUp pin: WakeUp Pin 1 on PA.00.
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @endverbatim
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Enables or disables the WakeUp Pin functionality.
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  NewState: new state of the WakeUp Pin functionality.
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         This parameter can be: ENABLE or DISABLE.
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_WakeUpPinCmd(FunctionalState NewState)
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 146              		.loc 1 244 0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150              		@ link register save eliminated.
+ 151              	.LVL8:
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */  
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *(__IO uint32_t *) CSR_EWUP_BB = (uint32_t)NewState;
+ 152              		.loc 1 248 0
+ 153 0000 014B     		ldr	r3, .L12
+ 154 0002 1860     		str	r0, [r3, #0]
+ 155 0004 7047     		bx	lr
+ 156              	.L13:
+ 157 0006 00BF     		.align	2
+ 158              	.L12:
+ 159 0008 A0000E42 		.word	1108213920
+ 160              		.cfi_endproc
+ 161              	.LFE60:
+ 163              		.section	.text.PWR_BackupRegulatorCmd,"ax",%progbits
+ 164              		.align	1
+ 165              		.global	PWR_BackupRegulatorCmd
+ 166              		.thumb
+ 167              		.thumb_func
+ 169              	PWR_BackupRegulatorCmd:
+ 170              	.LFB61:
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @}
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Group4 Backup Regulator configuration functions
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *  @brief   Backup Regulator configuration functions 
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @verbatim   
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****                     Backup Regulator configuration functions
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================  
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - The backup domain includes 4 Kbytes of backup SRAM accessible only from the 
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    CPU, and address in 32-bit, 16-bit or 8-bit mode. Its content is retained 
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    even in Standby or VBAT mode when the low power backup regulator is enabled. 
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    It can be considered as an internal EEPROM when VBAT is always present.
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    You can use the PWR_BackupRegulatorCmd() function to enable the low power
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    backup regulator and use the PWR_GetFlagStatus(PWR_FLAG_BRR) to check if it is
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    ready or not. 
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - When the backup domain is supplied by VDD (analog switch connected to VDD) 
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    the backup SRAM is powered from VDD which replaces the VBAT power supply to 
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    save battery life.
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - The backup SRAM is not mass erased by an tamper event. It is read protected 
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    to prevent confidential data, such as cryptographic private key, from being 
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    accessed. The backup SRAM can be erased only through the Flash interface when
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    a protection level change from level 1 to level 0 is requested. 
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    Refer to the description of Read protection (RDP) in the Flash programming manual.
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @endverbatim
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Enables or disables the Backup Regulator.
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  NewState: new state of the Backup Regulator.
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_BackupRegulatorCmd(FunctionalState NewState)
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 171              		.loc 1 292 0
+ 172              		.cfi_startproc
+ 173              		@ args = 0, pretend = 0, frame = 0
+ 174              		@ frame_needed = 0, uses_anonymous_args = 0
+ 175              		@ link register save eliminated.
+ 176              	.LVL9:
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *(__IO uint32_t *) CSR_BRE_BB = (uint32_t)NewState;
+ 177              		.loc 1 296 0
+ 178 0000 014B     		ldr	r3, .L15
+ 179 0002 1860     		str	r0, [r3, #0]
+ 180 0004 7047     		bx	lr
+ 181              	.L16:
+ 182 0006 00BF     		.align	2
+ 183              	.L15:
+ 184 0008 A4000E42 		.word	1108213924
+ 185              		.cfi_endproc
+ 186              	.LFE61:
+ 188              		.section	.text.PWR_FlashPowerDownCmd,"ax",%progbits
+ 189              		.align	1
+ 190              		.global	PWR_FlashPowerDownCmd
+ 191              		.thumb
+ 192              		.thumb_func
+ 194              	PWR_FlashPowerDownCmd:
+ 195              	.LFB62:
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @}
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Group5 FLASH Power Down configuration functions
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *  @brief   FLASH Power Down configuration functions 
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @verbatim   
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****                      FLASH Power Down configuration functions
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================  
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  - By setting the FPDS bit in the PWR_CR register by using the PWR_FlashPowerDownCmd()
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    function, the Flash memory also enters power down mode when the device enters 
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    Stop mode. When the Flash memory is in power down mode, an additional startup 
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    delay is incurred when waking up from Stop mode.
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @endverbatim
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Enables or disables the Flash Power Down in STOP mode.
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  NewState: new state of the Flash power mode.
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_FlashPowerDownCmd(FunctionalState NewState)
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 196              		.loc 1 327 0
+ 197              		.cfi_startproc
+ 198              		@ args = 0, pretend = 0, frame = 0
+ 199              		@ frame_needed = 0, uses_anonymous_args = 0
+ 200              		@ link register save eliminated.
+ 201              	.LVL10:
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *(__IO uint32_t *) CR_FPDS_BB = (uint32_t)NewState;
+ 202              		.loc 1 331 0
+ 203 0000 014B     		ldr	r3, .L18
+ 204 0002 1860     		str	r0, [r3, #0]
+ 205 0004 7047     		bx	lr
+ 206              	.L19:
+ 207 0006 00BF     		.align	2
+ 208              	.L18:
+ 209 0008 24000E42 		.word	1108213796
+ 210              		.cfi_endproc
+ 211              	.LFE62:
+ 213              		.section	.text.PWR_EnterSTOPMode,"ax",%progbits
+ 214              		.align	1
+ 215              		.global	PWR_EnterSTOPMode
+ 216              		.thumb
+ 217              		.thumb_func
+ 219              	PWR_EnterSTOPMode:
+ 220              	.LFB63:
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @}
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Group6 Low Power modes configuration functions
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *  @brief   Low Power modes configuration functions 
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @verbatim   
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****                     Low Power modes configuration functions
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================  
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   The devices feature 3 low-power modes:
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    - Sleep mode: Cortex-M3 core stopped, peripherals kept running.
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    - Stop mode: all clocks are stopped, regulator running, regulator in low power mode
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    - Standby mode: 1.2V domain powered off.
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    Sleep mode
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    ===========
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Entry:
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       - The Sleep mode is entered by using the __WFI() or __WFE() functions.
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Exit:
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       - Any peripheral interrupt acknowledged by the nested vectored interrupt 
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****         controller (NVIC) can wake up the device from Sleep mode.
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    Stop mode
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    ==========
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    In Stop mode, all clocks in the 1.2V domain are stopped, the PLL, the HSI,
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    and the HSE RC oscillators are disabled. Internal SRAM and register contents 
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    are preserved.
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    The voltage regulator can be configured either in normal or low-power mode.
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    To minimize the consumption In Stop mode, FLASH can be powered off before 
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    entering the Stop mode. It can be switched on again by software after exiting 
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    the Stop mode using the PWR_FlashPowerDownCmd() function. 
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Entry:
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       - The Stop mode is entered using the PWR_EnterSTOPMode(PWR_Regulator_LowPower,) 
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****         function with regulator in LowPower or with Regulator ON.
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Exit:
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       - Any EXTI Line (Internal or External) configured in Interrupt/Event mode.
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    Standby mode
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    ============
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    The Standby mode allows to achieve the lowest power consumption. It is based 
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    on the Cortex-M3 deepsleep mode, with the voltage regulator disabled. 
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    The 1.2V domain is consequently powered off. The PLL, the HSI oscillator and 
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    the HSE oscillator are also switched off. SRAM and register contents are lost 
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    except for the RTC registers, RTC backup registers, backup SRAM and Standby 
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    circuitry.
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    The voltage regulator is OFF.
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Entry:
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       - The Standby mode is entered using the PWR_EnterSTANDBYMode() function.
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     - Exit:
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****       - WKUP pin rising edge, RTC alarm (Alarm A and Alarm B), RTC wakeup,
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****         tamper event, time-stamp event, external reset in NRST pin, IWDG reset.              
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    Auto-wakeup (AWU) from low-power mode
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    =====================================
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    The MCU can be woken up from low-power mode by an RTC Alarm event, an RTC 
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    Wakeup event, a tamper event, a time-stamp event, or a comparator event, 
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    without depending on an external interrupt (Auto-wakeup mode).
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    - RTC auto-wakeup (AWU) from the Stop mode
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      ----------------------------------------
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      - To wake up from the Stop mode with an RTC alarm event, it is necessary to:
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the EXTI Line 17 to be sensitive to rising edges (Interrupt 
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          or Event modes) using the EXTI_Init() function.
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Enable the RTC Alarm Interrupt using the RTC_ITConfig() function
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the RTC to generate the RTC alarm using the RTC_SetAlarm() 
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          and RTC_AlarmCmd() functions.
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      - To wake up from the Stop mode with an RTC Tamper or time stamp event, it 
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        is necessary to:
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the EXTI Line 21 to be sensitive to rising edges (Interrupt 
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          or Event modes) using the EXTI_Init() function.
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Enable the RTC Tamper or time stamp Interrupt using the RTC_ITConfig() 
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          function
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the RTC to detect the tamper or time stamp event using the
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          RTC_TimeStampConfig(), RTC_TamperTriggerConfig() and RTC_TamperCmd()
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          functions.
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      - To wake up from the Stop mode with an RTC WakeUp event, it is necessary to:
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the EXTI Line 22 to be sensitive to rising edges (Interrupt 
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          or Event modes) using the EXTI_Init() function.
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Enable the RTC WakeUp Interrupt using the RTC_ITConfig() function
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the RTC to generate the RTC WakeUp event using the RTC_WakeUpClockConfig(), 
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          RTC_SetWakeUpCounter() and RTC_WakeUpCmd() functions.
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****    - RTC auto-wakeup (AWU) from the Standby mode
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      -------------------------------------------
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      - To wake up from the Standby mode with an RTC alarm event, it is necessary to:
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Enable the RTC Alarm Interrupt using the RTC_ITConfig() function
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the RTC to generate the RTC alarm using the RTC_SetAlarm() 
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          and RTC_AlarmCmd() functions.
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      - To wake up from the Standby mode with an RTC Tamper or time stamp event, it 
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        is necessary to:
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Enable the RTC Tamper or time stamp Interrupt using the RTC_ITConfig() 
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          function
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the RTC to detect the tamper or time stamp event using the
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          RTC_TimeStampConfig(), RTC_TamperTriggerConfig() and RTC_TamperCmd()
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          functions.
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****      - To wake up from the Standby mode with an RTC WakeUp event, it is necessary to:
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Enable the RTC WakeUp Interrupt using the RTC_ITConfig() function
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****        - Configure the RTC to generate the RTC WakeUp event using the RTC_WakeUpClockConfig(), 
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          RTC_SetWakeUpCounter() and RTC_WakeUpCmd() functions.
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @endverbatim
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Enters STOP mode.
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *   
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @note   In Stop mode, all I/O pins keep the same state as in Run mode.
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @note   When exiting Stop mode by issuing an interrupt or a wakeup event, 
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         the HSI RC oscillator is selected as system clock.
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @note   When the voltage regulator operates in low power mode, an additional 
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         startup delay is incurred when waking up from Stop mode. 
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         By keeping the internal regulator ON during Stop mode, the consumption 
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *         is higher although the startup time is reduced.           
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *     
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  PWR_Regulator: specifies the regulator state in STOP mode.
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be one of the following values:
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_Regulator_ON: STOP mode with regulator ON
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_Regulator_LowPower: STOP mode with regulator in low power mode
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  PWR_STOPEntry: specifies if STOP mode in entered with WFI or WFE instruction.
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be one of the following values:
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_STOPEntry_WFI: enter STOP mode with WFI instruction
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_STOPEntry_WFE: enter STOP mode with WFE instruction
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_EnterSTOPMode(uint32_t PWR_Regulator, uint8_t PWR_STOPEntry)
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 221              		.loc 1 467 0
+ 222              		.cfi_startproc
+ 223              		@ args = 0, pretend = 0, frame = 0
+ 224              		@ frame_needed = 0, uses_anonymous_args = 0
+ 225              		@ link register save eliminated.
+ 226              	.LVL11:
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   uint32_t tmpreg = 0;
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_PWR_REGULATOR(PWR_Regulator));
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_PWR_STOP_ENTRY(PWR_STOPEntry));
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Select the regulator state in STOP mode ---------------------------------*/
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg = PWR->CR;
+ 227              		.loc 1 475 0
+ 228 0000 0A4B     		ldr	r3, .L24
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Clear PDDS and LPDSR bits */
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg &= CR_DS_MASK;
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Set LPDSR bit according to PWR_Regulator value */
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg |= PWR_Regulator;
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Store the new value */
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   PWR->CR = tmpreg;
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Set SLEEPDEEP bit of Cortex System Control Register */
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Select STOP mode entry --------------------------------------------------*/
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   if(PWR_STOPEntry == PWR_STOPEntry_WFI)
+ 229              		.loc 1 489 0
+ 230 0002 0129     		cmp	r1, #1
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg = PWR->CR;
+ 231              		.loc 1 475 0
+ 232 0004 1A68     		ldr	r2, [r3, #0]
+ 233              	.LVL12:
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg &= CR_DS_MASK;
+ 234              		.loc 1 477 0
+ 235 0006 22F00302 		bic	r2, r2, #3
+ 236              	.LVL13:
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   tmpreg |= PWR_Regulator;
+ 237              		.loc 1 480 0
+ 238 000a 40EA0200 		orr	r0, r0, r2
+ 239              	.LVL14:
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   PWR->CR = tmpreg;
+ 240              		.loc 1 483 0
+ 241 000e 1860     		str	r0, [r3, #0]
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+ 242              		.loc 1 486 0
+ 243 0010 0748     		ldr	r0, .L24+4
+ 244              	.LVL15:
+ 245 0012 0369     		ldr	r3, [r0, #16]
+ 246              	.LVL16:
+ 247 0014 43F00402 		orr	r2, r3, #4
+ 248 0018 0261     		str	r2, [r0, #16]
+ 249              		.loc 1 489 0
+ 250 001a 01D1     		bne	.L21
+ 251              	.LBB8:
+ 252              	.LBB9:
+ 253              		.file 2 "src/libstm32f2/core_cmInstr.h"
+   1:src/libstm32f2/core_cmInstr.h **** /**************************************************************************//**
+   2:src/libstm32f2/core_cmInstr.h ****  * @file     core_cmInstr.h
+   3:src/libstm32f2/core_cmInstr.h ****  * @brief    CMSIS Cortex-M Core Instruction Access Header File
+   4:src/libstm32f2/core_cmInstr.h ****  * @version  V3.01
+   5:src/libstm32f2/core_cmInstr.h ****  * @date     06. March 2012
+   6:src/libstm32f2/core_cmInstr.h ****  *
+   7:src/libstm32f2/core_cmInstr.h ****  * @note
+   8:src/libstm32f2/core_cmInstr.h ****  * Copyright (C) 2009-2012 ARM Limited. All rights reserved.
+   9:src/libstm32f2/core_cmInstr.h ****  *
+  10:src/libstm32f2/core_cmInstr.h ****  * @par
+  11:src/libstm32f2/core_cmInstr.h ****  * ARM Limited (ARM) is supplying this software for use with Cortex-M
+  12:src/libstm32f2/core_cmInstr.h ****  * processor based microcontrollers.  This file can be freely distributed
+  13:src/libstm32f2/core_cmInstr.h ****  * within development tools that are supporting such ARM based processors.
+  14:src/libstm32f2/core_cmInstr.h ****  *
+  15:src/libstm32f2/core_cmInstr.h ****  * @par
+  16:src/libstm32f2/core_cmInstr.h ****  * THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
+  17:src/libstm32f2/core_cmInstr.h ****  * OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+  18:src/libstm32f2/core_cmInstr.h ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
+  19:src/libstm32f2/core_cmInstr.h ****  * ARM SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR
+  20:src/libstm32f2/core_cmInstr.h ****  * CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+  21:src/libstm32f2/core_cmInstr.h ****  *
+  22:src/libstm32f2/core_cmInstr.h ****  ******************************************************************************/
+  23:src/libstm32f2/core_cmInstr.h **** 
+  24:src/libstm32f2/core_cmInstr.h **** #ifndef __CORE_CMINSTR_H
+  25:src/libstm32f2/core_cmInstr.h **** #define __CORE_CMINSTR_H
+  26:src/libstm32f2/core_cmInstr.h **** 
+  27:src/libstm32f2/core_cmInstr.h **** 
+  28:src/libstm32f2/core_cmInstr.h **** /* ##########################  Core Instruction Access  ######################### */
+  29:src/libstm32f2/core_cmInstr.h **** /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+  30:src/libstm32f2/core_cmInstr.h ****   Access to dedicated instructions
+  31:src/libstm32f2/core_cmInstr.h ****   @{
+  32:src/libstm32f2/core_cmInstr.h **** */
+  33:src/libstm32f2/core_cmInstr.h **** 
+  34:src/libstm32f2/core_cmInstr.h **** #if   defined ( __CC_ARM ) /*------------------RealView Compiler -----------------*/
+  35:src/libstm32f2/core_cmInstr.h **** /* ARM armcc specific functions */
+  36:src/libstm32f2/core_cmInstr.h **** 
+  37:src/libstm32f2/core_cmInstr.h **** #if (__ARMCC_VERSION < 400677)
+  38:src/libstm32f2/core_cmInstr.h ****   #error "Please use ARM Compiler Toolchain V4.0.677 or later!"
+  39:src/libstm32f2/core_cmInstr.h **** #endif
+  40:src/libstm32f2/core_cmInstr.h **** 
+  41:src/libstm32f2/core_cmInstr.h **** 
+  42:src/libstm32f2/core_cmInstr.h **** /** \brief  No Operation
+  43:src/libstm32f2/core_cmInstr.h **** 
+  44:src/libstm32f2/core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+  45:src/libstm32f2/core_cmInstr.h ****  */
+  46:src/libstm32f2/core_cmInstr.h **** #define __NOP                             __nop
+  47:src/libstm32f2/core_cmInstr.h **** 
+  48:src/libstm32f2/core_cmInstr.h **** 
+  49:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Interrupt
+  50:src/libstm32f2/core_cmInstr.h **** 
+  51:src/libstm32f2/core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+  52:src/libstm32f2/core_cmInstr.h ****     until one of a number of events occurs.
+  53:src/libstm32f2/core_cmInstr.h ****  */
+  54:src/libstm32f2/core_cmInstr.h **** #define __WFI                             __wfi
+  55:src/libstm32f2/core_cmInstr.h **** 
+  56:src/libstm32f2/core_cmInstr.h **** 
+  57:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Event
+  58:src/libstm32f2/core_cmInstr.h **** 
+  59:src/libstm32f2/core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+  60:src/libstm32f2/core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+  61:src/libstm32f2/core_cmInstr.h ****  */
+  62:src/libstm32f2/core_cmInstr.h **** #define __WFE                             __wfe
+  63:src/libstm32f2/core_cmInstr.h **** 
+  64:src/libstm32f2/core_cmInstr.h **** 
+  65:src/libstm32f2/core_cmInstr.h **** /** \brief  Send Event
+  66:src/libstm32f2/core_cmInstr.h **** 
+  67:src/libstm32f2/core_cmInstr.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+  68:src/libstm32f2/core_cmInstr.h ****  */
+  69:src/libstm32f2/core_cmInstr.h **** #define __SEV                             __sev
+  70:src/libstm32f2/core_cmInstr.h **** 
+  71:src/libstm32f2/core_cmInstr.h **** 
+  72:src/libstm32f2/core_cmInstr.h **** /** \brief  Instruction Synchronization Barrier
+  73:src/libstm32f2/core_cmInstr.h **** 
+  74:src/libstm32f2/core_cmInstr.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+  75:src/libstm32f2/core_cmInstr.h ****     so that all instructions following the ISB are fetched from cache or
+  76:src/libstm32f2/core_cmInstr.h ****     memory, after the instruction has been completed.
+  77:src/libstm32f2/core_cmInstr.h ****  */
+  78:src/libstm32f2/core_cmInstr.h **** #define __ISB()                           __isb(0xF)
+  79:src/libstm32f2/core_cmInstr.h **** 
+  80:src/libstm32f2/core_cmInstr.h **** 
+  81:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Synchronization Barrier
+  82:src/libstm32f2/core_cmInstr.h **** 
+  83:src/libstm32f2/core_cmInstr.h ****     This function acts as a special kind of Data Memory Barrier.
+  84:src/libstm32f2/core_cmInstr.h ****     It completes when all explicit memory accesses before this instruction complete.
+  85:src/libstm32f2/core_cmInstr.h ****  */
+  86:src/libstm32f2/core_cmInstr.h **** #define __DSB()                           __dsb(0xF)
+  87:src/libstm32f2/core_cmInstr.h **** 
+  88:src/libstm32f2/core_cmInstr.h **** 
+  89:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Memory Barrier
+  90:src/libstm32f2/core_cmInstr.h **** 
+  91:src/libstm32f2/core_cmInstr.h ****     This function ensures the apparent order of the explicit memory operations before
+  92:src/libstm32f2/core_cmInstr.h ****     and after the instruction, without ensuring their completion.
+  93:src/libstm32f2/core_cmInstr.h ****  */
+  94:src/libstm32f2/core_cmInstr.h **** #define __DMB()                           __dmb(0xF)
+  95:src/libstm32f2/core_cmInstr.h **** 
+  96:src/libstm32f2/core_cmInstr.h **** 
+  97:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (32 bit)
+  98:src/libstm32f2/core_cmInstr.h **** 
+  99:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in integer value.
+ 100:src/libstm32f2/core_cmInstr.h **** 
+ 101:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 102:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 103:src/libstm32f2/core_cmInstr.h ****  */
+ 104:src/libstm32f2/core_cmInstr.h **** #define __REV                             __rev
+ 105:src/libstm32f2/core_cmInstr.h **** 
+ 106:src/libstm32f2/core_cmInstr.h **** 
+ 107:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (16 bit)
+ 108:src/libstm32f2/core_cmInstr.h **** 
+ 109:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in two unsigned short values.
+ 110:src/libstm32f2/core_cmInstr.h **** 
+ 111:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 112:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 113:src/libstm32f2/core_cmInstr.h ****  */
+ 114:src/libstm32f2/core_cmInstr.h **** __attribute__((section(".rev16_text"))) __STATIC_INLINE __ASM uint32_t __REV16(uint32_t value)
+ 115:src/libstm32f2/core_cmInstr.h **** {
+ 116:src/libstm32f2/core_cmInstr.h ****   rev16 r0, r0
+ 117:src/libstm32f2/core_cmInstr.h ****   bx lr
+ 118:src/libstm32f2/core_cmInstr.h **** }
+ 119:src/libstm32f2/core_cmInstr.h **** 
+ 120:src/libstm32f2/core_cmInstr.h **** 
+ 121:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order in signed short value
+ 122:src/libstm32f2/core_cmInstr.h **** 
+ 123:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in a signed short value with sign extension to integer.
+ 124:src/libstm32f2/core_cmInstr.h **** 
+ 125:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 126:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 127:src/libstm32f2/core_cmInstr.h ****  */
+ 128:src/libstm32f2/core_cmInstr.h **** __attribute__((section(".revsh_text"))) __STATIC_INLINE __ASM int32_t __REVSH(int32_t value)
+ 129:src/libstm32f2/core_cmInstr.h **** {
+ 130:src/libstm32f2/core_cmInstr.h ****   revsh r0, r0
+ 131:src/libstm32f2/core_cmInstr.h ****   bx lr
+ 132:src/libstm32f2/core_cmInstr.h **** }
+ 133:src/libstm32f2/core_cmInstr.h **** 
+ 134:src/libstm32f2/core_cmInstr.h **** 
+ 135:src/libstm32f2/core_cmInstr.h **** /** \brief  Rotate Right in unsigned value (32 bit)
+ 136:src/libstm32f2/core_cmInstr.h **** 
+ 137:src/libstm32f2/core_cmInstr.h ****     This function Rotate Right (immediate) provides the value of the contents of a register rotated
+ 138:src/libstm32f2/core_cmInstr.h **** 
+ 139:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to rotate
+ 140:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Number of Bits to rotate
+ 141:src/libstm32f2/core_cmInstr.h ****     \return               Rotated value
+ 142:src/libstm32f2/core_cmInstr.h ****  */
+ 143:src/libstm32f2/core_cmInstr.h **** #define __ROR                             __ror
+ 144:src/libstm32f2/core_cmInstr.h **** 
+ 145:src/libstm32f2/core_cmInstr.h **** 
+ 146:src/libstm32f2/core_cmInstr.h **** #if       (__CORTEX_M >= 0x03)
+ 147:src/libstm32f2/core_cmInstr.h **** 
+ 148:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse bit order of value
+ 149:src/libstm32f2/core_cmInstr.h **** 
+ 150:src/libstm32f2/core_cmInstr.h ****     This function reverses the bit order of the given value.
+ 151:src/libstm32f2/core_cmInstr.h **** 
+ 152:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 153:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 154:src/libstm32f2/core_cmInstr.h ****  */
+ 155:src/libstm32f2/core_cmInstr.h **** #define __RBIT                            __rbit
+ 156:src/libstm32f2/core_cmInstr.h **** 
+ 157:src/libstm32f2/core_cmInstr.h **** 
+ 158:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (8 bit)
+ 159:src/libstm32f2/core_cmInstr.h **** 
+ 160:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 8 bit value.
+ 161:src/libstm32f2/core_cmInstr.h **** 
+ 162:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 163:src/libstm32f2/core_cmInstr.h ****     \return             value of type uint8_t at (*ptr)
+ 164:src/libstm32f2/core_cmInstr.h ****  */
+ 165:src/libstm32f2/core_cmInstr.h **** #define __LDREXB(ptr)                     ((uint8_t ) __ldrex(ptr))
+ 166:src/libstm32f2/core_cmInstr.h **** 
+ 167:src/libstm32f2/core_cmInstr.h **** 
+ 168:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (16 bit)
+ 169:src/libstm32f2/core_cmInstr.h **** 
+ 170:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 16 bit values.
+ 171:src/libstm32f2/core_cmInstr.h **** 
+ 172:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 173:src/libstm32f2/core_cmInstr.h ****     \return        value of type uint16_t at (*ptr)
+ 174:src/libstm32f2/core_cmInstr.h ****  */
+ 175:src/libstm32f2/core_cmInstr.h **** #define __LDREXH(ptr)                     ((uint16_t) __ldrex(ptr))
+ 176:src/libstm32f2/core_cmInstr.h **** 
+ 177:src/libstm32f2/core_cmInstr.h **** 
+ 178:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (32 bit)
+ 179:src/libstm32f2/core_cmInstr.h **** 
+ 180:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 32 bit values.
+ 181:src/libstm32f2/core_cmInstr.h **** 
+ 182:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 183:src/libstm32f2/core_cmInstr.h ****     \return        value of type uint32_t at (*ptr)
+ 184:src/libstm32f2/core_cmInstr.h ****  */
+ 185:src/libstm32f2/core_cmInstr.h **** #define __LDREXW(ptr)                     ((uint32_t ) __ldrex(ptr))
+ 186:src/libstm32f2/core_cmInstr.h **** 
+ 187:src/libstm32f2/core_cmInstr.h **** 
+ 188:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (8 bit)
+ 189:src/libstm32f2/core_cmInstr.h **** 
+ 190:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 8 bit values.
+ 191:src/libstm32f2/core_cmInstr.h **** 
+ 192:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 193:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 194:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 195:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 196:src/libstm32f2/core_cmInstr.h ****  */
+ 197:src/libstm32f2/core_cmInstr.h **** #define __STREXB(value, ptr)              __strex(value, ptr)
+ 198:src/libstm32f2/core_cmInstr.h **** 
+ 199:src/libstm32f2/core_cmInstr.h **** 
+ 200:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (16 bit)
+ 201:src/libstm32f2/core_cmInstr.h **** 
+ 202:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 16 bit values.
+ 203:src/libstm32f2/core_cmInstr.h **** 
+ 204:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 205:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 206:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 207:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 208:src/libstm32f2/core_cmInstr.h ****  */
+ 209:src/libstm32f2/core_cmInstr.h **** #define __STREXH(value, ptr)              __strex(value, ptr)
+ 210:src/libstm32f2/core_cmInstr.h **** 
+ 211:src/libstm32f2/core_cmInstr.h **** 
+ 212:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (32 bit)
+ 213:src/libstm32f2/core_cmInstr.h **** 
+ 214:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 32 bit values.
+ 215:src/libstm32f2/core_cmInstr.h **** 
+ 216:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 217:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 218:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 219:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 220:src/libstm32f2/core_cmInstr.h ****  */
+ 221:src/libstm32f2/core_cmInstr.h **** #define __STREXW(value, ptr)              __strex(value, ptr)
+ 222:src/libstm32f2/core_cmInstr.h **** 
+ 223:src/libstm32f2/core_cmInstr.h **** 
+ 224:src/libstm32f2/core_cmInstr.h **** /** \brief  Remove the exclusive lock
+ 225:src/libstm32f2/core_cmInstr.h **** 
+ 226:src/libstm32f2/core_cmInstr.h ****     This function removes the exclusive lock which is created by LDREX.
+ 227:src/libstm32f2/core_cmInstr.h **** 
+ 228:src/libstm32f2/core_cmInstr.h ****  */
+ 229:src/libstm32f2/core_cmInstr.h **** #define __CLREX                           __clrex
+ 230:src/libstm32f2/core_cmInstr.h **** 
+ 231:src/libstm32f2/core_cmInstr.h **** 
+ 232:src/libstm32f2/core_cmInstr.h **** /** \brief  Signed Saturate
+ 233:src/libstm32f2/core_cmInstr.h **** 
+ 234:src/libstm32f2/core_cmInstr.h ****     This function saturates a signed value.
+ 235:src/libstm32f2/core_cmInstr.h **** 
+ 236:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 237:src/libstm32f2/core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (1..32)
+ 238:src/libstm32f2/core_cmInstr.h ****     \return             Saturated value
+ 239:src/libstm32f2/core_cmInstr.h ****  */
+ 240:src/libstm32f2/core_cmInstr.h **** #define __SSAT                            __ssat
+ 241:src/libstm32f2/core_cmInstr.h **** 
+ 242:src/libstm32f2/core_cmInstr.h **** 
+ 243:src/libstm32f2/core_cmInstr.h **** /** \brief  Unsigned Saturate
+ 244:src/libstm32f2/core_cmInstr.h **** 
+ 245:src/libstm32f2/core_cmInstr.h ****     This function saturates an unsigned value.
+ 246:src/libstm32f2/core_cmInstr.h **** 
+ 247:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 248:src/libstm32f2/core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (0..31)
+ 249:src/libstm32f2/core_cmInstr.h ****     \return             Saturated value
+ 250:src/libstm32f2/core_cmInstr.h ****  */
+ 251:src/libstm32f2/core_cmInstr.h **** #define __USAT                            __usat
+ 252:src/libstm32f2/core_cmInstr.h **** 
+ 253:src/libstm32f2/core_cmInstr.h **** 
+ 254:src/libstm32f2/core_cmInstr.h **** /** \brief  Count leading zeros
+ 255:src/libstm32f2/core_cmInstr.h **** 
+ 256:src/libstm32f2/core_cmInstr.h ****     This function counts the number of leading zeros of a data value.
+ 257:src/libstm32f2/core_cmInstr.h **** 
+ 258:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to count the leading zeros
+ 259:src/libstm32f2/core_cmInstr.h ****     \return             number of leading zeros in value
+ 260:src/libstm32f2/core_cmInstr.h ****  */
+ 261:src/libstm32f2/core_cmInstr.h **** #define __CLZ                             __clz
+ 262:src/libstm32f2/core_cmInstr.h **** 
+ 263:src/libstm32f2/core_cmInstr.h **** #endif /* (__CORTEX_M >= 0x03) */
+ 264:src/libstm32f2/core_cmInstr.h **** 
+ 265:src/libstm32f2/core_cmInstr.h **** 
+ 266:src/libstm32f2/core_cmInstr.h **** 
+ 267:src/libstm32f2/core_cmInstr.h **** #elif defined ( __ICCARM__ ) /*------------------ ICC Compiler -------------------*/
+ 268:src/libstm32f2/core_cmInstr.h **** /* IAR iccarm specific functions */
+ 269:src/libstm32f2/core_cmInstr.h **** 
+ 270:src/libstm32f2/core_cmInstr.h **** #include <cmsis_iar.h>
+ 271:src/libstm32f2/core_cmInstr.h **** 
+ 272:src/libstm32f2/core_cmInstr.h **** 
+ 273:src/libstm32f2/core_cmInstr.h **** #elif defined ( __TMS470__ ) /*---------------- TI CCS Compiler ------------------*/
+ 274:src/libstm32f2/core_cmInstr.h **** /* TI CCS specific functions */
+ 275:src/libstm32f2/core_cmInstr.h **** 
+ 276:src/libstm32f2/core_cmInstr.h **** #include <cmsis_ccs.h>
+ 277:src/libstm32f2/core_cmInstr.h **** 
+ 278:src/libstm32f2/core_cmInstr.h **** 
+ 279:src/libstm32f2/core_cmInstr.h **** #elif defined ( __GNUC__ ) /*------------------ GNU Compiler ---------------------*/
+ 280:src/libstm32f2/core_cmInstr.h **** /* GNU gcc specific functions */
+ 281:src/libstm32f2/core_cmInstr.h **** 
+ 282:src/libstm32f2/core_cmInstr.h **** /** \brief  No Operation
+ 283:src/libstm32f2/core_cmInstr.h **** 
+ 284:src/libstm32f2/core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+ 285:src/libstm32f2/core_cmInstr.h ****  */
+ 286:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __NOP(void)
+ 287:src/libstm32f2/core_cmInstr.h **** {
+ 288:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("nop");
+ 289:src/libstm32f2/core_cmInstr.h **** }
+ 290:src/libstm32f2/core_cmInstr.h **** 
+ 291:src/libstm32f2/core_cmInstr.h **** 
+ 292:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Interrupt
+ 293:src/libstm32f2/core_cmInstr.h **** 
+ 294:src/libstm32f2/core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+ 295:src/libstm32f2/core_cmInstr.h ****     until one of a number of events occurs.
+ 296:src/libstm32f2/core_cmInstr.h ****  */
+ 297:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFI(void)
+ 298:src/libstm32f2/core_cmInstr.h **** {
+ 299:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("wfi");
+ 254              		.loc 2 299 0
+ 255              	@ 299 "src/libstm32f2/core_cmInstr.h" 1
+ 256 001c 30BF     		wfi
+ 257              	@ 0 "" 2
+ 258              		.thumb
+ 259 001e 00E0     		b	.L22
+ 260              	.L21:
+ 261              	.LBE9:
+ 262              	.LBE8:
+ 263              	.LBB10:
+ 264              	.LBB11:
+ 300:src/libstm32f2/core_cmInstr.h **** }
+ 301:src/libstm32f2/core_cmInstr.h **** 
+ 302:src/libstm32f2/core_cmInstr.h **** 
+ 303:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Event
+ 304:src/libstm32f2/core_cmInstr.h **** 
+ 305:src/libstm32f2/core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+ 306:src/libstm32f2/core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+ 307:src/libstm32f2/core_cmInstr.h ****  */
+ 308:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFE(void)
+ 309:src/libstm32f2/core_cmInstr.h **** {
+ 310:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("wfe");
+ 265              		.loc 2 310 0
+ 266              	@ 310 "src/libstm32f2/core_cmInstr.h" 1
+ 267 0020 20BF     		wfe
+ 268              	@ 0 "" 2
+ 269              		.thumb
+ 270              	.L22:
+ 271              	.LBE11:
+ 272              	.LBE10:
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   {   
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     /* Request Wait For Interrupt */
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     __WFI();
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   }
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   else
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   {
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     /* Request Wait For Event */
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     __WFE();
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   }
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Reset SLEEPDEEP bit of Cortex System Control Register */
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   SCB->SCR &= (uint32_t)~((uint32_t)SCB_SCR_SLEEPDEEP_Msk);  
+ 273              		.loc 1 500 0
+ 274 0022 0169     		ldr	r1, [r0, #16]
+ 275              	.LVL17:
+ 276 0024 21F00403 		bic	r3, r1, #4
+ 277 0028 0361     		str	r3, [r0, #16]
+ 278 002a 7047     		bx	lr
+ 279              	.L25:
+ 280              		.align	2
+ 281              	.L24:
+ 282 002c 00700040 		.word	1073770496
+ 283 0030 00ED00E0 		.word	-536810240
+ 284              		.cfi_endproc
+ 285              	.LFE63:
+ 287              		.section	.text.PWR_EnterSTANDBYMode,"ax",%progbits
+ 288              		.align	1
+ 289              		.global	PWR_EnterSTANDBYMode
+ 290              		.thumb
+ 291              		.thumb_func
+ 293              	PWR_EnterSTANDBYMode:
+ 294              	.LFB64:
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Enters STANDBY mode.
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @note   In Standby mode, all I/O pins are high impedance except for:
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          - Reset pad (still available) 
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          - RTC_AF1 pin (PC13) if configured for tamper, time-stamp, RTC 
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            Alarm out, or RTC clock calibration out.
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          - RTC_AF2 pin (PI8) if configured for tamper or time-stamp.  
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          - WKUP pin 1 (PA0) if enabled.       
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  None
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_EnterSTANDBYMode(void)
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 295              		.loc 1 515 0
+ 296              		.cfi_startproc
+ 297              		@ args = 0, pretend = 0, frame = 0
+ 298              		@ frame_needed = 0, uses_anonymous_args = 0
+ 299              		@ link register save eliminated.
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Clear Wakeup flag */
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   PWR->CR |= PWR_CR_CWUF;
+ 300              		.loc 1 517 0
+ 301 0000 074B     		ldr	r3, .L27
+ 302 0002 1A68     		ldr	r2, [r3, #0]
+ 303 0004 42F00400 		orr	r0, r2, #4
+ 304 0008 1860     		str	r0, [r3, #0]
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Select STANDBY mode */
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   PWR->CR |= PWR_CR_PDDS;
+ 305              		.loc 1 520 0
+ 306 000a 1968     		ldr	r1, [r3, #0]
+ 307 000c 41F00202 		orr	r2, r1, #2
+ 308 0010 1A60     		str	r2, [r3, #0]
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Set SLEEPDEEP bit of Cortex System Control Register */
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+ 309              		.loc 1 523 0
+ 310 0012 044B     		ldr	r3, .L27+4
+ 311 0014 1869     		ldr	r0, [r3, #16]
+ 312 0016 40F00401 		orr	r1, r0, #4
+ 313 001a 1961     		str	r1, [r3, #16]
+ 314              	.LBB12:
+ 315              	.LBB13:
+ 299:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("wfi");
+ 316              		.loc 2 299 0
+ 317              	@ 299 "src/libstm32f2/core_cmInstr.h" 1
+ 318 001c 30BF     		wfi
+ 319              	@ 0 "" 2
+ 320              		.thumb
+ 321 001e 7047     		bx	lr
+ 322              	.L28:
+ 323              		.align	2
+ 324              	.L27:
+ 325 0020 00700040 		.word	1073770496
+ 326 0024 00ED00E0 		.word	-536810240
+ 327              	.LBE13:
+ 328              	.LBE12:
+ 329              		.cfi_endproc
+ 330              	.LFE64:
+ 332              		.section	.text.PWR_GetFlagStatus,"ax",%progbits
+ 333              		.align	1
+ 334              		.global	PWR_GetFlagStatus
+ 335              		.thumb
+ 336              		.thumb_func
+ 338              	PWR_GetFlagStatus:
+ 339              	.LFB65:
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /* This option is used to ensure that store operations are completed */
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #if defined ( __CC_ARM   )
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   __force_stores();
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** #endif
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Request Wait For Interrupt */
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   __WFI();
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @}
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /** @defgroup PWR_Group7 Flags management functions
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *  @brief   Flags management functions 
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  *
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @verbatim   
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****                            Flags management functions
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****  ===============================================================================  
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** @endverbatim
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @{
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Checks whether the specified PWR flag is set or not.
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  PWR_FLAG: specifies the flag to check.
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be one of the following values:
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_FLAG_WU: Wake Up flag. This flag indicates that a wakeup event 
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  was received from the WKUP pin or from the RTC alarm (Alarm A 
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  or Alarm B), RTC Tamper event, RTC TimeStamp event or RTC Wakeup.
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  An additional wakeup event is detected if the WKUP pin is enabled 
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  (by setting the EWUP bit) when the WKUP pin level is already high.  
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_FLAG_SB: StandBy flag. This flag indicates that the system was
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  resumed from StandBy mode.    
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_FLAG_PVDO: PVD Output. This flag is valid only if PVD is enabled 
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  by the PWR_PVDCmd() function. The PVD is stopped by Standby mode 
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  For this reason, this bit is equal to 0 after Standby or reset
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  until the PVDE bit is set.
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_FLAG_BRR: Backup regulator ready flag. This bit is not reset 
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  when the device wakes up from Standby mode or by a system reset 
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *                  or power reset.  
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval The new state of PWR_FLAG (SET or RESET).
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG)
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 340              		.loc 1 570 0
+ 341              		.cfi_startproc
+ 342              		@ args = 0, pretend = 0, frame = 0
+ 343              		@ frame_needed = 0, uses_anonymous_args = 0
+ 344              		@ link register save eliminated.
+ 345              	.LVL18:
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   FlagStatus bitstatus = RESET;
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_PWR_GET_FLAG(PWR_FLAG));
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   if ((PWR->CSR & PWR_FLAG) != (uint32_t)RESET)
+ 346              		.loc 1 576 0
+ 347 0000 034B     		ldr	r3, .L30
+ 348 0002 5968     		ldr	r1, [r3, #4]
+ 349              	.LVL19:
+ 350 0004 0842     		tst	r0, r1
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   {
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     bitstatus = SET;
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   }
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   else
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   {
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****     bitstatus = RESET;
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   }
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Return the flag status */
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   return bitstatus;
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** }
+ 351              		.loc 1 586 0
+ 352 0006 0CBF     		ite	eq
+ 353 0008 0020     		moveq	r0, #0
+ 354 000a 0120     		movne	r0, #1
+ 355              	.LVL20:
+ 356 000c 7047     		bx	lr
+ 357              	.L31:
+ 358 000e 00BF     		.align	2
+ 359              	.L30:
+ 360 0010 00700040 		.word	1073770496
+ 361              		.cfi_endproc
+ 362              	.LFE65:
+ 364              		.section	.text.PWR_ClearFlag,"ax",%progbits
+ 365              		.align	1
+ 366              		.global	PWR_ClearFlag
+ 367              		.thumb
+ 368              		.thumb_func
+ 370              	PWR_ClearFlag:
+ 371              	.LFB66:
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** 
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** /**
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @brief  Clears the PWR's pending flags.
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @param  PWR_FLAG: specifies the flag to clear.
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *          This parameter can be one of the following values:
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_FLAG_WU: Wake Up flag
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   *            @arg PWR_FLAG_SB: StandBy flag
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   * @retval None
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   */
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** void PWR_ClearFlag(uint32_t PWR_FLAG)
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c **** {
+ 372              		.loc 1 597 0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 376              		@ link register save eliminated.
+ 377              	.LVL21:
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   /* Check the parameters */
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   assert_param(IS_PWR_CLEAR_FLAG(PWR_FLAG));
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****          
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_pwr.c ****   PWR->CR |=  PWR_FLAG << 2;
+ 378              		.loc 1 601 0
+ 379 0000 024B     		ldr	r3, .L33
+ 380 0002 1A68     		ldr	r2, [r3, #0]
+ 381 0004 42EA8000 		orr	r0, r2, r0, lsl #2
+ 382              	.LVL22:
+ 383 0008 1860     		str	r0, [r3, #0]
+ 384 000a 7047     		bx	lr
+ 385              	.L34:
+ 386              		.align	2
+ 387              	.L33:
+ 388 000c 00700040 		.word	1073770496
+ 389              		.cfi_endproc
+ 390              	.LFE66:
+ 392              		.text
+ 393              	.Letext0:
+ 394              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 395              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 396              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 397              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_pwr.c
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:19     .text.PWR_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:24     .text.PWR_DeInit:00000000 PWR_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:55     .text.PWR_BackupAccessCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:60     .text.PWR_BackupAccessCmd:00000000 PWR_BackupAccessCmd
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:75     .text.PWR_BackupAccessCmd:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:80     .text.PWR_PVDLevelConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:85     .text.PWR_PVDLevelConfig:00000000 PWR_PVDLevelConfig
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:109    .text.PWR_PVDLevelConfig:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:114    .text.PWR_PVDCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:119    .text.PWR_PVDCmd:00000000 PWR_PVDCmd
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:134    .text.PWR_PVDCmd:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:139    .text.PWR_WakeUpPinCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:144    .text.PWR_WakeUpPinCmd:00000000 PWR_WakeUpPinCmd
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:159    .text.PWR_WakeUpPinCmd:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:164    .text.PWR_BackupRegulatorCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:169    .text.PWR_BackupRegulatorCmd:00000000 PWR_BackupRegulatorCmd
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:184    .text.PWR_BackupRegulatorCmd:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:189    .text.PWR_FlashPowerDownCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:194    .text.PWR_FlashPowerDownCmd:00000000 PWR_FlashPowerDownCmd
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:209    .text.PWR_FlashPowerDownCmd:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:214    .text.PWR_EnterSTOPMode:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:219    .text.PWR_EnterSTOPMode:00000000 PWR_EnterSTOPMode
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:282    .text.PWR_EnterSTOPMode:0000002c $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:288    .text.PWR_EnterSTANDBYMode:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:293    .text.PWR_EnterSTANDBYMode:00000000 PWR_EnterSTANDBYMode
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:325    .text.PWR_EnterSTANDBYMode:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:333    .text.PWR_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:338    .text.PWR_GetFlagStatus:00000000 PWR_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:360    .text.PWR_GetFlagStatus:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:365    .text.PWR_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:370    .text.PWR_ClearFlag:00000000 PWR_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccBzfKAw.s:388    .text.PWR_ClearFlag:0000000c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_APB1PeriphResetCmd

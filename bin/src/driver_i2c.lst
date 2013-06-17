@@ -1,0 +1,822 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"driver_i2c.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.i2c_reset,"ax",%progbits
+  19              		.align	1
+  20              		.thumb
+  21              		.thumb_func
+  23              	i2c_reset:
+  24              	.LFB59:
+  25              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/driver_i2c.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** // Davey Taylor, Arduino Verkstad AB
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** // I2C driver
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** #include <stm32f2xx_i2c.h>
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** #include <stm32f2xx_dma.h>
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** #include "driver_i2c.h"
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** void i2c_init(void) {    
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   // Enable I2C & pin clocks
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_AHB1PeriphClockCmd(I2C_SDA->clock | I2C_SCL->clock, ENABLE);
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   // Reset I2C
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, ENABLE);
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, DISABLE);
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   // Enable I2C
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_Cmd(I2C1, ENABLE);
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   // I2C Configuration
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_InitTypeDef  ConfigI2C;
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_Mode                = I2C_Mode_I2C;
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_DutyCycle           = I2C_DUTYCYCLE;
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_OwnAddress1         = 0xA0;
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_Ack                 = I2C_Ack_Enable;
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_ClockSpeed          = I2C_SPEED;
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   // Initialize I2C
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_Init(I2C1, &ConfigI2C);
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** }
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** #define uses_timeout \
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   uint32_t timer; \
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   uint8_t timeout; \
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** #define timeout(TIME, CONDITION) \
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   timer = millis(); \
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   timeout = 0; \
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   while(CONDITION) { \
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****     if(((uint32_t)(millis() - timer)) >= (TIME)) { \
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****       timeout = 1; \
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****       break; \
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****     } \
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   } \
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   if(timeout)
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** static uint8_t i2c_reset(uint8_t errorcode) {
+  26              		.loc 1 49 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+  31 0000 38B5     		push	{r3, r4, r5, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 16
+  34              		.cfi_offset 3, -16
+  35              		.cfi_offset 4, -12
+  36              		.cfi_offset 5, -8
+  37              		.cfi_offset 14, -4
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_AcknowledgeConfig(I2C1, ENABLE);
+  38              		.loc 1 50 0
+  39 0002 064C     		ldr	r4, .L2
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** static uint8_t i2c_reset(uint8_t errorcode) {
+  40              		.loc 1 49 0
+  41 0004 0546     		mov	r5, r0
+  42              		.loc 1 50 0
+  43 0006 0121     		movs	r1, #1
+  44 0008 2046     		mov	r0, r4
+  45              	.LVL1:
+  46 000a FFF7FEFF 		bl	I2C_AcknowledgeConfig
+  47              	.LVL2:
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_GenerateSTOP(I2C1, ENABLE);
+  48              		.loc 1 51 0
+  49 000e 2046     		mov	r0, r4
+  50 0010 0121     		movs	r1, #1
+  51 0012 FFF7FEFF 		bl	I2C_GenerateSTOP
+  52              	.LVL3:
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   return errorcode;
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** }
+  53              		.loc 1 53 0
+  54 0016 2846     		mov	r0, r5
+  55 0018 38BD     		pop	{r3, r4, r5, pc}
+  56              	.L3:
+  57 001a 00BF     		.align	2
+  58              	.L2:
+  59 001c 00540040 		.word	1073763328
+  60              		.cfi_endproc
+  61              	.LFE59:
+  63              		.section	.text.i2c_init,"ax",%progbits
+  64              		.align	1
+  65              		.global	i2c_init
+  66              		.thumb
+  67              		.thumb_func
+  69              	i2c_init:
+  70              	.LFB58:
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** void i2c_init(void) {    
+  71              		.loc 1 8 0
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 16
+  74              		@ frame_needed = 0, uses_anonymous_args = 0
+  75 0000 1FB5     		push	{r0, r1, r2, r3, r4, lr}
+  76              	.LCFI1:
+  77              		.cfi_def_cfa_offset 24
+  78              		.cfi_offset 0, -24
+  79              		.cfi_offset 1, -20
+  80              		.cfi_offset 2, -16
+  81              		.cfi_offset 3, -12
+  82              		.cfi_offset 4, -8
+  83              		.cfi_offset 14, -4
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+  84              		.loc 1 10 0
+  85 0002 0121     		movs	r1, #1
+  86 0004 4FF40010 		mov	r0, #2097152
+  87 0008 FFF7FEFF 		bl	RCC_APB1PeriphClockCmd
+  88              	.LVL4:
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_AHB1PeriphClockCmd(I2C_SDA->clock | I2C_SCL->clock, ENABLE);
+  89              		.loc 1 11 0
+  90 000c 174B     		ldr	r3, .L5
+  91 000e 1849     		ldr	r1, .L5+4
+  92 0010 D868     		ldr	r0, [r3, #12]
+  93 0012 CA68     		ldr	r2, [r1, #12]
+  94 0014 0121     		movs	r1, #1
+  95 0016 1043     		orrs	r0, r0, r2
+  96 0018 FFF7FEFF 		bl	RCC_AHB1PeriphClockCmd
+  97              	.LVL5:
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_Cmd(I2C1, ENABLE);
+  98              		.loc 1 18 0
+  99 001c 154C     		ldr	r4, .L5+8
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, ENABLE);
+ 100              		.loc 1 14 0
+ 101 001e 0121     		movs	r1, #1
+ 102 0020 4FF40010 		mov	r0, #2097152
+ 103 0024 FFF7FEFF 		bl	RCC_APB1PeriphResetCmd
+ 104              	.LVL6:
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, DISABLE);
+ 105              		.loc 1 15 0
+ 106 0028 0021     		movs	r1, #0
+ 107 002a 4FF40010 		mov	r0, #2097152
+ 108 002e FFF7FEFF 		bl	RCC_APB1PeriphResetCmd
+ 109              	.LVL7:
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_Cmd(I2C1, ENABLE);
+ 110              		.loc 1 18 0
+ 111 0032 2046     		mov	r0, r4
+ 112 0034 0121     		movs	r1, #1
+ 113 0036 FFF7FEFF 		bl	I2C_Cmd
+ 114              	.LVL8:
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_Mode                = I2C_Mode_I2C;
+ 115              		.loc 1 22 0
+ 116 003a 0020     		movs	r0, #0
+ 117 003c ADF80400 		strh	r0, [sp, #4]	@ movhi
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_ClockSpeed          = I2C_SPEED;
+ 118              		.loc 1 26 0
+ 119 0040 0D48     		ldr	r0, .L5+12
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_OwnAddress1         = 0xA0;
+ 120              		.loc 1 24 0
+ 121 0042 A021     		movs	r1, #160
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_DutyCycle           = I2C_DUTYCYCLE;
+ 122              		.loc 1 23 0
+ 123 0044 4BF6FF73 		movw	r3, #49151
+ 124 0048 ADF80630 		strh	r3, [sp, #6]	@ movhi
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_OwnAddress1         = 0xA0;
+ 125              		.loc 1 24 0
+ 126 004c ADF80810 		strh	r1, [sp, #8]	@ movhi
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_Ack                 = I2C_Ack_Enable;
+ 127              		.loc 1 25 0
+ 128 0050 4FF48062 		mov	r2, #1024
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_ClockSpeed          = I2C_SPEED;
+ 129              		.loc 1 26 0
+ 130 0054 0090     		str	r0, [sp, #0]
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+ 131              		.loc 1 27 0
+ 132 0056 4FF48043 		mov	r3, #16384
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_Init(I2C1, &ConfigI2C);
+ 133              		.loc 1 30 0
+ 134 005a 2046     		mov	r0, r4
+ 135 005c 6946     		mov	r1, sp
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_Ack                 = I2C_Ack_Enable;
+ 136              		.loc 1 25 0
+ 137 005e ADF80A20 		strh	r2, [sp, #10]	@ movhi
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   ConfigI2C.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+ 138              		.loc 1 27 0
+ 139 0062 ADF80C30 		strh	r3, [sp, #12]	@ movhi
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   I2C_Init(I2C1, &ConfigI2C);
+ 140              		.loc 1 30 0
+ 141 0066 FFF7FEFF 		bl	I2C_Init
+ 142              	.LVL9:
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** }
+ 143              		.loc 1 32 0
+ 144 006a 1FBD     		pop	{r0, r1, r2, r3, r4, pc}
+ 145              	.L6:
+ 146              		.align	2
+ 147              	.L5:
+ 148 006c 00000000 		.word	PIN_PB6
+ 149 0070 00000000 		.word	PIN_PB7
+ 150 0074 00540040 		.word	1073763328
+ 151 0078 A0860100 		.word	100000
+ 152              		.cfi_endproc
+ 153              	.LFE58:
+ 155              		.section	.text.i2c_write,"ax",%progbits
+ 156              		.align	1
+ 157              		.global	i2c_write
+ 158              		.thumb
+ 159              		.thumb_func
+ 161              	i2c_write:
+ 162              	.LFB60:
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** uint8_t i2c_write(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes) {
+ 163              		.loc 1 55 0
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 0
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167              	.LVL10:
+ 168 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 169              	.LCFI2:
+ 170              		.cfi_def_cfa_offset 24
+ 171              		.cfi_offset 4, -24
+ 172              		.cfi_offset 5, -20
+ 173              		.cfi_offset 6, -16
+ 174              		.cfi_offset 7, -12
+ 175              		.cfi_offset 8, -8
+ 176              		.cfi_offset 14, -4
+ 177              		.loc 1 55 0
+ 178 0004 0746     		mov	r7, r0
+ 179 0006 0D46     		mov	r5, r1
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   uses_timeout
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// START
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_GenerateSTART(I2C1, ENABLE); 
+ 180              		.loc 1 59 0
+ 181 0008 2E48     		ldr	r0, .L34
+ 182              	.LVL11:
+ 183 000a 0121     		movs	r1, #1
+ 184              	.LVL12:
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** uint8_t i2c_write(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes) {
+ 185              		.loc 1 55 0
+ 186 000c 1446     		mov	r4, r2
+ 187 000e 1E46     		mov	r6, r3
+ 188              		.loc 1 59 0
+ 189 0010 FFF7FEFF 		bl	I2C_GenerateSTART
+ 190              	.LVL13:
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT)) return i2c_reset(2);
+ 191              		.loc 1 60 0
+ 192 0014 FFF7FEFF 		bl	millis
+ 193              	.LVL14:
+ 194 0018 8046     		mov	r8, r0
+ 195              	.LVL15:
+ 196              	.L8:
+ 197              		.loc 1 60 0 is_stmt 0 discriminator 1
+ 198 001a 2A48     		ldr	r0, .L34
+ 199 001c 2A49     		ldr	r1, .L34+4
+ 200 001e FFF7FEFF 		bl	I2C_CheckEvent
+ 201              	.LVL16:
+ 202 0022 38B9     		cbnz	r0, .L30
+ 203              	.L10:
+ 204              		.loc 1 60 0 discriminator 4
+ 205 0024 FFF7FEFF 		bl	millis
+ 206              	.LVL17:
+ 207 0028 C8EB0003 		rsb	r3, r8, r0
+ 208 002c 632B     		cmp	r3, #99
+ 209 002e F4D9     		bls	.L8
+ 210              	.L9:
+ 211              	.LVL18:
+ 212              		.loc 1 60 0
+ 213 0030 0220     		movs	r0, #2
+ 214 0032 3CE0     		b	.L28
+ 215              	.LVL19:
+ 216              	.L30:
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// Address
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_Send7bitAddress(I2C1, device, I2C_Direction_Transmitter); 
+ 217              		.loc 1 63 0 is_stmt 1
+ 218 0034 3946     		mov	r1, r7
+ 219 0036 2348     		ldr	r0, .L34
+ 220 0038 0022     		movs	r2, #0
+ 221 003a FFF7FEFF 		bl	I2C_Send7bitAddress
+ 222              	.LVL20:
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED)) return i2c_reset(3
+ 223              		.loc 1 64 0
+ 224 003e FFF7FEFF 		bl	millis
+ 225              	.LVL21:
+ 226 0042 0746     		mov	r7, r0
+ 227              	.LVL22:
+ 228              	.L22:
+ 229              		.loc 1 64 0 is_stmt 0 discriminator 1
+ 230 0044 1F48     		ldr	r0, .L34
+ 231 0046 2149     		ldr	r1, .L34+8
+ 232 0048 FFF7FEFF 		bl	I2C_CheckEvent
+ 233              	.LVL23:
+ 234 004c 30B9     		cbnz	r0, .L31
+ 235              	.L13:
+ 236              		.loc 1 64 0 discriminator 4
+ 237 004e FFF7FEFF 		bl	millis
+ 238              	.LVL24:
+ 239 0052 C21B     		subs	r2, r0, r7
+ 240 0054 632A     		cmp	r2, #99
+ 241 0056 F5D9     		bls	.L22
+ 242              	.L12:
+ 243              	.LVL25:
+ 244              		.loc 1 64 0
+ 245 0058 0320     		movs	r0, #3
+ 246 005a 28E0     		b	.L28
+ 247              	.LVL26:
+ 248              	.L31:
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// Register
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_SendData(I2C1, reg); 
+ 249              		.loc 1 67 0 is_stmt 1
+ 250 005c 2946     		mov	r1, r5
+ 251 005e 1948     		ldr	r0, .L34
+ 252 0060 FFF7FEFF 		bl	I2C_SendData
+ 253              	.LVL27:
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) return i2c_reset(4);
+ 254              		.loc 1 68 0
+ 255 0064 FFF7FEFF 		bl	millis
+ 256              	.LVL28:
+ 257 0068 0546     		mov	r5, r0
+ 258              	.LVL29:
+ 259              	.L23:
+ 260              		.loc 1 68 0 is_stmt 0 discriminator 1
+ 261 006a 1648     		ldr	r0, .L34
+ 262 006c 1849     		ldr	r1, .L34+12
+ 263 006e FFF7FEFF 		bl	I2C_CheckEvent
+ 264              	.LVL30:
+ 265 0072 28B9     		cbnz	r0, .L32
+ 266              	.L16:
+ 267              		.loc 1 68 0 discriminator 4
+ 268 0074 FFF7FEFF 		bl	millis
+ 269              	.LVL31:
+ 270 0078 411B     		subs	r1, r0, r5
+ 271 007a 6329     		cmp	r1, #99
+ 272 007c F5D9     		bls	.L23
+ 273 007e 15E0     		b	.L19
+ 274              	.L32:
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** uint8_t i2c_write(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes) {
+ 275              		.loc 1 55 0 is_stmt 1
+ 276 0080 A619     		adds	r6, r4, r6
+ 277              	.LVL32:
+ 278              	.L17:
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// Data
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	while(bytes--) {
+ 279              		.loc 1 71 0 discriminator 1
+ 280 0082 B442     		cmp	r4, r6
+ 281 0084 17D0     		beq	.L33
+ 282              	.L21:
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   	I2C_SendData(I2C1, *(uint8_t*)buffer); 
+ 283              		.loc 1 72 0
+ 284 0086 0F48     		ldr	r0, .L34
+ 285 0088 14F8011B 		ldrb	r1, [r4], #1	@ zero_extendqisi2
+ 286              	.LVL33:
+ 287 008c FFF7FEFF 		bl	I2C_SendData
+ 288              	.LVL34:
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   	buffer = ((uint8_t*)buffer) + 1;
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) return i2c_reset(4);
+ 289              		.loc 1 74 0
+ 290 0090 FFF7FEFF 		bl	millis
+ 291              	.LVL35:
+ 292 0094 0546     		mov	r5, r0
+ 293              	.LVL36:
+ 294              	.L18:
+ 295              		.loc 1 74 0 is_stmt 0 discriminator 1
+ 296 0096 0B48     		ldr	r0, .L34
+ 297 0098 0D49     		ldr	r1, .L34+12
+ 298 009a FFF7FEFF 		bl	I2C_CheckEvent
+ 299              	.LVL37:
+ 300 009e 0028     		cmp	r0, #0
+ 301 00a0 EFD1     		bne	.L17
+ 302              	.L20:
+ 303              		.loc 1 74 0 discriminator 4
+ 304 00a2 FFF7FEFF 		bl	millis
+ 305              	.LVL38:
+ 306 00a6 401B     		subs	r0, r0, r5
+ 307 00a8 6328     		cmp	r0, #99
+ 308 00aa F4D9     		bls	.L18
+ 309              	.L19:
+ 310              	.LVL39:
+ 311              		.loc 1 74 0
+ 312 00ac 0420     		movs	r0, #4
+ 313              	.LVL40:
+ 314              	.L28:
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   }
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// STOP
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_GenerateSTOP(I2C1, ENABLE);
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	return 0;
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** }
+ 315              		.loc 1 81 0 is_stmt 1
+ 316 00ae BDE8F041 		pop	{r4, r5, r6, r7, r8, lr}
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) return i2c_reset(4);
+ 317              		.loc 1 74 0
+ 318 00b2 FFF7FEBF 		b	i2c_reset
+ 319              	.LVL41:
+ 320              	.L33:
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_GenerateSTOP(I2C1, ENABLE);
+ 321              		.loc 1 78 0
+ 322 00b6 0348     		ldr	r0, .L34
+ 323 00b8 0121     		movs	r1, #1
+ 324 00ba FFF7FEFF 		bl	I2C_GenerateSTOP
+ 325              	.LVL42:
+ 326              		.loc 1 81 0
+ 327 00be 0020     		movs	r0, #0
+ 328 00c0 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 329              	.L35:
+ 330              		.align	2
+ 331              	.L34:
+ 332 00c4 00540040 		.word	1073763328
+ 333 00c8 01000300 		.word	196609
+ 334 00cc 82000700 		.word	458882
+ 335 00d0 84000700 		.word	458884
+ 336              		.cfi_endproc
+ 337              	.LFE60:
+ 339              		.section	.text.i2c_read,"ax",%progbits
+ 340              		.align	1
+ 341              		.global	i2c_read
+ 342              		.thumb
+ 343              		.thumb_func
+ 345              	i2c_read:
+ 346              	.LFB61:
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** uint8_t i2c_read(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes) {
+ 347              		.loc 1 83 0
+ 348              		.cfi_startproc
+ 349              		@ args = 0, pretend = 0, frame = 0
+ 350              		@ frame_needed = 0, uses_anonymous_args = 0
+ 351              	.LVL43:
+ 352 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 353              	.LCFI3:
+ 354              		.cfi_def_cfa_offset 24
+ 355              		.cfi_offset 4, -24
+ 356              		.cfi_offset 5, -20
+ 357              		.cfi_offset 6, -16
+ 358              		.cfi_offset 7, -12
+ 359              		.cfi_offset 8, -8
+ 360              		.cfi_offset 14, -4
+ 361              		.loc 1 83 0
+ 362 0004 0646     		mov	r6, r0
+ 363 0006 0F46     		mov	r7, r1
+ 364 0008 1546     		mov	r5, r2
+ 365 000a 1C46     		mov	r4, r3
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   uses_timeout
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   // While the bus is busy
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY)) return 1;
+ 366              		.loc 1 87 0
+ 367 000c FFF7FEFF 		bl	millis
+ 368              	.LVL44:
+ 369 0010 8046     		mov	r8, r0
+ 370              	.LVL45:
+ 371              	.L37:
+ 372              		.loc 1 87 0 is_stmt 0 discriminator 1
+ 373 0012 5148     		ldr	r0, .L84
+ 374 0014 4FF40031 		mov	r1, #131072
+ 375 0018 FFF7FEFF 		bl	I2C_GetFlagStatus
+ 376              	.LVL46:
+ 377 001c 40B1     		cbz	r0, .L78
+ 378              	.L39:
+ 379              		.loc 1 87 0 discriminator 4
+ 380 001e FFF7FEFF 		bl	millis
+ 381              	.LVL47:
+ 382 0022 C8EB0002 		rsb	r2, r8, r0
+ 383 0026 632A     		cmp	r2, #99
+ 384 0028 F3D9     		bls	.L37
+ 385              	.L68:
+ 386              		.loc 1 87 0
+ 387 002a 0120     		movs	r0, #1
+ 388 002c BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 389              	.L78:
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	/// START
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_GenerateSTART(I2C1, ENABLE);
+ 390              		.loc 1 90 0 is_stmt 1
+ 391 0030 4948     		ldr	r0, .L84
+ 392 0032 0121     		movs	r1, #1
+ 393 0034 FFF7FEFF 		bl	I2C_GenerateSTART
+ 394              	.LVL48:
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT)) return i2c_reset(2);
+ 395              		.loc 1 91 0
+ 396 0038 FFF7FEFF 		bl	millis
+ 397              	.LVL49:
+ 398 003c 8046     		mov	r8, r0
+ 399              	.LVL50:
+ 400              	.L62:
+ 401              		.loc 1 91 0 is_stmt 0 discriminator 1
+ 402 003e 4648     		ldr	r0, .L84
+ 403 0040 4649     		ldr	r1, .L84+4
+ 404 0042 FFF7FEFF 		bl	I2C_CheckEvent
+ 405              	.LVL51:
+ 406 0046 38B9     		cbnz	r0, .L79
+ 407              	.L42:
+ 408              		.loc 1 91 0 discriminator 4
+ 409 0048 FFF7FEFF 		bl	millis
+ 410              	.LVL52:
+ 411 004c C8EB0001 		rsb	r1, r8, r0
+ 412 0050 6329     		cmp	r1, #99
+ 413 0052 F4D9     		bls	.L62
+ 414              	.L41:
+ 415              	.LVL53:
+ 416              		.loc 1 91 0
+ 417 0054 0220     		movs	r0, #2
+ 418 0056 7BE0     		b	.L77
+ 419              	.LVL54:
+ 420              	.L79:
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// Address:WRITE
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_Send7bitAddress(I2C1, device, I2C_Direction_Transmitter); 
+ 421              		.loc 1 94 0 is_stmt 1
+ 422 0058 3F48     		ldr	r0, .L84
+ 423 005a 3146     		mov	r1, r6
+ 424 005c 0022     		movs	r2, #0
+ 425 005e FFF7FEFF 		bl	I2C_Send7bitAddress
+ 426              	.LVL55:
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED)) return i2c_reset(3
+ 427              		.loc 1 95 0
+ 428 0062 FFF7FEFF 		bl	millis
+ 429              	.LVL56:
+ 430 0066 8046     		mov	r8, r0
+ 431              	.LVL57:
+ 432              	.L63:
+ 433              		.loc 1 95 0 is_stmt 0 discriminator 1
+ 434 0068 3B48     		ldr	r0, .L84
+ 435 006a 3D49     		ldr	r1, .L84+8
+ 436 006c FFF7FEFF 		bl	I2C_CheckEvent
+ 437              	.LVL58:
+ 438 0070 38B9     		cbnz	r0, .L80
+ 439              	.L45:
+ 440              		.loc 1 95 0 discriminator 4
+ 441 0072 FFF7FEFF 		bl	millis
+ 442              	.LVL59:
+ 443 0076 C8EB0000 		rsb	r0, r8, r0
+ 444 007a 6328     		cmp	r0, #99
+ 445 007c F4D9     		bls	.L63
+ 446              	.L44:
+ 447              	.LVL60:
+ 448              		.loc 1 95 0
+ 449 007e 0320     		movs	r0, #3
+ 450 0080 66E0     		b	.L77
+ 451              	.LVL61:
+ 452              	.L80:
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_Cmd(I2C1, ENABLE); // ???
+ 453              		.loc 1 97 0 is_stmt 1
+ 454 0082 3548     		ldr	r0, .L84
+ 455 0084 0121     		movs	r1, #1
+ 456 0086 FFF7FEFF 		bl	I2C_Cmd
+ 457              	.LVL62:
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// Register
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_SendData(I2C1, reg);
+ 458              		.loc 1 100 0
+ 459 008a 3946     		mov	r1, r7
+ 460 008c 3248     		ldr	r0, .L84
+ 461 008e FFF7FEFF 		bl	I2C_SendData
+ 462              	.LVL63:
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) return i2c_reset(4);
+ 463              		.loc 1 101 0
+ 464 0092 FFF7FEFF 		bl	millis
+ 465              	.LVL64:
+ 466 0096 0746     		mov	r7, r0
+ 467              	.LVL65:
+ 468              	.L64:
+ 469              		.loc 1 101 0 is_stmt 0 discriminator 1
+ 470 0098 2F48     		ldr	r0, .L84
+ 471 009a 3249     		ldr	r1, .L84+12
+ 472 009c FFF7FEFF 		bl	I2C_CheckEvent
+ 473              	.LVL66:
+ 474 00a0 30B9     		cbnz	r0, .L81
+ 475              	.L48:
+ 476              		.loc 1 101 0 discriminator 4
+ 477 00a2 FFF7FEFF 		bl	millis
+ 478              	.LVL67:
+ 479 00a6 C31B     		subs	r3, r0, r7
+ 480 00a8 632B     		cmp	r3, #99
+ 481 00aa F5D9     		bls	.L64
+ 482              	.L47:
+ 483              	.LVL68:
+ 484              		.loc 1 101 0
+ 485 00ac 0420     		movs	r0, #4
+ 486 00ae 4FE0     		b	.L77
+ 487              	.LVL69:
+ 488              	.L81:
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// REPEATED-START
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_GenerateSTART(I2C1, ENABLE);
+ 489              		.loc 1 104 0 is_stmt 1
+ 490 00b0 2948     		ldr	r0, .L84
+ 491 00b2 0121     		movs	r1, #1
+ 492 00b4 FFF7FEFF 		bl	I2C_GenerateSTART
+ 493              	.LVL70:
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT)) return i2c_reset(5);
+ 494              		.loc 1 105 0
+ 495 00b8 FFF7FEFF 		bl	millis
+ 496              	.LVL71:
+ 497 00bc 0746     		mov	r7, r0
+ 498              	.LVL72:
+ 499              	.L65:
+ 500              		.loc 1 105 0 is_stmt 0 discriminator 1
+ 501 00be 2648     		ldr	r0, .L84
+ 502 00c0 2649     		ldr	r1, .L84+4
+ 503 00c2 FFF7FEFF 		bl	I2C_CheckEvent
+ 504              	.LVL73:
+ 505 00c6 30B9     		cbnz	r0, .L82
+ 506              	.L51:
+ 507              		.loc 1 105 0 discriminator 4
+ 508 00c8 FFF7FEFF 		bl	millis
+ 509              	.LVL74:
+ 510 00cc C21B     		subs	r2, r0, r7
+ 511 00ce 632A     		cmp	r2, #99
+ 512 00d0 F5D9     		bls	.L65
+ 513              	.L50:
+ 514              	.LVL75:
+ 515              		.loc 1 105 0
+ 516 00d2 0520     		movs	r0, #5
+ 517 00d4 3CE0     		b	.L77
+ 518              	.LVL76:
+ 519              	.L82:
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****   // Address:READ
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_Send7bitAddress(I2C1, device, I2C_Direction_Receiver);
+ 520              		.loc 1 108 0 is_stmt 1
+ 521 00d6 3146     		mov	r1, r6
+ 522 00d8 1F48     		ldr	r0, .L84
+ 523 00da 0122     		movs	r2, #1
+ 524 00dc FFF7FEFF 		bl	I2C_Send7bitAddress
+ 525              	.LVL77:
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED)) return i2c_reset(6);
+ 526              		.loc 1 109 0
+ 527 00e0 FFF7FEFF 		bl	millis
+ 528              	.LVL78:
+ 529 00e4 0646     		mov	r6, r0
+ 530              	.LVL79:
+ 531              	.L66:
+ 532              		.loc 1 109 0 is_stmt 0 discriminator 1
+ 533 00e6 1C48     		ldr	r0, .L84
+ 534 00e8 1F49     		ldr	r1, .L84+16
+ 535 00ea FFF7FEFF 		bl	I2C_CheckEvent
+ 536              	.LVL80:
+ 537 00ee E0B9     		cbnz	r0, .L74
+ 538              	.L54:
+ 539              		.loc 1 109 0 discriminator 4
+ 540 00f0 FFF7FEFF 		bl	millis
+ 541              	.LVL81:
+ 542 00f4 811B     		subs	r1, r0, r6
+ 543 00f6 6329     		cmp	r1, #99
+ 544 00f8 F5D9     		bls	.L66
+ 545              	.L53:
+ 546              	.LVL82:
+ 547              		.loc 1 109 0
+ 548 00fa 0620     		movs	r0, #6
+ 549 00fc 28E0     		b	.L77
+ 550              	.LVL83:
+ 551              	.L61:
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// Data
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	while(bytes--) {
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		if(!bytes) {
+ 552              		.loc 1 113 0 is_stmt 1
+ 553 00fe 3CB9     		cbnz	r4, .L56
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		  // Disable ACK
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		  I2C_AcknowledgeConfig(I2C1, DISABLE);
+ 554              		.loc 1 115 0
+ 555 0100 1548     		ldr	r0, .L84
+ 556 0102 2146     		mov	r1, r4
+ 557 0104 FFF7FEFF 		bl	I2C_AcknowledgeConfig
+ 558              	.LVL84:
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		  I2C_GenerateSTOP(I2C1, ENABLE);
+ 559              		.loc 1 116 0
+ 560 0108 1348     		ldr	r0, .L84
+ 561 010a 0121     		movs	r1, #1
+ 562 010c FFF7FEFF 		bl	I2C_GenerateSTOP
+ 563              	.LVL85:
+ 564              	.L56:
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		}
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED)) return i2c_reset(7);
+ 565              		.loc 1 118 0
+ 566 0110 FFF7FEFF 		bl	millis
+ 567              	.LVL86:
+ 568 0114 0646     		mov	r6, r0
+ 569              	.LVL87:
+ 570              	.L57:
+ 571              		.loc 1 118 0 is_stmt 0 discriminator 1
+ 572 0116 1048     		ldr	r0, .L84
+ 573 0118 1449     		ldr	r1, .L84+20
+ 574 011a FFF7FEFF 		bl	I2C_CheckEvent
+ 575              	.LVL88:
+ 576 011e 48B1     		cbz	r0, .L59
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****     *((uint8_t*)buffer) = I2C_ReceiveData(I2C1);
+ 577              		.loc 1 119 0 is_stmt 1
+ 578 0120 0D48     		ldr	r0, .L84
+ 579 0122 FFF7FEFF 		bl	I2C_ReceiveData
+ 580              	.LVL89:
+ 581 0126 05F8010C 		strb	r0, [r5, #-1]
+ 582              	.L74:
+ 583 012a 013C     		subs	r4, r4, #1
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** uint8_t i2c_read(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes) {
+ 584              		.loc 1 83 0
+ 585 012c 0135     		adds	r5, r5, #1
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	while(bytes--) {
+ 586              		.loc 1 112 0
+ 587 012e 631C     		adds	r3, r4, #1
+ 588 0130 E5D1     		bne	.L61
+ 589 0132 06E0     		b	.L83
+ 590              	.L59:
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED)) return i2c_reset(7);
+ 591              		.loc 1 118 0 discriminator 4
+ 592 0134 FFF7FEFF 		bl	millis
+ 593              	.LVL90:
+ 594 0138 801B     		subs	r0, r0, r6
+ 595 013a 6328     		cmp	r0, #99
+ 596 013c EBD9     		bls	.L57
+ 597              	.L58:
+ 598              	.LVL91:
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED)) return i2c_reset(7);
+ 599              		.loc 1 118 0 is_stmt 0
+ 600 013e 0720     		movs	r0, #7
+ 601 0140 06E0     		b	.L77
+ 602              	.LVL92:
+ 603              	.L83:
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c ****     buffer = ((uint8_t*)buffer) + 1;
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	}
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	// Enable ACK
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	I2C_AcknowledgeConfig(I2C1, ENABLE);
+ 604              		.loc 1 124 0 is_stmt 1
+ 605 0142 0548     		ldr	r0, .L84
+ 606 0144 0121     		movs	r1, #1
+ 607 0146 FFF7FEFF 		bl	I2C_AcknowledgeConfig
+ 608              	.LVL93:
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 	return 0;
+ 609              		.loc 1 126 0
+ 610 014a 0020     		movs	r0, #0
+ 611 014c BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 612              	.LVL94:
+ 613              	.L77:
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** }...
+ 614              		.loc 1 128 0
+ 615 0150 BDE8F041 		pop	{r4, r5, r6, r7, r8, lr}
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\driver_i2c.c **** 		timeout(100, !I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED)) return i2c_reset(7);
+ 616              		.loc 1 118 0
+ 617 0154 FFF7FEBF 		b	i2c_reset
+ 618              	.LVL95:
+ 619              	.L85:
+ 620              		.align	2
+ 621              	.L84:
+ 622 0158 00540040 		.word	1073763328
+ 623 015c 01000300 		.word	196609
+ 624 0160 82000700 		.word	458882
+ 625 0164 84000700 		.word	458884
+ 626 0168 02000300 		.word	196610
+ 627 016c 40000300 		.word	196672
+ 628              		.cfi_endproc
+ 629              	.LFE61:
+ 631              		.text
+ 632              	.Letext0:
+ 633              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 634              		.file 3 "src/libstm32f2/stm32f2xx.h"
+ 635              		.file 4 "src/libstm32f2/stm32f2xx_gpio.h"
+ 636              		.file 5 "src/libstm32f2/stm32f2xx_i2c.h"
+ 637              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h"
+ 638              		.file 7 "src/libstm32f2/core_cm3.h"
+ 639              		.file 8 "src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 driver_i2c.c
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:19     .text.i2c_reset:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:23     .text.i2c_reset:00000000 i2c_reset
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:59     .text.i2c_reset:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:64     .text.i2c_init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:69     .text.i2c_init:00000000 i2c_init
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:148    .text.i2c_init:0000006c $d
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:156    .text.i2c_write:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:161    .text.i2c_write:00000000 i2c_write
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:332    .text.i2c_write:000000c4 $d
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:340    .text.i2c_read:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:345    .text.i2c_read:00000000 i2c_read
+C:\Users\STINA\AppData\Local\Temp\ccwcgY0H.s:622    .text.i2c_read:00000158 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+I2C_AcknowledgeConfig
+I2C_GenerateSTOP
+RCC_APB1PeriphClockCmd
+RCC_AHB1PeriphClockCmd
+RCC_APB1PeriphResetCmd
+I2C_Cmd
+I2C_Init
+PIN_PB6
+PIN_PB7
+I2C_GenerateSTART
+millis
+I2C_CheckEvent
+I2C_Send7bitAddress
+I2C_SendData
+I2C_GetFlagStatus
+I2C_ReceiveData

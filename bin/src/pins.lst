@@ -1,0 +1,1335 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"pins.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.pinMode,"ax",%progbits
+  19              		.align	1
+  20              		.global	pinMode
+  21              		.thumb
+  22              		.thumb_func
+  24              	pinMode:
+  25              	.LFB58:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Davey Taylor, Arduino Verkstad AB
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Platform configuration and Arduino internals
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** #include <stm32f2xx_gpio.h>
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** #include <stm32f2xx_rcc.h>
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** #include "pins.h"
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Common pin modes
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** //             NAME              MODE           SPEED             OUTPUT TYPE    PULL-UP/DOWN      
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_in       = {GPIO_Mode_IN,  GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_NOPULL,
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_in_pd    = {GPIO_Mode_IN,  GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_DOWN,  
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_in_pu    = {GPIO_Mode_IN,  GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_UP,    
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_ain      = {GPIO_Mode_AIN, GPIO_Speed_50MHz, GPIO_OType_PP, GPIO_PuPd_NOPULL,
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_out_od   = {GPIO_Mode_OUT, GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_NOPULL,
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_out_od_s = {GPIO_Mode_OUT, GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_NOPULL,
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_out_od_r = {GPIO_Mode_OUT, GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_NOPULL,
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_out      = {GPIO_Mode_OUT, GPIO_Speed_50MHz, GPIO_OType_PP, GPIO_PuPd_NOPULL,
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_out_s    = {GPIO_Mode_OUT, GPIO_Speed_50MHz, GPIO_OType_PP, GPIO_PuPd_NOPULL,
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_out_r    = {GPIO_Mode_OUT, GPIO_Speed_50MHz, GPIO_OType_PP, GPIO_PuPd_NOPULL,
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_af_spi1  = {GPIO_Mode_AF,  GPIO_Speed_50MHz, GPIO_OType_PP, GPIO_PuPd_NOPULL,
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_af_i2c1  = {GPIO_Mode_AF,  GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_NOPULL,
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinCfg_t pincfg_af_mco1  = {GPIO_Mode_AF,  GPIO_Speed_50MHz, GPIO_OType_PP, GPIO_PuPd_NOPULL,
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Pins and their default modes
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** //             NAME        PORT   PIN(MASK)    PIN(NUMBER)       AHB CLOCK             DEFAULT MODE
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA0  = {GPIOA, GPIO_Pin_0,  GPIO_PinSource0,  RCC_AHB1Periph_GPIOA, INPUT};     
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA1  = {GPIOA, GPIO_Pin_1,  GPIO_PinSource1,  RCC_AHB1Periph_GPIOA, OUTPUT_LOW};
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA2  = {GPIOA, GPIO_Pin_2,  GPIO_PinSource2,  RCC_AHB1Periph_GPIOA, ANALOG_INPUT
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA4  = {GPIOA, GPIO_Pin_4,  GPIO_PinSource4,  RCC_AHB1Periph_GPIOA, OUTPUT_HIGH}
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA5  = {GPIOA, GPIO_Pin_5,  GPIO_PinSource5,  RCC_AHB1Periph_GPIOA, AF_SPI1};   
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA7  = {GPIOA, GPIO_Pin_7,  GPIO_PinSource7,  RCC_AHB1Periph_GPIOA, AF_SPI1};   
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA8  = {GPIOA, GPIO_Pin_8,  GPIO_PinSource8,  RCC_AHB1Periph_GPIOA, AF_MCO1};   
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA9  = {GPIOA, GPIO_Pin_9,  GPIO_PinSource9,  RCC_AHB1Periph_GPIOA, INPUT_PULLDO
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA11 = {GPIOA, GPIO_Pin_11, GPIO_PinSource11, RCC_AHB1Periph_GPIOA, INPUT};     
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA12 = {GPIOA, GPIO_Pin_12, GPIO_PinSource12, RCC_AHB1Periph_GPIOA, INPUT};     
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PA15 = {GPIOA, GPIO_Pin_15, GPIO_PinSource15, RCC_AHB1Periph_GPIOA, OUTPUT_OD_LO
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB0  = {GPIOB, GPIO_Pin_0,  GPIO_PinSource0,  RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB1  = {GPIOB, GPIO_Pin_1,  GPIO_PinSource1,  RCC_AHB1Periph_GPIOB, OUTPUT_OD_LO
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB2  = {GPIOB, GPIO_Pin_2,  GPIO_PinSource2,  RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB3  = {GPIOB, GPIO_Pin_3,  GPIO_PinSource3,  RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB4  = {GPIOB, GPIO_Pin_4,  GPIO_PinSource4,  RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB5  = {GPIOB, GPIO_Pin_5,  GPIO_PinSource5,  RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB6  = {GPIOB, GPIO_Pin_6,  GPIO_PinSource6,  RCC_AHB1Periph_GPIOB, AF_I2C1};   
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB7  = {GPIOB, GPIO_Pin_7,  GPIO_PinSource7,  RCC_AHB1Periph_GPIOB, AF_I2C1};   
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB8  = {GPIOB, GPIO_Pin_8,  GPIO_PinSource8,  RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB9  = {GPIOB, GPIO_Pin_9,  GPIO_PinSource9,  RCC_AHB1Periph_GPIOB, INPUT_PULLDO
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB10 = {GPIOB, GPIO_Pin_10, GPIO_PinSource10, RCC_AHB1Periph_GPIOB, INPUT};     
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB11 = {GPIOB, GPIO_Pin_11, GPIO_PinSource11, RCC_AHB1Periph_GPIOB, INPUT};     
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB12 = {GPIOB, GPIO_Pin_12, GPIO_PinSource12, RCC_AHB1Periph_GPIOB, OUTPUT_HIGH}
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB13 = {GPIOB, GPIO_Pin_13, GPIO_PinSource13, RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB14 = {GPIOB, GPIO_Pin_14, GPIO_PinSource14, RCC_AHB1Periph_GPIOB, INPUT_PULLDO
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PB15 = {GPIOB, GPIO_Pin_15, GPIO_PinSource15, RCC_AHB1Periph_GPIOB, OUTPUT_LOW};
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC0  = {GPIOC, GPIO_Pin_0,  GPIO_PinSource0,  RCC_AHB1Periph_GPIOC, OUTPUT_LOW};
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC1  = {GPIOC, GPIO_Pin_1,  GPIO_PinSource1,  RCC_AHB1Periph_GPIOC, OUTPUT_LOW};
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC3  = {GPIOC, GPIO_Pin_3,  GPIO_PinSource3,  RCC_AHB1Periph_GPIOC, OUTPUT_OD_HI
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC4  = {GPIOC, GPIO_Pin_4,  GPIO_PinSource4,  RCC_AHB1Periph_GPIOC, ANALOG_INPUT
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC6  = {GPIOC, GPIO_Pin_6,  GPIO_PinSource6,  RCC_AHB1Periph_GPIOC, INPUT};     
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC7  = {GPIOC, GPIO_Pin_7,  GPIO_PinSource7,  RCC_AHB1Periph_GPIOC, OUTPUT_OD_HI
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC9  = {GPIOC, GPIO_Pin_9,  GPIO_PinSource9,  RCC_AHB1Periph_GPIOC, OUTPUT_LOW};
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC10 = {GPIOC, GPIO_Pin_10, GPIO_PinSource10, RCC_AHB1Periph_GPIOC, OUTPUT_LOW};
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC11 = {GPIOC, GPIO_Pin_11, GPIO_PinSource11, RCC_AHB1Periph_GPIOC, INPUT_PULLDO
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC12 = {GPIOC, GPIO_Pin_12, GPIO_PinSource12, RCC_AHB1Periph_GPIOC, OUTPUT_LOW};
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** const PinDef_t PIN_PC13 = {GPIOC, GPIO_Pin_13, GPIO_PinSource13, RCC_AHB1Periph_GPIOC, INPUT};     
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Changes the "mode"/configuration of a pin
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void pinMode(const PinDef_t *pin, const PinCfg_t *cfg) {
+  27              		.loc 1 67 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 37B5     		push	{r0, r1, r2, r4, r5, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 24
+  35              		.cfi_offset 0, -24
+  36              		.cfi_offset 1, -20
+  37              		.cfi_offset 2, -16
+  38              		.cfi_offset 4, -12
+  39              		.cfi_offset 5, -8
+  40              		.cfi_offset 14, -4
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   GPIO_InitTypeDef ConfigPin;
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_Pin   = pin->pin;
+  41              		.loc 1 69 0
+  42 0002 4368     		ldr	r3, [r0, #4]
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void pinMode(const PinDef_t *pin, const PinCfg_t *cfg) {
+  43              		.loc 1 67 0
+  44 0004 0C46     		mov	r4, r1
+  45 0006 0546     		mov	r5, r0
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_Mode  = cfg->mode;
+  46              		.loc 1 70 0
+  47 0008 0878     		ldrb	r0, [r1, #0]	@ zero_extendqisi2
+  48              	.LVL1:
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_Speed = cfg->speed;
+  49              		.loc 1 71 0
+  50 000a 4978     		ldrb	r1, [r1, #1]	@ zero_extendqisi2
+  51              	.LVL2:
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_Pin   = pin->pin;
+  52              		.loc 1 69 0
+  53 000c 0093     		str	r3, [sp, #0]
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_OType = cfg->type;
+  54              		.loc 1 72 0
+  55 000e A278     		ldrb	r2, [r4, #2]	@ zero_extendqisi2
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_PuPd  = cfg->pupd;
+  56              		.loc 1 73 0
+  57 0010 E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_Mode  = cfg->mode;
+  58              		.loc 1 70 0
+  59 0012 8DF80400 		strb	r0, [sp, #4]
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_Speed = cfg->speed;
+  60              		.loc 1 71 0
+  61 0016 8DF80510 		strb	r1, [sp, #5]
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   GPIO_Init(pin->port, &ConfigPin);
+  62              		.loc 1 74 0
+  63 001a 2868     		ldr	r0, [r5, #0]
+  64 001c 6946     		mov	r1, sp
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_OType = cfg->type;
+  65              		.loc 1 72 0
+  66 001e 8DF80620 		strb	r2, [sp, #6]
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ConfigPin.GPIO_PuPd  = cfg->pupd;
+  67              		.loc 1 73 0
+  68 0022 8DF80730 		strb	r3, [sp, #7]
+  69              		.loc 1 74 0
+  70 0026 FFF7FEFF 		bl	GPIO_Init
+  71              	.LVL3:
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   if(cfg->mode == GPIO_Mode_AF) {
+  72              		.loc 1 75 0
+  73 002a 2078     		ldrb	r0, [r4, #0]	@ zero_extendqisi2
+  74 002c 0228     		cmp	r0, #2
+  75 002e 05D1     		bne	.L2
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     GPIO_PinAFConfig(pin->port,  pin->source, cfg->af);
+  76              		.loc 1 76 0
+  77 0030 2868     		ldr	r0, [r5, #0]
+  78 0032 297A     		ldrb	r1, [r5, #8]	@ zero_extendqisi2
+  79 0034 2279     		ldrb	r2, [r4, #4]	@ zero_extendqisi2
+  80 0036 FFF7FEFF 		bl	GPIO_PinAFConfig
+  81              	.LVL4:
+  82 003a 0AE0     		b	.L1
+  83              	.L2:
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   } else if(cfg->set != NO_CHANGE) {
+  84              		.loc 1 77 0
+  85 003c B4F90620 		ldrsh	r2, [r4, #6]
+  86 0040 531C     		adds	r3, r2, #1
+  87 0042 06D0     		beq	.L1
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     GPIO_WriteBit(pin->port, pin->pin, cfg->set ? Bit_SET : Bit_RESET);
+  88              		.loc 1 78 0
+  89 0044 0032     		adds	r2, r2, #0
+  90 0046 2868     		ldr	r0, [r5, #0]
+  91 0048 A988     		ldrh	r1, [r5, #4]
+  92 004a 18BF     		it	ne
+  93 004c 0122     		movne	r2, #1
+  94 004e FFF7FEFF 		bl	GPIO_WriteBit
+  95              	.LVL5:
+  96              	.L1:
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   }
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+  97              		.loc 1 80 0
+  98 0052 3EBD     		pop	{r1, r2, r3, r4, r5, pc}
+  99              		.cfi_endproc
+ 100              	.LFE58:
+ 102              		.section	.text.initializePins,"ax",%progbits
+ 103              		.align	1
+ 104              		.global	initializePins
+ 105              		.thumb
+ 106              		.thumb_func
+ 108              	initializePins:
+ 109              	.LFB59:
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Initializes all pins to their default configuration
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void initializePins() {
+ 110              		.loc 1 83 0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 152
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114 0000 10B5     		push	{r4, lr}
+ 115              	.LCFI1:
+ 116              		.cfi_def_cfa_offset 8
+ 117              		.cfi_offset 4, -8
+ 118              		.cfi_offset 14, -4
+ 119 0002 A6B0     		sub	sp, sp, #152
+ 120              	.LCFI2:
+ 121              		.cfi_def_cfa_offset 160
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   const PinDef_t * pins[38] = {
+ 122              		.loc 1 84 0
+ 123 0004 6846     		mov	r0, sp
+ 124 0006 0749     		ldr	r1, .L11
+ 125 0008 9822     		movs	r2, #152
+ 126 000a FFF7FEFF 		bl	memcpy
+ 127              	.LVL6:
+ 128 000e 0024     		movs	r4, #0
+ 129              	.LVL7:
+ 130              	.L9:
+ 131              	.LBB6:
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     &PIN_PA0, &PIN_PA1, &PIN_PA2, &PIN_PA4, &PIN_PA5, &PIN_PA7, &PIN_PA8, &PIN_PA9,
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     &PIN_PA11, &PIN_PA12, &PIN_PA15, &PIN_PB0, &PIN_PB1, &PIN_PB2, &PIN_PB3,
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     &PIN_PB4, &PIN_PB5, &PIN_PB6, &PIN_PB7, &PIN_PB8, &PIN_PB9, &PIN_PB10,
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     &PIN_PB11, &PIN_PB12, &PIN_PB13, &PIN_PB14, &PIN_PB15, &PIN_PC0,
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     &PIN_PC1, &PIN_PC3, &PIN_PC4, &PIN_PC6, &PIN_PC7, &PIN_PC9,
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     &PIN_PC10, &PIN_PC11, &PIN_PC12, &PIN_PC13
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   };
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   for(uint8_t n = 0; n < 38; n++) {
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****     pinMode(pins[n], pins[n]->cfg);
+ 132              		.loc 1 93 0 discriminator 2
+ 133 0010 5DF80400 		ldr	r0, [sp, r4]
+ 134 0014 0434     		adds	r4, r4, #4
+ 135 0016 0169     		ldr	r1, [r0, #16]
+ 136 0018 FFF7FEFF 		bl	pinMode
+ 137              	.LVL8:
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   for(uint8_t n = 0; n < 38; n++) {
+ 138              		.loc 1 92 0 discriminator 2
+ 139 001c 982C     		cmp	r4, #152
+ 140 001e F7D1     		bne	.L9
+ 141              	.LBE6:
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   }
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+ 142              		.loc 1 95 0
+ 143 0020 26B0     		add	sp, sp, #152
+ 144 0022 10BD     		pop	{r4, pc}
+ 145              	.L12:
+ 146              		.align	2
+ 147              	.L11:
+ 148 0024 00000000 		.word	.LANCHOR0
+ 149              		.cfi_endproc
+ 150              	.LFE59:
+ 152              		.section	.text.digitalWrite,"ax",%progbits
+ 153              		.align	1
+ 154              		.global	digitalWrite
+ 155              		.thumb
+ 156              		.thumb_func
+ 158              	digitalWrite:
+ 159              	.LFB60:
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Writes digital output
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void digitalWrite(const PinDef_t *pin, uint8_t value) {
+ 160              		.loc 1 98 0
+ 161              		.cfi_startproc
+ 162              		@ args = 0, pretend = 0, frame = 0
+ 163              		@ frame_needed = 0, uses_anonymous_args = 0
+ 164              		@ link register save eliminated.
+ 165              	.LVL9:
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   GPIO_WriteBit(pin->port, pin->pin, value == HIGH ? Bit_SET : Bit_RESET);
+ 166              		.loc 1 99 0
+ 167 0000 0139     		subs	r1, r1, #1
+ 168              	.LVL10:
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void digitalWrite(const PinDef_t *pin, uint8_t value) {
+ 169              		.loc 1 98 0
+ 170 0002 0346     		mov	r3, r0
+ 171              		.loc 1 99 0
+ 172 0004 4A42     		rsbs	r2, r1, #0
+ 173 0006 4A41     		adcs	r2, r2, r1
+ 174 0008 0068     		ldr	r0, [r0, #0]
+ 175              	.LVL11:
+ 176 000a 9988     		ldrh	r1, [r3, #4]
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+ 177              		.loc 1 100 0
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   GPIO_WriteBit(pin->port, pin->pin, value == HIGH ? Bit_SET : Bit_RESET);
+ 178              		.loc 1 99 0
+ 179 000c FFF7FEBF 		b	GPIO_WriteBit
+ 180              	.LVL12:
+ 181              		.cfi_endproc
+ 182              	.LFE60:
+ 184              		.section	.text.digitalRead,"ax",%progbits
+ 185              		.align	1
+ 186              		.global	digitalRead
+ 187              		.thumb
+ 188              		.thumb_func
+ 190              	digitalRead:
+ 191              	.LFB61:
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Reads digital input
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** uint8_t digitalRead(const PinDef_t *pin) {
+ 192              		.loc 1 103 0
+ 193              		.cfi_startproc
+ 194              		@ args = 0, pretend = 0, frame = 0
+ 195              		@ frame_needed = 0, uses_anonymous_args = 0
+ 196              	.LVL13:
+ 197 0000 08B5     		push	{r3, lr}
+ 198              	.LCFI3:
+ 199              		.cfi_def_cfa_offset 8
+ 200              		.cfi_offset 3, -8
+ 201              		.cfi_offset 14, -4
+ 202              		.loc 1 103 0
+ 203 0002 0346     		mov	r3, r0
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   return GPIO_ReadInputDataBit(pin->port, pin->pin) ? HIGH : LOW;
+ 204              		.loc 1 104 0
+ 205 0004 9988     		ldrh	r1, [r3, #4]
+ 206 0006 0068     		ldr	r0, [r0, #0]
+ 207              	.LVL14:
+ 208 0008 FFF7FEFF 		bl	GPIO_ReadInputDataBit
+ 209              	.LVL15:
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+ 210              		.loc 1 105 0
+ 211 000c 0030     		adds	r0, r0, #0
+ 212 000e 18BF     		it	ne
+ 213 0010 0120     		movne	r0, #1
+ 214 0012 08BD     		pop	{r3, pc}
+ 215              		.cfi_endproc
+ 216              	.LFE61:
+ 218              		.section	.text.millis,"ax",%progbits
+ 219              		.align	1
+ 220              		.global	millis
+ 221              		.thumb
+ 222              		.thumb_func
+ 224              	millis:
+ 225              	.LFB62:
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** static volatile uint32_t ticks;
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** volatile uint16_t int_ctr;
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** uint32_t millis() {
+ 226              		.loc 1 110 0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 0
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 230              		@ link register save eliminated.
+ 231              	.LBB7:
+ 232              	.LBB8:
+ 233              		.file 2 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Davey Taylor, Arduino Verkstad AB
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Platform configuration and Arduino internals
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #ifndef _PINS_H_
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define _PINS_H_
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #include "stm32f2xx_gpio.h"
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #include <stdint.h>
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #include <stdbool.h>
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define HIGH 1
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define LOW 0
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** #define NO_CHANGE -1
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** typedef struct {
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOMode_TypeDef  mode;  // operating mode @ref GPIOMode_TypeDef
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOSpeed_TypeDef speed; // speed @ref GPIOSpeed_TypeDef
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOOType_TypeDef type;  // output type @ref GPIOOType_TypeDef
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIOPuPd_TypeDef  pupd;  // pull-up/down @ref GPIOPuPd_TypeDef
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint8_t af;              // alternate function
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   int16_t set;             // pin setting
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** } PinCfg_t;
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** typedef struct {
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   GPIO_TypeDef *port; // Pin port
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint32_t pin;       // Pin mask @ref GPIO_pins_define
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint8_t  source;    // Pin number @ref GPIO_Pin_sources 
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   uint32_t clock;     // clock source
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   const PinCfg_t *cfg;      // Default configuration
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** } PinDef_t;
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t INPUT;
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t INPUT_PULLDOWN;
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t INPUT_PULLUP;
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t ANALOG_INPUT;
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t OUTPUT;
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t OUTPUT_HIGH;
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t OUTPUT_LOW;
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t AF_SPI1;
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinCfg_t AF_MCO1;
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA0 ;
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA1 ;
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA2 ;
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA4 ;
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA5 ;
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA7 ;
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA8 ;
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA9 ;
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA11;
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA12;
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PA15;
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB0 ;
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB1 ;
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB2 ;
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB3 ;
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB4 ;
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB5 ;
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB6 ;
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB7 ;
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB8 ;
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB9 ;
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB10;
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB11;
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB12;
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB13;
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB14;
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PB15; 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC0 ;
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC1 ;
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC3 ;
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC4 ;
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC6 ;
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC7 ;
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC9 ;
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC10;
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC11;
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC12; 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern const PinDef_t PIN_PC13;
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** void pinMode(const PinDef_t *pin, const PinCfg_t *cfg);
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** void initializePins(void);
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** void digitalWrite(const PinDef_t *pin, uint8_t value);
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** uint8_t digitalRead(const PinDef_t *pin);
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** extern volatile uint16_t int_ctr;
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Nested interrupt enable
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void cli(void) {
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   __ASM volatile ("cpsid i");
+ 234              		.loc 2 89 0
+ 235              	@ 89 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h" 1
+ 236 0000 72B6     		cpsid i
+ 237              	@ 0 "" 2
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   int_ctr++;
+ 238              		.loc 2 90 0
+ 239              		.thumb
+ 240 0002 074B     		ldr	r3, .L17
+ 241 0004 1A88     		ldrh	r2, [r3, #0]
+ 242 0006 501C     		adds	r0, r2, #1
+ 243 0008 81B2     		uxth	r1, r0
+ 244              	.LBE8:
+ 245              	.LBE7:
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   uint32_t copy;
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   cli();
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   copy = ticks;
+ 246              		.loc 1 113 0
+ 247 000a 064A     		ldr	r2, .L17+4
+ 248              	.LBB10:
+ 249              	.LBB9:
+ 250              		.loc 2 90 0
+ 251 000c 1980     		strh	r1, [r3, #0]	@ movhi
+ 252              	.LBE9:
+ 253              	.LBE10:
+ 254              		.loc 1 113 0
+ 255 000e 1068     		ldr	r0, [r2, #0]
+ 256              	.LVL16:
+ 257              	.LBB11:
+ 258              	.LBB12:
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** }
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** // Nested interrupt disable
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void sei(void) {
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   __ASM volatile ("cpsid i");
+ 259              		.loc 2 94 0
+ 260              	@ 94 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h" 1
+ 261 0010 72B6     		cpsid i
+ 262              	@ 0 "" 2
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.h ****   if(!--int_ctr) {__ASM volatile ("cpsie i");}
+ 263              		.loc 2 95 0
+ 264              		.thumb
+ 265 0012 1988     		ldrh	r1, [r3, #0]
+ 266 0014 4A1E     		subs	r2, r1, #1
+ 267 0016 91B2     		uxth	r1, r2
+ 268 0018 1980     		strh	r1, [r3, #0]	@ movhi
+ 269 001a 01B9     		cbnz	r1, .L16
+ 270              	@ 95 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/pins.h" 1
+ 271 001c 62B6     		cpsie i
+ 272              	@ 0 "" 2
+ 273              		.thumb
+ 274              	.L16:
+ 275              	.LBE12:
+ 276              	.LBE11:
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   sei();
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   return copy;
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+ 277              		.loc 1 116 0
+ 278 001e 7047     		bx	lr
+ 279              	.L18:
+ 280              		.align	2
+ 281              	.L17:
+ 282 0020 00000000 		.word	int_ctr
+ 283 0024 00000000 		.word	.LANCHOR1
+ 284              		.cfi_endproc
+ 285              	.LFE62:
+ 287              		.section	.text.delay_loop,"ax",%progbits
+ 288              		.align	1
+ 289              		.global	delay_loop
+ 290              		.thumb
+ 291              		.thumb_func
+ 293              	delay_loop:
+ 294              	.LFB63:
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Soft loop, cpu speed dependent
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void delay_loop(uint32_t volatile n) {
+ 295              		.loc 1 119 0
+ 296              		.cfi_startproc
+ 297              		@ args = 0, pretend = 0, frame = 8
+ 298              		@ frame_needed = 0, uses_anonymous_args = 0
+ 299              		@ link register save eliminated.
+ 300              	.LVL17:
+ 301 0000 82B0     		sub	sp, sp, #8
+ 302              	.LCFI4:
+ 303              		.cfi_def_cfa_offset 8
+ 304 0002 0190     		str	r0, [sp, #4]
+ 305              	.LVL18:
+ 306              	.L20:
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   while(n--);  
+ 307              		.loc 1 120 0 discriminator 1
+ 308 0004 019B     		ldr	r3, [sp, #4]
+ 309 0006 5A1E     		subs	r2, r3, #1
+ 310              	.LVL19:
+ 311 0008 0192     		str	r2, [sp, #4]
+ 312              	.LVL20:
+ 313 000a 002B     		cmp	r3, #0
+ 314 000c FAD1     		bne	.L20
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+ 315              		.loc 1 121 0
+ 316 000e 02B0     		add	sp, sp, #8
+ 317 0010 7047     		bx	lr
+ 318              		.cfi_endproc
+ 319              	.LFE63:
+ 321              		.section	.text.delay,"ax",%progbits
+ 322              		.align	1
+ 323              		.global	delay
+ 324              		.thumb
+ 325              		.thumb_func
+ 327              	delay:
+ 328              	.LFB64:
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** // Delay
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void delay(uint32_t us) {
+ 329              		.loc 1 124 0
+ 330              		.cfi_startproc
+ 331              		@ args = 0, pretend = 0, frame = 0
+ 332              		@ frame_needed = 0, uses_anonymous_args = 0
+ 333              	.LVL21:
+ 334 0000 38B5     		push	{r3, r4, r5, lr}
+ 335              	.LCFI5:
+ 336              		.cfi_def_cfa_offset 16
+ 337              		.cfi_offset 3, -16
+ 338              		.cfi_offset 4, -12
+ 339              		.cfi_offset 5, -8
+ 340              		.cfi_offset 14, -4
+ 341              		.loc 1 124 0
+ 342 0002 0446     		mov	r4, r0
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   uint32_t start = millis();
+ 343              		.loc 1 125 0
+ 344 0004 FFF7FEFF 		bl	millis
+ 345              	.LVL22:
+ 346 0008 0546     		mov	r5, r0
+ 347              	.LVL23:
+ 348              	.L23:
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   while((millis() - start) < us);
+ 349              		.loc 1 126 0 discriminator 1
+ 350 000a FFF7FEFF 		bl	millis
+ 351              	.LVL24:
+ 352 000e 401B     		subs	r0, r0, r5
+ 353 0010 A042     		cmp	r0, r4
+ 354 0012 FAD3     		bcc	.L23
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+ 355              		.loc 1 127 0
+ 356 0014 38BD     		pop	{r3, r4, r5, pc}
+ 357              		.cfi_endproc
+ 358              	.LFE64:
+ 360              		.section	.text.SysTick_Handler,"ax",%progbits
+ 361              		.align	1
+ 362              		.global	SysTick_Handler
+ 363              		.thumb
+ 364              		.thumb_func
+ 366              	SysTick_Handler:
+ 367              	.LFB65:
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** 
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** __attribute__ ((interrupt ("IRQ")))
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void SysTick_Handler(void) {
+ 368              		.loc 1 130 0
+ 369              		.cfi_startproc
+ 370              		@ Stack Align: May be called with mis-aligned SP.
+ 371              		@ args = 0, pretend = 0, frame = 0
+ 372              		@ frame_needed = 0, uses_anonymous_args = 0
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c ****   ticks++;
+ 373              		.loc 1 131 0
+ 374 0000 064B     		ldr	r3, .L26
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void SysTick_Handler(void) {
+ 375              		.loc 1 130 0
+ 376 0002 6846     		mov	r0, sp
+ 377              		.cfi_register 13, 0
+ 378 0004 20F00701 		bic	r1, r0, #7
+ 379              		.loc 1 131 0
+ 380 0008 1A68     		ldr	r2, [r3, #0]
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** void SysTick_Handler(void) {
+ 381              		.loc 1 130 0
+ 382 000a 8D46     		mov	sp, r1
+ 383 000c 01B5     		push	{r0, lr}
+ 384              	.LCFI6:
+ 385              		.cfi_def_cfa_offset 8
+ 386              		.cfi_offset 13, -8
+ 387              		.cfi_offset 14, -4
+ 388              		.loc 1 131 0
+ 389 000e 501C     		adds	r0, r2, #1
+ 390 0010 1860     		str	r0, [r3, #0]
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src\pins.c **** }
+ 391              		.loc 1 132 0
+ 392 0012 BDE80140 		pop	{r0, lr}
+ 393 0016 8546     		mov	sp, r0
+ 394 0018 7047     		bx	lr
+ 395              	.L27:
+ 396 001a 00BF     		.align	2
+ 397              	.L26:
+ 398 001c 00000000 		.word	.LANCHOR1
+ 399              		.cfi_endproc
+ 400              	.LFE65:
+ 402              		.comm	int_ctr,2,2
+ 403              		.global	PIN_PC13
+ 404              		.global	PIN_PC12
+ 405              		.global	PIN_PC11
+ 406              		.global	PIN_PC10
+ 407              		.global	PIN_PC9
+ 408              		.global	PIN_PC7
+ 409              		.global	PIN_PC6
+ 410              		.global	PIN_PC4
+ 411              		.global	PIN_PC3
+ 412              		.global	PIN_PC1
+ 413              		.global	PIN_PC0
+ 414              		.global	PIN_PB15
+ 415              		.global	PIN_PB14
+ 416              		.global	PIN_PB13
+ 417              		.global	PIN_PB12
+ 418              		.global	PIN_PB11
+ 419              		.global	PIN_PB10
+ 420              		.global	PIN_PB9
+ 421              		.global	PIN_PB8
+ 422              		.global	PIN_PB7
+ 423              		.global	PIN_PB6
+ 424              		.global	PIN_PB5
+ 425              		.global	PIN_PB4
+ 426              		.global	PIN_PB3
+ 427              		.global	PIN_PB2
+ 428              		.global	PIN_PB1
+ 429              		.global	PIN_PB0
+ 430              		.global	PIN_PA15
+ 431              		.global	PIN_PA12
+ 432              		.global	PIN_PA11
+ 433              		.global	PIN_PA9
+ 434              		.global	PIN_PA8
+ 435              		.global	PIN_PA7
+ 436              		.global	PIN_PA5
+ 437              		.global	PIN_PA4
+ 438              		.global	PIN_PA2
+ 439              		.global	PIN_PA1
+ 440              		.global	PIN_PA0
+ 441              		.global	pincfg_af_mco1
+ 442              		.global	pincfg_af_i2c1
+ 443              		.global	pincfg_af_spi1
+ 444              		.global	pincfg_out_r
+ 445              		.global	pincfg_out_s
+ 446              		.global	pincfg_out
+ 447              		.global	pincfg_out_od_r
+ 448              		.global	pincfg_out_od_s
+ 449              		.global	pincfg_out_od
+ 450              		.global	pincfg_ain
+ 451              		.global	pincfg_in_pu
+ 452              		.global	pincfg_in_pd
+ 453              		.global	pincfg_in
+ 454              		.section	.rodata
+ 455              		.align	2
+ 456              		.set	.LANCHOR0,. + 0
+ 457              	.LC0:
+ 458 0000 00000000 		.word	PIN_PA0
+ 459 0004 00000000 		.word	PIN_PA1
+ 460 0008 00000000 		.word	PIN_PA2
+ 461 000c 00000000 		.word	PIN_PA4
+ 462 0010 00000000 		.word	PIN_PA5
+ 463 0014 00000000 		.word	PIN_PA7
+ 464 0018 00000000 		.word	PIN_PA8
+ 465 001c 00000000 		.word	PIN_PA9
+ 466 0020 00000000 		.word	PIN_PA11
+ 467 0024 00000000 		.word	PIN_PA12
+ 468 0028 00000000 		.word	PIN_PA15
+ 469 002c 00000000 		.word	PIN_PB0
+ 470 0030 00000000 		.word	PIN_PB1
+ 471 0034 00000000 		.word	PIN_PB2
+ 472 0038 00000000 		.word	PIN_PB3
+ 473 003c 00000000 		.word	PIN_PB4
+ 474 0040 00000000 		.word	PIN_PB5
+ 475 0044 00000000 		.word	PIN_PB6
+ 476 0048 00000000 		.word	PIN_PB7
+ 477 004c 00000000 		.word	PIN_PB8
+ 478 0050 00000000 		.word	PIN_PB9
+ 479 0054 00000000 		.word	PIN_PB10
+ 480 0058 00000000 		.word	PIN_PB11
+ 481 005c 00000000 		.word	PIN_PB12
+ 482 0060 00000000 		.word	PIN_PB13
+ 483 0064 00000000 		.word	PIN_PB14
+ 484 0068 00000000 		.word	PIN_PB15
+ 485 006c 00000000 		.word	PIN_PC0
+ 486 0070 00000000 		.word	PIN_PC1
+ 487 0074 00000000 		.word	PIN_PC3
+ 488 0078 00000000 		.word	PIN_PC4
+ 489 007c 00000000 		.word	PIN_PC6
+ 490 0080 00000000 		.word	PIN_PC7
+ 491 0084 00000000 		.word	PIN_PC9
+ 492 0088 00000000 		.word	PIN_PC10
+ 493 008c 00000000 		.word	PIN_PC11
+ 494 0090 00000000 		.word	PIN_PC12
+ 495 0094 00000000 		.word	PIN_PC13
+ 496              		.section	.rodata.PIN_PC12,"a",%progbits
+ 497              		.align	2
+ 500              	PIN_PC12:
+ 501 0000 00080240 		.word	1073874944
+ 502 0004 00100000 		.word	4096
+ 503 0008 0C       		.byte	12
+ 504 0009 000000   		.space	3
+ 505 000c 04000000 		.word	4
+ 506 0010 00000000 		.word	pincfg_out_r
+ 507              		.section	.rodata.PIN_PC13,"a",%progbits
+ 508              		.align	2
+ 511              	PIN_PC13:
+ 512 0000 00080240 		.word	1073874944
+ 513 0004 00200000 		.word	8192
+ 514 0008 0D       		.byte	13
+ 515 0009 000000   		.space	3
+ 516 000c 04000000 		.word	4
+ 517 0010 00000000 		.word	pincfg_in
+ 518              		.section	.rodata.pincfg_af_i2c1,"a",%progbits
+ 519              		.align	1
+ 522              	pincfg_af_i2c1:
+ 523 0000 02       		.byte	2
+ 524 0001 02       		.byte	2
+ 525 0002 01       		.byte	1
+ 526 0003 00       		.byte	0
+ 527 0004 04       		.byte	4
+ 528 0005 00       		.space	1
+ 529 0006 0000     		.short	0
+ 530              		.section	.rodata.PIN_PA0,"a",%progbits
+ 531              		.align	2
+ 534              	PIN_PA0:
+ 535 0000 00000240 		.word	1073872896
+ 536 0004 01000000 		.word	1
+ 537 0008 00       		.byte	0
+ 538 0009 000000   		.space	3
+ 539 000c 01000000 		.word	1
+ 540 0010 00000000 		.word	pincfg_in
+ 541              		.section	.rodata.PIN_PA1,"a",%progbits
+ 542              		.align	2
+ 545              	PIN_PA1:
+ 546 0000 00000240 		.word	1073872896
+ 547 0004 02000000 		.word	2
+ 548 0008 01       		.byte	1
+ 549 0009 000000   		.space	3
+ 550 000c 01000000 		.word	1
+ 551 0010 00000000 		.word	pincfg_out_r
+ 552              		.section	.rodata.PIN_PA2,"a",%progbits
+ 553              		.align	2
+ 556              	PIN_PA2:
+ 557 0000 00000240 		.word	1073872896
+ 558 0004 04000000 		.word	4
+ 559 0008 02       		.byte	2
+ 560 0009 000000   		.space	3
+ 561 000c 01000000 		.word	1
+ 562 0010 00000000 		.word	pincfg_ain
+ 563              		.section	.rodata.PIN_PA4,"a",%progbits
+ 564              		.align	2
+ 567              	PIN_PA4:
+ 568 0000 00000240 		.word	1073872896
+ 569 0004 10000000 		.word	16
+ 570 0008 04       		.byte	4
+ 571 0009 000000   		.space	3
+ 572 000c 01000000 		.word	1
+ 573 0010 00000000 		.word	pincfg_out_s
+ 574              		.section	.rodata.PIN_PA5,"a",%progbits
+ 575              		.align	2
+ 578              	PIN_PA5:
+ 579 0000 00000240 		.word	1073872896
+ 580 0004 20000000 		.word	32
+ 581 0008 05       		.byte	5
+ 582 0009 000000   		.space	3
+ 583 000c 01000000 		.word	1
+ 584 0010 00000000 		.word	pincfg_af_spi1
+ 585              		.section	.rodata.PIN_PC0,"a",%progbits
+ 586              		.align	2
+ 589              	PIN_PC0:
+ 590 0000 00080240 		.word	1073874944
+ 591 0004 01000000 		.word	1
+ 592 0008 00       		.byte	0
+ 593 0009 000000   		.space	3
+ 594 000c 04000000 		.word	4
+ 595 0010 00000000 		.word	pincfg_out_r
+ 596              		.section	.rodata.PIN_PA8,"a",%progbits
+ 597              		.align	2
+ 600              	PIN_PA8:
+ 601 0000 00000240 		.word	1073872896
+ 602 0004 00010000 		.word	256
+ 603 0008 08       		.byte	8
+ 604 0009 000000   		.space	3
+ 605 000c 01000000 		.word	1
+ 606 0010 00000000 		.word	pincfg_af_mco1
+ 607              		.section	.rodata.pincfg_out_r,"a",%progbits
+ 608              		.align	1
+ 611              	pincfg_out_r:
+ 612 0000 01       		.byte	1
+ 613 0001 02       		.byte	2
+ 614 0002 00       		.byte	0
+ 615 0003 00       		.byte	0
+ 616 0004 00       		.byte	0
+ 617 0005 00       		.space	1
+ 618 0006 0000     		.short	0
+ 619              		.section	.rodata.pincfg_out_s,"a",%progbits
+ 620              		.align	1
+ 623              	pincfg_out_s:
+ 624 0000 01       		.byte	1
+ 625 0001 02       		.byte	2
+ 626 0002 00       		.byte	0
+ 627 0003 00       		.byte	0
+ 628 0004 00       		.byte	0
+ 629 0005 00       		.space	1
+ 630 0006 0100     		.short	1
+ 631              		.section	.rodata.PIN_PC4,"a",%progbits
+ 632              		.align	2
+ 635              	PIN_PC4:
+ 636 0000 00080240 		.word	1073874944
+ 637 0004 10000000 		.word	16
+ 638 0008 04       		.byte	4
+ 639 0009 000000   		.space	3
+ 640 000c 04000000 		.word	4
+ 641 0010 00000000 		.word	pincfg_ain
+ 642              		.section	.rodata.pincfg_af_mco1,"a",%progbits
+ 643              		.align	1
+ 646              	pincfg_af_mco1:
+ 647 0000 02       		.byte	2
+ 648 0001 02       		.byte	2
+ 649 0002 00       		.byte	0
+ 650 0003 00       		.byte	0
+ 651 0004 00       		.byte	0
+ 652 0005 00       		.space	1
+ 653 0006 FFFF     		.short	-1
+ 654              		.section	.rodata.PIN_PC6,"a",%progbits
+ 655              		.align	2
+ 658              	PIN_PC6:
+ 659 0000 00080240 		.word	1073874944
+ 660 0004 40000000 		.word	64
+ 661 0008 06       		.byte	6
+ 662 0009 000000   		.space	3
+ 663 000c 04000000 		.word	4
+ 664 0010 00000000 		.word	pincfg_in
+ 665              		.section	.rodata.PIN_PC7,"a",%progbits
+ 666              		.align	2
+ 669              	PIN_PC7:
+ 670 0000 00080240 		.word	1073874944
+ 671 0004 80000000 		.word	128
+ 672 0008 07       		.byte	7
+ 673 0009 000000   		.space	3
+ 674 000c 04000000 		.word	4
+ 675 0010 00000000 		.word	pincfg_out_od_s
+ 676              		.section	.rodata.PIN_PC9,"a",%progbits
+ 677              		.align	2
+ 680              	PIN_PC9:
+ 681 0000 00080240 		.word	1073874944
+ 682 0004 00020000 		.word	512
+ 683 0008 09       		.byte	9
+ 684 0009 000000   		.space	3
+ 685 000c 04000000 		.word	4
+ 686 0010 00000000 		.word	pincfg_out_r
+ 687              		.section	.bss.ticks,"aw",%nobits
+ 688              		.align	2
+ 689              		.set	.LANCHOR1,. + 0
+ 692              	ticks:
+ 693 0000 00000000 		.space	4
+ 694              		.section	.rodata.PIN_PA11,"a",%progbits
+ 695              		.align	2
+ 698              	PIN_PA11:
+ 699 0000 00000240 		.word	1073872896
+ 700 0004 00080000 		.word	2048
+ 701 0008 0B       		.byte	11
+ 702 0009 000000   		.space	3
+ 703 000c 01000000 		.word	1
+ 704 0010 00000000 		.word	pincfg_in
+ 705              		.section	.rodata.PIN_PA12,"a",%progbits
+ 706              		.align	2
+ 709              	PIN_PA12:
+ 710 0000 00000240 		.word	1073872896
+ 711 0004 00100000 		.word	4096
+ 712 0008 0C       		.byte	12
+ 713 0009 000000   		.space	3
+ 714 000c 01000000 		.word	1
+ 715 0010 00000000 		.word	pincfg_in
+ 716              		.section	.rodata.PIN_PA15,"a",%progbits
+ 717              		.align	2
+ 720              	PIN_PA15:
+ 721 0000 00000240 		.word	1073872896
+ 722 0004 00800000 		.word	32768
+ 723 0008 0F       		.byte	15
+ 724 0009 000000   		.space	3
+ 725 000c 01000000 		.word	1
+ 726 0010 00000000 		.word	pincfg_out_od_r
+ 727              		.section	.rodata.pincfg_out,"a",%progbits
+ 728              		.align	1
+ 731              	pincfg_out:
+ 732 0000 01       		.byte	1
+ 733 0001 02       		.byte	2
+ 734 0002 00       		.byte	0
+ 735 0003 00       		.byte	0
+ 736 0004 00       		.byte	0
+ 737 0005 00       		.space	1
+ 738 0006 FFFF     		.short	-1
+ 739              		.section	.rodata.PIN_PB10,"a",%progbits
+ 740              		.align	2
+ 743              	PIN_PB10:
+ 744 0000 00040240 		.word	1073873920
+ 745 0004 00040000 		.word	1024
+ 746 0008 0A       		.byte	10
+ 747 0009 000000   		.space	3
+ 748 000c 02000000 		.word	2
+ 749 0010 00000000 		.word	pincfg_in
+ 750              		.section	.rodata.PIN_PB11,"a",%progbits
+ 751              		.align	2
+ 754              	PIN_PB11:
+ 755 0000 00040240 		.word	1073873920
+ 756 0004 00080000 		.word	2048
+ 757 0008 0B       		.byte	11
+ 758 0009 000000   		.space	3
+ 759 000c 02000000 		.word	2
+ 760 0010 00000000 		.word	pincfg_in
+ 761              		.section	.rodata.PIN_PB13,"a",%progbits
+ 762              		.align	2
+ 765              	PIN_PB13:
+ 766 0000 00040240 		.word	1073873920
+ 767 0004 00200000 		.word	8192
+ 768 0008 0D       		.byte	13
+ 769 0009 000000   		.space	3
+ 770 000c 02000000 		.word	2
+ 771 0010 00000000 		.word	pincfg_out_r
+ 772              		.section	.rodata.PIN_PB14,"a",%progbits
+ 773              		.align	2
+ 776              	PIN_PB14:
+ 777 0000 00040240 		.word	1073873920
+ 778 0004 00400000 		.word	16384
+ 779 0008 0E       		.byte	14
+ 780 0009 000000   		.space	3
+ 781 000c 02000000 		.word	2
+ 782 0010 00000000 		.word	pincfg_in_pd
+ 783              		.section	.rodata.PIN_PB15,"a",%progbits
+ 784              		.align	2
+ 787              	PIN_PB15:
+ 788 0000 00040240 		.word	1073873920
+ 789 0004 00800000 		.word	32768
+ 790 0008 0F       		.byte	15
+ 791 0009 000000   		.space	3
+ 792 000c 02000000 		.word	2
+ 793 0010 00000000 		.word	pincfg_out_r
+ 794              		.section	.rodata.PIN_PB0,"a",%progbits
+ 795              		.align	2
+ 798              	PIN_PB0:
+ 799 0000 00040240 		.word	1073873920
+ 800 0004 01000000 		.word	1
+ 801 0008 00       		.byte	0
+ 802 0009 000000   		.space	3
+ 803 000c 02000000 		.word	2
+ 804 0010 00000000 		.word	pincfg_out_r
+ 805              		.section	.rodata.PIN_PB1,"a",%progbits
+ 806              		.align	2
+ 809              	PIN_PB1:
+ 810 0000 00040240 		.word	1073873920
+ 811 0004 02000000 		.word	2
+ 812 0008 01       		.byte	1
+ 813 0009 000000   		.space	3
+ 814 000c 02000000 		.word	2
+ 815 0010 00000000 		.word	pincfg_out_od_r
+ 816              		.section	.rodata.PIN_PB2,"a",%progbits
+ 817              		.align	2
+ 820              	PIN_PB2:
+ 821 0000 00040240 		.word	1073873920
+ 822 0004 04000000 		.word	4
+ 823 0008 02       		.byte	2
+ 824 0009 000000   		.space	3
+ 825 000c 02000000 		.word	2
+ 826 0010 00000000 		.word	pincfg_out_r
+ 827              		.section	.rodata.PIN_PB3,"a",%progbits
+ 828              		.align	2
+ 831              	PIN_PB3:
+ 832 0000 00040240 		.word	1073873920
+ 833 0004 08000000 		.word	8
+ 834 0008 03       		.byte	3
+ 835 0009 000000   		.space	3
+ 836 000c 02000000 		.word	2
+ 837 0010 00000000 		.word	pincfg_out_r
+ 838              		.section	.rodata.PIN_PB4,"a",%progbits
+ 839              		.align	2
+ 842              	PIN_PB4:
+ 843 0000 00040240 		.word	1073873920
+ 844 0004 10000000 		.word	16
+ 845 0008 04       		.byte	4
+ 846 0009 000000   		.space	3
+ 847 000c 02000000 		.word	2
+ 848 0010 00000000 		.word	pincfg_out_r
+ 849              		.section	.rodata.PIN_PB5,"a",%progbits
+ 850              		.align	2
+ 853              	PIN_PB5:
+ 854 0000 00040240 		.word	1073873920
+ 855 0004 20000000 		.word	32
+ 856 0008 05       		.byte	5
+ 857 0009 000000   		.space	3
+ 858 000c 02000000 		.word	2
+ 859 0010 00000000 		.word	pincfg_out_r
+ 860              		.section	.rodata.PIN_PB12,"a",%progbits
+ 861              		.align	2
+ 864              	PIN_PB12:
+ 865 0000 00040240 		.word	1073873920
+ 866 0004 00100000 		.word	4096
+ 867 0008 0C       		.byte	12
+ 868 0009 000000   		.space	3
+ 869 000c 02000000 		.word	2
+ 870 0010 00000000 		.word	pincfg_out_s
+ 871              		.section	.rodata.PIN_PB7,"a",%progbits
+ 872              		.align	2
+ 875              	PIN_PB7:
+ 876 0000 00040240 		.word	1073873920
+ 877 0004 80000000 		.word	128
+ 878 0008 07       		.byte	7
+ 879 0009 000000   		.space	3
+ 880 000c 02000000 		.word	2
+ 881 0010 00000000 		.word	pincfg_af_i2c1
+ 882              		.section	.rodata.PIN_PB8,"a",%progbits
+ 883              		.align	2
+ 886              	PIN_PB8:
+ 887 0000 00040240 		.word	1073873920
+ 888 0004 00010000 		.word	256
+ 889 0008 08       		.byte	8
+ 890 0009 000000   		.space	3
+ 891 000c 02000000 		.word	2
+ 892 0010 00000000 		.word	pincfg_out_r
+ 893              		.section	.rodata.PIN_PB9,"a",%progbits
+ 894              		.align	2
+ 897              	PIN_PB9:
+ 898 0000 00040240 		.word	1073873920
+ 899 0004 00020000 		.word	512
+ 900 0008 09       		.byte	9
+ 901 0009 000000   		.space	3
+ 902 000c 02000000 		.word	2
+ 903 0010 00000000 		.word	pincfg_in_pd
+ 904              		.section	.rodata.pincfg_af_spi1,"a",%progbits
+ 905              		.align	1
+ 908              	pincfg_af_spi1:
+ 909 0000 02       		.byte	2
+ 910 0001 02       		.byte	2
+ 911 0002 00       		.byte	0
+ 912 0003 00       		.byte	0
+ 913 0004 05       		.byte	5
+ 914 0005 00       		.space	1
+ 915 0006 0000     		.short	0
+ 916              		.section	.rodata.PIN_PC1,"a",%progbits
+ 917              		.align	2
+ 920              	PIN_PC1:
+ 921 0000 00080240 		.word	1073874944
+ 922 0004 02000000 		.word	2
+ 923 0008 01       		.byte	1
+ 924 0009 000000   		.space	3
+ 925 000c 04000000 		.word	4
+ 926 0010 00000000 		.word	pincfg_out_r
+ 927              		.section	.rodata.pincfg_out_od_r,"a",%progbits
+ 928              		.align	1
+ 931              	pincfg_out_od_r:
+ 932 0000 01       		.byte	1
+ 933 0001 02       		.byte	2
+ 934 0002 01       		.byte	1
+ 935 0003 00       		.byte	0
+ 936 0004 00       		.byte	0
+ 937 0005 00       		.space	1
+ 938 0006 0000     		.short	0
+ 939              		.section	.rodata.pincfg_in_pd,"a",%progbits
+ 940              		.align	1
+ 943              	pincfg_in_pd:
+ 944 0000 00       		.byte	0
+ 945 0001 02       		.byte	2
+ 946 0002 01       		.byte	1
+ 947 0003 02       		.byte	2
+ 948 0004 00       		.byte	0
+ 949 0005 00       		.space	1
+ 950 0006 FFFF     		.short	-1
+ 951              		.section	.rodata.pincfg_in,"a",%progbits
+ 952              		.align	1
+ 955              	pincfg_in:
+ 956 0000 00       		.byte	0
+ 957 0001 02       		.byte	2
+ 958 0002 01       		.byte	1
+ 959 0003 00       		.byte	0
+ 960 0004 00       		.byte	0
+ 961 0005 00       		.space	1
+ 962 0006 FFFF     		.short	-1
+ 963              		.section	.rodata.pincfg_out_od,"a",%progbits
+ 964              		.align	1
+ 967              	pincfg_out_od:
+ 968 0000 01       		.byte	1
+ 969 0001 02       		.byte	2
+ 970 0002 01       		.byte	1
+ 971 0003 00       		.byte	0
+ 972 0004 00       		.byte	0
+ 973 0005 00       		.space	1
+ 974 0006 FFFF     		.short	-1
+ 975              		.section	.rodata.PIN_PC11,"a",%progbits
+ 976              		.align	2
+ 979              	PIN_PC11:
+ 980 0000 00080240 		.word	1073874944
+ 981 0004 00080000 		.word	2048
+ 982 0008 0B       		.byte	11
+ 983 0009 000000   		.space	3
+ 984 000c 04000000 		.word	4
+ 985 0010 00000000 		.word	pincfg_in_pd
+ 986              		.section	.rodata.PIN_PA7,"a",%progbits
+ 987              		.align	2
+ 990              	PIN_PA7:
+ 991 0000 00000240 		.word	1073872896
+ 992 0004 80000000 		.word	128
+ 993 0008 07       		.byte	7
+ 994 0009 000000   		.space	3
+ 995 000c 01000000 		.word	1
+ 996 0010 00000000 		.word	pincfg_af_spi1
+ 997              		.section	.rodata.pincfg_in_pu,"a",%progbits
+ 998              		.align	1
+ 1001              	pincfg_in_pu:
+ 1002 0000 00       		.byte	0
+ 1003 0001 02       		.byte	2
+ 1004 0002 01       		.byte	1
+ 1005 0003 01       		.byte	1
+ 1006 0004 00       		.byte	0
+ 1007 0005 00       		.space	1
+ 1008 0006 FFFF     		.short	-1
+ 1009              		.section	.rodata.pincfg_ain,"a",%progbits
+ 1010              		.align	1
+ 1013              	pincfg_ain:
+ 1014 0000 03       		.byte	3
+ 1015 0001 02       		.byte	2
+ 1016 0002 00       		.byte	0
+ 1017 0003 00       		.byte	0
+ 1018 0004 00       		.byte	0
+ 1019 0005 00       		.space	1
+ 1020 0006 FFFF     		.short	-1
+ 1021              		.section	.rodata.PIN_PA9,"a",%progbits
+ 1022              		.align	2
+ 1025              	PIN_PA9:
+ 1026 0000 00000240 		.word	1073872896
+ 1027 0004 00020000 		.word	512
+ 1028 0008 09       		.byte	9
+ 1029 0009 000000   		.space	3
+ 1030 000c 01000000 		.word	1
+ 1031 0010 00000000 		.word	pincfg_in_pd
+ 1032              		.section	.rodata.pincfg_out_od_s,"a",%progbits
+ 1033              		.align	1
+ 1036              	pincfg_out_od_s:
+ 1037 0000 01       		.byte	1
+ 1038 0001 02       		.byte	2
+ 1039 0002 01       		.byte	1
+ 1040 0003 00       		.byte	0
+ 1041 0004 00       		.byte	0
+ 1042 0005 00       		.space	1
+ 1043 0006 0100     		.short	1
+ 1044              		.section	.rodata.PIN_PB6,"a",%progbits
+ 1045              		.align	2
+ 1048              	PIN_PB6:
+ 1049 0000 00040240 		.word	1073873920
+ 1050 0004 40000000 		.word	64
+ 1051 0008 06       		.byte	6
+ 1052 0009 000000   		.space	3
+ 1053 000c 02000000 		.word	2
+ 1054 0010 00000000 		.word	pincfg_af_i2c1
+ 1055              		.section	.rodata.PIN_PC3,"a",%progbits
+ 1056              		.align	2
+ 1059              	PIN_PC3:
+ 1060 0000 00080240 		.word	1073874944
+ 1061 0004 08000000 		.word	8
+ 1062 0008 03       		.byte	3
+ 1063 0009 000000   		.space	3
+ 1064 000c 04000000 		.word	4
+ 1065 0010 00000000 		.word	pincfg_out_od_s
+ 1066              		.section	.rodata.PIN_PC10,"a",%progbits
+ 1067              		.align	2
+ 1070              	PIN_PC10:
+ 1071 0000 00080240 		.word	1073874944
+ 1072 0004 00040000 		.word	1024
+ 1073 0008 0A       		.byte	10
+ 1074 0009 000000   		.space	3
+ 1075 000c 04000000 		.word	4
+ 1076 0010 00000000 		.word	pincfg_out_r
+ 1077              		.text
+ 1078              	.Letext0:
+ 1079              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 1080              		.file 4 "src/libstm32f2/stm32f2xx.h"
+ 1081              		.file 5 "src/libstm32f2/stm32f2xx_gpio.h"
+ 1082              		.file 6 "src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pins.c
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:19     .text.pinMode:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:24     .text.pinMode:00000000 pinMode
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:103    .text.initializePins:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:108    .text.initializePins:00000000 initializePins
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:148    .text.initializePins:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:153    .text.digitalWrite:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:158    .text.digitalWrite:00000000 digitalWrite
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:185    .text.digitalRead:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:190    .text.digitalRead:00000000 digitalRead
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:219    .text.millis:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:224    .text.millis:00000000 millis
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:282    .text.millis:00000020 $d
+                            *COM*:00000002 int_ctr
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:288    .text.delay_loop:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:293    .text.delay_loop:00000000 delay_loop
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:322    .text.delay:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:327    .text.delay:00000000 delay
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:361    .text.SysTick_Handler:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:366    .text.SysTick_Handler:00000000 SysTick_Handler
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:398    .text.SysTick_Handler:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:511    .rodata.PIN_PC13:00000000 PIN_PC13
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:500    .rodata.PIN_PC12:00000000 PIN_PC12
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:979    .rodata.PIN_PC11:00000000 PIN_PC11
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1070   .rodata.PIN_PC10:00000000 PIN_PC10
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:680    .rodata.PIN_PC9:00000000 PIN_PC9
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:669    .rodata.PIN_PC7:00000000 PIN_PC7
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:658    .rodata.PIN_PC6:00000000 PIN_PC6
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:635    .rodata.PIN_PC4:00000000 PIN_PC4
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1059   .rodata.PIN_PC3:00000000 PIN_PC3
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:920    .rodata.PIN_PC1:00000000 PIN_PC1
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:589    .rodata.PIN_PC0:00000000 PIN_PC0
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:787    .rodata.PIN_PB15:00000000 PIN_PB15
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:776    .rodata.PIN_PB14:00000000 PIN_PB14
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:765    .rodata.PIN_PB13:00000000 PIN_PB13
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:864    .rodata.PIN_PB12:00000000 PIN_PB12
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:754    .rodata.PIN_PB11:00000000 PIN_PB11
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:743    .rodata.PIN_PB10:00000000 PIN_PB10
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:897    .rodata.PIN_PB9:00000000 PIN_PB9
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:886    .rodata.PIN_PB8:00000000 PIN_PB8
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:875    .rodata.PIN_PB7:00000000 PIN_PB7
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1048   .rodata.PIN_PB6:00000000 PIN_PB6
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:853    .rodata.PIN_PB5:00000000 PIN_PB5
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:842    .rodata.PIN_PB4:00000000 PIN_PB4
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:831    .rodata.PIN_PB3:00000000 PIN_PB3
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:820    .rodata.PIN_PB2:00000000 PIN_PB2
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:809    .rodata.PIN_PB1:00000000 PIN_PB1
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:798    .rodata.PIN_PB0:00000000 PIN_PB0
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:720    .rodata.PIN_PA15:00000000 PIN_PA15
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:709    .rodata.PIN_PA12:00000000 PIN_PA12
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:698    .rodata.PIN_PA11:00000000 PIN_PA11
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1025   .rodata.PIN_PA9:00000000 PIN_PA9
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:600    .rodata.PIN_PA8:00000000 PIN_PA8
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:990    .rodata.PIN_PA7:00000000 PIN_PA7
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:578    .rodata.PIN_PA5:00000000 PIN_PA5
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:567    .rodata.PIN_PA4:00000000 PIN_PA4
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:556    .rodata.PIN_PA2:00000000 PIN_PA2
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:545    .rodata.PIN_PA1:00000000 PIN_PA1
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:534    .rodata.PIN_PA0:00000000 PIN_PA0
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:646    .rodata.pincfg_af_mco1:00000000 pincfg_af_mco1
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:522    .rodata.pincfg_af_i2c1:00000000 pincfg_af_i2c1
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:908    .rodata.pincfg_af_spi1:00000000 pincfg_af_spi1
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:611    .rodata.pincfg_out_r:00000000 pincfg_out_r
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:623    .rodata.pincfg_out_s:00000000 pincfg_out_s
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:731    .rodata.pincfg_out:00000000 pincfg_out
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:931    .rodata.pincfg_out_od_r:00000000 pincfg_out_od_r
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1036   .rodata.pincfg_out_od_s:00000000 pincfg_out_od_s
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:967    .rodata.pincfg_out_od:00000000 pincfg_out_od
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1013   .rodata.pincfg_ain:00000000 pincfg_ain
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1001   .rodata.pincfg_in_pu:00000000 pincfg_in_pu
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:943    .rodata.pincfg_in_pd:00000000 pincfg_in_pd
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:955    .rodata.pincfg_in:00000000 pincfg_in
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:455    .rodata:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:497    .rodata.PIN_PC12:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:508    .rodata.PIN_PC13:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:519    .rodata.pincfg_af_i2c1:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:531    .rodata.PIN_PA0:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:542    .rodata.PIN_PA1:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:553    .rodata.PIN_PA2:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:564    .rodata.PIN_PA4:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:575    .rodata.PIN_PA5:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:586    .rodata.PIN_PC0:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:597    .rodata.PIN_PA8:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:608    .rodata.pincfg_out_r:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:620    .rodata.pincfg_out_s:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:632    .rodata.PIN_PC4:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:643    .rodata.pincfg_af_mco1:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:655    .rodata.PIN_PC6:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:666    .rodata.PIN_PC7:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:677    .rodata.PIN_PC9:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:688    .bss.ticks:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:692    .bss.ticks:00000000 ticks
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:695    .rodata.PIN_PA11:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:706    .rodata.PIN_PA12:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:717    .rodata.PIN_PA15:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:728    .rodata.pincfg_out:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:740    .rodata.PIN_PB10:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:751    .rodata.PIN_PB11:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:762    .rodata.PIN_PB13:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:773    .rodata.PIN_PB14:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:784    .rodata.PIN_PB15:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:795    .rodata.PIN_PB0:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:806    .rodata.PIN_PB1:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:817    .rodata.PIN_PB2:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:828    .rodata.PIN_PB3:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:839    .rodata.PIN_PB4:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:850    .rodata.PIN_PB5:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:861    .rodata.PIN_PB12:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:872    .rodata.PIN_PB7:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:883    .rodata.PIN_PB8:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:894    .rodata.PIN_PB9:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:905    .rodata.pincfg_af_spi1:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:917    .rodata.PIN_PC1:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:928    .rodata.pincfg_out_od_r:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:940    .rodata.pincfg_in_pd:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:952    .rodata.pincfg_in:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:964    .rodata.pincfg_out_od:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:976    .rodata.PIN_PC11:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:987    .rodata.PIN_PA7:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:998    .rodata.pincfg_in_pu:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1010   .rodata.pincfg_ain:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1022   .rodata.PIN_PA9:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1033   .rodata.pincfg_out_od_s:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1045   .rodata.PIN_PB6:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1056   .rodata.PIN_PC3:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccxkcLfO.s:1067   .rodata.PIN_PC10:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+GPIO_Init
+GPIO_PinAFConfig
+GPIO_WriteBit
+memcpy
+GPIO_ReadInputDataBit

@@ -1,0 +1,681 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_rng.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.RNG_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	RNG_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	RNG_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rng.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @file    stm32f2xx_rng.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     * @brief This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          functionalities of the Random Number Generator (RNG) peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *           - Initialization and Configuration 
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *           - Get 32 bit Random number      
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *           - Interrupts and flags management       
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *  @verbatim
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *                               
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          ===================================================================      
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *                                   How to use this driver
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          ===================================================================          
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          1. Enable The RNG controller clock using 
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE) function.
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *              
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          2. Activate the RNG peripheral using RNG_Cmd() function.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          3. Wait until the 32 bit Random number Generator contains a valid 
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            random data (using polling/interrupt mode). For more details, 
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            refer to "Interrupts and flags management functions" module 
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            description.
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *           
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          4. Get the 32 bit Random number using RNG_GetRandomNumber() function
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          5. To get another 32 bit Random number, go to step 3.       
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *              
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *  @endverbatim
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   ******************************************************************************
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @attention
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * You may not use this file except in compliance with the License.
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * You may obtain a copy of the License at:
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * Unless required by applicable law or agreed to in writing, software 
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * See the License for the specific language governing permissions and
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * limitations under the License.
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   ******************************************************************************
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /* Includes ------------------------------------------------------------------*/
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** #include "stm32f2xx_rng.h"
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** #include "stm32f2xx_rcc.h"
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @{
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /** @defgroup RNG 
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief RNG driver modules
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @{
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */ 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /* Private typedef -----------------------------------------------------------*/
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /* Private define ------------------------------------------------------------*/
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /* Private macro -------------------------------------------------------------*/
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /* Private variables ---------------------------------------------------------*/
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /* Private function prototypes -----------------------------------------------*/
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /* Private functions ---------------------------------------------------------*/
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /** @defgroup RNG_Private_Functions
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @{
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */ 
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /** @defgroup RNG_Group1 Initialization and Configuration functions
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  *  @brief    Initialization and Configuration functions 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  *
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** @verbatim    
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  ===============================================================================
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****                       Initialization and Configuration functions
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  ===============================================================================  
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   This section provides functions allowing to 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    - Initialize the RNG peripheral
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    - Enable or disable the RNG peripheral
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** @endverbatim
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @{
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Deinitializes the RNG peripheral registers to their default reset values.
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  None
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval None
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** void RNG_DeInit(void)
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+  27              		.loc 1 101 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Enable RNG reset state */
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_RNG, ENABLE);
+  31              		.loc 1 103 0
+  32 0000 4020     		movs	r0, #64
+  33 0002 0121     		movs	r1, #1
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+  34              		.loc 1 101 0
+  35 0004 08B5     		push	{r3, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 3, -8
+  39              		.cfi_offset 14, -4
+  40              		.loc 1 103 0
+  41 0006 FFF7FEFF 		bl	RCC_AHB2PeriphResetCmd
+  42              	.LVL0:
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Release RNG from reset state */
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_RNG, DISABLE);
+  43              		.loc 1 106 0
+  44 000a 4020     		movs	r0, #64
+  45 000c 0021     		movs	r1, #0
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** }
+  46              		.loc 1 107 0
+  47 000e BDE80840 		pop	{r3, lr}
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_RNG, DISABLE);
+  48              		.loc 1 106 0
+  49 0012 FFF7FEBF 		b	RCC_AHB2PeriphResetCmd
+  50              	.LVL1:
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.RNG_Cmd,"ax",%progbits
+  55              		.align	1
+  56              		.global	RNG_Cmd
+  57              		.thumb
+  58              		.thumb_func
+  60              	RNG_Cmd:
+  61              	.LFB57:
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Enables or disables the RNG peripheral.
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  NewState: new state of the RNG peripheral.
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval None
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** void RNG_Cmd(FunctionalState NewState)
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+  62              		.loc 1 116 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+  67              	.LVL2:
+  68 0000 044B     		ldr	r3, .L7
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the parameters */
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   if (NewState != DISABLE)
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* Enable the RNG */
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     RNG->CR |= RNG_CR_RNGEN;
+  69              		.loc 1 123 0
+  70 0002 1A68     		ldr	r2, [r3, #0]
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   if (NewState != DISABLE)
+  71              		.loc 1 120 0
+  72 0004 10B1     		cbz	r0, .L3
+  73              		.loc 1 123 0
+  74 0006 42F00400 		orr	r0, r2, #4
+  75              	.LVL3:
+  76 000a 01E0     		b	.L5
+  77              	.LVL4:
+  78              	.L3:
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   else
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* Disable the RNG */
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     RNG->CR &= ~RNG_CR_RNGEN;
+  79              		.loc 1 128 0
+  80 000c 22F00400 		bic	r0, r2, #4
+  81              	.LVL5:
+  82              	.L5:
+  83 0010 1860     		str	r0, [r3, #0]
+  84 0012 7047     		bx	lr
+  85              	.L8:
+  86              		.align	2
+  87              	.L7:
+  88 0014 00080650 		.word	1342572544
+  89              		.cfi_endproc
+  90              	.LFE57:
+  92              		.section	.text.RNG_GetRandomNumber,"ax",%progbits
+  93              		.align	1
+  94              		.global	RNG_GetRandomNumber
+  95              		.thumb
+  96              		.thumb_func
+  98              	RNG_GetRandomNumber:
+  99              	.LFB58:
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** }
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @}
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /** @defgroup RNG_Group2 Get 32 bit Random number function
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  *  @brief    Get 32 bit Random number function 
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  *
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** @verbatim    
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  ===============================================================================
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****                       Get 32 bit Random number function
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  ===============================================================================  
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   This section provides a function allowing to get the 32 bit Random number  
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   @note  Before to call this function you have to wait till DRDY flag is set,
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****          using RNG_GetFlagStatus(RNG_FLAG_DRDY) function. 
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** @endverbatim
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @{
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Returns a 32-bit random number.
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *   
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @note   Before to call this function you have to wait till DRDY (data ready)
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         flag is set, using RNG_GetFlagStatus(RNG_FLAG_DRDY) function.
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @note   Each time the the Random number data is read (using RNG_GetRandomNumber()
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         function), the RNG_FLAG_DRDY flag is automatically cleared.
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @note   In the case of a seed error, the generation of random numbers is 
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         interrupted for as long as the SECS bit is '1'. If a number is 
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         available in the RNG_DR register, it must not be used because it may 
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         not have enough entropy. In this case, it is recommended to clear the 
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         SEIS bit(using RNG_ClearFlag(RNG_FLAG_SECS) function), then disable 
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         and enable the RNG peripheral (using RNG_Cmd() function) to 
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         reinitialize and restart the RNG.
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @note   In the case of a clock error, the RNG is no more able to generate 
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         random numbers because the PLL48CLK clock is not correct. User have 
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         to check that the clock controller is correctly configured to provide
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         the RNG clock and clear the CEIS bit (using RNG_ClearFlag(RNG_FLAG_CECS) 
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         function) . The clock error has no impact on the previously generated 
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         random numbers, and the RNG_DR register contents can be used.
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  None
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval 32-bit random number.
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** uint32_t RNG_GetRandomNumber(void)
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+ 100              		.loc 1 178 0
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+ 104              		@ link register save eliminated.
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Return the 32 bit random number from the DR register */
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   return RNG->DR;
+ 105              		.loc 1 180 0
+ 106 0000 014B     		ldr	r3, .L10
+ 107 0002 9868     		ldr	r0, [r3, #8]
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** }
+ 108              		.loc 1 181 0
+ 109 0004 7047     		bx	lr
+ 110              	.L11:
+ 111 0006 00BF     		.align	2
+ 112              	.L10:
+ 113 0008 00080650 		.word	1342572544
+ 114              		.cfi_endproc
+ 115              	.LFE58:
+ 117              		.section	.text.RNG_ITConfig,"ax",%progbits
+ 118              		.align	1
+ 119              		.global	RNG_ITConfig
+ 120              		.thumb
+ 121              		.thumb_func
+ 123              	RNG_ITConfig:
+ 124              	.LFB59:
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @}
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /** @defgroup RNG_Group3 Interrupts and flags management functions
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  *  @brief   Interrupts and flags management functions
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  *
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** @verbatim   
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  ===============================================================================
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****                    Interrupts and flags management functions
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****  ===============================================================================  
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   This section provides functions allowing to configure the RNG Interrupts and 
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   to get the status and clear flags and Interrupts pending bits.
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   The RNG provides 3 Interrupts sources and 3 Flags:
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   Flags :
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   ---------- 
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****      1. RNG_FLAG_DRDY :  In the case of the RNG_DR register contains valid 
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****                          random data. it is cleared by reading the valid data 
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****                          (using RNG_GetRandomNumber() function).
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****      2. RNG_FLAG_CECS : In the case of a seed error detection. 
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****      3. RNG_FLAG_SECS : In the case of a clock error detection.
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****               
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   Interrupts :
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   ------------
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    if enabled, an RNG interrupt is pending :
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    1.  In the case of the RNG_DR register contains valid random data. 
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****        This interrupt source is cleared once the RNG_DR register has been read 
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****        (using RNG_GetRandomNumber() function) until a new valid value is 
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****        computed. 
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    or 
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    2. In the case of a seed error : One of the following faulty sequences has 
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       been detected:
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       - More than 64 consecutive bits at the same value (0 or 1)
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       - More than 32 consecutive alternance of 0 and 1 (0101010101...01)
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       This interrupt source is cleared using RNG_ClearITPendingBit(RNG_IT_SEI)
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       function.
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    or
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****    3. In the case of a clock error : the PLL48CLK (RNG peripheral clock source) 
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       was not correctly detected (fPLL48CLK< fHCLK/16).
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       This interrupt source is cleared using RNG_ClearITPendingBit(RNG_IT_CEI)
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       function.
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       @note In this case, User have to check that the clock controller is 
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****             correctly configured to provide the RNG clock. 
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   Managing the RNG controller events :
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   ------------------------------------ 
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   The user should identify which mode will be used in his application to manage 
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   the RNG controller events: Polling mode or Interrupt mode.
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   1.  In the Polling Mode it is advised to use the following functions:
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       - RNG_GetFlagStatus() : to check if flags events occur. 
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       - RNG_ClearFlag()     : to clear the flags events.
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   @note RNG_FLAG_DRDY can not be cleared by RNG_ClearFlag(). it is cleared only 
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****         by reading the Random number data.      
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   2.  In the Interrupt Mode it is advised to use the following functions:
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       - RNG_ITConfig()       : to enable or disable the interrupt source.
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       - RNG_GetITStatus()    : to check if Interrupt occurs.
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****       - RNG_ClearITPendingBit() : to clear the Interrupt pending Bit 
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****                                 (corresponding Flag). 
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** @endverbatim
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @{
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */ 
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Enables or disables the RNG interrupt.
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @note   The RNG provides 3 interrupt sources,
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *           - Computed data is ready event (DRDY), and           
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *           - Seed error Interrupt (SEI) and 
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *           - Clock error Interrupt (CEI), 
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         all these interrupts sources are enabled by setting the IE bit in 
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         CR register. However, each interrupt have its specific status bit
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         (see RNG_GetITStatus() function) and clear bit except the DRDY event
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         (see RNG_ClearITPendingBit() function).
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  NewState: new state of the RNG interrupt.
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval None
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** void RNG_ITConfig(FunctionalState NewState)
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+ 125              		.loc 1 275 0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129              		@ link register save eliminated.
+ 130              	.LVL6:
+ 131 0000 044B     		ldr	r3, .L16
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the parameters */
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   if (NewState != DISABLE)
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* Enable the RNG interrupt */
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     RNG->CR |= RNG_CR_IE;
+ 132              		.loc 1 282 0
+ 133 0002 1A68     		ldr	r2, [r3, #0]
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   if (NewState != DISABLE)
+ 134              		.loc 1 279 0
+ 135 0004 10B1     		cbz	r0, .L13
+ 136              		.loc 1 282 0
+ 137 0006 42F00800 		orr	r0, r2, #8
+ 138              	.LVL7:
+ 139 000a 01E0     		b	.L15
+ 140              	.LVL8:
+ 141              	.L13:
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   else
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* Disable the RNG interrupt */
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     RNG->CR &= ~RNG_CR_IE;
+ 142              		.loc 1 287 0
+ 143 000c 22F00800 		bic	r0, r2, #8
+ 144              	.LVL9:
+ 145              	.L15:
+ 146 0010 1860     		str	r0, [r3, #0]
+ 147 0012 7047     		bx	lr
+ 148              	.L17:
+ 149              		.align	2
+ 150              	.L16:
+ 151 0014 00080650 		.word	1342572544
+ 152              		.cfi_endproc
+ 153              	.LFE59:
+ 155              		.section	.text.RNG_GetFlagStatus,"ax",%progbits
+ 156              		.align	1
+ 157              		.global	RNG_GetFlagStatus
+ 158              		.thumb
+ 159              		.thumb_func
+ 161              	RNG_GetFlagStatus:
+ 162              	.LFB60:
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** }
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Checks whether the specified RNG flag is set or not.
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  RNG_FLAG: specifies the RNG flag to check.
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          This parameter can be one of the following values:
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_FLAG_DRDY: Data Ready flag.
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_FLAG_CECS: Clock Error Current flag.
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_FLAG_SECS: Seed Error Current flag.
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval The new state of RNG_FLAG (SET or RESET).
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** FlagStatus RNG_GetFlagStatus(uint8_t RNG_FLAG)
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+ 163              		.loc 1 301 0
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 0
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167              		@ link register save eliminated.
+ 168              	.LVL10:
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   FlagStatus bitstatus = RESET;
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the parameters */
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   assert_param(IS_RNG_GET_FLAG(RNG_FLAG));
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the status of the specified RNG flag */
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   if ((RNG->SR & RNG_FLAG) != (uint8_t)RESET)
+ 169              		.loc 1 307 0
+ 170 0000 034B     		ldr	r3, .L19
+ 171 0002 5968     		ldr	r1, [r3, #4]
+ 172              	.LVL11:
+ 173 0004 0842     		tst	r0, r1
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* RNG_FLAG is set */
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     bitstatus = SET;
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   else
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* RNG_FLAG is reset */
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     bitstatus = RESET;
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Return the RNG_FLAG status */
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   return  bitstatus;
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** }
+ 174              		.loc 1 319 0
+ 175 0006 0CBF     		ite	eq
+ 176 0008 0020     		moveq	r0, #0
+ 177 000a 0120     		movne	r0, #1
+ 178              	.LVL12:
+ 179 000c 7047     		bx	lr
+ 180              	.L20:
+ 181 000e 00BF     		.align	2
+ 182              	.L19:
+ 183 0010 00080650 		.word	1342572544
+ 184              		.cfi_endproc
+ 185              	.LFE60:
+ 187              		.section	.text.RNG_ClearFlag,"ax",%progbits
+ 188              		.align	1
+ 189              		.global	RNG_ClearFlag
+ 190              		.thumb
+ 191              		.thumb_func
+ 193              	RNG_ClearFlag:
+ 194              	.LFB61:
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Clears the RNG flags.
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  RNG_FLAG: specifies the flag to clear. 
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          This parameter can be any combination of the following values:
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_FLAG_CECS: Clock Error Current flag.
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_FLAG_SECS: Seed Error Current flag.
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @note   RNG_FLAG_DRDY can not be cleared by RNG_ClearFlag() function. 
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         This flag is cleared only by reading the Random number data (using 
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *         RNG_GetRandomNumber() function).                           
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval None
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** void RNG_ClearFlag(uint8_t RNG_FLAG)
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+ 195              		.loc 1 334 0
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 0
+ 198              		@ frame_needed = 0, uses_anonymous_args = 0
+ 199              		@ link register save eliminated.
+ 200              	.LVL13:
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the parameters */
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   assert_param(IS_RNG_CLEAR_FLAG(RNG_FLAG));
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Clear the selected RNG flags */
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   RNG->SR = ~(uint32_t)(((uint32_t)RNG_FLAG) << 4);
+ 201              		.loc 1 338 0
+ 202 0000 024B     		ldr	r3, .L22
+ 203 0002 6FEA0010 		mvn	r0, r0, lsl #4
+ 204              	.LVL14:
+ 205 0006 5860     		str	r0, [r3, #4]
+ 206 0008 7047     		bx	lr
+ 207              	.L23:
+ 208 000a 00BF     		.align	2
+ 209              	.L22:
+ 210 000c 00080650 		.word	1342572544
+ 211              		.cfi_endproc
+ 212              	.LFE61:
+ 214              		.section	.text.RNG_GetITStatus,"ax",%progbits
+ 215              		.align	1
+ 216              		.global	RNG_GetITStatus
+ 217              		.thumb
+ 218              		.thumb_func
+ 220              	RNG_GetITStatus:
+ 221              	.LFB62:
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** }
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Checks whether the specified RNG interrupt has occurred or not.
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  RNG_IT: specifies the RNG interrupt source to check.
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          This parameter can be one of the following values:
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_IT_CEI: Clock Error Interrupt.
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_IT_SEI: Seed Error Interrupt.                   
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval The new state of RNG_IT (SET or RESET).
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** ITStatus RNG_GetITStatus(uint8_t RNG_IT)
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+ 222              		.loc 1 350 0
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 0
+ 225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226              		@ link register save eliminated.
+ 227              	.LVL15:
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   ITStatus bitstatus = RESET;
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the parameters */
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   assert_param(IS_RNG_GET_IT(RNG_IT));
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the status of the specified RNG interrupt */
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   if ((RNG->SR & RNG_IT) != (uint8_t)RESET)
+ 228              		.loc 1 356 0
+ 229 0000 034B     		ldr	r3, .L25
+ 230 0002 5968     		ldr	r1, [r3, #4]
+ 231              	.LVL16:
+ 232 0004 0842     		tst	r0, r1
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* RNG_IT is set */
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     bitstatus = SET;
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   else
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   {
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     /* RNG_IT is reset */
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****     bitstatus = RESET;
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   }
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Return the RNG_IT status */
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   return bitstatus;
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** }
+ 233              		.loc 1 368 0
+ 234 0006 0CBF     		ite	eq
+ 235 0008 0020     		moveq	r0, #0
+ 236 000a 0120     		movne	r0, #1
+ 237              	.LVL17:
+ 238 000c 7047     		bx	lr
+ 239              	.L26:
+ 240 000e 00BF     		.align	2
+ 241              	.L25:
+ 242 0010 00080650 		.word	1342572544
+ 243              		.cfi_endproc
+ 244              	.LFE62:
+ 246              		.section	.text.RNG_ClearITPendingBit,"ax",%progbits
+ 247              		.align	1
+ 248              		.global	RNG_ClearITPendingBit
+ 249              		.thumb
+ 250              		.thumb_func
+ 252              	RNG_ClearITPendingBit:
+ 253              	.LFB63:
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** /**
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @brief  Clears the RNG interrupt pending bit(s).
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @param  RNG_IT: specifies the RNG interrupt pending bit(s) to clear.
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *          This parameter can be any combination of the following values:
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_IT_CEI: Clock Error Interrupt.
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   *            @arg RNG_IT_SEI: Seed Error Interrupt.
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   * @retval None
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   */
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** void RNG_ClearITPendingBit(uint8_t RNG_IT)
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** {
+ 254              		.loc 1 380 0
+ 255              		.cfi_startproc
+ 256              		@ args = 0, pretend = 0, frame = 0
+ 257              		@ frame_needed = 0, uses_anonymous_args = 0
+ 258              		@ link register save eliminated.
+ 259              	.LVL18:
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Check the parameters */
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   assert_param(IS_RNG_IT(RNG_IT));
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c **** 
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   /* Clear the selected RNG interrupt pending bit */
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_rng.c ****   RNG->SR = (uint8_t)~RNG_IT;
+ 260              		.loc 1 385 0
+ 261 0000 C043     		mvns	r0, r0
+ 262              	.LVL19:
+ 263 0002 024B     		ldr	r3, .L28
+ 264 0004 C1B2     		uxtb	r1, r0
+ 265 0006 5960     		str	r1, [r3, #4]
+ 266 0008 7047     		bx	lr
+ 267              	.L29:
+ 268 000a 00BF     		.align	2
+ 269              	.L28:
+ 270 000c 00080650 		.word	1342572544
+ 271              		.cfi_endproc
+ 272              	.LFE63:
+ 274              		.text
+ 275              	.Letext0:
+ 276              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 277              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 278              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+ 279              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_rcc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_rng.c
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:19     .text.RNG_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:24     .text.RNG_DeInit:00000000 RNG_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:55     .text.RNG_Cmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:60     .text.RNG_Cmd:00000000 RNG_Cmd
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:88     .text.RNG_Cmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:93     .text.RNG_GetRandomNumber:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:98     .text.RNG_GetRandomNumber:00000000 RNG_GetRandomNumber
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:113    .text.RNG_GetRandomNumber:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:118    .text.RNG_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:123    .text.RNG_ITConfig:00000000 RNG_ITConfig
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:151    .text.RNG_ITConfig:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:156    .text.RNG_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:161    .text.RNG_GetFlagStatus:00000000 RNG_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:183    .text.RNG_GetFlagStatus:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:188    .text.RNG_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:193    .text.RNG_ClearFlag:00000000 RNG_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:210    .text.RNG_ClearFlag:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:215    .text.RNG_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:220    .text.RNG_GetITStatus:00000000 RNG_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:242    .text.RNG_GetITStatus:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:247    .text.RNG_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:252    .text.RNG_ClearITPendingBit:00000000 RNG_ClearITPendingBit
+C:\Users\STINA\AppData\Local\Temp\ccY4YnXz.s:270    .text.RNG_ClearITPendingBit:0000000c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+RCC_AHB2PeriphResetCmd

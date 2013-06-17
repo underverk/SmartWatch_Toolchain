@@ -1,0 +1,744 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"syscalls.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.__aeabi_memclr,"ax",%progbits
+  19              		.align	1
+  20              		.global	__aeabi_memclr
+  21              		.thumb
+  22              		.thumb_func
+  24              	__aeabi_memclr:
+  25              	.LFB0:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/syscalls.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** /* Support files for GNU libc.  Files in the system namespace go here.
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****    Files in the C namespace (ie those that do not start with an
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****    underscore) go in .c.  */
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <_ansi.h>
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <sys/types.h>
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <sys/stat.h>
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <sys/fcntl.h>
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <stdio.h>
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <string.h>
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <time.h>
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <sys/time.h>
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <sys/times.h>
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <errno.h>
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <reent.h>
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <unistd.h>
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #include <sys/wait.h>
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** #undef errno
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** extern int errno;
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** register char * stack_ptr asm("sp");
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** // Clear memory
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** void __aeabi_memclr(void *dest, size_t n) {
+  27              		.loc 1 25 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+  33              		.loc 1 25 0
+  34 0000 0A46     		mov	r2, r1
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****   memset(dest, 0, n);
+  35              		.loc 1 26 0
+  36 0002 0021     		movs	r1, #0
+  37              	.LVL1:
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+  38              		.loc 1 27 0
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****   memset(dest, 0, n);
+  39              		.loc 1 26 0
+  40 0004 FFF7FEBF 		b	memset
+  41              	.LVL2:
+  42              		.cfi_endproc
+  43              	.LFE0:
+  45              		.section	.text._sbrk,"ax",%progbits
+  46              		.align	1
+  47              		.global	_sbrk
+  48              		.thumb
+  49              		.thumb_func
+  51              	_sbrk:
+  52              	.LFB1:
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** // Increase heap
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** caddr_t _sbrk(int incr) {
+  53              		.loc 1 30 0
+  54              		.cfi_startproc
+  55              		@ args = 0, pretend = 0, frame = 0
+  56              		@ frame_needed = 0, uses_anonymous_args = 0
+  57              		@ link register save eliminated.
+  58              	.LVL3:
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	extern char end asm("end");
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	static char *heap_end;
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	char *prev_heap_end;
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	if (heap_end == 0) heap_end = &end;
+  59              		.loc 1 35 0
+  60 0000 094B     		ldr	r3, .L7
+  61 0002 1A68     		ldr	r2, [r3, #0]
+  62 0004 0AB9     		cbnz	r2, .L3
+  63              		.loc 1 35 0 is_stmt 0 discriminator 1
+  64 0006 0949     		ldr	r1, .L7+4
+  65 0008 1960     		str	r1, [r3, #0]
+  66              	.L3:
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	prev_heap_end = heap_end;
+  67              		.loc 1 37 0 is_stmt 1
+  68 000a 1B68     		ldr	r3, [r3, #0]
+  69              	.LVL4:
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	if (heap_end + incr > stack_ptr) {
+  70              		.loc 1 39 0
+  71 000c 6A46     		mov	r2, sp
+  72 000e 1818     		adds	r0, r3, r0
+  73              	.LVL5:
+  74 0010 9042     		cmp	r0, r2
+  75 0012 05D9     		bls	.L4
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 		errno = ENOMEM;
+  76              		.loc 1 40 0
+  77 0014 064B     		ldr	r3, .L7+8
+  78              	.LVL6:
+  79 0016 0C20     		movs	r0, #12
+  80 0018 1860     		str	r0, [r3, #0]
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 		return (caddr_t)-1;
+  81              		.loc 1 41 0
+  82 001a 4FF0FF33 		mov	r3, #-1
+  83 001e 01E0     		b	.L5
+  84              	.LVL7:
+  85              	.L4:
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	}
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	heap_end += incr;
+  86              		.loc 1 44 0
+  87 0020 0149     		ldr	r1, .L7
+  88 0022 0860     		str	r0, [r1, #0]
+  89              	.LVL8:
+  90              	.L5:
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return (caddr_t)prev_heap_end;
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+  91              		.loc 1 47 0
+  92 0024 1846     		mov	r0, r3
+  93 0026 7047     		bx	lr
+  94              	.L8:
+  95              		.align	2
+  96              	.L7:
+  97 0028 00000000 		.word	.LANCHOR0
+  98 002c 00000000 		.word	end
+  99 0030 00000000 		.word	errno
+ 100              		.cfi_endproc
+ 101              	.LFE1:
+ 103              		.section	.text._gettimeofday,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	_gettimeofday
+ 106              		.thumb
+ 107              		.thumb_func
+ 109              	_gettimeofday:
+ 110              	.LFB2:
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** // _gettimeofday primitive (Stub function)
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _gettimeofday (struct timeval * tp, struct timezone * tzp) {
+ 111              		.loc 1 50 0
+ 112              		.cfi_startproc
+ 113              		@ args = 0, pretend = 0, frame = 0
+ 114              		@ frame_needed = 0, uses_anonymous_args = 0
+ 115              		@ link register save eliminated.
+ 116              	.LVL9:
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****   if (tzp) {
+ 117              		.loc 1 51 0
+ 118 0000 11B1     		cbz	r1, .L10
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****     tzp->tz_minuteswest = 0;
+ 119              		.loc 1 52 0
+ 120 0002 0023     		movs	r3, #0
+ 121 0004 0B60     		str	r3, [r1, #0]
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****     tzp->tz_dsttime = 0;
+ 122              		.loc 1 53 0
+ 123 0006 4B60     		str	r3, [r1, #4]
+ 124              	.L10:
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****   }
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****   return 0;
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 125              		.loc 1 57 0
+ 126 0008 0020     		movs	r0, #0
+ 127              	.LVL10:
+ 128 000a 7047     		bx	lr
+ 129              		.cfi_endproc
+ 130              	.LFE2:
+ 132              		.section	.text.initialise_monitor_handles,"ax",%progbits
+ 133              		.align	1
+ 134              		.global	initialise_monitor_handles
+ 135              		.thumb
+ 136              		.thumb_func
+ 138              	initialise_monitor_handles:
+ 139              	.LFB3:
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** void initialise_monitor_handles(void) {}
+ 140              		.loc 1 58 0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144              		@ link register save eliminated.
+ 145 0000 7047     		bx	lr
+ 146              		.cfi_endproc
+ 147              	.LFE3:
+ 149              		.section	.text._getpid,"ax",%progbits
+ 150              		.align	1
+ 151              		.global	_getpid
+ 152              		.thumb
+ 153              		.thumb_func
+ 155              	_getpid:
+ 156              	.LFB4:
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _getpid(void) {
+ 157              		.loc 1 60 0
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 161              		@ link register save eliminated.
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c ****   return 1;
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 162              		.loc 1 62 0
+ 163 0000 0120     		movs	r0, #1
+ 164 0002 7047     		bx	lr
+ 165              		.cfi_endproc
+ 166              	.LFE4:
+ 168              		.section	.text._kill,"ax",%progbits
+ 169              		.align	1
+ 170              		.global	_kill
+ 171              		.thumb
+ 172              		.thumb_func
+ 174              	_kill:
+ 175              	.LFB5:
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _kill(int pid, int sig) {
+ 176              		.loc 1 64 0
+ 177              		.cfi_startproc
+ 178              		@ args = 0, pretend = 0, frame = 0
+ 179              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180              		@ link register save eliminated.
+ 181              	.LVL11:
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	errno = EINVAL;
+ 182              		.loc 1 65 0
+ 183 0000 024B     		ldr	r3, .L17
+ 184 0002 1622     		movs	r2, #22
+ 185 0004 1A60     		str	r2, [r3, #0]
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 186              		.loc 1 67 0
+ 187 0006 4FF0FF30 		mov	r0, #-1
+ 188              	.LVL12:
+ 189 000a 7047     		bx	lr
+ 190              	.L18:
+ 191              		.align	2
+ 192              	.L17:
+ 193 000c 00000000 		.word	errno
+ 194              		.cfi_endproc
+ 195              	.LFE5:
+ 197              		.section	.text._exit,"ax",%progbits
+ 198              		.align	1
+ 199              		.global	_exit
+ 200              		.thumb
+ 201              		.thumb_func
+ 203              	_exit:
+ 204              	.LFB6:
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** void _exit (int status) {
+ 205              		.loc 1 69 0
+ 206              		.cfi_startproc
+ 207              		@ Volatile: function does not return.
+ 208              		@ args = 0, pretend = 0, frame = 0
+ 209              		@ frame_needed = 0, uses_anonymous_args = 0
+ 210              		@ link register save eliminated.
+ 211              	.LVL13:
+ 212              	.LBB4:
+ 213              	.LBB5:
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	errno = EINVAL;
+ 214              		.loc 1 65 0
+ 215 0000 014B     		ldr	r3, .L21
+ 216 0002 1622     		movs	r2, #22
+ 217 0004 1A60     		str	r2, [r3, #0]
+ 218              	.L20:
+ 219 0006 FEE7     		b	.L20
+ 220              	.L22:
+ 221              		.align	2
+ 222              	.L21:
+ 223 0008 00000000 		.word	errno
+ 224              	.LBE5:
+ 225              	.LBE4:
+ 226              		.cfi_endproc
+ 227              	.LFE6:
+ 229              		.section	.text._write,"ax",%progbits
+ 230              		.align	1
+ 231              		.global	_write
+ 232              		.thumb
+ 233              		.thumb_func
+ 235              	_write:
+ 236              	.LFB7:
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	_kill(status, -1);
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	while (1) {}
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _write(int file, char *ptr, int len) {
+ 237              		.loc 1 74 0
+ 238              		.cfi_startproc
+ 239              		@ args = 0, pretend = 0, frame = 0
+ 240              		@ frame_needed = 0, uses_anonymous_args = 0
+ 241              		@ link register save eliminated.
+ 242              	.LVL14:
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return len;
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 243              		.loc 1 76 0
+ 244 0000 1046     		mov	r0, r2
+ 245              	.LVL15:
+ 246 0002 7047     		bx	lr
+ 247              		.cfi_endproc
+ 248              	.LFE7:
+ 250              		.section	.text._close,"ax",%progbits
+ 251              		.align	1
+ 252              		.global	_close
+ 253              		.thumb
+ 254              		.thumb_func
+ 256              	_close:
+ 257              	.LFB8:
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _close(int file) {
+ 258              		.loc 1 78 0
+ 259              		.cfi_startproc
+ 260              		@ args = 0, pretend = 0, frame = 0
+ 261              		@ frame_needed = 0, uses_anonymous_args = 0
+ 262              		@ link register save eliminated.
+ 263              	.LVL16:
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 264              		.loc 1 80 0
+ 265 0000 4FF0FF30 		mov	r0, #-1
+ 266              	.LVL17:
+ 267 0004 7047     		bx	lr
+ 268              		.cfi_endproc
+ 269              	.LFE8:
+ 271              		.section	.text._fstat,"ax",%progbits
+ 272              		.align	1
+ 273              		.global	_fstat
+ 274              		.thumb
+ 275              		.thumb_func
+ 277              	_fstat:
+ 278              	.LFB9:
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _fstat(int file, struct stat *st) {
+ 279              		.loc 1 82 0
+ 280              		.cfi_startproc
+ 281              		@ args = 0, pretend = 0, frame = 0
+ 282              		@ frame_needed = 0, uses_anonymous_args = 0
+ 283              		@ link register save eliminated.
+ 284              	.LVL18:
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	st->st_mode = S_IFCHR;
+ 285              		.loc 1 83 0
+ 286 0000 4FF40053 		mov	r3, #8192
+ 287 0004 4B60     		str	r3, [r1, #4]
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return 0;
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 288              		.loc 1 85 0
+ 289 0006 0020     		movs	r0, #0
+ 290              	.LVL19:
+ 291 0008 7047     		bx	lr
+ 292              		.cfi_endproc
+ 293              	.LFE9:
+ 295              		.section	.text._isatty,"ax",%progbits
+ 296              		.align	1
+ 297              		.global	_isatty
+ 298              		.thumb
+ 299              		.thumb_func
+ 301              	_isatty:
+ 302              	.LFB10:
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _isatty(int file) {
+ 303              		.loc 1 87 0
+ 304              		.cfi_startproc
+ 305              		@ args = 0, pretend = 0, frame = 0
+ 306              		@ frame_needed = 0, uses_anonymous_args = 0
+ 307              		@ link register save eliminated.
+ 308              	.LVL20:
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return 1;
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 309              		.loc 1 89 0
+ 310 0000 0120     		movs	r0, #1
+ 311              	.LVL21:
+ 312 0002 7047     		bx	lr
+ 313              		.cfi_endproc
+ 314              	.LFE10:
+ 316              		.section	.text._lseek,"ax",%progbits
+ 317              		.align	1
+ 318              		.global	_lseek
+ 319              		.thumb
+ 320              		.thumb_func
+ 322              	_lseek:
+ 323              	.LFB11:
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _lseek(int file, int ptr, int dir) {
+ 324              		.loc 1 91 0
+ 325              		.cfi_startproc
+ 326              		@ args = 0, pretend = 0, frame = 0
+ 327              		@ frame_needed = 0, uses_anonymous_args = 0
+ 328              		@ link register save eliminated.
+ 329              	.LVL22:
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return 0;
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 330              		.loc 1 93 0
+ 331 0000 0020     		movs	r0, #0
+ 332              	.LVL23:
+ 333 0002 7047     		bx	lr
+ 334              		.cfi_endproc
+ 335              	.LFE11:
+ 337              		.section	.text._read,"ax",%progbits
+ 338              		.align	1
+ 339              		.global	_read
+ 340              		.thumb
+ 341              		.thumb_func
+ 343              	_read:
+ 344              	.LFB12:
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _read(int file, char *ptr, int len) {
+ 345              		.loc 1 95 0
+ 346              		.cfi_startproc
+ 347              		@ args = 0, pretend = 0, frame = 0
+ 348              		@ frame_needed = 0, uses_anonymous_args = 0
+ 349              		@ link register save eliminated.
+ 350              	.LVL24:
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return 0;
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 351              		.loc 1 97 0
+ 352 0000 0020     		movs	r0, #0
+ 353              	.LVL25:
+ 354 0002 7047     		bx	lr
+ 355              		.cfi_endproc
+ 356              	.LFE12:
+ 358              		.section	.text._open,"ax",%progbits
+ 359              		.align	1
+ 360              		.global	_open
+ 361              		.thumb
+ 362              		.thumb_func
+ 364              	_open:
+ 365              	.LFB13:
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _open(char *path, int flags, ...) {
+ 366              		.loc 1 99 0
+ 367              		.cfi_startproc
+ 368              		@ args = 4, pretend = 12, frame = 0
+ 369              		@ frame_needed = 0, uses_anonymous_args = 1
+ 370              		@ link register save eliminated.
+ 371              	.LVL26:
+ 372 0000 0EB4     		push	{r1, r2, r3}
+ 373              	.LCFI0:
+ 374              		.cfi_def_cfa_offset 12
+ 375              		.cfi_offset 1, -12
+ 376              		.cfi_offset 2, -8
+ 377              		.cfi_offset 3, -4
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 378              		.loc 1 101 0
+ 379 0002 4FF0FF30 		mov	r0, #-1
+ 380              	.LVL27:
+ 381 0006 03B0     		add	sp, sp, #12
+ 382 0008 7047     		bx	lr
+ 383              		.cfi_endproc
+ 384              	.LFE13:
+ 386              		.section	.text._wait,"ax",%progbits
+ 387              		.align	1
+ 388              		.global	_wait
+ 389              		.thumb
+ 390              		.thumb_func
+ 392              	_wait:
+ 393              	.LFB14:
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _wait(int *status) {
+ 394              		.loc 1 103 0
+ 395              		.cfi_startproc
+ 396              		@ args = 0, pretend = 0, frame = 0
+ 397              		@ frame_needed = 0, uses_anonymous_args = 0
+ 398              		@ link register save eliminated.
+ 399              	.LVL28:
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	errno = ECHILD;
+ 400              		.loc 1 104 0
+ 401 0000 024B     		ldr	r3, .L31
+ 402 0002 0A22     		movs	r2, #10
+ 403 0004 1A60     		str	r2, [r3, #0]
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 404              		.loc 1 106 0
+ 405 0006 4FF0FF30 		mov	r0, #-1
+ 406              	.LVL29:
+ 407 000a 7047     		bx	lr
+ 408              	.L32:
+ 409              		.align	2
+ 410              	.L31:
+ 411 000c 00000000 		.word	errno
+ 412              		.cfi_endproc
+ 413              	.LFE14:
+ 415              		.section	.text._unlink,"ax",%progbits
+ 416              		.align	1
+ 417              		.global	_unlink
+ 418              		.thumb
+ 419              		.thumb_func
+ 421              	_unlink:
+ 422              	.LFB15:
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _unlink(char *name) {
+ 423              		.loc 1 108 0
+ 424              		.cfi_startproc
+ 425              		@ args = 0, pretend = 0, frame = 0
+ 426              		@ frame_needed = 0, uses_anonymous_args = 0
+ 427              		@ link register save eliminated.
+ 428              	.LVL30:
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	errno = ENOENT;
+ 429              		.loc 1 109 0
+ 430 0000 024B     		ldr	r3, .L34
+ 431 0002 0222     		movs	r2, #2
+ 432 0004 1A60     		str	r2, [r3, #0]
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 433              		.loc 1 111 0
+ 434 0006 4FF0FF30 		mov	r0, #-1
+ 435              	.LVL31:
+ 436 000a 7047     		bx	lr
+ 437              	.L35:
+ 438              		.align	2
+ 439              	.L34:
+ 440 000c 00000000 		.word	errno
+ 441              		.cfi_endproc
+ 442              	.LFE15:
+ 444              		.section	.text._times,"ax",%progbits
+ 445              		.align	1
+ 446              		.global	_times
+ 447              		.thumb
+ 448              		.thumb_func
+ 450              	_times:
+ 451              	.LFB16:
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _times(struct tms *buf) {
+ 452              		.loc 1 113 0
+ 453              		.cfi_startproc
+ 454              		@ args = 0, pretend = 0, frame = 0
+ 455              		@ frame_needed = 0, uses_anonymous_args = 0
+ 456              		@ link register save eliminated.
+ 457              	.LVL32:
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 458              		.loc 1 115 0
+ 459 0000 4FF0FF30 		mov	r0, #-1
+ 460              	.LVL33:
+ 461 0004 7047     		bx	lr
+ 462              		.cfi_endproc
+ 463              	.LFE16:
+ 465              		.section	.text._stat,"ax",%progbits
+ 466              		.align	1
+ 467              		.global	_stat
+ 468              		.thumb
+ 469              		.thumb_func
+ 471              	_stat:
+ 472              	.LFB17:
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _stat(char *file, struct stat *st) {
+ 473              		.loc 1 117 0
+ 474              		.cfi_startproc
+ 475              		@ args = 0, pretend = 0, frame = 0
+ 476              		@ frame_needed = 0, uses_anonymous_args = 0
+ 477              		@ link register save eliminated.
+ 478              	.LVL34:
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	st->st_mode = S_IFCHR;
+ 479              		.loc 1 118 0
+ 480 0000 4FF40053 		mov	r3, #8192
+ 481 0004 4B60     		str	r3, [r1, #4]
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return 0;
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 482              		.loc 1 120 0
+ 483 0006 0020     		movs	r0, #0
+ 484              	.LVL35:
+ 485 0008 7047     		bx	lr
+ 486              		.cfi_endproc
+ 487              	.LFE17:
+ 489              		.section	.text._link,"ax",%progbits
+ 490              		.align	1
+ 491              		.global	_link
+ 492              		.thumb
+ 493              		.thumb_func
+ 495              	_link:
+ 496              	.LFB18:
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _link(char *old, char *new) {
+ 497              		.loc 1 122 0
+ 498              		.cfi_startproc
+ 499              		@ args = 0, pretend = 0, frame = 0
+ 500              		@ frame_needed = 0, uses_anonymous_args = 0
+ 501              		@ link register save eliminated.
+ 502              	.LVL36:
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	errno = EMLINK;
+ 503              		.loc 1 123 0
+ 504 0000 024B     		ldr	r3, .L39
+ 505 0002 1F22     		movs	r2, #31
+ 506 0004 1A60     		str	r2, [r3, #0]
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 507              		.loc 1 125 0
+ 508 0006 4FF0FF30 		mov	r0, #-1
+ 509              	.LVL37:
+ 510 000a 7047     		bx	lr
+ 511              	.L40:
+ 512              		.align	2
+ 513              	.L39:
+ 514 000c 00000000 		.word	errno
+ 515              		.cfi_endproc
+ 516              	.LFE18:
+ 518              		.section	.text._fork,"ax",%progbits
+ 519              		.align	1
+ 520              		.global	_fork
+ 521              		.thumb
+ 522              		.thumb_func
+ 524              	_fork:
+ 525              	.LFB19:
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _fork(void) {
+ 526              		.loc 1 127 0
+ 527              		.cfi_startproc
+ 528              		@ args = 0, pretend = 0, frame = 0
+ 529              		@ frame_needed = 0, uses_anonymous_args = 0
+ 530              		@ link register save eliminated.
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	errno = EAGAIN;
+ 531              		.loc 1 128 0
+ 532 0000 024B     		ldr	r3, .L42
+ 533 0002 0B22     		movs	r2, #11
+ 534 0004 1A60     		str	r2, [r3, #0]
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }
+ 535              		.loc 1 130 0
+ 536 0006 4FF0FF30 		mov	r0, #-1
+ 537 000a 7047     		bx	lr
+ 538              	.L43:
+ 539              		.align	2
+ 540              	.L42:
+ 541 000c 00000000 		.word	errno
+ 542              		.cfi_endproc
+ 543              	.LFE19:
+ 545              		.section	.text._execve,"ax",%progbits
+ 546              		.align	1
+ 547              		.global	_execve
+ 548              		.thumb
+ 549              		.thumb_func
+ 551              	_execve:
+ 552              	.LFB20:
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** int _execve(char *name, char **argv, char **env) {
+ 553              		.loc 1 132 0
+ 554              		.cfi_startproc
+ 555              		@ args = 0, pretend = 0, frame = 0
+ 556              		@ frame_needed = 0, uses_anonymous_args = 0
+ 557              		@ link register save eliminated.
+ 558              	.LVL38:
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	errno = ENOMEM;
+ 559              		.loc 1 133 0
+ 560 0000 024B     		ldr	r3, .L45
+ 561 0002 0C22     		movs	r2, #12
+ 562              	.LVL39:
+ 563 0004 1A60     		str	r2, [r3, #0]
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** 	return -1;
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\syscalls.c **** }...
+ 564              		.loc 1 135 0
+ 565 0006 4FF0FF30 		mov	r0, #-1
+ 566              	.LVL40:
+ 567 000a 7047     		bx	lr
+ 568              	.L46:
+ 569              		.align	2
+ 570              	.L45:
+ 571 000c 00000000 		.word	errno
+ 572              		.cfi_endproc
+ 573              	.LFE20:
+ 575              		.section	.bss.heap_end.5561,"aw",%nobits
+ 576              		.align	2
+ 577              		.set	.LANCHOR0,. + 0
+ 580              	heap_end.5561:
+ 581 0000 00000000 		.space	4
+ 582              		.text
+ 583              	.Letext0:
+ 584              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 585              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 586              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 587              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 588              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 589              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 590              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 591              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+DEFINED SYMBOLS
+                            *ABS*:00000000 syscalls.c
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:19     .text.__aeabi_memclr:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:24     .text.__aeabi_memclr:00000000 __aeabi_memclr
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:46     .text._sbrk:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:51     .text._sbrk:00000000 _sbrk
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:97     .text._sbrk:00000028 $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:104    .text._gettimeofday:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:109    .text._gettimeofday:00000000 _gettimeofday
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:133    .text.initialise_monitor_handles:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:138    .text.initialise_monitor_handles:00000000 initialise_monitor_handles
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:150    .text._getpid:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:155    .text._getpid:00000000 _getpid
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:169    .text._kill:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:174    .text._kill:00000000 _kill
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:193    .text._kill:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:198    .text._exit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:203    .text._exit:00000000 _exit
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:223    .text._exit:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:230    .text._write:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:235    .text._write:00000000 _write
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:251    .text._close:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:256    .text._close:00000000 _close
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:272    .text._fstat:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:277    .text._fstat:00000000 _fstat
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:296    .text._isatty:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:301    .text._isatty:00000000 _isatty
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:317    .text._lseek:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:322    .text._lseek:00000000 _lseek
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:338    .text._read:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:343    .text._read:00000000 _read
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:359    .text._open:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:364    .text._open:00000000 _open
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:387    .text._wait:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:392    .text._wait:00000000 _wait
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:411    .text._wait:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:416    .text._unlink:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:421    .text._unlink:00000000 _unlink
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:440    .text._unlink:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:445    .text._times:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:450    .text._times:00000000 _times
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:466    .text._stat:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:471    .text._stat:00000000 _stat
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:490    .text._link:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:495    .text._link:00000000 _link
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:514    .text._link:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:519    .text._fork:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:524    .text._fork:00000000 _fork
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:541    .text._fork:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:546    .text._execve:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:551    .text._execve:00000000 _execve
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:571    .text._execve:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:576    .bss.heap_end.5561:00000000 $d
+C:\Users\STINA\AppData\Local\Temp\ccrNYmGu.s:580    .bss.heap_end.5561:00000000 heap_end.5561
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+memset
+end
+errno

@@ -1,0 +1,665 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_exti.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.EXTI_DeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	EXTI_DeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	EXTI_DeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_exti.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @file    stm32f2xx_exti.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          functionalities of the EXTI peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *           - Initialization and Configuration
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *           - Interrupts and flags management
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *  @verbatim  
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *  
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          ===================================================================
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *                                     EXTI features
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          ===================================================================
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *    
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          External interrupt/event lines are mapped as following:
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            1- All available GPIO pins are connected to the 16 external 
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *               interrupt/event lines from EXTI0 to EXTI15.
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            2- EXTI line 16 is connected to the PVD Output
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            3- EXTI line 17 is connected to the RTC Alarm event
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            4- EXTI line 18 is connected to the USB OTG FS Wakeup from suspend event            
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            5- EXTI line 19 is connected to the Ethernet Wakeup event
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            6- EXTI line 20 is connected to the USB OTG HS (configured in FS) Wakeup event 
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            7- EXTI line 21 is connected to the RTC Tamper and Time Stamp events                
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            8- EXTI line 22 is connected to the RTC Wakeup event
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *        
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          ===================================================================
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *                                 How to use this driver
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          ===================================================================  
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *              
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          In order to use an I/O pin as an external interrupt source, follow
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          steps below:
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            1- Configure the I/O in input mode using GPIO_Init()
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            2- Select the input source pin for the EXTI line using SYSCFG_EXTILineConfig()
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            3- Select the mode(interrupt, event) and configure the trigger 
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *               selection (Rising, falling or both) using EXTI_Init()
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *            4- Configure NVIC IRQ channel mapped to the EXTI line using NVIC_Init()
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *   
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *  @note  SYSCFG APB clock must be enabled to get write access to SYSCFG_EXTICRx
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *         registers using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *  @endverbatim                  
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   ******************************************************************************
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @attention
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * You may not use this file except in compliance with the License.
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * You may obtain a copy of the License at:
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * Unless required by applicable law or agreed to in writing, software 
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * See the License for the specific language governing permissions and
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * limitations under the License.
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   ******************************************************************************
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /* Includes ------------------------------------------------------------------*/
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** #include "stm32f2xx_exti.h"
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @{
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /** @defgroup EXTI 
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief EXTI driver modules
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @{
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /* Private typedef -----------------------------------------------------------*/
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /* Private define ------------------------------------------------------------*/
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** #define EXTI_LINENONE    ((uint32_t)0x00000)  /* No interrupt selected */
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /* Private macro -------------------------------------------------------------*/
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /* Private variables ---------------------------------------------------------*/
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /* Private function prototypes -----------------------------------------------*/
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /* Private functions ---------------------------------------------------------*/
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /** @defgroup EXTI_Private_Functions
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @{
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /** @defgroup EXTI_Group1 Initialization and Configuration functions
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  *  @brief   Initialization and Configuration functions 
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  *
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** @verbatim   
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  ===============================================================================
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****                   Initialization and Configuration functions
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  ===============================================================================  
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** @endverbatim
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @{
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Deinitializes the EXTI peripheral registers to their default reset values.
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  None
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval None
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** void EXTI_DeInit(void)
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+  27              		.loc 1 110 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->IMR = 0x00000000;
+  32              		.loc 1 111 0
+  33 0000 044B     		ldr	r3, .L2
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->EMR = 0x00000000;
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->RTSR = 0x00000000;
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->FTSR = 0x00000000;
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->PR = 0x007FFFFF;
+  34              		.loc 1 115 0
+  35 0002 0548     		ldr	r0, .L2+4
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->IMR = 0x00000000;
+  36              		.loc 1 111 0
+  37 0004 0022     		movs	r2, #0
+  38 0006 1A60     		str	r2, [r3, #0]
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->EMR = 0x00000000;
+  39              		.loc 1 112 0
+  40 0008 5A60     		str	r2, [r3, #4]
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->RTSR = 0x00000000;
+  41              		.loc 1 113 0
+  42 000a 9A60     		str	r2, [r3, #8]
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->FTSR = 0x00000000;
+  43              		.loc 1 114 0
+  44 000c DA60     		str	r2, [r3, #12]
+  45              		.loc 1 115 0
+  46 000e 5861     		str	r0, [r3, #20]
+  47 0010 7047     		bx	lr
+  48              	.L3:
+  49 0012 00BF     		.align	2
+  50              	.L2:
+  51 0014 003C0140 		.word	1073822720
+  52 0018 FFFF7F00 		.word	8388607
+  53              		.cfi_endproc
+  54              	.LFE56:
+  56              		.section	.text.EXTI_Init,"ax",%progbits
+  57              		.align	1
+  58              		.global	EXTI_Init
+  59              		.thumb
+  60              		.thumb_func
+  62              	EXTI_Init:
+  63              	.LFB57:
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** }
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Initializes the EXTI peripheral according to the specified
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *         parameters in the EXTI_InitStruct.
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  EXTI_InitStruct: pointer to a EXTI_InitTypeDef structure
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *         that contains the configuration information for the EXTI peripheral.
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval None
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** void EXTI_Init(EXTI_InitTypeDef* EXTI_InitStruct)
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+  64              		.loc 1 126 0
+  65              		.cfi_startproc
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  68              	.LVL0:
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   uint32_t tmp = 0;
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   /* Check the parameters */
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_EXTI_MODE(EXTI_InitStruct->EXTI_Mode));
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_EXTI_TRIGGER(EXTI_InitStruct->EXTI_Trigger));
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_EXTI_LINE(EXTI_InitStruct->EXTI_Line));  
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_FUNCTIONAL_STATE(EXTI_InitStruct->EXTI_LineCmd));
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   tmp = (uint32_t)EXTI_BASE;
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****      
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   if (EXTI_InitStruct->EXTI_LineCmd != DISABLE)
+  69              		.loc 1 137 0
+  70 0000 8379     		ldrb	r3, [r0, #6]	@ zero_extendqisi2
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+  71              		.loc 1 126 0
+  72 0002 10B5     		push	{r4, lr}
+  73              	.LCFI0:
+  74              		.cfi_def_cfa_offset 8
+  75              		.cfi_offset 4, -8
+  76              		.cfi_offset 14, -4
+  77              		.loc 1 137 0
+  78 0004 002B     		cmp	r3, #0
+  79 0006 29D0     		beq	.L5
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   {
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     /* Clear EXTI line configuration */
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     EXTI->IMR &= ~EXTI_InitStruct->EXTI_Line;
+  80              		.loc 1 140 0
+  81 0008 1A4B     		ldr	r3, .L10
+  82 000a 0168     		ldr	r1, [r0, #0]
+  83 000c 1C68     		ldr	r4, [r3, #0]
+  84 000e CA43     		mvns	r2, r1
+  85 0010 1440     		ands	r4, r4, r2
+  86 0012 1C60     		str	r4, [r3, #0]
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     EXTI->EMR &= ~EXTI_InitStruct->EXTI_Line;
+  87              		.loc 1 141 0
+  88 0014 5C68     		ldr	r4, [r3, #4]
+  89 0016 2240     		ands	r2, r2, r4
+  90 0018 5A60     		str	r2, [r3, #4]
+  91              	.LVL1:
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     tmp += EXTI_InitStruct->EXTI_Mode;
+  92              		.loc 1 143 0
+  93 001a 0279     		ldrb	r2, [r0, #4]	@ zero_extendqisi2
+  94 001c 02F18044 		add	r4, r2, #1073741824
+  95 0020 04F59E32 		add	r2, r4, #80896
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     *(__IO uint32_t *) tmp |= EXTI_InitStruct->EXTI_Line;
+  96              		.loc 1 145 0
+  97 0024 1468     		ldr	r4, [r2, #0]
+  98 0026 2143     		orrs	r1, r1, r4
+  99 0028 1160     		str	r1, [r2, #0]
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     /* Clear Rising Falling edge configuration */
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     EXTI->RTSR &= ~EXTI_InitStruct->EXTI_Line;
+ 100              		.loc 1 148 0
+ 101 002a 0268     		ldr	r2, [r0, #0]
+ 102 002c 9C68     		ldr	r4, [r3, #8]
+ 103 002e D143     		mvns	r1, r2
+ 104 0030 0C40     		ands	r4, r4, r1
+ 105 0032 9C60     		str	r4, [r3, #8]
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     EXTI->FTSR &= ~EXTI_InitStruct->EXTI_Line;
+ 106              		.loc 1 149 0
+ 107 0034 DC68     		ldr	r4, [r3, #12]
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     /* Select the trigger for the selected external interrupts */
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     if (EXTI_InitStruct->EXTI_Trigger == EXTI_Trigger_Rising_Falling)
+ 108              		.loc 1 152 0
+ 109 0036 4079     		ldrb	r0, [r0, #5]	@ zero_extendqisi2
+ 110              	.LVL2:
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     EXTI->FTSR &= ~EXTI_InitStruct->EXTI_Line;
+ 111              		.loc 1 149 0
+ 112 0038 2140     		ands	r1, r1, r4
+ 113              		.loc 1 152 0
+ 114 003a 1028     		cmp	r0, #16
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     EXTI->FTSR &= ~EXTI_InitStruct->EXTI_Line;
+ 115              		.loc 1 149 0
+ 116 003c D960     		str	r1, [r3, #12]
+ 117              		.loc 1 152 0
+ 118 003e 06D1     		bne	.L6
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     {
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****       /* Rising Falling edge */
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****       EXTI->RTSR |= EXTI_InitStruct->EXTI_Line;
+ 119              		.loc 1 155 0
+ 120 0040 9868     		ldr	r0, [r3, #8]
+ 121 0042 1043     		orrs	r0, r0, r2
+ 122 0044 9860     		str	r0, [r3, #8]
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****       EXTI->FTSR |= EXTI_InitStruct->EXTI_Line;
+ 123              		.loc 1 156 0
+ 124 0046 D968     		ldr	r1, [r3, #12]
+ 125 0048 0A43     		orrs	r2, r2, r1
+ 126 004a DA60     		str	r2, [r3, #12]
+ 127 004c 10BD     		pop	{r4, pc}
+ 128              	.L6:
+ 129              	.LVL3:
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     }
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     else
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     {
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****       tmp = (uint32_t)EXTI_BASE;
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****       tmp += EXTI_InitStruct->EXTI_Trigger;
+ 130              		.loc 1 161 0
+ 131 004e 00F18043 		add	r3, r0, #1073741824
+ 132 0052 03F59E33 		add	r3, r3, #80896
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****       *(__IO uint32_t *) tmp |= EXTI_InitStruct->EXTI_Line;
+ 133              		.loc 1 163 0
+ 134 0056 1968     		ldr	r1, [r3, #0]
+ 135 0058 0A43     		orrs	r2, r2, r1
+ 136 005a 08E0     		b	.L8
+ 137              	.LVL4:
+ 138              	.L5:
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     }
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   }
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   else
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   {
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     tmp += EXTI_InitStruct->EXTI_Mode;
+ 139              		.loc 1 168 0
+ 140 005c 0179     		ldrb	r1, [r0, #4]	@ zero_extendqisi2
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     /* Disable the selected external lines */
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     *(__IO uint32_t *) tmp &= ~EXTI_InitStruct->EXTI_Line;
+ 141              		.loc 1 171 0
+ 142 005e 0068     		ldr	r0, [r0, #0]
+ 143              	.LVL5:
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     tmp += EXTI_InitStruct->EXTI_Mode;
+ 144              		.loc 1 168 0
+ 145 0060 01F18042 		add	r2, r1, #1073741824
+ 146 0064 02F59E33 		add	r3, r2, #80896
+ 147              		.loc 1 171 0
+ 148 0068 1A68     		ldr	r2, [r3, #0]
+ 149 006a 22EA0002 		bic	r2, r2, r0
+ 150              	.LVL6:
+ 151              	.L8:
+ 152 006e 1A60     		str	r2, [r3, #0]
+ 153 0070 10BD     		pop	{r4, pc}
+ 154              	.L11:
+ 155 0072 00BF     		.align	2
+ 156              	.L10:
+ 157 0074 003C0140 		.word	1073822720
+ 158              		.cfi_endproc
+ 159              	.LFE57:
+ 161              		.section	.text.EXTI_StructInit,"ax",%progbits
+ 162              		.align	1
+ 163              		.global	EXTI_StructInit
+ 164              		.thumb
+ 165              		.thumb_func
+ 167              	EXTI_StructInit:
+ 168              	.LFB58:
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   }
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** }
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Fills each EXTI_InitStruct member with its reset value.
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  EXTI_InitStruct: pointer to a EXTI_InitTypeDef structure which will
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *         be initialized.
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval None
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** void EXTI_StructInit(EXTI_InitTypeDef* EXTI_InitStruct)
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+ 169              		.loc 1 182 0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 0
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173              		@ link register save eliminated.
+ 174              	.LVL7:
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI_InitStruct->EXTI_Line = EXTI_LINENONE;
+ 175              		.loc 1 183 0
+ 176 0000 0023     		movs	r3, #0
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI_InitStruct->EXTI_Trigger = EXTI_Trigger_Falling;
+ 177              		.loc 1 185 0
+ 178 0002 0C22     		movs	r2, #12
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI_InitStruct->EXTI_Line = EXTI_LINENONE;
+ 179              		.loc 1 183 0
+ 180 0004 0360     		str	r3, [r0, #0]
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
+ 181              		.loc 1 184 0
+ 182 0006 0371     		strb	r3, [r0, #4]
+ 183              		.loc 1 185 0
+ 184 0008 4271     		strb	r2, [r0, #5]
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI_InitStruct->EXTI_LineCmd = DISABLE;
+ 185              		.loc 1 186 0
+ 186 000a 8371     		strb	r3, [r0, #6]
+ 187 000c 7047     		bx	lr
+ 188              		.cfi_endproc
+ 189              	.LFE58:
+ 191              		.section	.text.EXTI_GenerateSWInterrupt,"ax",%progbits
+ 192              		.align	1
+ 193              		.global	EXTI_GenerateSWInterrupt
+ 194              		.thumb
+ 195              		.thumb_func
+ 197              	EXTI_GenerateSWInterrupt:
+ 198              	.LFB59:
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** }
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Generates a Software interrupt on selected EXTI line.
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  EXTI_Line: specifies the EXTI line on which the software interrupt
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *         will be generated.
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *         This parameter can be any combination of EXTI_Linex where x can be (0..22)
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval None
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+ 199              		.loc 1 197 0
+ 200              		.cfi_startproc
+ 201              		@ args = 0, pretend = 0, frame = 0
+ 202              		@ frame_needed = 0, uses_anonymous_args = 0
+ 203              		@ link register save eliminated.
+ 204              	.LVL8:
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   /* Check the parameters */
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_EXTI_LINE(EXTI_Line));
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->SWIER |= EXTI_Line;
+ 205              		.loc 1 201 0
+ 206 0000 024B     		ldr	r3, .L14
+ 207 0002 1A69     		ldr	r2, [r3, #16]
+ 208 0004 1043     		orrs	r0, r0, r2
+ 209              	.LVL9:
+ 210 0006 1861     		str	r0, [r3, #16]
+ 211 0008 7047     		bx	lr
+ 212              	.L15:
+ 213 000a 00BF     		.align	2
+ 214              	.L14:
+ 215 000c 003C0140 		.word	1073822720
+ 216              		.cfi_endproc
+ 217              	.LFE59:
+ 219              		.section	.text.EXTI_GetFlagStatus,"ax",%progbits
+ 220              		.align	1
+ 221              		.global	EXTI_GetFlagStatus
+ 222              		.thumb
+ 223              		.thumb_func
+ 225              	EXTI_GetFlagStatus:
+ 226              	.LFB60:
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** }
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @}
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /** @defgroup EXTI_Group2 Interrupts and flags management functions
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  *  @brief   Interrupts and flags management functions 
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  *
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** @verbatim   
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  ===============================================================================
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****                   Interrupts and flags management functions
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****  ===============================================================================  
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** @endverbatim
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @{
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Checks whether the specified EXTI line flag is set or not.
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  EXTI_Line: specifies the EXTI line flag to check.
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          This parameter can be EXTI_Linex where x can be(0..22)
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval The new state of EXTI_Line (SET or RESET).
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line)
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+ 227              		.loc 1 227 0
+ 228              		.cfi_startproc
+ 229              		@ args = 0, pretend = 0, frame = 0
+ 230              		@ frame_needed = 0, uses_anonymous_args = 0
+ 231              		@ link register save eliminated.
+ 232              	.LVL10:
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   FlagStatus bitstatus = RESET;
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   /* Check the parameters */
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   if ((EXTI->PR & EXTI_Line) != (uint32_t)RESET)
+ 233              		.loc 1 232 0
+ 234 0000 034B     		ldr	r3, .L17
+ 235 0002 5969     		ldr	r1, [r3, #20]
+ 236              	.LVL11:
+ 237 0004 0842     		tst	r0, r1
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   {
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     bitstatus = SET;
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   }
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   else
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   {
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     bitstatus = RESET;
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   }
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   return bitstatus;
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** }
+ 238              		.loc 1 241 0
+ 239 0006 0CBF     		ite	eq
+ 240 0008 0020     		moveq	r0, #0
+ 241 000a 0120     		movne	r0, #1
+ 242              	.LVL12:
+ 243 000c 7047     		bx	lr
+ 244              	.L18:
+ 245 000e 00BF     		.align	2
+ 246              	.L17:
+ 247 0010 003C0140 		.word	1073822720
+ 248              		.cfi_endproc
+ 249              	.LFE60:
+ 251              		.section	.text.EXTI_ClearFlag,"ax",%progbits
+ 252              		.align	1
+ 253              		.global	EXTI_ClearFlag
+ 254              		.thumb
+ 255              		.thumb_func
+ 257              	EXTI_ClearFlag:
+ 258              	.LFB61:
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Clears the EXTI's line pending flags.
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  EXTI_Line: specifies the EXTI lines flags to clear.
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          This parameter can be any combination of EXTI_Linex where x can be (0..22)
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval None
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** void EXTI_ClearFlag(uint32_t EXTI_Line)
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+ 259              		.loc 1 250 0
+ 260              		.cfi_startproc
+ 261              		@ args = 0, pretend = 0, frame = 0
+ 262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 263              		@ link register save eliminated.
+ 264              	.LVL13:
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   /* Check the parameters */
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_EXTI_LINE(EXTI_Line));
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->PR = EXTI_Line;
+ 265              		.loc 1 254 0
+ 266 0000 014B     		ldr	r3, .L20
+ 267 0002 5861     		str	r0, [r3, #20]
+ 268 0004 7047     		bx	lr
+ 269              	.L21:
+ 270 0006 00BF     		.align	2
+ 271              	.L20:
+ 272 0008 003C0140 		.word	1073822720
+ 273              		.cfi_endproc
+ 274              	.LFE61:
+ 276              		.section	.text.EXTI_GetITStatus,"ax",%progbits
+ 277              		.align	1
+ 278              		.global	EXTI_GetITStatus
+ 279              		.thumb
+ 280              		.thumb_func
+ 282              	EXTI_GetITStatus:
+ 283              	.LFB62:
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** }
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Checks whether the specified EXTI line is asserted or not.
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  EXTI_Line: specifies the EXTI line to check.
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          This parameter can be EXTI_Linex where x can be(0..22)
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval The new state of EXTI_Line (SET or RESET).
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+ 284              		.loc 1 264 0
+ 285              		.cfi_startproc
+ 286              		@ args = 0, pretend = 0, frame = 0
+ 287              		@ frame_needed = 0, uses_anonymous_args = 0
+ 288              		@ link register save eliminated.
+ 289              	.LVL14:
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   ITStatus bitstatus = RESET;
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   uint32_t enablestatus = 0;
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   /* Check the parameters */
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   enablestatus =  EXTI->IMR & EXTI_Line;
+ 290              		.loc 1 270 0
+ 291 0000 064B     		ldr	r3, .L25
+ 292 0002 1A68     		ldr	r2, [r3, #0]
+ 293              	.LVL15:
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
+ 294              		.loc 1 271 0
+ 295 0004 5969     		ldr	r1, [r3, #20]
+ 296 0006 10EA0103 		ands	r3, r0, r1
+ 297 000a 04D0     		beq	.L24
+ 298              		.loc 1 271 0 is_stmt 0 discriminator 1
+ 299 000c 1042     		tst	r0, r2
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   {
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     bitstatus = SET;
+ 300              		.loc 1 273 0 is_stmt 1 discriminator 1
+ 301 000e 0CBF     		ite	eq
+ 302 0010 0020     		moveq	r0, #0
+ 303 0012 0120     		movne	r0, #1
+ 304              	.LVL16:
+ 305 0014 7047     		bx	lr
+ 306              	.LVL17:
+ 307              	.L24:
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   }
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   else
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   {
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****     bitstatus = RESET;
+ 308              		.loc 1 277 0
+ 309 0016 1846     		mov	r0, r3
+ 310              	.LVL18:
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   }
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   return bitstatus;
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** }
+ 311              		.loc 1 280 0
+ 312 0018 7047     		bx	lr
+ 313              	.L26:
+ 314 001a 00BF     		.align	2
+ 315              	.L25:
+ 316 001c 003C0140 		.word	1073822720
+ 317              		.cfi_endproc
+ 318              	.LFE62:
+ 320              		.section	.text.EXTI_ClearITPendingBit,"ax",%progbits
+ 321              		.align	1
+ 322              		.global	EXTI_ClearITPendingBit
+ 323              		.thumb
+ 324              		.thumb_func
+ 326              	EXTI_ClearITPendingBit:
+ 327              	.LFB63:
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** 
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** /**
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @brief  Clears the EXTI's line pending bits.
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @param  EXTI_Line: specifies the EXTI lines to clear.
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   *          This parameter can be any combination of EXTI_Linex where x can be (0..22)
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   * @retval None
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   */
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** void EXTI_ClearITPendingBit(uint32_t EXTI_Line)
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c **** {
+ 328              		.loc 1 289 0
+ 329              		.cfi_startproc
+ 330              		@ args = 0, pretend = 0, frame = 0
+ 331              		@ frame_needed = 0, uses_anonymous_args = 0
+ 332              		@ link register save eliminated.
+ 333              	.LVL19:
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   /* Check the parameters */
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   assert_param(IS_EXTI_LINE(EXTI_Line));
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_exti.c ****   EXTI->PR = EXTI_Line;
+ 334              		.loc 1 293 0
+ 335 0000 014B     		ldr	r3, .L28
+ 336 0002 5861     		str	r0, [r3, #20]
+ 337 0004 7047     		bx	lr
+ 338              	.L29:
+ 339 0006 00BF     		.align	2
+ 340              	.L28:
+ 341 0008 003C0140 		.word	1073822720
+ 342              		.cfi_endproc
+ 343              	.LFE63:
+ 345              		.text
+ 346              	.Letext0:
+ 347              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 348              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 349              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_exti.h"
+ 350              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_exti.c
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:19     .text.EXTI_DeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:24     .text.EXTI_DeInit:00000000 EXTI_DeInit
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:51     .text.EXTI_DeInit:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:57     .text.EXTI_Init:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:62     .text.EXTI_Init:00000000 EXTI_Init
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:157    .text.EXTI_Init:00000074 $d
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:162    .text.EXTI_StructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:167    .text.EXTI_StructInit:00000000 EXTI_StructInit
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:192    .text.EXTI_GenerateSWInterrupt:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:197    .text.EXTI_GenerateSWInterrupt:00000000 EXTI_GenerateSWInterrupt
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:215    .text.EXTI_GenerateSWInterrupt:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:220    .text.EXTI_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:225    .text.EXTI_GetFlagStatus:00000000 EXTI_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:247    .text.EXTI_GetFlagStatus:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:252    .text.EXTI_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:257    .text.EXTI_ClearFlag:00000000 EXTI_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:272    .text.EXTI_ClearFlag:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:277    .text.EXTI_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:282    .text.EXTI_GetITStatus:00000000 EXTI_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:316    .text.EXTI_GetITStatus:0000001c $d
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:321    .text.EXTI_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:326    .text.EXTI_ClearITPendingBit:00000000 EXTI_ClearITPendingBit
+C:\Users\STINA\AppData\Local\Temp\ccARuEFg.s:341    .text.EXTI_ClearITPendingBit:00000008 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

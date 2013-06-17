@@ -1,0 +1,2691 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_cryp_aes.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.CRYP_AES_ECB,"ax",%progbits
+  19              		.align	1
+  20              		.global	CRYP_AES_ECB
+  21              		.thumb
+  22              		.thumb_func
+  24              	CRYP_AES_ECB:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_cryp_aes.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @file    stm32f2xx_cryp_aes.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @brief   This file provides high level functions to encrypt and decrypt an 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          input message using AES in ECB/CBC/CTR modes.
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          It uses the stm32f2xx_cryp.c/.h drivers to access the STM32F2xx CRYP
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          peripheral.
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *  @verbatim
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          ===================================================================
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *                                   How to use this driver
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          ===================================================================
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          1. Enable The CRYP controller clock using 
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_CRYP, ENABLE); function.
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          2. Encrypt and decrypt using AES in ECB Mode using CRYP_AES_ECB()
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *             function.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          3. Encrypt and decrypt using AES in CBC Mode using CRYP_AES_CBC()
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *             function.
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          4. Encrypt and decrypt using AES in CTR Mode using CRYP_AES_CTR()
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *             function.
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *  @endverbatim
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ******************************************************************************
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @attention
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * You may not use this file except in compliance with the License.
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * You may obtain a copy of the License at:
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * Unless required by applicable law or agreed to in writing, software 
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * See the License for the specific language governing permissions and
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * limitations under the License.
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ******************************************************************************
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /* Includes ------------------------------------------------------------------*/
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** #include "stm32f2xx_cryp.h"
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @{
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /** @defgroup CRYP 
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @brief CRYP driver modules
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @{
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /* Private typedef -----------------------------------------------------------*/
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /* Private define ------------------------------------------------------------*/
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** #define AESBUSY_TIMEOUT    ((uint32_t) 0x00010000)
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /* Private macro -------------------------------------------------------------*/
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /* Private variables ---------------------------------------------------------*/
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /* Private function prototypes -----------------------------------------------*/
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /* Private functions ---------------------------------------------------------*/
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /** @defgroup CRYP_Private_Functions
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @{
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */ 
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /** @defgroup CRYP_Group6 High Level AES functions
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****  *  @brief   High Level AES functions 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****  *
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** @verbatim   
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****  ===============================================================================
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****                           High Level AES functions
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****  ===============================================================================
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** @endverbatim
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @{
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /**
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @brief  Encrypt and decrypt using AES in ECB Mode
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Mode: encryption or decryption Mode.
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          This parameter can be one of the following values:
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *            @arg MODE_ENCRYPT: Encryption
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *            @arg MODE_DECRYPT: Decryption
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Key: Key used for AES algorithm.
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Keysize: length of the Key, must be a 128, 192 or 256.
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Input: pointer to the Input buffer.
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Ilength: length of the Input buffer, must be a multiple of 16.
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Output: pointer to the returned buffer.
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @retval An ErrorStatus enumeration value:
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          - SUCCESS: Operation done
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          - ERROR: Operation failed
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** ErrorStatus CRYP_AES_ECB(uint8_t Mode, uint8_t* Key, uint16_t Keysize,
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****                          uint8_t* Input, uint32_t Ilength, uint8_t* Output)
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** {
+  27              		.loc 1 106 0
+  28              		.cfi_startproc
+  29              		@ args = 8, pretend = 0, frame = 48
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 2DE9F045 		push	{r4, r5, r6, r7, r8, sl, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 28
+  35              		.cfi_offset 4, -28
+  36              		.cfi_offset 5, -24
+  37              		.cfi_offset 6, -20
+  38              		.cfi_offset 7, -16
+  39              		.cfi_offset 8, -12
+  40              		.cfi_offset 10, -8
+  41              		.cfi_offset 14, -4
+  42 0004 8DB0     		sub	sp, sp, #52
+  43              	.LCFI1:
+  44              		.cfi_def_cfa_offset 80
+  45              		.loc 1 106 0
+  46 0006 1746     		mov	r7, r2
+  47 0008 0646     		mov	r6, r0
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_InitTypeDef AES_CRYP_InitStructure;
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_KeyInitTypeDef AES_CRYP_KeyInitStructure;
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   __IO uint32_t counter = 0;
+  48              		.loc 1 109 0
+  49 000a 4FF0000A 		mov	sl, #0
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t busystatus = 0;
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ErrorStatus status = SUCCESS;
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t keyaddr    = (uint32_t)Key;
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t i = 0;
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Crypto structures initialisation*/
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_KeyStructInit(&AES_CRYP_KeyInitStructure);
+  50              		.loc 1 118 0
+  51 000e 04A8     		add	r0, sp, #16
+  52              	.LVL1:
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** {
+  53              		.loc 1 106 0
+  54 0010 0C46     		mov	r4, r1
+  55 0012 9846     		mov	r8, r3
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   __IO uint32_t counter = 0;
+  56              		.loc 1 109 0
+  57 0014 CDF804A0 		str	sl, [sp, #4]
+  58              	.LVL2:
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t outputaddr = (uint32_t)Output;
+  59              		.loc 1 114 0
+  60 0018 159D     		ldr	r5, [sp, #84]
+  61              	.LVL3:
+  62              		.loc 1 118 0
+  63 001a FFF7FEFF 		bl	CRYP_KeyStructInit
+  64              	.LVL4:
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   switch(Keysize)
+  65              		.loc 1 120 0
+  66 001e C02F     		cmp	r7, #192
+  67 0020 11D0     		beq	.L4
+  68 0022 B7F5807F 		cmp	r7, #256
+  69 0026 23D0     		beq	.L5
+  70 0028 802F     		cmp	r7, #128
+  71 002a 3DD1     		bne	.L2
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 128:
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize = CRYP_KeySize_128b;
+  72              		.loc 1 123 0
+  73 002c ADF80EA0 		strh	sl, [sp, #14]	@ movhi
+  74              	.LVL5:
+  75              	.LBB126:
+  76              	.LBB127:
+  77              		.file 2 "src/libstm32f2/core_cmInstr.h"
+   1:src/libstm32f2/core_cmInstr.h **** /**************************************************************************//**
+   2:src/libstm32f2/core_cmInstr.h ****  * @file     core_cmInstr.h
+   3:src/libstm32f2/core_cmInstr.h ****  * @brief    CMSIS Cortex-M Core Instruction Access Header File
+   4:src/libstm32f2/core_cmInstr.h ****  * @version  V3.01
+   5:src/libstm32f2/core_cmInstr.h ****  * @date     06. March 2012
+   6:src/libstm32f2/core_cmInstr.h ****  *
+   7:src/libstm32f2/core_cmInstr.h ****  * @note
+   8:src/libstm32f2/core_cmInstr.h ****  * Copyright (C) 2009-2012 ARM Limited. All rights reserved.
+   9:src/libstm32f2/core_cmInstr.h ****  *
+  10:src/libstm32f2/core_cmInstr.h ****  * @par
+  11:src/libstm32f2/core_cmInstr.h ****  * ARM Limited (ARM) is supplying this software for use with Cortex-M
+  12:src/libstm32f2/core_cmInstr.h ****  * processor based microcontrollers.  This file can be freely distributed
+  13:src/libstm32f2/core_cmInstr.h ****  * within development tools that are supporting such ARM based processors.
+  14:src/libstm32f2/core_cmInstr.h ****  *
+  15:src/libstm32f2/core_cmInstr.h ****  * @par
+  16:src/libstm32f2/core_cmInstr.h ****  * THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
+  17:src/libstm32f2/core_cmInstr.h ****  * OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+  18:src/libstm32f2/core_cmInstr.h ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
+  19:src/libstm32f2/core_cmInstr.h ****  * ARM SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR
+  20:src/libstm32f2/core_cmInstr.h ****  * CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+  21:src/libstm32f2/core_cmInstr.h ****  *
+  22:src/libstm32f2/core_cmInstr.h ****  ******************************************************************************/
+  23:src/libstm32f2/core_cmInstr.h **** 
+  24:src/libstm32f2/core_cmInstr.h **** #ifndef __CORE_CMINSTR_H
+  25:src/libstm32f2/core_cmInstr.h **** #define __CORE_CMINSTR_H
+  26:src/libstm32f2/core_cmInstr.h **** 
+  27:src/libstm32f2/core_cmInstr.h **** 
+  28:src/libstm32f2/core_cmInstr.h **** /* ##########################  Core Instruction Access  ######################### */
+  29:src/libstm32f2/core_cmInstr.h **** /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+  30:src/libstm32f2/core_cmInstr.h ****   Access to dedicated instructions
+  31:src/libstm32f2/core_cmInstr.h ****   @{
+  32:src/libstm32f2/core_cmInstr.h **** */
+  33:src/libstm32f2/core_cmInstr.h **** 
+  34:src/libstm32f2/core_cmInstr.h **** #if   defined ( __CC_ARM ) /*------------------RealView Compiler -----------------*/
+  35:src/libstm32f2/core_cmInstr.h **** /* ARM armcc specific functions */
+  36:src/libstm32f2/core_cmInstr.h **** 
+  37:src/libstm32f2/core_cmInstr.h **** #if (__ARMCC_VERSION < 400677)
+  38:src/libstm32f2/core_cmInstr.h ****   #error "Please use ARM Compiler Toolchain V4.0.677 or later!"
+  39:src/libstm32f2/core_cmInstr.h **** #endif
+  40:src/libstm32f2/core_cmInstr.h **** 
+  41:src/libstm32f2/core_cmInstr.h **** 
+  42:src/libstm32f2/core_cmInstr.h **** /** \brief  No Operation
+  43:src/libstm32f2/core_cmInstr.h **** 
+  44:src/libstm32f2/core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+  45:src/libstm32f2/core_cmInstr.h ****  */
+  46:src/libstm32f2/core_cmInstr.h **** #define __NOP                             __nop
+  47:src/libstm32f2/core_cmInstr.h **** 
+  48:src/libstm32f2/core_cmInstr.h **** 
+  49:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Interrupt
+  50:src/libstm32f2/core_cmInstr.h **** 
+  51:src/libstm32f2/core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+  52:src/libstm32f2/core_cmInstr.h ****     until one of a number of events occurs.
+  53:src/libstm32f2/core_cmInstr.h ****  */
+  54:src/libstm32f2/core_cmInstr.h **** #define __WFI                             __wfi
+  55:src/libstm32f2/core_cmInstr.h **** 
+  56:src/libstm32f2/core_cmInstr.h **** 
+  57:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Event
+  58:src/libstm32f2/core_cmInstr.h **** 
+  59:src/libstm32f2/core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+  60:src/libstm32f2/core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+  61:src/libstm32f2/core_cmInstr.h ****  */
+  62:src/libstm32f2/core_cmInstr.h **** #define __WFE                             __wfe
+  63:src/libstm32f2/core_cmInstr.h **** 
+  64:src/libstm32f2/core_cmInstr.h **** 
+  65:src/libstm32f2/core_cmInstr.h **** /** \brief  Send Event
+  66:src/libstm32f2/core_cmInstr.h **** 
+  67:src/libstm32f2/core_cmInstr.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+  68:src/libstm32f2/core_cmInstr.h ****  */
+  69:src/libstm32f2/core_cmInstr.h **** #define __SEV                             __sev
+  70:src/libstm32f2/core_cmInstr.h **** 
+  71:src/libstm32f2/core_cmInstr.h **** 
+  72:src/libstm32f2/core_cmInstr.h **** /** \brief  Instruction Synchronization Barrier
+  73:src/libstm32f2/core_cmInstr.h **** 
+  74:src/libstm32f2/core_cmInstr.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+  75:src/libstm32f2/core_cmInstr.h ****     so that all instructions following the ISB are fetched from cache or
+  76:src/libstm32f2/core_cmInstr.h ****     memory, after the instruction has been completed.
+  77:src/libstm32f2/core_cmInstr.h ****  */
+  78:src/libstm32f2/core_cmInstr.h **** #define __ISB()                           __isb(0xF)
+  79:src/libstm32f2/core_cmInstr.h **** 
+  80:src/libstm32f2/core_cmInstr.h **** 
+  81:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Synchronization Barrier
+  82:src/libstm32f2/core_cmInstr.h **** 
+  83:src/libstm32f2/core_cmInstr.h ****     This function acts as a special kind of Data Memory Barrier.
+  84:src/libstm32f2/core_cmInstr.h ****     It completes when all explicit memory accesses before this instruction complete.
+  85:src/libstm32f2/core_cmInstr.h ****  */
+  86:src/libstm32f2/core_cmInstr.h **** #define __DSB()                           __dsb(0xF)
+  87:src/libstm32f2/core_cmInstr.h **** 
+  88:src/libstm32f2/core_cmInstr.h **** 
+  89:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Memory Barrier
+  90:src/libstm32f2/core_cmInstr.h **** 
+  91:src/libstm32f2/core_cmInstr.h ****     This function ensures the apparent order of the explicit memory operations before
+  92:src/libstm32f2/core_cmInstr.h ****     and after the instruction, without ensuring their completion.
+  93:src/libstm32f2/core_cmInstr.h ****  */
+  94:src/libstm32f2/core_cmInstr.h **** #define __DMB()                           __dmb(0xF)
+  95:src/libstm32f2/core_cmInstr.h **** 
+  96:src/libstm32f2/core_cmInstr.h **** 
+  97:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (32 bit)
+  98:src/libstm32f2/core_cmInstr.h **** 
+  99:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in integer value.
+ 100:src/libstm32f2/core_cmInstr.h **** 
+ 101:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 102:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 103:src/libstm32f2/core_cmInstr.h ****  */
+ 104:src/libstm32f2/core_cmInstr.h **** #define __REV                             __rev
+ 105:src/libstm32f2/core_cmInstr.h **** 
+ 106:src/libstm32f2/core_cmInstr.h **** 
+ 107:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (16 bit)
+ 108:src/libstm32f2/core_cmInstr.h **** 
+ 109:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in two unsigned short values.
+ 110:src/libstm32f2/core_cmInstr.h **** 
+ 111:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 112:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 113:src/libstm32f2/core_cmInstr.h ****  */
+ 114:src/libstm32f2/core_cmInstr.h **** __attribute__((section(".rev16_text"))) __STATIC_INLINE __ASM uint32_t __REV16(uint32_t value)
+ 115:src/libstm32f2/core_cmInstr.h **** {
+ 116:src/libstm32f2/core_cmInstr.h ****   rev16 r0, r0
+ 117:src/libstm32f2/core_cmInstr.h ****   bx lr
+ 118:src/libstm32f2/core_cmInstr.h **** }
+ 119:src/libstm32f2/core_cmInstr.h **** 
+ 120:src/libstm32f2/core_cmInstr.h **** 
+ 121:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order in signed short value
+ 122:src/libstm32f2/core_cmInstr.h **** 
+ 123:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in a signed short value with sign extension to integer.
+ 124:src/libstm32f2/core_cmInstr.h **** 
+ 125:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 126:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 127:src/libstm32f2/core_cmInstr.h ****  */
+ 128:src/libstm32f2/core_cmInstr.h **** __attribute__((section(".revsh_text"))) __STATIC_INLINE __ASM int32_t __REVSH(int32_t value)
+ 129:src/libstm32f2/core_cmInstr.h **** {
+ 130:src/libstm32f2/core_cmInstr.h ****   revsh r0, r0
+ 131:src/libstm32f2/core_cmInstr.h ****   bx lr
+ 132:src/libstm32f2/core_cmInstr.h **** }
+ 133:src/libstm32f2/core_cmInstr.h **** 
+ 134:src/libstm32f2/core_cmInstr.h **** 
+ 135:src/libstm32f2/core_cmInstr.h **** /** \brief  Rotate Right in unsigned value (32 bit)
+ 136:src/libstm32f2/core_cmInstr.h **** 
+ 137:src/libstm32f2/core_cmInstr.h ****     This function Rotate Right (immediate) provides the value of the contents of a register rotated
+ 138:src/libstm32f2/core_cmInstr.h **** 
+ 139:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to rotate
+ 140:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Number of Bits to rotate
+ 141:src/libstm32f2/core_cmInstr.h ****     \return               Rotated value
+ 142:src/libstm32f2/core_cmInstr.h ****  */
+ 143:src/libstm32f2/core_cmInstr.h **** #define __ROR                             __ror
+ 144:src/libstm32f2/core_cmInstr.h **** 
+ 145:src/libstm32f2/core_cmInstr.h **** 
+ 146:src/libstm32f2/core_cmInstr.h **** #if       (__CORTEX_M >= 0x03)
+ 147:src/libstm32f2/core_cmInstr.h **** 
+ 148:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse bit order of value
+ 149:src/libstm32f2/core_cmInstr.h **** 
+ 150:src/libstm32f2/core_cmInstr.h ****     This function reverses the bit order of the given value.
+ 151:src/libstm32f2/core_cmInstr.h **** 
+ 152:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 153:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 154:src/libstm32f2/core_cmInstr.h ****  */
+ 155:src/libstm32f2/core_cmInstr.h **** #define __RBIT                            __rbit
+ 156:src/libstm32f2/core_cmInstr.h **** 
+ 157:src/libstm32f2/core_cmInstr.h **** 
+ 158:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (8 bit)
+ 159:src/libstm32f2/core_cmInstr.h **** 
+ 160:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 8 bit value.
+ 161:src/libstm32f2/core_cmInstr.h **** 
+ 162:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 163:src/libstm32f2/core_cmInstr.h ****     \return             value of type uint8_t at (*ptr)
+ 164:src/libstm32f2/core_cmInstr.h ****  */
+ 165:src/libstm32f2/core_cmInstr.h **** #define __LDREXB(ptr)                     ((uint8_t ) __ldrex(ptr))
+ 166:src/libstm32f2/core_cmInstr.h **** 
+ 167:src/libstm32f2/core_cmInstr.h **** 
+ 168:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (16 bit)
+ 169:src/libstm32f2/core_cmInstr.h **** 
+ 170:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 16 bit values.
+ 171:src/libstm32f2/core_cmInstr.h **** 
+ 172:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 173:src/libstm32f2/core_cmInstr.h ****     \return        value of type uint16_t at (*ptr)
+ 174:src/libstm32f2/core_cmInstr.h ****  */
+ 175:src/libstm32f2/core_cmInstr.h **** #define __LDREXH(ptr)                     ((uint16_t) __ldrex(ptr))
+ 176:src/libstm32f2/core_cmInstr.h **** 
+ 177:src/libstm32f2/core_cmInstr.h **** 
+ 178:src/libstm32f2/core_cmInstr.h **** /** \brief  LDR Exclusive (32 bit)
+ 179:src/libstm32f2/core_cmInstr.h **** 
+ 180:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive LDR command for 32 bit values.
+ 181:src/libstm32f2/core_cmInstr.h **** 
+ 182:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 183:src/libstm32f2/core_cmInstr.h ****     \return        value of type uint32_t at (*ptr)
+ 184:src/libstm32f2/core_cmInstr.h ****  */
+ 185:src/libstm32f2/core_cmInstr.h **** #define __LDREXW(ptr)                     ((uint32_t ) __ldrex(ptr))
+ 186:src/libstm32f2/core_cmInstr.h **** 
+ 187:src/libstm32f2/core_cmInstr.h **** 
+ 188:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (8 bit)
+ 189:src/libstm32f2/core_cmInstr.h **** 
+ 190:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 8 bit values.
+ 191:src/libstm32f2/core_cmInstr.h **** 
+ 192:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 193:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 194:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 195:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 196:src/libstm32f2/core_cmInstr.h ****  */
+ 197:src/libstm32f2/core_cmInstr.h **** #define __STREXB(value, ptr)              __strex(value, ptr)
+ 198:src/libstm32f2/core_cmInstr.h **** 
+ 199:src/libstm32f2/core_cmInstr.h **** 
+ 200:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (16 bit)
+ 201:src/libstm32f2/core_cmInstr.h **** 
+ 202:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 16 bit values.
+ 203:src/libstm32f2/core_cmInstr.h **** 
+ 204:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 205:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 206:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 207:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 208:src/libstm32f2/core_cmInstr.h ****  */
+ 209:src/libstm32f2/core_cmInstr.h **** #define __STREXH(value, ptr)              __strex(value, ptr)
+ 210:src/libstm32f2/core_cmInstr.h **** 
+ 211:src/libstm32f2/core_cmInstr.h **** 
+ 212:src/libstm32f2/core_cmInstr.h **** /** \brief  STR Exclusive (32 bit)
+ 213:src/libstm32f2/core_cmInstr.h **** 
+ 214:src/libstm32f2/core_cmInstr.h ****     This function performs a exclusive STR command for 32 bit values.
+ 215:src/libstm32f2/core_cmInstr.h **** 
+ 216:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to store
+ 217:src/libstm32f2/core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 218:src/libstm32f2/core_cmInstr.h ****     \return          0  Function succeeded
+ 219:src/libstm32f2/core_cmInstr.h ****     \return          1  Function failed
+ 220:src/libstm32f2/core_cmInstr.h ****  */
+ 221:src/libstm32f2/core_cmInstr.h **** #define __STREXW(value, ptr)              __strex(value, ptr)
+ 222:src/libstm32f2/core_cmInstr.h **** 
+ 223:src/libstm32f2/core_cmInstr.h **** 
+ 224:src/libstm32f2/core_cmInstr.h **** /** \brief  Remove the exclusive lock
+ 225:src/libstm32f2/core_cmInstr.h **** 
+ 226:src/libstm32f2/core_cmInstr.h ****     This function removes the exclusive lock which is created by LDREX.
+ 227:src/libstm32f2/core_cmInstr.h **** 
+ 228:src/libstm32f2/core_cmInstr.h ****  */
+ 229:src/libstm32f2/core_cmInstr.h **** #define __CLREX                           __clrex
+ 230:src/libstm32f2/core_cmInstr.h **** 
+ 231:src/libstm32f2/core_cmInstr.h **** 
+ 232:src/libstm32f2/core_cmInstr.h **** /** \brief  Signed Saturate
+ 233:src/libstm32f2/core_cmInstr.h **** 
+ 234:src/libstm32f2/core_cmInstr.h ****     This function saturates a signed value.
+ 235:src/libstm32f2/core_cmInstr.h **** 
+ 236:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 237:src/libstm32f2/core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (1..32)
+ 238:src/libstm32f2/core_cmInstr.h ****     \return             Saturated value
+ 239:src/libstm32f2/core_cmInstr.h ****  */
+ 240:src/libstm32f2/core_cmInstr.h **** #define __SSAT                            __ssat
+ 241:src/libstm32f2/core_cmInstr.h **** 
+ 242:src/libstm32f2/core_cmInstr.h **** 
+ 243:src/libstm32f2/core_cmInstr.h **** /** \brief  Unsigned Saturate
+ 244:src/libstm32f2/core_cmInstr.h **** 
+ 245:src/libstm32f2/core_cmInstr.h ****     This function saturates an unsigned value.
+ 246:src/libstm32f2/core_cmInstr.h **** 
+ 247:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 248:src/libstm32f2/core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (0..31)
+ 249:src/libstm32f2/core_cmInstr.h ****     \return             Saturated value
+ 250:src/libstm32f2/core_cmInstr.h ****  */
+ 251:src/libstm32f2/core_cmInstr.h **** #define __USAT                            __usat
+ 252:src/libstm32f2/core_cmInstr.h **** 
+ 253:src/libstm32f2/core_cmInstr.h **** 
+ 254:src/libstm32f2/core_cmInstr.h **** /** \brief  Count leading zeros
+ 255:src/libstm32f2/core_cmInstr.h **** 
+ 256:src/libstm32f2/core_cmInstr.h ****     This function counts the number of leading zeros of a data value.
+ 257:src/libstm32f2/core_cmInstr.h **** 
+ 258:src/libstm32f2/core_cmInstr.h ****     \param [in]  value  Value to count the leading zeros
+ 259:src/libstm32f2/core_cmInstr.h ****     \return             number of leading zeros in value
+ 260:src/libstm32f2/core_cmInstr.h ****  */
+ 261:src/libstm32f2/core_cmInstr.h **** #define __CLZ                             __clz
+ 262:src/libstm32f2/core_cmInstr.h **** 
+ 263:src/libstm32f2/core_cmInstr.h **** #endif /* (__CORTEX_M >= 0x03) */
+ 264:src/libstm32f2/core_cmInstr.h **** 
+ 265:src/libstm32f2/core_cmInstr.h **** 
+ 266:src/libstm32f2/core_cmInstr.h **** 
+ 267:src/libstm32f2/core_cmInstr.h **** #elif defined ( __ICCARM__ ) /*------------------ ICC Compiler -------------------*/
+ 268:src/libstm32f2/core_cmInstr.h **** /* IAR iccarm specific functions */
+ 269:src/libstm32f2/core_cmInstr.h **** 
+ 270:src/libstm32f2/core_cmInstr.h **** #include <cmsis_iar.h>
+ 271:src/libstm32f2/core_cmInstr.h **** 
+ 272:src/libstm32f2/core_cmInstr.h **** 
+ 273:src/libstm32f2/core_cmInstr.h **** #elif defined ( __TMS470__ ) /*---------------- TI CCS Compiler ------------------*/
+ 274:src/libstm32f2/core_cmInstr.h **** /* TI CCS specific functions */
+ 275:src/libstm32f2/core_cmInstr.h **** 
+ 276:src/libstm32f2/core_cmInstr.h **** #include <cmsis_ccs.h>
+ 277:src/libstm32f2/core_cmInstr.h **** 
+ 278:src/libstm32f2/core_cmInstr.h **** 
+ 279:src/libstm32f2/core_cmInstr.h **** #elif defined ( __GNUC__ ) /*------------------ GNU Compiler ---------------------*/
+ 280:src/libstm32f2/core_cmInstr.h **** /* GNU gcc specific functions */
+ 281:src/libstm32f2/core_cmInstr.h **** 
+ 282:src/libstm32f2/core_cmInstr.h **** /** \brief  No Operation
+ 283:src/libstm32f2/core_cmInstr.h **** 
+ 284:src/libstm32f2/core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+ 285:src/libstm32f2/core_cmInstr.h ****  */
+ 286:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __NOP(void)
+ 287:src/libstm32f2/core_cmInstr.h **** {
+ 288:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("nop");
+ 289:src/libstm32f2/core_cmInstr.h **** }
+ 290:src/libstm32f2/core_cmInstr.h **** 
+ 291:src/libstm32f2/core_cmInstr.h **** 
+ 292:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Interrupt
+ 293:src/libstm32f2/core_cmInstr.h **** 
+ 294:src/libstm32f2/core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+ 295:src/libstm32f2/core_cmInstr.h ****     until one of a number of events occurs.
+ 296:src/libstm32f2/core_cmInstr.h ****  */
+ 297:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFI(void)
+ 298:src/libstm32f2/core_cmInstr.h **** {
+ 299:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("wfi");
+ 300:src/libstm32f2/core_cmInstr.h **** }
+ 301:src/libstm32f2/core_cmInstr.h **** 
+ 302:src/libstm32f2/core_cmInstr.h **** 
+ 303:src/libstm32f2/core_cmInstr.h **** /** \brief  Wait For Event
+ 304:src/libstm32f2/core_cmInstr.h **** 
+ 305:src/libstm32f2/core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+ 306:src/libstm32f2/core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+ 307:src/libstm32f2/core_cmInstr.h ****  */
+ 308:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFE(void)
+ 309:src/libstm32f2/core_cmInstr.h **** {
+ 310:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("wfe");
+ 311:src/libstm32f2/core_cmInstr.h **** }
+ 312:src/libstm32f2/core_cmInstr.h **** 
+ 313:src/libstm32f2/core_cmInstr.h **** 
+ 314:src/libstm32f2/core_cmInstr.h **** /** \brief  Send Event
+ 315:src/libstm32f2/core_cmInstr.h **** 
+ 316:src/libstm32f2/core_cmInstr.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+ 317:src/libstm32f2/core_cmInstr.h ****  */
+ 318:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __SEV(void)
+ 319:src/libstm32f2/core_cmInstr.h **** {
+ 320:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("sev");
+ 321:src/libstm32f2/core_cmInstr.h **** }
+ 322:src/libstm32f2/core_cmInstr.h **** 
+ 323:src/libstm32f2/core_cmInstr.h **** 
+ 324:src/libstm32f2/core_cmInstr.h **** /** \brief  Instruction Synchronization Barrier
+ 325:src/libstm32f2/core_cmInstr.h **** 
+ 326:src/libstm32f2/core_cmInstr.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+ 327:src/libstm32f2/core_cmInstr.h ****     so that all instructions following the ISB are fetched from cache or
+ 328:src/libstm32f2/core_cmInstr.h ****     memory, after the instruction has been completed.
+ 329:src/libstm32f2/core_cmInstr.h ****  */
+ 330:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __ISB(void)
+ 331:src/libstm32f2/core_cmInstr.h **** {
+ 332:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("isb");
+ 333:src/libstm32f2/core_cmInstr.h **** }
+ 334:src/libstm32f2/core_cmInstr.h **** 
+ 335:src/libstm32f2/core_cmInstr.h **** 
+ 336:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Synchronization Barrier
+ 337:src/libstm32f2/core_cmInstr.h **** 
+ 338:src/libstm32f2/core_cmInstr.h ****     This function acts as a special kind of Data Memory Barrier.
+ 339:src/libstm32f2/core_cmInstr.h ****     It completes when all explicit memory accesses before this instruction complete.
+ 340:src/libstm32f2/core_cmInstr.h ****  */
+ 341:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __DSB(void)
+ 342:src/libstm32f2/core_cmInstr.h **** {
+ 343:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("dsb");
+ 344:src/libstm32f2/core_cmInstr.h **** }
+ 345:src/libstm32f2/core_cmInstr.h **** 
+ 346:src/libstm32f2/core_cmInstr.h **** 
+ 347:src/libstm32f2/core_cmInstr.h **** /** \brief  Data Memory Barrier
+ 348:src/libstm32f2/core_cmInstr.h **** 
+ 349:src/libstm32f2/core_cmInstr.h ****     This function ensures the apparent order of the explicit memory operations before
+ 350:src/libstm32f2/core_cmInstr.h ****     and after the instruction, without ensuring their completion.
+ 351:src/libstm32f2/core_cmInstr.h ****  */
+ 352:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __DMB(void)
+ 353:src/libstm32f2/core_cmInstr.h **** {
+ 354:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("dmb");
+ 355:src/libstm32f2/core_cmInstr.h **** }
+ 356:src/libstm32f2/core_cmInstr.h **** 
+ 357:src/libstm32f2/core_cmInstr.h **** 
+ 358:src/libstm32f2/core_cmInstr.h **** /** \brief  Reverse byte order (32 bit)
+ 359:src/libstm32f2/core_cmInstr.h **** 
+ 360:src/libstm32f2/core_cmInstr.h ****     This function reverses the byte order in integer value.
+ 361:src/libstm32f2/core_cmInstr.h **** 
+ 362:src/libstm32f2/core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 363:src/libstm32f2/core_cmInstr.h ****     \return               Reversed value
+ 364:src/libstm32f2/core_cmInstr.h ****  */
+ 365:src/libstm32f2/core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __REV(uint32_t value)
+ 366:src/libstm32f2/core_cmInstr.h **** {
+ 367:src/libstm32f2/core_cmInstr.h ****   uint32_t result;
+ 368:src/libstm32f2/core_cmInstr.h **** 
+ 369:src/libstm32f2/core_cmInstr.h ****   __ASM volatile ("rev %0, %1" : "=r" (result) : "r" (value) );
+  78              		.loc 2 369 0
+  79 0030 2368     		ldr	r3, [r4, #0]
+  80              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+  81 0032 18BA     		rev r0, r3
+  82              	@ 0 "" 2
+  83              	.LVL6:
+  84              		.thumb
+  85              	.LBE127:
+  86              	.LBE126:
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+  87              		.loc 1 124 0
+  88 0034 0890     		str	r0, [sp, #32]
+  89              	.LVL7:
+  90              	.LBB128:
+  91              	.LBB129:
+  92              		.loc 2 369 0
+  93 0036 6168     		ldr	r1, [r4, #4]
+  94              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+  95 0038 0ABA     		rev r2, r1
+  96              	@ 0 "" 2
+  97              	.LVL8:
+  98              		.thumb
+  99              	.LBE129:
+ 100              	.LBE128:
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 101              		.loc 1 126 0
+ 102 003a 0992     		str	r2, [sp, #36]
+ 103              	.LVL9:
+ 104              	.LBB130:
+ 105              	.LBB131:
+ 106              		.loc 2 369 0
+ 107 003c A768     		ldr	r7, [r4, #8]
+ 108              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 109 003e 3BBA     		rev r3, r7
+ 110              	@ 0 "" 2
+ 111              	.LVL10:
+ 112              		.thumb
+ 113              	.LBE131:
+ 114              	.LBE130:
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 115              		.loc 1 128 0
+ 116 0040 0A93     		str	r3, [sp, #40]
+ 117              	.LVL11:
+ 118              	.LBB132:
+ 119              	.LBB133:
+ 120              		.loc 2 369 0
+ 121 0042 E468     		ldr	r4, [r4, #12]
+ 122              	.LVL12:
+ 123 0044 2EE0     		b	.L23
+ 124              	.LVL13:
+ 125              	.L4:
+ 126              	.LBE133:
+ 127              	.LBE132:
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 192:
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize  = CRYP_KeySize_192b;
+ 128              		.loc 1 133 0
+ 129 0046 4FF48070 		mov	r0, #256
+ 130 004a ADF80E00 		strh	r0, [sp, #14]	@ movhi
+ 131              	.LVL14:
+ 132              	.LBB134:
+ 133              	.LBB135:
+ 134              		.loc 2 369 0
+ 135 004e 2168     		ldr	r1, [r4, #0]
+ 136              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 137 0050 0ABA     		rev r2, r1
+ 138              	@ 0 "" 2
+ 139              	.LVL15:
+ 140              		.thumb
+ 141              	.LBE135:
+ 142              	.LBE134:
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+ 143              		.loc 1 134 0
+ 144 0052 0692     		str	r2, [sp, #24]
+ 145              	.LVL16:
+ 146              	.LBB136:
+ 147              	.LBB137:
+ 148              		.loc 2 369 0
+ 149 0054 6768     		ldr	r7, [r4, #4]
+ 150              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 151 0056 3BBA     		rev r3, r7
+ 152              	@ 0 "" 2
+ 153              	.LVL17:
+ 154              		.thumb
+ 155              	.LBE137:
+ 156              	.LBE136:
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 157              		.loc 1 136 0
+ 158 0058 0793     		str	r3, [sp, #28]
+ 159              	.LVL18:
+ 160              	.LBB138:
+ 161              	.LBB139:
+ 162              		.loc 2 369 0
+ 163 005a A068     		ldr	r0, [r4, #8]
+ 164              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 165 005c 01BA     		rev r1, r0
+ 166              	@ 0 "" 2
+ 167              	.LVL19:
+ 168              		.thumb
+ 169              	.LBE139:
+ 170              	.LBE138:
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 171              		.loc 1 138 0
+ 172 005e 0891     		str	r1, [sp, #32]
+ 173              	.LVL20:
+ 174              	.LBB140:
+ 175              	.LBB141:
+ 176              		.loc 2 369 0
+ 177 0060 E268     		ldr	r2, [r4, #12]
+ 178              	.LVL21:
+ 179              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 180 0062 17BA     		rev r7, r2
+ 181              	@ 0 "" 2
+ 182              	.LVL22:
+ 183              		.thumb
+ 184              	.LBE141:
+ 185              	.LBE140:
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 186              		.loc 1 140 0
+ 187 0064 0997     		str	r7, [sp, #36]
+ 188              	.LVL23:
+ 189              	.LBB142:
+ 190              	.LBB143:
+ 191              		.loc 2 369 0
+ 192 0066 2369     		ldr	r3, [r4, #16]
+ 193              	.LVL24:
+ 194              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 195 0068 18BA     		rev r0, r3
+ 196              	@ 0 "" 2
+ 197              	.LVL25:
+ 198              		.thumb
+ 199              	.LBE143:
+ 200              	.LBE142:
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 201              		.loc 1 142 0
+ 202 006a 0A90     		str	r0, [sp, #40]
+ 203              	.LVL26:
+ 204              	.LBB144:
+ 205              	.LBB145:
+ 206              		.loc 2 369 0
+ 207 006c 6469     		ldr	r4, [r4, #20]
+ 208              	.LVL27:
+ 209 006e 19E0     		b	.L23
+ 210              	.LVL28:
+ 211              	.L5:
+ 212              	.LBE145:
+ 213              	.LBE144:
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 256:
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize  = CRYP_KeySize_256b;
+ 214              		.loc 1 147 0
+ 215 0070 4FF40070 		mov	r0, #512
+ 216 0074 ADF80E00 		strh	r0, [sp, #14]	@ movhi
+ 217              	.LVL29:
+ 218              	.LBB146:
+ 219              	.LBB147:
+ 220              		.loc 2 369 0
+ 221 0078 2168     		ldr	r1, [r4, #0]
+ 222              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 223 007a 0ABA     		rev r2, r1
+ 224              	@ 0 "" 2
+ 225              	.LVL30:
+ 226              		.thumb
+ 227              	.LBE147:
+ 228              	.LBE146:
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key0Left = __REV(*(uint32_t*)(keyaddr));
+ 229              		.loc 1 148 0
+ 230 007c 0492     		str	r2, [sp, #16]
+ 231              	.LVL31:
+ 232              	.LBB148:
+ 233              	.LBB149:
+ 234              		.loc 2 369 0
+ 235 007e 6768     		ldr	r7, [r4, #4]
+ 236              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 237 0080 3BBA     		rev r3, r7
+ 238              	@ 0 "" 2
+ 239              	.LVL32:
+ 240              		.thumb
+ 241              	.LBE149:
+ 242              	.LBE148:
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key0Right= __REV(*(uint32_t*)(keyaddr));
+ 243              		.loc 1 150 0
+ 244 0082 0593     		str	r3, [sp, #20]
+ 245              	.LVL33:
+ 246              	.LBB150:
+ 247              	.LBB151:
+ 248              		.loc 2 369 0
+ 249 0084 A068     		ldr	r0, [r4, #8]
+ 250              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 251 0086 01BA     		rev r1, r0
+ 252              	@ 0 "" 2
+ 253              	.LVL34:
+ 254              		.thumb
+ 255              	.LBE151:
+ 256              	.LBE150:
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+ 257              		.loc 1 152 0
+ 258 0088 0691     		str	r1, [sp, #24]
+ 259              	.LVL35:
+ 260              	.LBB152:
+ 261              	.LBB153:
+ 262              		.loc 2 369 0
+ 263 008a E268     		ldr	r2, [r4, #12]
+ 264              	.LVL36:
+ 265              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 266 008c 17BA     		rev r7, r2
+ 267              	@ 0 "" 2
+ 268              	.LVL37:
+ 269              		.thumb
+ 270              	.LBE153:
+ 271              	.LBE152:
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 272              		.loc 1 154 0
+ 273 008e 0797     		str	r7, [sp, #28]
+ 274              	.LVL38:
+ 275              	.LBB154:
+ 276              	.LBB155:
+ 277              		.loc 2 369 0
+ 278 0090 2369     		ldr	r3, [r4, #16]
+ 279              	.LVL39:
+ 280              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 281 0092 18BA     		rev r0, r3
+ 282              	@ 0 "" 2
+ 283              	.LVL40:
+ 284              		.thumb
+ 285              	.LBE155:
+ 286              	.LBE154:
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 287              		.loc 1 156 0
+ 288 0094 0890     		str	r0, [sp, #32]
+ 289              	.LVL41:
+ 290              	.LBB156:
+ 291              	.LBB157:
+ 292              		.loc 2 369 0
+ 293 0096 6169     		ldr	r1, [r4, #20]
+ 294              	.LVL42:
+ 295              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 296 0098 0ABA     		rev r2, r1
+ 297              	@ 0 "" 2
+ 298              	.LVL43:
+ 299              		.thumb
+ 300              	.LBE157:
+ 301              	.LBE156:
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 302              		.loc 1 158 0
+ 303 009a 0992     		str	r2, [sp, #36]
+ 304              	.LVL44:
+ 305              	.LBB158:
+ 306              	.LBB159:
+ 307              		.loc 2 369 0
+ 308 009c A769     		ldr	r7, [r4, #24]
+ 309              	.LVL45:
+ 310              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 311 009e 3BBA     		rev r3, r7
+ 312              	@ 0 "" 2
+ 313              	.LVL46:
+ 314              		.thumb
+ 315              	.LBE159:
+ 316              	.LBE158:
+ 317              	.LBB160:
+ 318              	.LBB161:
+ 319 00a0 E469     		ldr	r4, [r4, #28]
+ 320              	.LVL47:
+ 321              	.LBE161:
+ 322              	.LBE160:
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 323              		.loc 1 160 0
+ 324 00a2 0A93     		str	r3, [sp, #40]
+ 325              	.LVL48:
+ 326              	.L23:
+ 327              	.LBB163:
+ 328              	.LBB162:
+ 329              		.loc 2 369 0
+ 330              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 331 00a4 24BA     		rev r4, r4
+ 332              	@ 0 "" 2
+ 333              	.LVL49:
+ 334              		.thumb
+ 335              	.LBE162:
+ 336              	.LBE163:
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 337              		.loc 1 162 0
+ 338 00a6 0B94     		str	r4, [sp, #44]
+ 339              	.LVL50:
+ 340              	.L2:
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     default:
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /*------------------ AES Decryption ------------------*/
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   if(Mode == MODE_DECRYPT) /* AES decryption */
+ 341              		.loc 1 169 0
+ 342 00a8 1EBB     		cbnz	r6, .L6
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Flush IN/OUT FIFOs */
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_FIFOFlush();
+ 343              		.loc 1 172 0
+ 344 00aa FFF7FEFF 		bl	CRYP_FIFOFlush
+ 345              	.LVL51:
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Crypto Init for Key preparation for decryption process */
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_Key;
+ 346              		.loc 1 176 0
+ 347 00ae 3827     		movs	r7, #56
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 348              		.loc 1 175 0
+ 349 00b0 0422     		movs	r2, #4
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_32b;
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_Init(&AES_CRYP_InitStructure);
+ 350              		.loc 1 178 0
+ 351 00b2 02A8     		add	r0, sp, #8
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 352              		.loc 1 175 0
+ 353 00b4 ADF80820 		strh	r2, [sp, #8]	@ movhi
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_Key;
+ 354              		.loc 1 176 0
+ 355 00b8 ADF80A70 		strh	r7, [sp, #10]	@ movhi
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_32b;
+ 356              		.loc 1 177 0
+ 357 00bc ADF80C60 		strh	r6, [sp, #12]	@ movhi
+ 358              		.loc 1 178 0
+ 359 00c0 FFF7FEFF 		bl	CRYP_Init
+ 360              	.LVL52:
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Key Initialisation */
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_KeyInit(&AES_CRYP_KeyInitStructure);
+ 361              		.loc 1 181 0
+ 362 00c4 04A8     		add	r0, sp, #16
+ 363 00c6 FFF7FEFF 		bl	CRYP_KeyInit
+ 364              	.LVL53:
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Enable Crypto processor */
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_Cmd(ENABLE);
+ 365              		.loc 1 184 0
+ 366 00ca 0120     		movs	r0, #1
+ 367 00cc FFF7FEFF 		bl	CRYP_Cmd
+ 368              	.LVL54:
+ 369              	.L8:
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* wait until the Busy flag is RESET */
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     do
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 370              		.loc 1 189 0 discriminator 1
+ 371 00d0 1020     		movs	r0, #16
+ 372 00d2 FFF7FEFF 		bl	CRYP_GetFlagStatus
+ 373              	.LVL55:
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       counter++;
+ 374              		.loc 1 190 0 discriminator 1
+ 375 00d6 019B     		ldr	r3, [sp, #4]
+ 376 00d8 5C1C     		adds	r4, r3, #1
+ 377              	.LVL56:
+ 378 00da 0194     		str	r4, [sp, #4]
+ 379              	.LVL57:
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }while ((counter != AESBUSY_TIMEOUT) && (busystatus != RESET));
+ 380              		.loc 1 191 0 discriminator 1
+ 381 00dc 0199     		ldr	r1, [sp, #4]
+ 382 00de B1F5803F 		cmp	r1, #65536
+ 383 00e2 02D0     		beq	.L7
+ 384 00e4 0028     		cmp	r0, #0
+ 385 00e6 F3D1     		bne	.L8
+ 386 00e8 01E0     		b	.L9
+ 387              	.L7:
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****    {
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****        status = ERROR;
+ 388              		.loc 1 195 0
+ 389 00ea 0027     		movs	r7, #0
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 390              		.loc 1 193 0
+ 391 00ec 40B9     		cbnz	r0, .L10
+ 392              	.L9:
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     else
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       /* Crypto Init for decryption process */  
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 393              		.loc 1 200 0
+ 394 00ee 0421     		movs	r1, #4
+ 395 00f0 03E0     		b	.L24
+ 396              	.LVL58:
+ 397              	.L6:
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /*------------------ AES Encryption ------------------*/
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   else /* AES encryption */
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_KeyInit(&AES_CRYP_KeyInitStructure);
+ 398              		.loc 1 207 0
+ 399 00f2 04A8     		add	r0, sp, #16
+ 400 00f4 FFF7FEFF 		bl	CRYP_KeyInit
+ 401              	.LVL59:
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Crypto Init for Encryption process */
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir  = CRYP_AlgoDir_Encrypt;
+ 402              		.loc 1 210 0
+ 403 00f8 0021     		movs	r1, #0
+ 404              	.LVL60:
+ 405              	.L24:
+ 406 00fa ADF80810 		strh	r1, [sp, #8]	@ movhi
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ErrorStatus status = SUCCESS;
+ 407              		.loc 1 111 0
+ 408 00fe 0127     		movs	r7, #1
+ 409              	.L10:
+ 410              	.LVL61:
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_ECB;
+ 411              		.loc 1 213 0
+ 412 0100 2020     		movs	r0, #32
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 413              		.loc 1 214 0
+ 414 0102 8022     		movs	r2, #128
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_ECB;
+ 415              		.loc 1 213 0
+ 416 0104 ADF80A00 		strh	r0, [sp, #10]	@ movhi
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Init(&AES_CRYP_InitStructure);
+ 417              		.loc 1 215 0
+ 418 0108 02A8     		add	r0, sp, #8
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 419              		.loc 1 214 0
+ 420 010a ADF80C20 		strh	r2, [sp, #12]	@ movhi
+ 421              		.loc 1 215 0
+ 422 010e FFF7FEFF 		bl	CRYP_Init
+ 423              	.LVL62:
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Flush IN/OUT FIFOs */
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_FIFOFlush();
+ 424              		.loc 1 218 0
+ 425 0112 FFF7FEFF 		bl	CRYP_FIFOFlush
+ 426              	.LVL63:
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Enable Crypto processor */
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Cmd(ENABLE);
+ 427              		.loc 1 221 0
+ 428 0116 0120     		movs	r0, #1
+ 429 0118 FFF7FEFF 		bl	CRYP_Cmd
+ 430              	.LVL64:
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 431              		.loc 1 113 0
+ 432 011c 4446     		mov	r4, r8
+ 433              	.LVL65:
+ 434              	.L22:
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=16)
+ 435              		.loc 1 223 0 discriminator 1
+ 436 011e 1499     		ldr	r1, [sp, #80]
+ 437 0120 C8EB0403 		rsb	r3, r8, r4
+ 438 0124 8B42     		cmp	r3, r1
+ 439 0126 2ED2     		bcs	.L16
+ 440              		.loc 1 223 0 is_stmt 0 discriminator 2
+ 441 0128 6FB3     		cbz	r7, .L16
+ 442              	.L17:
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Write the Input block in the IN FIFO */
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 443              		.loc 1 227 0 is_stmt 1
+ 444 012a 2068     		ldr	r0, [r4, #0]
+ 445 012c FFF7FEFF 		bl	CRYP_DataIn
+ 446              	.LVL66:
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 447              		.loc 1 229 0
+ 448 0130 6068     		ldr	r0, [r4, #4]
+ 449 0132 FFF7FEFF 		bl	CRYP_DataIn
+ 450              	.LVL67:
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 451              		.loc 1 231 0
+ 452 0136 A068     		ldr	r0, [r4, #8]
+ 453 0138 FFF7FEFF 		bl	CRYP_DataIn
+ 454              	.LVL68:
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Wait until the complete message has been processed */
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     counter = 0;
+ 455              		.loc 1 237 0
+ 456 013c 0027     		movs	r7, #0
+ 457              	.LVL69:
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 458              		.loc 1 233 0
+ 459 013e E068     		ldr	r0, [r4, #12]
+ 460 0140 FFF7FEFF 		bl	CRYP_DataIn
+ 461              	.LVL70:
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 462              		.loc 1 234 0
+ 463 0144 1034     		adds	r4, r4, #16
+ 464              	.LVL71:
+ 465              		.loc 1 237 0
+ 466 0146 0197     		str	r7, [sp, #4]
+ 467              	.L13:
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     do
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 468              		.loc 1 240 0 discriminator 1
+ 469 0148 1020     		movs	r0, #16
+ 470 014a FFF7FEFF 		bl	CRYP_GetFlagStatus
+ 471              	.LVL72:
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       counter++;
+ 472              		.loc 1 241 0 discriminator 1
+ 473 014e 019A     		ldr	r2, [sp, #4]
+ 474 0150 531C     		adds	r3, r2, #1
+ 475              	.LVL73:
+ 476 0152 0193     		str	r3, [sp, #4]
+ 477              	.LVL74:
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }while ((counter != AESBUSY_TIMEOUT) && (busystatus != RESET));
+ 478              		.loc 1 242 0 discriminator 1
+ 479 0154 0199     		ldr	r1, [sp, #4]
+ 480 0156 B1F5803F 		cmp	r1, #65536
+ 481 015a 02D0     		beq	.L12
+ 482 015c 0028     		cmp	r0, #0
+ 483 015e F3D1     		bne	.L13
+ 484 0160 02E0     		b	.L14
+ 485              	.L12:
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****    {
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****        status = ERROR;
+ 486              		.loc 1 246 0
+ 487 0162 0027     		movs	r7, #0
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 488              		.loc 1 244 0
+ 489 0164 0028     		cmp	r0, #0
+ 490 0166 DAD1     		bne	.L22
+ 491              	.L14:
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     else
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       /* Read the Output block from the Output FIFO */
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 492              		.loc 1 252 0
+ 493 0168 FFF7FEFF 		bl	CRYP_DataOut
+ 494              	.LVL75:
+ 495 016c 2860     		str	r0, [r5, #0]
+ 496              	.LVL76:
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 497              		.loc 1 254 0
+ 498 016e FFF7FEFF 		bl	CRYP_DataOut
+ 499              	.LVL77:
+ 500 0172 6860     		str	r0, [r5, #4]
+ 501              	.LVL78:
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 502              		.loc 1 256 0
+ 503 0174 FFF7FEFF 		bl	CRYP_DataOut
+ 504              	.LVL79:
+ 505 0178 A860     		str	r0, [r5, #8]
+ 506              	.LVL80:
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut(); 
+ 507              		.loc 1 258 0
+ 508 017a FFF7FEFF 		bl	CRYP_DataOut
+ 509              	.LVL81:
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 510              		.loc 1 259 0
+ 511 017e 0127     		movs	r7, #1
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut(); 
+ 512              		.loc 1 258 0
+ 513 0180 E860     		str	r0, [r5, #12]
+ 514              		.loc 1 259 0
+ 515 0182 1035     		adds	r5, r5, #16
+ 516              	.LVL82:
+ 517 0184 CBE7     		b	.L22
+ 518              	.LVL83:
+ 519              	.L16:
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Disable Crypto */
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Cmd(DISABLE);
+ 520              		.loc 1 264 0
+ 521 0186 0020     		movs	r0, #0
+ 522 0188 FFF7FEFF 		bl	CRYP_Cmd
+ 523              	.LVL84:
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   return status; 
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** }
+ 524              		.loc 1 267 0
+ 525 018c 3846     		mov	r0, r7
+ 526 018e 0DB0     		add	sp, sp, #52
+ 527 0190 BDE8F085 		pop	{r4, r5, r6, r7, r8, sl, pc}
+ 528              		.cfi_endproc
+ 529              	.LFE56:
+ 531              		.section	.text.CRYP_AES_CBC,"ax",%progbits
+ 532              		.align	1
+ 533              		.global	CRYP_AES_CBC
+ 534              		.thumb
+ 535              		.thumb_func
+ 537              	CRYP_AES_CBC:
+ 538              	.LFB57:
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /**
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @brief  Encrypt and decrypt using AES in CBC Mode
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Mode: encryption or decryption Mode.
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          This parameter can be one of the following values:
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *            @arg MODE_ENCRYPT: Encryption
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *            @arg MODE_DECRYPT: Decryption
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  InitVectors: Initialisation Vectors used for AES algorithm.
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Key: Key used for AES algorithm.
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Keysize: length of the Key, must be a 128, 192 or 256.
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Input: pointer to the Input buffer.
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Ilength: length of the Input buffer, must be a multiple of 16.
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Output: pointer to the returned buffer.
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @retval An ErrorStatus enumeration value:
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          - SUCCESS: Operation done
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          - ERROR: Operation failed
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** ErrorStatus CRYP_AES_CBC(uint8_t Mode, uint8_t InitVectors[16], uint8_t *Key,
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****                          uint16_t Keysize, uint8_t *Input, uint32_t Ilength,
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****                          uint8_t *Output)
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** {
+ 539              		.loc 1 288 0
+ 540              		.cfi_startproc
+ 541              		@ args = 12, pretend = 0, frame = 64
+ 542              		@ frame_needed = 0, uses_anonymous_args = 0
+ 543              	.LVL85:
+ 544 0000 2DE9F04D 		push	{r4, r5, r6, r7, r8, sl, fp, lr}
+ 545              	.LCFI2:
+ 546              		.cfi_def_cfa_offset 32
+ 547              		.cfi_offset 4, -32
+ 548              		.cfi_offset 5, -28
+ 549              		.cfi_offset 6, -24
+ 550              		.cfi_offset 7, -20
+ 551              		.cfi_offset 8, -16
+ 552              		.cfi_offset 10, -12
+ 553              		.cfi_offset 11, -8
+ 554              		.cfi_offset 14, -4
+ 555 0004 90B0     		sub	sp, sp, #64
+ 556              	.LCFI3:
+ 557              		.cfi_def_cfa_offset 96
+ 558              		.loc 1 288 0
+ 559 0006 9846     		mov	r8, r3
+ 560 0008 8246     		mov	sl, r0
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_InitTypeDef AES_CRYP_InitStructure;
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_KeyInitTypeDef AES_CRYP_KeyInitStructure;
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_IVInitTypeDef AES_CRYP_IVInitStructure;
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   __IO uint32_t counter = 0;
+ 561              		.loc 1 292 0
+ 562 000a 4FF0000B 		mov	fp, #0
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t busystatus = 0;
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ErrorStatus status = SUCCESS;
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t keyaddr    = (uint32_t)Key;
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t ivaddr     = (uint32_t)InitVectors;
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t i = 0;
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Crypto structures initialisation*/
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_KeyStructInit(&AES_CRYP_KeyInitStructure);
+ 563              		.loc 1 302 0
+ 564 000e 08A8     		add	r0, sp, #32
+ 565              	.LVL86:
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** {
+ 566              		.loc 1 288 0
+ 567 0010 0F46     		mov	r7, r1
+ 568 0012 1446     		mov	r4, r2
+ 569 0014 189E     		ldr	r6, [sp, #96]
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   __IO uint32_t counter = 0;
+ 570              		.loc 1 292 0
+ 571 0016 CDF804B0 		str	fp, [sp, #4]
+ 572              	.LVL87:
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 573              		.loc 1 297 0
+ 574 001a 1A9D     		ldr	r5, [sp, #104]
+ 575              	.LVL88:
+ 576              		.loc 1 302 0
+ 577 001c FFF7FEFF 		bl	CRYP_KeyStructInit
+ 578              	.LVL89:
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   switch(Keysize)
+ 579              		.loc 1 304 0
+ 580 0020 B8F1C00F 		cmp	r8, #192
+ 581 0024 12D0     		beq	.L29
+ 582 0026 B8F5807F 		cmp	r8, #256
+ 583 002a 24D0     		beq	.L30
+ 584 002c B8F1800F 		cmp	r8, #128
+ 585 0030 3DD1     		bne	.L27
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 128:
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize = CRYP_KeySize_128b;
+ 586              		.loc 1 307 0
+ 587 0032 ADF80EB0 		strh	fp, [sp, #14]	@ movhi
+ 588              	.LVL90:
+ 589              	.LBB164:
+ 590              	.LBB165:
+ 591              		.loc 2 369 0
+ 592 0036 2368     		ldr	r3, [r4, #0]
+ 593              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 594 0038 18BA     		rev r0, r3
+ 595              	@ 0 "" 2
+ 596              	.LVL91:
+ 597              		.thumb
+ 598              	.LBE165:
+ 599              	.LBE164:
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 600              		.loc 1 308 0
+ 601 003a 0C90     		str	r0, [sp, #48]
+ 602              	.LVL92:
+ 603              	.LBB166:
+ 604              	.LBB167:
+ 605              		.loc 2 369 0
+ 606 003c 6168     		ldr	r1, [r4, #4]
+ 607              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 608 003e 0ABA     		rev r2, r1
+ 609              	@ 0 "" 2
+ 610              	.LVL93:
+ 611              		.thumb
+ 612              	.LBE167:
+ 613              	.LBE166:
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 614              		.loc 1 310 0
+ 615 0040 0D92     		str	r2, [sp, #52]
+ 616              	.LVL94:
+ 617              	.LBB168:
+ 618              	.LBB169:
+ 619              		.loc 2 369 0
+ 620 0042 A368     		ldr	r3, [r4, #8]
+ 621              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 622 0044 18BA     		rev r0, r3
+ 623              	@ 0 "" 2
+ 624              	.LVL95:
+ 625              		.thumb
+ 626              	.LBE169:
+ 627              	.LBE168:
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 628              		.loc 1 312 0
+ 629 0046 0E90     		str	r0, [sp, #56]
+ 630              	.LVL96:
+ 631              	.LBB170:
+ 632              	.LBB171:
+ 633              		.loc 2 369 0
+ 634 0048 E468     		ldr	r4, [r4, #12]
+ 635              	.LVL97:
+ 636 004a 2EE0     		b	.L48
+ 637              	.LVL98:
+ 638              	.L29:
+ 639              	.LBE171:
+ 640              	.LBE170:
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 192:
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize  = CRYP_KeySize_192b;
+ 641              		.loc 1 317 0
+ 642 004c 4FF48070 		mov	r0, #256
+ 643 0050 ADF80E00 		strh	r0, [sp, #14]	@ movhi
+ 644              	.LVL99:
+ 645              	.LBB172:
+ 646              	.LBB173:
+ 647              		.loc 2 369 0
+ 648 0054 2168     		ldr	r1, [r4, #0]
+ 649              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 650 0056 0ABA     		rev r2, r1
+ 651              	@ 0 "" 2
+ 652              	.LVL100:
+ 653              		.thumb
+ 654              	.LBE173:
+ 655              	.LBE172:
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+ 656              		.loc 1 318 0
+ 657 0058 0A92     		str	r2, [sp, #40]
+ 658              	.LVL101:
+ 659              	.LBB174:
+ 660              	.LBB175:
+ 661              		.loc 2 369 0
+ 662 005a 6368     		ldr	r3, [r4, #4]
+ 663              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 664 005c 18BA     		rev r0, r3
+ 665              	@ 0 "" 2
+ 666              	.LVL102:
+ 667              		.thumb
+ 668              	.LBE175:
+ 669              	.LBE174:
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 670              		.loc 1 320 0
+ 671 005e 0B90     		str	r0, [sp, #44]
+ 672              	.LVL103:
+ 673              	.LBB176:
+ 674              	.LBB177:
+ 675              		.loc 2 369 0
+ 676 0060 A168     		ldr	r1, [r4, #8]
+ 677              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 678 0062 0ABA     		rev r2, r1
+ 679              	@ 0 "" 2
+ 680              	.LVL104:
+ 681              		.thumb
+ 682              	.LBE177:
+ 683              	.LBE176:
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 684              		.loc 1 322 0
+ 685 0064 0C92     		str	r2, [sp, #48]
+ 686              	.LVL105:
+ 687              	.LBB178:
+ 688              	.LBB179:
+ 689              		.loc 2 369 0
+ 690 0066 E368     		ldr	r3, [r4, #12]
+ 691              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 692 0068 18BA     		rev r0, r3
+ 693              	@ 0 "" 2
+ 694              	.LVL106:
+ 695              		.thumb
+ 696              	.LBE179:
+ 697              	.LBE178:
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 698              		.loc 1 324 0
+ 699 006a 0D90     		str	r0, [sp, #52]
+ 700              	.LVL107:
+ 701              	.LBB180:
+ 702              	.LBB181:
+ 703              		.loc 2 369 0
+ 704 006c 2169     		ldr	r1, [r4, #16]
+ 705              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 706 006e 0ABA     		rev r2, r1
+ 707              	@ 0 "" 2
+ 708              	.LVL108:
+ 709              		.thumb
+ 710              	.LBE181:
+ 711              	.LBE180:
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 712              		.loc 1 326 0
+ 713 0070 0E92     		str	r2, [sp, #56]
+ 714              	.LVL109:
+ 715              	.LBB182:
+ 716              	.LBB183:
+ 717              		.loc 2 369 0
+ 718 0072 6469     		ldr	r4, [r4, #20]
+ 719              	.LVL110:
+ 720 0074 19E0     		b	.L48
+ 721              	.LVL111:
+ 722              	.L30:
+ 723              	.LBE183:
+ 724              	.LBE182:
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 256:
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize  = CRYP_KeySize_256b;
+ 725              		.loc 1 331 0
+ 726 0076 4FF40071 		mov	r1, #512
+ 727 007a ADF80E10 		strh	r1, [sp, #14]	@ movhi
+ 728              	.LVL112:
+ 729              	.LBB184:
+ 730              	.LBB185:
+ 731              		.loc 2 369 0
+ 732 007e 2268     		ldr	r2, [r4, #0]
+ 733              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 734 0080 13BA     		rev r3, r2
+ 735              	@ 0 "" 2
+ 736              	.LVL113:
+ 737              		.thumb
+ 738              	.LBE185:
+ 739              	.LBE184:
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key0Left = __REV(*(uint32_t*)(keyaddr));
+ 740              		.loc 1 332 0
+ 741 0082 0893     		str	r3, [sp, #32]
+ 742              	.LVL114:
+ 743              	.LBB186:
+ 744              	.LBB187:
+ 745              		.loc 2 369 0
+ 746 0084 6068     		ldr	r0, [r4, #4]
+ 747              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 748 0086 01BA     		rev r1, r0
+ 749              	@ 0 "" 2
+ 750              	.LVL115:
+ 751              		.thumb
+ 752              	.LBE187:
+ 753              	.LBE186:
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key0Right= __REV(*(uint32_t*)(keyaddr));
+ 754              		.loc 1 334 0
+ 755 0088 0991     		str	r1, [sp, #36]
+ 756              	.LVL116:
+ 757              	.LBB188:
+ 758              	.LBB189:
+ 759              		.loc 2 369 0
+ 760 008a A268     		ldr	r2, [r4, #8]
+ 761              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 762 008c 13BA     		rev r3, r2
+ 763              	@ 0 "" 2
+ 764              	.LVL117:
+ 765              		.thumb
+ 766              	.LBE189:
+ 767              	.LBE188:
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+ 768              		.loc 1 336 0
+ 769 008e 0A93     		str	r3, [sp, #40]
+ 770              	.LVL118:
+ 771              	.LBB190:
+ 772              	.LBB191:
+ 773              		.loc 2 369 0
+ 774 0090 E068     		ldr	r0, [r4, #12]
+ 775              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 776 0092 01BA     		rev r1, r0
+ 777              	@ 0 "" 2
+ 778              	.LVL119:
+ 779              		.thumb
+ 780              	.LBE191:
+ 781              	.LBE190:
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 782              		.loc 1 338 0
+ 783 0094 0B91     		str	r1, [sp, #44]
+ 784              	.LVL120:
+ 785              	.LBB192:
+ 786              	.LBB193:
+ 787              		.loc 2 369 0
+ 788 0096 2269     		ldr	r2, [r4, #16]
+ 789              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 790 0098 13BA     		rev r3, r2
+ 791              	@ 0 "" 2
+ 792              	.LVL121:
+ 793              		.thumb
+ 794              	.LBE193:
+ 795              	.LBE192:
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 796              		.loc 1 340 0
+ 797 009a 0C93     		str	r3, [sp, #48]
+ 798              	.LVL122:
+ 799              	.LBB194:
+ 800              	.LBB195:
+ 801              		.loc 2 369 0
+ 802 009c 6069     		ldr	r0, [r4, #20]
+ 803              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 804 009e 01BA     		rev r1, r0
+ 805              	@ 0 "" 2
+ 806              	.LVL123:
+ 807              		.thumb
+ 808              	.LBE195:
+ 809              	.LBE194:
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 810              		.loc 1 342 0
+ 811 00a0 0D91     		str	r1, [sp, #52]
+ 812              	.LVL124:
+ 813              	.LBB196:
+ 814              	.LBB197:
+ 815              		.loc 2 369 0
+ 816 00a2 A269     		ldr	r2, [r4, #24]
+ 817              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 818 00a4 13BA     		rev r3, r2
+ 819              	@ 0 "" 2
+ 820              	.LVL125:
+ 821              		.thumb
+ 822              	.LBE197:
+ 823              	.LBE196:
+ 824              	.LBB198:
+ 825              	.LBB199:
+ 826 00a6 E469     		ldr	r4, [r4, #28]
+ 827              	.LVL126:
+ 828              	.LBE199:
+ 829              	.LBE198:
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 830              		.loc 1 344 0
+ 831 00a8 0E93     		str	r3, [sp, #56]
+ 832              	.LVL127:
+ 833              	.L48:
+ 834              	.LBB201:
+ 835              	.LBB200:
+ 836              		.loc 2 369 0
+ 837              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 838 00aa 24BA     		rev r4, r4
+ 839              	@ 0 "" 2
+ 840              	.LVL128:
+ 841              		.thumb
+ 842              	.LBE200:
+ 843              	.LBE201:
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 844              		.loc 1 346 0
+ 845 00ac 0F94     		str	r4, [sp, #60]
+ 846              	.LVL129:
+ 847              	.L27:
+ 848              	.LBB202:
+ 849              	.LBB203:
+ 850              		.loc 2 369 0
+ 851 00ae 3B68     		ldr	r3, [r7, #0]
+ 852              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 853 00b0 18BA     		rev r0, r3
+ 854              	@ 0 "" 2
+ 855              	.LVL130:
+ 856              		.thumb
+ 857              	.LBE203:
+ 858              	.LBE202:
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     default:
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* CRYP Initialization Vectors */
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV0Left = __REV(*(uint32_t*)(ivaddr));
+ 859              		.loc 1 353 0
+ 860 00b2 0490     		str	r0, [sp, #16]
+ 861              	.LVL131:
+ 862              	.LBB204:
+ 863              	.LBB205:
+ 864              		.loc 2 369 0
+ 865 00b4 7968     		ldr	r1, [r7, #4]
+ 866              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 867 00b6 0ABA     		rev r2, r1
+ 868              	@ 0 "" 2
+ 869              	.LVL132:
+ 870              		.thumb
+ 871              	.LBE205:
+ 872              	.LBE204:
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ivaddr+=4;
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV0Right= __REV(*(uint32_t*)(ivaddr));
+ 873              		.loc 1 355 0
+ 874 00b8 0592     		str	r2, [sp, #20]
+ 875              	.LVL133:
+ 876              	.LBB206:
+ 877              	.LBB207:
+ 878              		.loc 2 369 0
+ 879 00ba BC68     		ldr	r4, [r7, #8]
+ 880              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 881 00bc 23BA     		rev r3, r4
+ 882              	@ 0 "" 2
+ 883              	.LVL134:
+ 884              		.thumb
+ 885              	.LBE207:
+ 886              	.LBE206:
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ivaddr+=4;
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV1Left = __REV(*(uint32_t*)(ivaddr));
+ 887              		.loc 1 357 0
+ 888 00be 0693     		str	r3, [sp, #24]
+ 889              	.LVL135:
+ 890              	.LBB208:
+ 891              	.LBB209:
+ 892              		.loc 2 369 0
+ 893 00c0 FF68     		ldr	r7, [r7, #12]
+ 894              	.LVL136:
+ 895              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 896 00c2 38BA     		rev r0, r7
+ 897              	@ 0 "" 2
+ 898              	.LVL137:
+ 899              		.thumb
+ 900              	.LBE209:
+ 901              	.LBE208:
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ivaddr+=4;
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV1Right= __REV(*(uint32_t*)(ivaddr));
+ 902              		.loc 1 359 0
+ 903 00c4 0790     		str	r0, [sp, #28]
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /*------------------ AES Decryption ------------------*/
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   if(Mode == MODE_DECRYPT) /* AES decryption */
+ 904              		.loc 1 363 0
+ 905 00c6 BAF1000F 		cmp	sl, #0
+ 906 00ca 23D1     		bne	.L31
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Flush IN/OUT FIFOs */
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_FIFOFlush();
+ 907              		.loc 1 366 0
+ 908 00cc FFF7FEFF 		bl	CRYP_FIFOFlush
+ 909              	.LVL138:
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Crypto Init for Key preparation for decryption process */
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_Key;
+ 910              		.loc 1 370 0
+ 911 00d0 3824     		movs	r4, #56
+ 912              	.LVL139:
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 913              		.loc 1 369 0
+ 914 00d2 0422     		movs	r2, #4
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_32b;
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_Init(&AES_CRYP_InitStructure);
+ 915              		.loc 1 373 0
+ 916 00d4 02A8     		add	r0, sp, #8
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 917              		.loc 1 369 0
+ 918 00d6 ADF80820 		strh	r2, [sp, #8]	@ movhi
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_Key;
+ 919              		.loc 1 370 0
+ 920 00da ADF80A40 		strh	r4, [sp, #10]	@ movhi
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_32b;
+ 921              		.loc 1 371 0
+ 922 00de ADF80CA0 		strh	sl, [sp, #12]	@ movhi
+ 923              		.loc 1 373 0
+ 924 00e2 FFF7FEFF 		bl	CRYP_Init
+ 925              	.LVL140:
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Key Initialisation */
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_KeyInit(&AES_CRYP_KeyInitStructure);
+ 926              		.loc 1 376 0
+ 927 00e6 08A8     		add	r0, sp, #32
+ 928 00e8 FFF7FEFF 		bl	CRYP_KeyInit
+ 929              	.LVL141:
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Enable Crypto processor */
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_Cmd(ENABLE);
+ 930              		.loc 1 379 0
+ 931 00ec 0120     		movs	r0, #1
+ 932 00ee FFF7FEFF 		bl	CRYP_Cmd
+ 933              	.LVL142:
+ 934              	.L33:
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* wait until the Busy flag is RESET */
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     do
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 935              		.loc 1 384 0 discriminator 1
+ 936 00f2 1020     		movs	r0, #16
+ 937 00f4 FFF7FEFF 		bl	CRYP_GetFlagStatus
+ 938              	.LVL143:
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       counter++;
+ 939              		.loc 1 385 0 discriminator 1
+ 940 00f8 019B     		ldr	r3, [sp, #4]
+ 941 00fa 5F1C     		adds	r7, r3, #1
+ 942              	.LVL144:
+ 943 00fc 0197     		str	r7, [sp, #4]
+ 944              	.LVL145:
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }while ((counter != AESBUSY_TIMEOUT) && (busystatus != RESET));
+ 945              		.loc 1 386 0 discriminator 1
+ 946 00fe 0199     		ldr	r1, [sp, #4]
+ 947 0100 B1F5803F 		cmp	r1, #65536
+ 948 0104 02D0     		beq	.L32
+ 949 0106 0028     		cmp	r0, #0
+ 950 0108 F3D1     		bne	.L33
+ 951 010a 01E0     		b	.L34
+ 952              	.L32:
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****    {
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****        status = ERROR;
+ 953              		.loc 1 390 0
+ 954 010c 0027     		movs	r7, #0
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 955              		.loc 1 388 0
+ 956 010e 40B9     		cbnz	r0, .L35
+ 957              	.LVL146:
+ 958              	.L34:
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     else
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       /* Crypto Init for decryption process */  
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 959              		.loc 1 395 0
+ 960 0110 0421     		movs	r1, #4
+ 961 0112 03E0     		b	.L49
+ 962              	.LVL147:
+ 963              	.L31:
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /*------------------ AES Encryption ------------------*/
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   else /* AES encryption */
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_KeyInit(&AES_CRYP_KeyInitStructure);
+ 964              		.loc 1 401 0
+ 965 0114 08A8     		add	r0, sp, #32
+ 966              	.LVL148:
+ 967 0116 FFF7FEFF 		bl	CRYP_KeyInit
+ 968              	.LVL149:
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Crypto Init for Encryption process */
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir  = CRYP_AlgoDir_Encrypt;
+ 969              		.loc 1 404 0
+ 970 011a 0021     		movs	r1, #0
+ 971              	.LVL150:
+ 972              	.L49:
+ 973 011c ADF80810 		strh	r1, [sp, #8]	@ movhi
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ErrorStatus status = SUCCESS;
+ 974              		.loc 1 294 0
+ 975 0120 0127     		movs	r7, #1
+ 976              	.L35:
+ 977              	.LVL151:
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_CBC;
+ 978              		.loc 1 406 0
+ 979 0122 2820     		movs	r0, #40
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 980              		.loc 1 407 0
+ 981 0124 8022     		movs	r2, #128
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_CBC;
+ 982              		.loc 1 406 0
+ 983 0126 ADF80A00 		strh	r0, [sp, #10]	@ movhi
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Init(&AES_CRYP_InitStructure);
+ 984              		.loc 1 408 0
+ 985 012a 02A8     		add	r0, sp, #8
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 986              		.loc 1 407 0
+ 987 012c ADF80C20 		strh	r2, [sp, #12]	@ movhi
+ 988              		.loc 1 408 0
+ 989 0130 FFF7FEFF 		bl	CRYP_Init
+ 990              	.LVL152:
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* CRYP Initialization Vectors */
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_IVInit(&AES_CRYP_IVInitStructure);
+ 991              		.loc 1 411 0
+ 992 0134 04A8     		add	r0, sp, #16
+ 993 0136 FFF7FEFF 		bl	CRYP_IVInit
+ 994              	.LVL153:
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Flush IN/OUT FIFOs */
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_FIFOFlush();
+ 995              		.loc 1 414 0
+ 996 013a FFF7FEFF 		bl	CRYP_FIFOFlush
+ 997              	.LVL154:
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Enable Crypto processor */
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Cmd(ENABLE);
+ 998              		.loc 1 417 0
+ 999 013e 0120     		movs	r0, #1
+ 1000 0140 FFF7FEFF 		bl	CRYP_Cmd
+ 1001              	.LVL155:
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 1002              		.loc 1 296 0
+ 1003 0144 3446     		mov	r4, r6
+ 1004              	.LVL156:
+ 1005              	.L47:
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=16)
+ 1006              		.loc 1 420 0 discriminator 1
+ 1007 0146 1999     		ldr	r1, [sp, #100]
+ 1008 0148 A31B     		subs	r3, r4, r6
+ 1009 014a 8B42     		cmp	r3, r1
+ 1010 014c 2ED2     		bcs	.L41
+ 1011              		.loc 1 420 0 is_stmt 0 discriminator 2
+ 1012 014e 6FB3     		cbz	r7, .L41
+ 1013              	.L42:
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Write the Input block in the IN FIFO */
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1014              		.loc 1 424 0 is_stmt 1
+ 1015 0150 2068     		ldr	r0, [r4, #0]
+ 1016 0152 FFF7FEFF 		bl	CRYP_DataIn
+ 1017              	.LVL157:
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1018              		.loc 1 426 0
+ 1019 0156 6068     		ldr	r0, [r4, #4]
+ 1020 0158 FFF7FEFF 		bl	CRYP_DataIn
+ 1021              	.LVL158:
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1022              		.loc 1 428 0
+ 1023 015c A068     		ldr	r0, [r4, #8]
+ 1024 015e FFF7FEFF 		bl	CRYP_DataIn
+ 1025              	.LVL159:
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Wait until the complete message has been processed */
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     counter = 0;
+ 1026              		.loc 1 433 0
+ 1027 0162 0027     		movs	r7, #0
+ 1028              	.LVL160:
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1029              		.loc 1 430 0
+ 1030 0164 E068     		ldr	r0, [r4, #12]
+ 1031 0166 FFF7FEFF 		bl	CRYP_DataIn
+ 1032              	.LVL161:
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 1033              		.loc 1 431 0
+ 1034 016a 1034     		adds	r4, r4, #16
+ 1035              	.LVL162:
+ 1036              		.loc 1 433 0
+ 1037 016c 0197     		str	r7, [sp, #4]
+ 1038              	.L38:
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     do
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 1039              		.loc 1 436 0 discriminator 1
+ 1040 016e 1020     		movs	r0, #16
+ 1041 0170 FFF7FEFF 		bl	CRYP_GetFlagStatus
+ 1042              	.LVL163:
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       counter++;
+ 1043              		.loc 1 437 0 discriminator 1
+ 1044 0174 019A     		ldr	r2, [sp, #4]
+ 1045 0176 531C     		adds	r3, r2, #1
+ 1046              	.LVL164:
+ 1047 0178 0193     		str	r3, [sp, #4]
+ 1048              	.LVL165:
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }while ((counter != AESBUSY_TIMEOUT) && (busystatus != RESET));
+ 1049              		.loc 1 438 0 discriminator 1
+ 1050 017a 0199     		ldr	r1, [sp, #4]
+ 1051 017c B1F5803F 		cmp	r1, #65536
+ 1052 0180 02D0     		beq	.L37
+ 1053 0182 0028     		cmp	r0, #0
+ 1054 0184 F3D1     		bne	.L38
+ 1055 0186 02E0     		b	.L39
+ 1056              	.L37:
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****    {
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****        status = ERROR;
+ 1057              		.loc 1 442 0
+ 1058 0188 0027     		movs	r7, #0
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 1059              		.loc 1 440 0
+ 1060 018a 0028     		cmp	r0, #0
+ 1061 018c DBD1     		bne	.L47
+ 1062              	.L39:
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     else
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       /* Read the Output block from the Output FIFO */
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1063              		.loc 1 448 0
+ 1064 018e FFF7FEFF 		bl	CRYP_DataOut
+ 1065              	.LVL166:
+ 1066 0192 2860     		str	r0, [r5, #0]
+ 1067              	.LVL167:
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1068              		.loc 1 450 0
+ 1069 0194 FFF7FEFF 		bl	CRYP_DataOut
+ 1070              	.LVL168:
+ 1071 0198 6860     		str	r0, [r5, #4]
+ 1072              	.LVL169:
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1073              		.loc 1 452 0
+ 1074 019a FFF7FEFF 		bl	CRYP_DataOut
+ 1075              	.LVL170:
+ 1076 019e A860     		str	r0, [r5, #8]
+ 1077              	.LVL171:
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1078              		.loc 1 454 0
+ 1079 01a0 FFF7FEFF 		bl	CRYP_DataOut
+ 1080              	.LVL172:
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 1081              		.loc 1 455 0
+ 1082 01a4 0127     		movs	r7, #1
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1083              		.loc 1 454 0
+ 1084 01a6 E860     		str	r0, [r5, #12]
+ 1085              		.loc 1 455 0
+ 1086 01a8 1035     		adds	r5, r5, #16
+ 1087              	.LVL173:
+ 1088 01aa CCE7     		b	.L47
+ 1089              	.LVL174:
+ 1090              	.L41:
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Disable Crypto */
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Cmd(DISABLE);
+ 1091              		.loc 1 460 0
+ 1092 01ac 0020     		movs	r0, #0
+ 1093 01ae FFF7FEFF 		bl	CRYP_Cmd
+ 1094              	.LVL175:
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   return status;
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** }
+ 1095              		.loc 1 463 0
+ 1096 01b2 3846     		mov	r0, r7
+ 1097 01b4 10B0     		add	sp, sp, #64
+ 1098 01b6 BDE8F08D 		pop	{r4, r5, r6, r7, r8, sl, fp, pc}
+ 1099              		.cfi_endproc
+ 1100              	.LFE57:
+ 1102              		.section	.text.CRYP_AES_CTR,"ax",%progbits
+ 1103              		.align	1
+ 1104              		.global	CRYP_AES_CTR
+ 1105              		.thumb
+ 1106              		.thumb_func
+ 1108              	CRYP_AES_CTR:
+ 1109              	.LFB58:
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** /**
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @brief  Encrypt and decrypt using AES in CTR Mode
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Mode: encryption or decryption Mode.
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *           This parameter can be one of the following values:
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *            @arg MODE_ENCRYPT: Encryption
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *            @arg MODE_DECRYPT: Decryption
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  InitVectors: Initialisation Vectors used for AES algorithm.
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Key: Key used for AES algorithm.
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Keysize: length of the Key, must be a 128, 192 or 256.
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Input: pointer to the Input buffer.
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Ilength: length of the Input buffer, must be a multiple of 16.
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @param  Output: pointer to the returned buffer.
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   * @retval An ErrorStatus enumeration value:
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          - SUCCESS: Operation done
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   *          - ERROR: Operation failed
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   */
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** ErrorStatus CRYP_AES_CTR(uint8_t Mode, uint8_t InitVectors[16], uint8_t *Key, 
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****                          uint16_t Keysize, uint8_t *Input, uint32_t Ilength,
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****                          uint8_t *Output)
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** {
+ 1110              		.loc 1 484 0
+ 1111              		.cfi_startproc
+ 1112              		@ args = 12, pretend = 0, frame = 64
+ 1113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1114              	.LVL176:
+ 1115 0000 2DE9F04D 		push	{r4, r5, r6, r7, r8, sl, fp, lr}
+ 1116              	.LCFI4:
+ 1117              		.cfi_def_cfa_offset 32
+ 1118              		.cfi_offset 4, -32
+ 1119              		.cfi_offset 5, -28
+ 1120              		.cfi_offset 6, -24
+ 1121              		.cfi_offset 7, -20
+ 1122              		.cfi_offset 8, -16
+ 1123              		.cfi_offset 10, -12
+ 1124              		.cfi_offset 11, -8
+ 1125              		.cfi_offset 14, -4
+ 1126 0004 90B0     		sub	sp, sp, #64
+ 1127              	.LCFI5:
+ 1128              		.cfi_def_cfa_offset 96
+ 1129              		.loc 1 484 0
+ 1130 0006 9846     		mov	r8, r3
+ 1131 0008 8346     		mov	fp, r0
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_InitTypeDef AES_CRYP_InitStructure;
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_KeyInitTypeDef AES_CRYP_KeyInitStructure;
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_IVInitTypeDef AES_CRYP_IVInitStructure;
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   __IO uint32_t counter = 0;
+ 1132              		.loc 1 488 0
+ 1133 000a 4FF0000A 		mov	sl, #0
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t busystatus = 0;
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ErrorStatus status = SUCCESS;
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t keyaddr    = (uint32_t)Key;
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t ivaddr     = (uint32_t)InitVectors;
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t i = 0;
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Crypto structures initialisation*/
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_KeyStructInit(&AES_CRYP_KeyInitStructure);
+ 1134              		.loc 1 498 0
+ 1135 000e 08A8     		add	r0, sp, #32
+ 1136              	.LVL177:
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** {
+ 1137              		.loc 1 484 0
+ 1138 0010 0F46     		mov	r7, r1
+ 1139 0012 1446     		mov	r4, r2
+ 1140 0014 189E     		ldr	r6, [sp, #96]
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   __IO uint32_t counter = 0;
+ 1141              		.loc 1 488 0
+ 1142 0016 CDF804A0 		str	sl, [sp, #4]
+ 1143              	.LVL178:
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t outputaddr = (uint32_t)Output;
+ 1144              		.loc 1 493 0
+ 1145 001a 1A9D     		ldr	r5, [sp, #104]
+ 1146              	.LVL179:
+ 1147              		.loc 1 498 0
+ 1148 001c FFF7FEFF 		bl	CRYP_KeyStructInit
+ 1149              	.LVL180:
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   switch(Keysize)
+ 1150              		.loc 1 500 0
+ 1151 0020 B8F1C00F 		cmp	r8, #192
+ 1152 0024 12D0     		beq	.L53
+ 1153 0026 B8F5807F 		cmp	r8, #256
+ 1154 002a 24D0     		beq	.L54
+ 1155 002c B8F1800F 		cmp	r8, #128
+ 1156 0030 3DD1     		bne	.L51
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 128:
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize = CRYP_KeySize_128b;
+ 1157              		.loc 1 503 0
+ 1158 0032 ADF80EA0 		strh	sl, [sp, #14]	@ movhi
+ 1159              	.LVL181:
+ 1160              	.LBB210:
+ 1161              	.LBB211:
+ 1162              		.loc 2 369 0
+ 1163 0036 2368     		ldr	r3, [r4, #0]
+ 1164              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1165 0038 18BA     		rev r0, r3
+ 1166              	@ 0 "" 2
+ 1167              	.LVL182:
+ 1168              		.thumb
+ 1169              	.LBE211:
+ 1170              	.LBE210:
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 1171              		.loc 1 504 0
+ 1172 003a 0C90     		str	r0, [sp, #48]
+ 1173              	.LVL183:
+ 1174              	.LBB212:
+ 1175              	.LBB213:
+ 1176              		.loc 2 369 0
+ 1177 003c 6168     		ldr	r1, [r4, #4]
+ 1178              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1179 003e 0ABA     		rev r2, r1
+ 1180              	@ 0 "" 2
+ 1181              	.LVL184:
+ 1182              		.thumb
+ 1183              	.LBE213:
+ 1184              	.LBE212:
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 1185              		.loc 1 506 0
+ 1186 0040 0D92     		str	r2, [sp, #52]
+ 1187              	.LVL185:
+ 1188              	.LBB214:
+ 1189              	.LBB215:
+ 1190              		.loc 2 369 0
+ 1191 0042 A368     		ldr	r3, [r4, #8]
+ 1192              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1193 0044 18BA     		rev r0, r3
+ 1194              	@ 0 "" 2
+ 1195              	.LVL186:
+ 1196              		.thumb
+ 1197              	.LBE215:
+ 1198              	.LBE214:
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 1199              		.loc 1 508 0
+ 1200 0046 0E90     		str	r0, [sp, #56]
+ 1201              	.LVL187:
+ 1202              	.LBB216:
+ 1203              	.LBB217:
+ 1204              		.loc 2 369 0
+ 1205 0048 E468     		ldr	r4, [r4, #12]
+ 1206              	.LVL188:
+ 1207 004a 2EE0     		b	.L67
+ 1208              	.LVL189:
+ 1209              	.L53:
+ 1210              	.LBE217:
+ 1211              	.LBE216:
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 192:
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize  = CRYP_KeySize_192b;
+ 1212              		.loc 1 513 0
+ 1213 004c 4FF48070 		mov	r0, #256
+ 1214 0050 ADF80E00 		strh	r0, [sp, #14]	@ movhi
+ 1215              	.LVL190:
+ 1216              	.LBB218:
+ 1217              	.LBB219:
+ 1218              		.loc 2 369 0
+ 1219 0054 2168     		ldr	r1, [r4, #0]
+ 1220              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1221 0056 0ABA     		rev r2, r1
+ 1222              	@ 0 "" 2
+ 1223              	.LVL191:
+ 1224              		.thumb
+ 1225              	.LBE219:
+ 1226              	.LBE218:
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+ 1227              		.loc 1 514 0
+ 1228 0058 0A92     		str	r2, [sp, #40]
+ 1229              	.LVL192:
+ 1230              	.LBB220:
+ 1231              	.LBB221:
+ 1232              		.loc 2 369 0
+ 1233 005a 6368     		ldr	r3, [r4, #4]
+ 1234              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1235 005c 18BA     		rev r0, r3
+ 1236              	@ 0 "" 2
+ 1237              	.LVL193:
+ 1238              		.thumb
+ 1239              	.LBE221:
+ 1240              	.LBE220:
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 1241              		.loc 1 516 0
+ 1242 005e 0B90     		str	r0, [sp, #44]
+ 1243              	.LVL194:
+ 1244              	.LBB222:
+ 1245              	.LBB223:
+ 1246              		.loc 2 369 0
+ 1247 0060 A168     		ldr	r1, [r4, #8]
+ 1248              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1249 0062 0ABA     		rev r2, r1
+ 1250              	@ 0 "" 2
+ 1251              	.LVL195:
+ 1252              		.thumb
+ 1253              	.LBE223:
+ 1254              	.LBE222:
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 1255              		.loc 1 518 0
+ 1256 0064 0C92     		str	r2, [sp, #48]
+ 1257              	.LVL196:
+ 1258              	.LBB224:
+ 1259              	.LBB225:
+ 1260              		.loc 2 369 0
+ 1261 0066 E368     		ldr	r3, [r4, #12]
+ 1262              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1263 0068 18BA     		rev r0, r3
+ 1264              	@ 0 "" 2
+ 1265              	.LVL197:
+ 1266              		.thumb
+ 1267              	.LBE225:
+ 1268              	.LBE224:
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 1269              		.loc 1 520 0
+ 1270 006a 0D90     		str	r0, [sp, #52]
+ 1271              	.LVL198:
+ 1272              	.LBB226:
+ 1273              	.LBB227:
+ 1274              		.loc 2 369 0
+ 1275 006c 2169     		ldr	r1, [r4, #16]
+ 1276              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1277 006e 0ABA     		rev r2, r1
+ 1278              	@ 0 "" 2
+ 1279              	.LVL199:
+ 1280              		.thumb
+ 1281              	.LBE227:
+ 1282              	.LBE226:
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 1283              		.loc 1 522 0
+ 1284 0070 0E92     		str	r2, [sp, #56]
+ 1285              	.LVL200:
+ 1286              	.LBB228:
+ 1287              	.LBB229:
+ 1288              		.loc 2 369 0
+ 1289 0072 6469     		ldr	r4, [r4, #20]
+ 1290              	.LVL201:
+ 1291 0074 19E0     		b	.L67
+ 1292              	.LVL202:
+ 1293              	.L54:
+ 1294              	.LBE229:
+ 1295              	.LBE228:
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     case 256:
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_KeySize  = CRYP_KeySize_256b;
+ 1296              		.loc 1 527 0
+ 1297 0076 4FF40071 		mov	r1, #512
+ 1298 007a ADF80E10 		strh	r1, [sp, #14]	@ movhi
+ 1299              	.LVL203:
+ 1300              	.LBB230:
+ 1301              	.LBB231:
+ 1302              		.loc 2 369 0
+ 1303 007e 2268     		ldr	r2, [r4, #0]
+ 1304              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1305 0080 13BA     		rev r3, r2
+ 1306              	@ 0 "" 2
+ 1307              	.LVL204:
+ 1308              		.thumb
+ 1309              	.LBE231:
+ 1310              	.LBE230:
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key0Left = __REV(*(uint32_t*)(keyaddr));
+ 1311              		.loc 1 528 0
+ 1312 0082 0893     		str	r3, [sp, #32]
+ 1313              	.LVL205:
+ 1314              	.LBB232:
+ 1315              	.LBB233:
+ 1316              		.loc 2 369 0
+ 1317 0084 6068     		ldr	r0, [r4, #4]
+ 1318              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1319 0086 01BA     		rev r1, r0
+ 1320              	@ 0 "" 2
+ 1321              	.LVL206:
+ 1322              		.thumb
+ 1323              	.LBE233:
+ 1324              	.LBE232:
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key0Right= __REV(*(uint32_t*)(keyaddr));
+ 1325              		.loc 1 530 0
+ 1326 0088 0991     		str	r1, [sp, #36]
+ 1327              	.LVL207:
+ 1328              	.LBB234:
+ 1329              	.LBB235:
+ 1330              		.loc 2 369 0
+ 1331 008a A268     		ldr	r2, [r4, #8]
+ 1332              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1333 008c 13BA     		rev r3, r2
+ 1334              	@ 0 "" 2
+ 1335              	.LVL208:
+ 1336              		.thumb
+ 1337              	.LBE235:
+ 1338              	.LBE234:
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Left = __REV(*(uint32_t*)(keyaddr));
+ 1339              		.loc 1 532 0
+ 1340 008e 0A93     		str	r3, [sp, #40]
+ 1341              	.LVL209:
+ 1342              	.LBB236:
+ 1343              	.LBB237:
+ 1344              		.loc 2 369 0
+ 1345 0090 E068     		ldr	r0, [r4, #12]
+ 1346              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1347 0092 01BA     		rev r1, r0
+ 1348              	@ 0 "" 2
+ 1349              	.LVL210:
+ 1350              		.thumb
+ 1351              	.LBE237:
+ 1352              	.LBE236:
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key1Right= __REV(*(uint32_t*)(keyaddr));
+ 1353              		.loc 1 534 0
+ 1354 0094 0B91     		str	r1, [sp, #44]
+ 1355              	.LVL211:
+ 1356              	.LBB238:
+ 1357              	.LBB239:
+ 1358              		.loc 2 369 0
+ 1359 0096 2269     		ldr	r2, [r4, #16]
+ 1360              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1361 0098 13BA     		rev r3, r2
+ 1362              	@ 0 "" 2
+ 1363              	.LVL212:
+ 1364              		.thumb
+ 1365              	.LBE239:
+ 1366              	.LBE238:
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Left = __REV(*(uint32_t*)(keyaddr));
+ 1367              		.loc 1 536 0
+ 1368 009a 0C93     		str	r3, [sp, #48]
+ 1369              	.LVL213:
+ 1370              	.LBB240:
+ 1371              	.LBB241:
+ 1372              		.loc 2 369 0
+ 1373 009c 6069     		ldr	r0, [r4, #20]
+ 1374              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1375 009e 01BA     		rev r1, r0
+ 1376              	@ 0 "" 2
+ 1377              	.LVL214:
+ 1378              		.thumb
+ 1379              	.LBE241:
+ 1380              	.LBE240:
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key2Right= __REV(*(uint32_t*)(keyaddr));
+ 1381              		.loc 1 538 0
+ 1382 00a0 0D91     		str	r1, [sp, #52]
+ 1383              	.LVL215:
+ 1384              	.LBB242:
+ 1385              	.LBB243:
+ 1386              		.loc 2 369 0
+ 1387 00a2 A269     		ldr	r2, [r4, #24]
+ 1388              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1389 00a4 13BA     		rev r3, r2
+ 1390              	@ 0 "" 2
+ 1391              	.LVL216:
+ 1392              		.thumb
+ 1393              	.LBE243:
+ 1394              	.LBE242:
+ 1395              	.LBB244:
+ 1396              	.LBB245:
+ 1397 00a6 E469     		ldr	r4, [r4, #28]
+ 1398              	.LVL217:
+ 1399              	.LBE245:
+ 1400              	.LBE244:
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Left = __REV(*(uint32_t*)(keyaddr));
+ 1401              		.loc 1 540 0
+ 1402 00a8 0E93     		str	r3, [sp, #56]
+ 1403              	.LVL218:
+ 1404              	.L67:
+ 1405              	.LBB247:
+ 1406              	.LBB246:
+ 1407              		.loc 2 369 0
+ 1408              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1409 00aa 24BA     		rev r4, r4
+ 1410              	@ 0 "" 2
+ 1411              	.LVL219:
+ 1412              		.thumb
+ 1413              	.LBE246:
+ 1414              	.LBE247:
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     keyaddr+=4;
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_KeyInitStructure.CRYP_Key3Right= __REV(*(uint32_t*)(keyaddr));
+ 1415              		.loc 1 542 0
+ 1416 00ac 0F94     		str	r4, [sp, #60]
+ 1417              	.LVL220:
+ 1418              	.L51:
+ 1419              	.LBB248:
+ 1420              	.LBB249:
+ 1421              		.loc 2 369 0
+ 1422 00ae 3B68     		ldr	r3, [r7, #0]
+ 1423              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1424 00b0 18BA     		rev r0, r3
+ 1425              	@ 0 "" 2
+ 1426              	.LVL221:
+ 1427              		.thumb
+ 1428              	.LBE249:
+ 1429              	.LBE248:
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     default:
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     break;
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* CRYP Initialization Vectors */
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV0Left = __REV(*(uint32_t*)(ivaddr));
+ 1430              		.loc 1 548 0
+ 1431 00b2 0490     		str	r0, [sp, #16]
+ 1432              	.LVL222:
+ 1433              	.LBB250:
+ 1434              	.LBB251:
+ 1435              		.loc 2 369 0
+ 1436 00b4 7968     		ldr	r1, [r7, #4]
+ 1437              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1438 00b6 0ABA     		rev r2, r1
+ 1439              	@ 0 "" 2
+ 1440              	.LVL223:
+ 1441              		.thumb
+ 1442              	.LBE251:
+ 1443              	.LBE250:
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ivaddr+=4;
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV0Right= __REV(*(uint32_t*)(ivaddr));
+ 1444              		.loc 1 550 0
+ 1445 00b8 0592     		str	r2, [sp, #20]
+ 1446              	.LVL224:
+ 1447              	.LBB252:
+ 1448              	.LBB253:
+ 1449              		.loc 2 369 0
+ 1450 00ba BC68     		ldr	r4, [r7, #8]
+ 1451              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1452 00bc 23BA     		rev r3, r4
+ 1453              	@ 0 "" 2
+ 1454              	.LVL225:
+ 1455              		.thumb
+ 1456              	.LBE253:
+ 1457              	.LBE252:
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ivaddr+=4;
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV1Left = __REV(*(uint32_t*)(ivaddr));
+ 1458              		.loc 1 552 0
+ 1459 00be 0693     		str	r3, [sp, #24]
+ 1460              	.LVL226:
+ 1461              	.LBB254:
+ 1462              	.LBB255:
+ 1463              		.loc 2 369 0
+ 1464 00c0 FF68     		ldr	r7, [r7, #12]
+ 1465              	.LVL227:
+ 1466              	@ 369 "src/libstm32f2/core_cmInstr.h" 1
+ 1467 00c2 38BA     		rev r0, r7
+ 1468              	@ 0 "" 2
+ 1469              	.LVL228:
+ 1470              		.thumb
+ 1471              	.LBE255:
+ 1472              	.LBE254:
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   ivaddr+=4;
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_IVInitStructure.CRYP_IV1Right= __REV(*(uint32_t*)(ivaddr));
+ 1473              		.loc 1 554 0
+ 1474 00c4 0790     		str	r0, [sp, #28]
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Key Initialisation */
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_KeyInit(&AES_CRYP_KeyInitStructure);
+ 1475              		.loc 1 557 0
+ 1476 00c6 08A8     		add	r0, sp, #32
+ 1477              	.LVL229:
+ 1478 00c8 FFF7FEFF 		bl	CRYP_KeyInit
+ 1479              	.LVL230:
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /*------------------ AES Decryption ------------------*/
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   if(Mode == MODE_DECRYPT) /* AES decryption */
+ 1480              		.loc 1 560 0
+ 1481 00cc BBF1000F 		cmp	fp, #0
+ 1482 00d0 01D1     		bne	.L55
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Crypto Init for decryption process */
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
+ 1483              		.loc 1 563 0
+ 1484 00d2 0421     		movs	r1, #4
+ 1485 00d4 00E0     		b	.L68
+ 1486              	.L55:
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /*------------------ AES Encryption ------------------*/
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   else /* AES encryption */
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Crypto Init for Encryption process */
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Encrypt;
+ 1487              		.loc 1 569 0
+ 1488 00d6 0021     		movs	r1, #0
+ 1489              	.L68:
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_CTR;
+ 1490              		.loc 1 571 0
+ 1491 00d8 3022     		movs	r2, #48
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 1492              		.loc 1 572 0
+ 1493 00da 8024     		movs	r4, #128
+ 1494              	.LVL231:
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Init(&AES_CRYP_InitStructure);
+ 1495              		.loc 1 573 0
+ 1496 00dc 02A8     		add	r0, sp, #8
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Encrypt;
+ 1497              		.loc 1 569 0
+ 1498 00de ADF80810 		strh	r1, [sp, #8]	@ movhi
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_AlgoMode = CRYP_AlgoMode_AES_CTR;
+ 1499              		.loc 1 571 0
+ 1500 00e2 ADF80A20 		strh	r2, [sp, #10]	@ movhi
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   AES_CRYP_InitStructure.CRYP_DataType = CRYP_DataType_8b;
+ 1501              		.loc 1 572 0
+ 1502 00e6 ADF80C40 		strh	r4, [sp, #12]	@ movhi
+ 1503              		.loc 1 573 0
+ 1504 00ea FFF7FEFF 		bl	CRYP_Init
+ 1505              	.LVL232:
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* CRYP Initialization Vectors */
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_IVInit(&AES_CRYP_IVInitStructure);
+ 1506              		.loc 1 576 0
+ 1507 00ee 04A8     		add	r0, sp, #16
+ 1508 00f0 FFF7FEFF 		bl	CRYP_IVInit
+ 1509              	.LVL233:
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Flush IN/OUT FIFOs */
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_FIFOFlush();
+ 1510              		.loc 1 579 0
+ 1511 00f4 FFF7FEFF 		bl	CRYP_FIFOFlush
+ 1512              	.LVL234:
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Enable Crypto processor */
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Cmd(ENABLE);
+ 1513              		.loc 1 582 0
+ 1514 00f8 0120     		movs	r0, #1
+ 1515 00fa FFF7FEFF 		bl	CRYP_Cmd
+ 1516              	.LVL235:
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   uint32_t inputaddr  = (uint32_t)Input;
+ 1517              		.loc 1 492 0
+ 1518 00fe 3446     		mov	r4, r6
+ 1519              	.LVL236:
+ 1520              	.L69:
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=16)
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   {
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Write the Input block in the IN FIFO */
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     /* Wait until the complete message has been processed */
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     counter = 0;
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     do
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       counter++;
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }while ((counter != AESBUSY_TIMEOUT) && (busystatus != RESET));
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****    {
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****        status = ERROR;
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     else
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     {
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       /* Read the Output block from the Output FIFO */
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       outputaddr+=4;
+ 1521              		.loc 1 619 0
+ 1522 0100 0127     		movs	r7, #1
+ 1523              	.L66:
+ 1524              	.LVL237:
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=16)
+ 1525              		.loc 1 584 0 discriminator 1
+ 1526 0102 1998     		ldr	r0, [sp, #100]
+ 1527 0104 A31B     		subs	r3, r4, r6
+ 1528 0106 8342     		cmp	r3, r0
+ 1529 0108 2DD2     		bcs	.L62
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   for(i=0; ((i<Ilength) && (status != ERROR)); i+=16)
+ 1530              		.loc 1 584 0 is_stmt 0 discriminator 2
+ 1531 010a 67B3     		cbz	r7, .L62
+ 1532              	.L63:
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1533              		.loc 1 588 0 is_stmt 1
+ 1534 010c 2068     		ldr	r0, [r4, #0]
+ 1535 010e FFF7FEFF 		bl	CRYP_DataIn
+ 1536              	.LVL238:
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1537              		.loc 1 590 0
+ 1538 0112 6068     		ldr	r0, [r4, #4]
+ 1539 0114 FFF7FEFF 		bl	CRYP_DataIn
+ 1540              	.LVL239:
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1541              		.loc 1 592 0
+ 1542 0118 A068     		ldr	r0, [r4, #8]
+ 1543 011a FFF7FEFF 		bl	CRYP_DataIn
+ 1544              	.LVL240:
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     counter = 0;
+ 1545              		.loc 1 597 0
+ 1546 011e 0027     		movs	r7, #0
+ 1547              	.LVL241:
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     CRYP_DataIn(*(uint32_t*)(inputaddr));
+ 1548              		.loc 1 594 0
+ 1549 0120 E068     		ldr	r0, [r4, #12]
+ 1550 0122 FFF7FEFF 		bl	CRYP_DataIn
+ 1551              	.LVL242:
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     inputaddr+=4;
+ 1552              		.loc 1 595 0
+ 1553 0126 1034     		adds	r4, r4, #16
+ 1554              	.LVL243:
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     counter = 0;
+ 1555              		.loc 1 597 0
+ 1556 0128 0197     		str	r7, [sp, #4]
+ 1557              	.L59:
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       busystatus = CRYP_GetFlagStatus(CRYP_FLAG_BUSY);
+ 1558              		.loc 1 600 0 discriminator 1
+ 1559 012a 1020     		movs	r0, #16
+ 1560 012c FFF7FEFF 		bl	CRYP_GetFlagStatus
+ 1561              	.LVL244:
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       counter++;
+ 1562              		.loc 1 601 0 discriminator 1
+ 1563 0130 0199     		ldr	r1, [sp, #4]
+ 1564 0132 4A1C     		adds	r2, r1, #1
+ 1565              	.LVL245:
+ 1566 0134 0192     		str	r2, [sp, #4]
+ 1567              	.LVL246:
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }while ((counter != AESBUSY_TIMEOUT) && (busystatus != RESET));
+ 1568              		.loc 1 602 0 discriminator 1
+ 1569 0136 019B     		ldr	r3, [sp, #4]
+ 1570 0138 B3F5803F 		cmp	r3, #65536
+ 1571 013c 02D0     		beq	.L58
+ 1572 013e 0028     		cmp	r0, #0
+ 1573 0140 F3D1     		bne	.L59
+ 1574 0142 00E0     		b	.L60
+ 1575              	.L58:
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     if (busystatus != RESET)
+ 1576              		.loc 1 604 0
+ 1577 0144 68B9     		cbnz	r0, .L64
+ 1578              	.L60:
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1579              		.loc 1 612 0
+ 1580 0146 FFF7FEFF 		bl	CRYP_DataOut
+ 1581              	.LVL247:
+ 1582 014a 2860     		str	r0, [r5, #0]
+ 1583              	.LVL248:
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1584              		.loc 1 614 0
+ 1585 014c FFF7FEFF 		bl	CRYP_DataOut
+ 1586              	.LVL249:
+ 1587 0150 6860     		str	r0, [r5, #4]
+ 1588              	.LVL250:
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1589              		.loc 1 616 0
+ 1590 0152 FFF7FEFF 		bl	CRYP_DataOut
+ 1591              	.LVL251:
+ 1592 0156 A860     		str	r0, [r5, #8]
+ 1593              	.LVL252:
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****       *(uint32_t*)(outputaddr) = CRYP_DataOut();
+ 1594              		.loc 1 618 0
+ 1595 0158 FFF7FEFF 		bl	CRYP_DataOut
+ 1596              	.LVL253:
+ 1597 015c E860     		str	r0, [r5, #12]
+ 1598              		.loc 1 619 0
+ 1599 015e 1035     		adds	r5, r5, #16
+ 1600              	.LVL254:
+ 1601 0160 CEE7     		b	.L69
+ 1602              	.LVL255:
+ 1603              	.L64:
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****        status = ERROR;
+ 1604              		.loc 1 606 0
+ 1605 0162 0027     		movs	r7, #0
+ 1606 0164 CDE7     		b	.L66
+ 1607              	.LVL256:
+ 1608              	.L62:
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****     }
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   }
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   /* Disable Crypto */
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   CRYP_Cmd(DISABLE);
+ 1609              		.loc 1 623 0
+ 1610 0166 0020     		movs	r0, #0
+ 1611 0168 FFF7FEFF 		bl	CRYP_Cmd
+ 1612              	.LVL257:
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** 
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c ****   return status;
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_cryp_aes.c **** }
+ 1613              		.loc 1 626 0
+ 1614 016c 3846     		mov	r0, r7
+ 1615 016e 10B0     		add	sp, sp, #64
+ 1616 0170 BDE8F08D 		pop	{r4, r5, r6, r7, r8, sl, fp, pc}
+ 1617              		.cfi_endproc
+ 1618              	.LFE58:
+ 1620              		.text
+ 1621              	.Letext0:
+ 1622              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 1623              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 1624              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_cryp.h"
+ 1625              		.file 6 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_cryp_aes.c
+C:\Users\STINA\AppData\Local\Temp\ccoiVJdk.s:19     .text.CRYP_AES_ECB:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccoiVJdk.s:24     .text.CRYP_AES_ECB:00000000 CRYP_AES_ECB
+C:\Users\STINA\AppData\Local\Temp\ccoiVJdk.s:532    .text.CRYP_AES_CBC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccoiVJdk.s:537    .text.CRYP_AES_CBC:00000000 CRYP_AES_CBC
+C:\Users\STINA\AppData\Local\Temp\ccoiVJdk.s:1103   .text.CRYP_AES_CTR:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccoiVJdk.s:1108   .text.CRYP_AES_CTR:00000000 CRYP_AES_CTR
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+CRYP_KeyStructInit
+CRYP_FIFOFlush
+CRYP_Init
+CRYP_KeyInit
+CRYP_Cmd
+CRYP_GetFlagStatus
+CRYP_DataIn
+CRYP_DataOut
+CRYP_IVInit

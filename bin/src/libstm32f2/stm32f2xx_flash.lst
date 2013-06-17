@@ -1,0 +1,2475 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_flash.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.FLASH_SetLatency,"ax",%progbits
+  19              		.align	1
+  20              		.global	FLASH_SetLatency
+  21              		.thumb
+  22              		.thumb_func
+  24              	FLASH_SetLatency:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_flash.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @file    stm32f2xx_flash.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          functionalities of the FLASH peripheral:
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            - FLASH Interface configuration
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            - FLASH Memory Programming
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            - Option Bytes Programming
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            - Interrupts and flags management
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  @verbatim
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          ===================================================================
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                 How to use this driver
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          ===================================================================
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                           
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This driver provides functions to configure and program the FLASH 
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          memory of all STM32F2xx devices.
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          These functions are split in 4 groups:
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * 
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           1. FLASH Interface configuration functions: this group includes the
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *              management of the following features:
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Set the latency
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Enable/Disable the prefetch buffer
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Enable/Disable the Instruction cache and the Data cache
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Reset the Instruction cache and the Data cache
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           2. FLASH Memory Programming functions: this group includes all needed
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *              functions to erase and program the main memory:
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Lock and Unlock the FLASH interface
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Erase function: Erase sector, erase all sectors
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Program functions: byte, half word, word and double word
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           3. Option Bytes Programming functions: this group includes all needed
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *              functions to manage the Option Bytes:
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Set/Reset the write protection
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Set the Read protection Level
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Set the BOR level
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Program the user Option Bytes
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Launch the Option Bytes loader
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           4. Interrupts and flags management functions: this group 
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *              includes all needed functions to:
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Enable/Disable the FLASH interrupt sources
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Get flags status
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Clear flags
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Get FLASH operation status
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                    - Wait for last FLASH operation
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * 
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  @endverbatim
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                      
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   ******************************************************************************
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @attention
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * You may not use this file except in compliance with the License.
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * You may obtain a copy of the License at:
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * Unless required by applicable law or agreed to in writing, software 
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * See the License for the specific language governing permissions and
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * limitations under the License.
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   ******************************************************************************
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /* Includes ------------------------------------------------------------------*/
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** #include "stm32f2xx_flash.h"
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @{
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /** @defgroup FLASH 
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief FLASH driver modules
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @{
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */ 
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /* Private typedef -----------------------------------------------------------*/
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /* Private define ------------------------------------------------------------*/ 
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** #define SECTOR_MASK               ((uint32_t)0xFFFFFF07)
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /* Private macro -------------------------------------------------------------*/
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /* Private variables ---------------------------------------------------------*/
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /* Private function prototypes -----------------------------------------------*/
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /* Private functions ---------------------------------------------------------*/
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /** @defgroup FLASH_Private_Functions
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @{
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */ 
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /** @defgroup FLASH_Group1 FLASH Interface configuration functions
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *  @brief   FLASH Interface configuration functions 
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  *
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @verbatim   
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****                        FLASH Interface configuration functions
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    This group includes the following functions:
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_SetLatency(uint32_t FLASH_Latency)
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****        To correctly read data from FLASH memory, the number of wait states (LATENCY) 
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****        must be correctly programmed according to the frequency of the CPU clock 
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       (HCLK) and the supply voltage of the device.
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  +-------------------------------------------------------------------------------------+     
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  | Latency       |                HCLK clock frequency (MHz)                           |
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |               |---------------------------------------------------------------------|     
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |               | voltage range  | voltage range  | voltage range   | voltage range   |
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |               | 2.7 V - 3.6 V  | 2.4 V - 2.7 V  | 2.1 V - 2.4 V   | 1.8 V - 2.1 V   |
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------|           
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |0WS(1CPU cycle)|0 < HCLK <= 30  |0 < HCLK <= 24  |0 < HCLK <= 18   |0 < HCLK <= 16   |
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------|   
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |1WS(2CPU cycle)|30 < HCLK <= 60 |24 < HCLK <= 48 |18 < HCLK <= 36  |16 < HCLK <= 32  | 
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------|   
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |2WS(3CPU cycle)|60 < HCLK <= 90 |48 < HCLK <= 72 |36 < HCLK <= 54  |32 < HCLK <= 48  |
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------| 
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |3WS(4CPU cycle)|90 < HCLK <= 120|72 < HCLK <= 96 |54 < HCLK <= 72  |48 < HCLK <= 64  |
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------| 
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |4WS(5CPU cycle)|      NA        |96 < HCLK <= 120|72 < HCLK <= 90  |64 < HCLK <= 80  |
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------| 
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |5WS(6CPU cycle)|      NA        |      NA        |90 < HCLK <= 108 |80 < HCLK <= 96  | 
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------| 
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |6WS(7CPU cycle)|      NA        |      NA        |108 < HCLK <= 120|96 < HCLK <= 112 | 
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------| 
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |7WS(8CPU cycle)|      NA        |      NA        |     NA          |112 < HCLK <= 120| 
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |***************|****************|****************|*****************|*****************|***********
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |               | voltage range  | voltage range  | voltage range   | voltage range   | voltage ra
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |               | 2.7 V - 3.6 V  | 2.4 V - 2.7 V  | 2.1 V - 2.4 V   | 1.8 V - 2.1 V   | with Exter
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------|-----------
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |Max Parallelism|      x32       |               x16                |       x8        |          x
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |---------------|----------------|----------------|-----------------|-----------------|-----------
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  |PSIZE[1:0]     |      10        |               01                 |       00        |           
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  +-------------------------------------------------------------------------------------------------
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_PrefetchBufferCmd(FunctionalState NewState)
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_InstructionCacheCmd(FunctionalState NewState)
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_DataCacheCmd(FunctionalState NewState)
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_InstructionCacheReset(void)
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_DataCacheReset(void)
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    The unlock sequence is not needed for these functions.
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @endverbatim
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @{
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Sets the code latency value.
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  FLASH_Latency: specifies the FLASH Latency value.
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_0: FLASH Zero Latency cycle
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_1: FLASH One Latency cycle
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_2: FLASH Two Latency cycles
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_3: FLASH Three Latency cycles
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_4: FLASH Four Latency cycles 
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_5: FLASH Five Latency cycles 
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_6: FLASH Six Latency cycles
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_Latency_7: FLASH Seven Latency cycles      
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_SetLatency(uint32_t FLASH_Latency)
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+  27              		.loc 1 171 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_LATENCY(FLASH_Latency));
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Perform Byte access to FLASH_ACR[8:0] to set the Latency value */
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *(__IO uint8_t *)ACR_BYTE0_ADDRESS = (uint8_t)FLASH_Latency;
+  33              		.loc 1 176 0
+  34 0000 014B     		ldr	r3, .L2
+  35 0002 C0B2     		uxtb	r0, r0
+  36              	.LVL1:
+  37 0004 1870     		strb	r0, [r3, #0]
+  38 0006 7047     		bx	lr
+  39              	.L3:
+  40              		.align	2
+  41              	.L2:
+  42 0008 003C0240 		.word	1073888256
+  43              		.cfi_endproc
+  44              	.LFE56:
+  46              		.section	.text.FLASH_PrefetchBufferCmd,"ax",%progbits
+  47              		.align	1
+  48              		.global	FLASH_PrefetchBufferCmd
+  49              		.thumb
+  50              		.thumb_func
+  52              	FLASH_PrefetchBufferCmd:
+  53              	.LFB57:
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Enables or disables the Prefetch Buffer.
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  NewState: new state of the Prefetch Buffer.
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter  can be: ENABLE or DISABLE.
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_PrefetchBufferCmd(FunctionalState NewState)
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+  54              		.loc 1 186 0
+  55              		.cfi_startproc
+  56              		@ args = 0, pretend = 0, frame = 0
+  57              		@ frame_needed = 0, uses_anonymous_args = 0
+  58              		@ link register save eliminated.
+  59              	.LVL2:
+  60 0000 044B     		ldr	r3, .L9
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Enable or disable the Prefetch Buffer */
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->ACR |= FLASH_ACR_PRFTEN;
+  61              		.loc 1 193 0
+  62 0002 1A68     		ldr	r2, [r3, #0]
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+  63              		.loc 1 191 0
+  64 0004 10B1     		cbz	r0, .L5
+  65              		.loc 1 193 0
+  66 0006 42F48070 		orr	r0, r2, #256
+  67              	.LVL3:
+  68 000a 01E0     		b	.L7
+  69              	.LVL4:
+  70              	.L5:
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->ACR &= (~FLASH_ACR_PRFTEN);
+  71              		.loc 1 197 0
+  72 000c 22F48070 		bic	r0, r2, #256
+  73              	.LVL5:
+  74              	.L7:
+  75 0010 1860     		str	r0, [r3, #0]
+  76 0012 7047     		bx	lr
+  77              	.L10:
+  78              		.align	2
+  79              	.L9:
+  80 0014 003C0240 		.word	1073888256
+  81              		.cfi_endproc
+  82              	.LFE57:
+  84              		.section	.text.FLASH_InstructionCacheCmd,"ax",%progbits
+  85              		.align	1
+  86              		.global	FLASH_InstructionCacheCmd
+  87              		.thumb
+  88              		.thumb_func
+  90              	FLASH_InstructionCacheCmd:
+  91              	.LFB58:
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Enables or disables the Instruction Cache feature.
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  NewState: new state of the Instruction Cache.
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter  can be: ENABLE or DISABLE.
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_InstructionCacheCmd(FunctionalState NewState)
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+  92              		.loc 1 208 0
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 0
+  95              		@ frame_needed = 0, uses_anonymous_args = 0
+  96              		@ link register save eliminated.
+  97              	.LVL6:
+  98 0000 044B     		ldr	r3, .L15
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->ACR |= FLASH_ACR_ICEN;
+  99              		.loc 1 214 0
+ 100 0002 1A68     		ldr	r2, [r3, #0]
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+ 101              		.loc 1 212 0
+ 102 0004 10B1     		cbz	r0, .L12
+ 103              		.loc 1 214 0
+ 104 0006 42F40070 		orr	r0, r2, #512
+ 105              	.LVL7:
+ 106 000a 01E0     		b	.L14
+ 107              	.LVL8:
+ 108              	.L12:
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->ACR &= (~FLASH_ACR_ICEN);
+ 109              		.loc 1 218 0
+ 110 000c 22F40070 		bic	r0, r2, #512
+ 111              	.LVL9:
+ 112              	.L14:
+ 113 0010 1860     		str	r0, [r3, #0]
+ 114 0012 7047     		bx	lr
+ 115              	.L16:
+ 116              		.align	2
+ 117              	.L15:
+ 118 0014 003C0240 		.word	1073888256
+ 119              		.cfi_endproc
+ 120              	.LFE58:
+ 122              		.section	.text.FLASH_DataCacheCmd,"ax",%progbits
+ 123              		.align	1
+ 124              		.global	FLASH_DataCacheCmd
+ 125              		.thumb
+ 126              		.thumb_func
+ 128              	FLASH_DataCacheCmd:
+ 129              	.LFB59:
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Enables or disables the Data Cache feature.
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  NewState: new state of the Data Cache.
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter  can be: ENABLE or DISABLE.
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_DataCacheCmd(FunctionalState NewState)
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 130              		.loc 1 229 0
+ 131              		.cfi_startproc
+ 132              		@ args = 0, pretend = 0, frame = 0
+ 133              		@ frame_needed = 0, uses_anonymous_args = 0
+ 134              		@ link register save eliminated.
+ 135              	.LVL10:
+ 136 0000 044B     		ldr	r3, .L21
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->ACR |= FLASH_ACR_DCEN;
+ 137              		.loc 1 235 0
+ 138 0002 1A68     		ldr	r2, [r3, #0]
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+ 139              		.loc 1 233 0
+ 140 0004 10B1     		cbz	r0, .L18
+ 141              		.loc 1 235 0
+ 142 0006 42F48060 		orr	r0, r2, #1024
+ 143              	.LVL11:
+ 144 000a 01E0     		b	.L20
+ 145              	.LVL12:
+ 146              	.L18:
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->ACR &= (~FLASH_ACR_DCEN);
+ 147              		.loc 1 239 0
+ 148 000c 22F48060 		bic	r0, r2, #1024
+ 149              	.LVL13:
+ 150              	.L20:
+ 151 0010 1860     		str	r0, [r3, #0]
+ 152 0012 7047     		bx	lr
+ 153              	.L22:
+ 154              		.align	2
+ 155              	.L21:
+ 156 0014 003C0240 		.word	1073888256
+ 157              		.cfi_endproc
+ 158              	.LFE59:
+ 160              		.section	.text.FLASH_InstructionCacheReset,"ax",%progbits
+ 161              		.align	1
+ 162              		.global	FLASH_InstructionCacheReset
+ 163              		.thumb
+ 164              		.thumb_func
+ 166              	FLASH_InstructionCacheReset:
+ 167              	.LFB60:
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Resets the Instruction Cache.
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @note   This function must be used only when the Instruction Cache is disabled.  
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_InstructionCacheReset(void)
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 168              		.loc 1 250 0
+ 169              		.cfi_startproc
+ 170              		@ args = 0, pretend = 0, frame = 0
+ 171              		@ frame_needed = 0, uses_anonymous_args = 0
+ 172              		@ link register save eliminated.
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH->ACR |= FLASH_ACR_ICRST;
+ 173              		.loc 1 251 0
+ 174 0000 024B     		ldr	r3, .L24
+ 175 0002 1A68     		ldr	r2, [r3, #0]
+ 176 0004 42F40060 		orr	r0, r2, #2048
+ 177 0008 1860     		str	r0, [r3, #0]
+ 178 000a 7047     		bx	lr
+ 179              	.L25:
+ 180              		.align	2
+ 181              	.L24:
+ 182 000c 003C0240 		.word	1073888256
+ 183              		.cfi_endproc
+ 184              	.LFE60:
+ 186              		.section	.text.FLASH_DataCacheReset,"ax",%progbits
+ 187              		.align	1
+ 188              		.global	FLASH_DataCacheReset
+ 189              		.thumb
+ 190              		.thumb_func
+ 192              	FLASH_DataCacheReset:
+ 193              	.LFB61:
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Resets the Data Cache.
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @note   This function must be used only when the Data Cache is disabled.  
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_DataCacheReset(void)
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 194              		.loc 1 261 0
+ 195              		.cfi_startproc
+ 196              		@ args = 0, pretend = 0, frame = 0
+ 197              		@ frame_needed = 0, uses_anonymous_args = 0
+ 198              		@ link register save eliminated.
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH->ACR |= FLASH_ACR_DCRST;
+ 199              		.loc 1 262 0
+ 200 0000 024B     		ldr	r3, .L27
+ 201 0002 1A68     		ldr	r2, [r3, #0]
+ 202 0004 42F48050 		orr	r0, r2, #4096
+ 203 0008 1860     		str	r0, [r3, #0]
+ 204 000a 7047     		bx	lr
+ 205              	.L28:
+ 206              		.align	2
+ 207              	.L27:
+ 208 000c 003C0240 		.word	1073888256
+ 209              		.cfi_endproc
+ 210              	.LFE61:
+ 212              		.section	.text.FLASH_Unlock,"ax",%progbits
+ 213              		.align	1
+ 214              		.global	FLASH_Unlock
+ 215              		.thumb
+ 216              		.thumb_func
+ 218              	FLASH_Unlock:
+ 219              	.LFB62:
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @}
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /** @defgroup FLASH_Group2 FLASH Memory Programming functions
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  *  @brief   FLASH Memory Programming functions
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  *
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @verbatim   
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****                       FLASH Memory Programming functions
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================   
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    This group includes the following functions:
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_Unlock(void)
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - void FLASH_Lock(void)
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - FLASH_Status FLASH_EraseSector(uint32_t FLASH_Sector, uint8_t VoltageRange)
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - FLASH_Status FLASH_EraseAllSectors(uint8_t VoltageRange)
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - FLASH_Status FLASH_ProgramDoubleWord(uint32_t Address, uint64_t Data)
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - FLASH_Status FLASH_ProgramWord(uint32_t Address, uint32_t Data)
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - FLASH_Status FLASH_ProgramHalfWord(uint32_t Address, uint16_t Data)
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     - FLASH_Status FLASH_ProgramByte(uint32_t Address, uint8_t Data)
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    Any operation of erase or program should follow these steps:
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    1. Call the FLASH_Unlock() function to enable the FLASH control register access
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    2. Call the desired function to erase sector(s) or program data
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    3. Call the FLASH_Lock() function to disable the FLASH control register access
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       (recommended to protect the FLASH memory against possible unwanted operation)
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @endverbatim
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @{
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Unlocks the FLASH control register access
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_Unlock(void)
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 220              		.loc 1 305 0
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 0
+ 223              		@ frame_needed = 0, uses_anonymous_args = 0
+ 224              		@ link register save eliminated.
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if((FLASH->CR & FLASH_CR_LOCK) != RESET)
+ 225              		.loc 1 306 0
+ 226 0000 044B     		ldr	r3, .L31
+ 227 0002 1A69     		ldr	r2, [r3, #16]
+ 228 0004 002A     		cmp	r2, #0
+ 229 0006 04DA     		bge	.L29
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Authorize the FLASH Registers access */
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->KEYR = FLASH_KEY1;
+ 230              		.loc 1 309 0
+ 231 0008 0348     		ldr	r0, .L31+4
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->KEYR = FLASH_KEY2;
+ 232              		.loc 1 310 0
+ 233 000a 00F18831 		add	r1, r0, #-2004318072
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->KEYR = FLASH_KEY1;
+ 234              		.loc 1 309 0
+ 235 000e 5860     		str	r0, [r3, #4]
+ 236              		.loc 1 310 0
+ 237 0010 5960     		str	r1, [r3, #4]
+ 238              	.L29:
+ 239 0012 7047     		bx	lr
+ 240              	.L32:
+ 241              		.align	2
+ 242              	.L31:
+ 243 0014 003C0240 		.word	1073888256
+ 244 0018 23016745 		.word	1164378403
+ 245              		.cfi_endproc
+ 246              	.LFE62:
+ 248              		.section	.text.FLASH_Lock,"ax",%progbits
+ 249              		.align	1
+ 250              		.global	FLASH_Lock
+ 251              		.thumb
+ 252              		.thumb_func
+ 254              	FLASH_Lock:
+ 255              	.LFB63:
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }  
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Locks the FLASH control register access
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_Lock(void)
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 256              		.loc 1 320 0
+ 257              		.cfi_startproc
+ 258              		@ args = 0, pretend = 0, frame = 0
+ 259              		@ frame_needed = 0, uses_anonymous_args = 0
+ 260              		@ link register save eliminated.
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Set the LOCK Bit to lock the FLASH Registers access */
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH->CR |= FLASH_CR_LOCK;
+ 261              		.loc 1 322 0
+ 262 0000 024B     		ldr	r3, .L34
+ 263 0002 1A69     		ldr	r2, [r3, #16]
+ 264 0004 42F00040 		orr	r0, r2, #-2147483648
+ 265 0008 1861     		str	r0, [r3, #16]
+ 266 000a 7047     		bx	lr
+ 267              	.L35:
+ 268              		.align	2
+ 269              	.L34:
+ 270 000c 003C0240 		.word	1073888256
+ 271              		.cfi_endproc
+ 272              	.LFE63:
+ 274              		.section	.text.FLASH_OB_Unlock,"ax",%progbits
+ 275              		.align	1
+ 276              		.global	FLASH_OB_Unlock
+ 277              		.thumb
+ 278              		.thumb_func
+ 280              	FLASH_OB_Unlock:
+ 281              	.LFB70:
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Erases a specified FLASH Sector.
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *   
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  FLASH_Sector: The Sector number to be erased.
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be a value between FLASH_Sector_0 and FLASH_Sector_11
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *    
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  VoltageRange: The device voltage range which defines the erase parallelism.  
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_1: when the device voltage range is 1.8V to 2.1V, 
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by byte (8-bit) 
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_2: when the device voltage range is 2.1V to 2.7V,
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by half word (16-bit)
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_3: when the device voltage range is 2.7V to 3.6V,
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by word (32-bit)
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_4: when the device voltage range is 2.7V to 3.6V + External Vpp, 
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by double word (64-bit)
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *       
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_EraseSector(uint32_t FLASH_Sector, uint8_t VoltageRange)
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   uint32_t tmp_psize = 0x0;
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_SECTOR(FLASH_Sector));
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_VOLTAGERANGE(VoltageRange));
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(VoltageRange == VoltageRange_1)
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      tmp_psize = FLASH_PSIZE_BYTE;
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else if(VoltageRange == VoltageRange_2)
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_HALF_WORD;
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else if(VoltageRange == VoltageRange_3)
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_WORD;
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_DOUBLE_WORD;
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   { 
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the previous operation is completed, proceed to erase the sector */
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= tmp_psize;
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= SECTOR_MASK;
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_SER | FLASH_Sector;
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_STRT;
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Wait for last operation to be completed */
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the erase operation is completed, disable the SER Bit */
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_SER);
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= SECTOR_MASK; 
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the Erase Status */
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Erases all FLASH Sectors.
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *    
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  VoltageRange: The device voltage range which defines the erase parallelism.  
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_1: when the device voltage range is 1.8V to 2.1V, 
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by byte (8-bit) 
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_2: when the device voltage range is 2.1V to 2.7V,
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by half word (16-bit)
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_3: when the device voltage range is 2.7V to 3.6V,
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by word (32-bit)
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg VoltageRange_4: when the device voltage range is 2.7V to 3.6V + External Vpp, 
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                                  the operation will be done by double word (64-bit)
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *       
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_EraseAllSectors(uint8_t VoltageRange)
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   uint32_t tmp_psize = 0x0;
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_VOLTAGERANGE(VoltageRange));
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(VoltageRange == VoltageRange_1)
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      tmp_psize = FLASH_PSIZE_BYTE;
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else if(VoltageRange == VoltageRange_2)
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_HALF_WORD;
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else if(VoltageRange == VoltageRange_3)
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_WORD;
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_DOUBLE_WORD;
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }  
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the previous operation is completed, proceed to erase all sectors */
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR &= CR_PSIZE_MASK;
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR |= tmp_psize;
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR |= FLASH_CR_MER;
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR |= FLASH_CR_STRT;
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Wait for last operation to be completed */
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the erase operation is completed, disable the MER Bit */
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_MER);
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }   
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the Erase Status */
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Programs a double word (64-bit) at a specified address.
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @note   This function must be used when the device voltage range is from
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *         2.7V to 3.6V and an External Vpp is present.           
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Address: specifies the address to be programmed.
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Data: specifies the data to be programmed.
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_ProgramDoubleWord(uint32_t Address, uint64_t Data)
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_ADDRESS(Address));
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the previous operation is completed, proceed to program the new data */
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_DOUBLE_WORD;
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint64_t*)Address = Data;
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Wait for last operation to be completed */
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the program operation is completed, disable the PG Bit */
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   } 
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the Program Status */
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Programs a word (32-bit) at a specified address.
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Address: specifies the address to be programmed.
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *         This parameter can be any address in Program memory zone or in OTP zone.  
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @note   This function must be used when the device voltage range is from 2.7V to 3.6V. 
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Data: specifies the data to be programmed.
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_ProgramWord(uint32_t Address, uint32_t Data)
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_ADDRESS(Address));
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the previous operation is completed, proceed to program the new data */
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_WORD;
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint32_t*)Address = Data;
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Wait for last operation to be completed */
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the program operation is completed, disable the PG Bit */
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   } 
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the Program Status */
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Programs a half word (16-bit) at a specified address. 
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @note   This function must be used when the device voltage range is from 2.1V to 3.6V.         
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Address: specifies the address to be programmed.
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *         This parameter can be any address in Program memory zone or in OTP zone.  
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Data: specifies the data to be programmed.
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_ProgramHalfWord(uint32_t Address, uint16_t Data)
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_ADDRESS(Address));
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the previous operation is completed, proceed to program the new data */
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_HALF_WORD;
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint16_t*)Address = Data;
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Wait for last operation to be completed */
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the program operation is completed, disable the PG Bit */
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   } 
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the Program Status */
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Programs a byte (8-bit) at a specified address.
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @note   This function can be used within all the device supply voltage ranges.               
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Address: specifies the address to be programmed.
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *         This parameter can be any address in Program memory zone or in OTP zone.  
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Data: specifies the data to be programmed.
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_ProgramByte(uint32_t Address, uint8_t Data)
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_ADDRESS(Address));
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the previous operation is completed, proceed to program the new data */
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_BYTE;
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint8_t*)Address = Data;
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Wait for last operation to be completed */
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* if the program operation is completed, disable the PG Bit */
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   } 
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the Program Status */
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @}
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /** @defgroup FLASH_Group3 Option Bytes Programming functions
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  *  @brief   Option Bytes Programming functions 
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  *
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @verbatim   
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****                         Option Bytes Programming functions
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================  
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    This group includes the following functions:
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - void FLASH_OB_Unlock(void)
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - void FLASH_OB_Lock(void)
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - void FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState)
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - void FLASH_OB_RDPConfig(uint8_t OB_RDP)
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - void FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY)
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - void FLASH_OB_BORConfig(uint8_t OB_BOR)
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - FLASH_Status FLASH_ProgramOTP(uint32_t Address, uint32_t Data)							
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - FLASH_Status FLASH_OB_Launch(void)
+ 628:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - uint32_t FLASH_OB_GetUser(void)						
+ 629:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - uint8_t FLASH_OB_GetWRP(void)						
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - uint8_t FLASH_OB_GetRDP(void)							
+ 631:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    - uint8_t FLASH_OB_GetBOR(void)
+ 632:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    
+ 633:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    Any operation of erase or program should follow these steps:
+ 634:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    1. Call the FLASH_OB_Unlock() function to enable the FLASH option control register access
+ 635:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 636:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    2. Call one or several functions to program the desired Option Bytes:
+ 637:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       - void FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState) => to Enable/Disable 
+ 638:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         the desired sector write protection
+ 639:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       - void FLASH_OB_RDPConfig(uint8_t OB_RDP) => to set the desired read Protection Level
+ 640:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       - void FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY) => to configur
+ 641:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         the user Option Bytes.
+ 642:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       - void FLASH_OB_BORConfig(uint8_t OB_BOR) => to set the BOR Level 			 
+ 643:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 644:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    3. Once all needed Option Bytes to be programmed are correctly written, call the
+ 645:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       FLASH_OB_Launch() function to launch the Option Bytes programming process.
+ 646:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      
+ 647:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      @note When changing the IWDG mode from HW to SW or from SW to HW, a system 
+ 648:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****            reset is needed to make the change effective.  
+ 649:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 650:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    4. Call the FLASH_OB_Lock() function to disable the FLASH option control register
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       access (recommended to protect the Option Bytes against possible unwanted operations)
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @endverbatim
+ 654:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @{
+ 655:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 656:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Unlocks the FLASH Option Control Registers access.
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 660:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 661:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 662:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_OB_Unlock(void)
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 282              		.loc 1 663 0
+ 283              		.cfi_startproc
+ 284              		@ args = 0, pretend = 0, frame = 0
+ 285              		@ frame_needed = 0, uses_anonymous_args = 0
+ 286              		@ link register save eliminated.
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if((FLASH->OPTCR & FLASH_OPTCR_OPTLOCK) != RESET)
+ 287              		.loc 1 664 0
+ 288 0000 044B     		ldr	r3, .L41
+ 289 0002 5A69     		ldr	r2, [r3, #20]
+ 290 0004 D207     		lsls	r2, r2, #31
+ 291 0006 04D5     		bpl	.L36
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 666:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Authorizes the Option Byte register programming */
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->OPTKEYR = FLASH_OPT_KEY1;
+ 292              		.loc 1 667 0
+ 293 0008 0348     		ldr	r0, .L41+4
+ 668:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->OPTKEYR = FLASH_OPT_KEY2;
+ 294              		.loc 1 668 0
+ 295 000a 00F14431 		add	r1, r0, #1145324612
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->OPTKEYR = FLASH_OPT_KEY1;
+ 296              		.loc 1 667 0
+ 297 000e 9860     		str	r0, [r3, #8]
+ 298              		.loc 1 668 0
+ 299 0010 9960     		str	r1, [r3, #8]
+ 300              	.L36:
+ 301 0012 7047     		bx	lr
+ 302              	.L42:
+ 303              		.align	2
+ 304              	.L41:
+ 305 0014 003C0240 		.word	1073888256
+ 306 0018 3B2A1908 		.word	135866939
+ 307              		.cfi_endproc
+ 308              	.LFE70:
+ 310              		.section	.text.FLASH_OB_Lock,"ax",%progbits
+ 311              		.align	1
+ 312              		.global	FLASH_OB_Lock
+ 313              		.thumb
+ 314              		.thumb_func
+ 316              	FLASH_OB_Lock:
+ 317              	.LFB71:
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }  
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 672:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 673:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Locks the FLASH Option Control Registers access.
+ 674:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 675:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 676:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 677:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_OB_Lock(void)
+ 678:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 318              		.loc 1 678 0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 0
+ 321              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322              		@ link register save eliminated.
+ 679:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Set the OPTLOCK Bit to lock the FLASH Option Byte Registers access */
+ 680:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH->OPTCR |= FLASH_OPTCR_OPTLOCK;
+ 323              		.loc 1 680 0
+ 324 0000 024B     		ldr	r3, .L44
+ 325 0002 5A69     		ldr	r2, [r3, #20]
+ 326 0004 42F00100 		orr	r0, r2, #1
+ 327 0008 5861     		str	r0, [r3, #20]
+ 328 000a 7047     		bx	lr
+ 329              	.L45:
+ 330              		.align	2
+ 331              	.L44:
+ 332 000c 003C0240 		.word	1073888256
+ 333              		.cfi_endproc
+ 334              	.LFE71:
+ 336              		.section	.text.FLASH_OB_BORConfig,"ax",%progbits
+ 337              		.align	1
+ 338              		.global	FLASH_OB_BORConfig
+ 339              		.thumb
+ 340              		.thumb_func
+ 342              	FLASH_OB_BORConfig:
+ 343              	.LFB75:
+ 681:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 682:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 683:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 684:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Enables or disables the write protection of the desired sectors
+ 685:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  OB_WRP: specifies the sector(s) to be write protected or unprotected.
+ 686:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_WRP: A value between OB_WRP_Sector0 and OB_WRP_Sector11                     
+ 688:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_WRP_Sector_All
+ 689:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  Newstate: new state of the Write Protection.
+ 690:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 691:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None  
+ 692:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 693:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState)
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** { 
+ 695:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 696:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 697:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 698:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_OB_WRP(OB_WRP));
+ 699:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 700:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     
+ 701:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 702:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 703:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 704:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   { 
+ 705:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     if(NewState != DISABLE)
+ 706:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     {
+ 707:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       *(__IO uint16_t*)OPTCR_BYTE2_ADDRESS &= (~OB_WRP);
+ 708:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     }
+ 709:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     else
+ 710:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     {
+ 711:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       *(__IO uint16_t*)OPTCR_BYTE2_ADDRESS |= (uint16_t)OB_WRP;
+ 712:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     }
+ 713:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 714:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 715:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 716:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 717:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Sets the read protection level.
+ 718:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  OB_RDP: specifies the read protection level.
+ 719:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 720:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_RDP_Level_0: No protection
+ 721:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_RDP_Level_1: Read protection of the memory
+ 722:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_RDP_Level_2: Full chip protection
+ 723:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *   
+ 724:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * !!!Warning!!! When enabling OB_RDP level 2 it's no more possible to go back to level 1 or 0
+ 725:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *    
+ 726:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 727:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 728:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_OB_RDPConfig(uint8_t OB_RDP)
+ 729:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 730:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 731:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 732:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 733:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_OB_RDP(OB_RDP));
+ 734:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 735:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 736:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 737:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 738:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 739:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint8_t*)OPTCR_BYTE1_ADDRESS = OB_RDP;
+ 740:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 741:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 742:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 743:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 744:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 745:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Programs the FLASH User Option Byte: IWDG_SW / RST_STOP / RST_STDBY.    
+ 746:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  OB_IWDG: Selects the IWDG mode
+ 747:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 748:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_IWDG_SW: Software IWDG selected
+ 749:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_IWDG_HW: Hardware IWDG selected
+ 750:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  OB_STOP: Reset event when entering STOP mode.
+ 751:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter  can be one of the following values:
+ 752:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_STOP_NoRST: No reset generated when entering in STOP
+ 753:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_STOP_RST: Reset generated when entering in STOP
+ 754:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  OB_STDBY: Reset event when entering Standby mode.
+ 755:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter  can be one of the following values:
+ 756:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_STDBY_NoRST: No reset generated when entering in STANDBY
+ 757:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_STDBY_RST: Reset generated when entering in STANDBY
+ 758:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 759:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 760:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY)
+ 761:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 762:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   uint8_t optiontmp = 0xFF;
+ 763:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE; 
+ 764:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 765:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 766:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_OB_IWDG_SOURCE(OB_IWDG));
+ 767:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_OB_STOP_SOURCE(OB_STOP));
+ 768:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_OB_STDBY_SOURCE(OB_STDBY));
+ 769:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 770:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 771:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 772:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 773:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 774:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   { 
+ 775:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Mask OPTLOCK, OPTSTRT and BOR_LEV bits */
+ 776:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     optiontmp =  (uint8_t)((*(__IO uint8_t *)OPTCR_BYTE0_ADDRESS) & (uint8_t)0x0F); 
+ 777:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 778:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Update User Option Byte */
+ 779:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint8_t *)OPTCR_BYTE0_ADDRESS = OB_IWDG | (uint8_t)(OB_STDBY | (uint8_t)(OB_STOP | ((uin
+ 780:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }  
+ 781:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 782:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 783:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 784:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Sets the BOR Level. 
+ 785:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  OB_BOR: specifies the Option Bytes BOR Reset Level.
+ 786:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 787:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_BOR_LEVEL3: Supply voltage ranges from 2.7 to 3.6 V
+ 788:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_BOR_LEVEL2: Supply voltage ranges from 2.4 to 2.7 V
+ 789:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_BOR_LEVEL1: Supply voltage ranges from 2.1 to 2.4 V
+ 790:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg OB_BOR_OFF: Supply voltage ranges from 1.62 to 2.1 V
+ 791:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 792:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 793:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_OB_BORConfig(uint8_t OB_BOR)
+ 794:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 344              		.loc 1 794 0
+ 345              		.cfi_startproc
+ 346              		@ args = 0, pretend = 0, frame = 0
+ 347              		@ frame_needed = 0, uses_anonymous_args = 0
+ 348              		@ link register save eliminated.
+ 349              	.LVL14:
+ 795:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 796:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_OB_BOR(OB_BOR));
+ 797:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 798:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Set the BOR Level */
+ 799:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *(__IO uint8_t *)OPTCR_BYTE0_ADDRESS &= (~FLASH_OPTCR_BOR_LEV);
+ 350              		.loc 1 799 0
+ 351 0000 044B     		ldr	r3, .L47
+ 352 0002 1A78     		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 353 0004 02F0F301 		and	r1, r2, #243
+ 354 0008 1970     		strb	r1, [r3, #0]
+ 800:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *(__IO uint8_t *)OPTCR_BYTE0_ADDRESS |= OB_BOR;
+ 355              		.loc 1 800 0
+ 356 000a 1A78     		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 357 000c 1043     		orrs	r0, r0, r2
+ 358              	.LVL15:
+ 359 000e 1870     		strb	r0, [r3, #0]
+ 360 0010 7047     		bx	lr
+ 361              	.L48:
+ 362 0012 00BF     		.align	2
+ 363              	.L47:
+ 364 0014 143C0240 		.word	1073888276
+ 365              		.cfi_endproc
+ 366              	.LFE75:
+ 368              		.section	.text.FLASH_OB_GetUser,"ax",%progbits
+ 369              		.align	1
+ 370              		.global	FLASH_OB_GetUser
+ 371              		.thumb
+ 372              		.thumb_func
+ 374              	FLASH_OB_GetUser:
+ 375              	.LFB77:
+ 801:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 802:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 803:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 804:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 805:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Launch the option byte loading.
+ 806:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 807:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 808:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 809:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 810:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_OB_Launch(void)
+ 811:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 812:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status status = FLASH_COMPLETE;
+ 813:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 814:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Set the OPTSTRT bit in OPTCR register */
+ 815:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *(__IO uint8_t *)OPTCR_BYTE0_ADDRESS |= FLASH_OPTCR_OPTSTRT;
+ 816:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 817:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for last operation to be completed */
+ 818:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 819:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 820:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 821:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 822:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 823:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 824:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Returns the FLASH User Option Bytes values.
+ 825:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 826:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval The FLASH User Option Bytes values: IWDG_SW(Bit0), RST_STOP(Bit1)
+ 827:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *         and RST_STDBY(Bit2).
+ 828:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 829:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** uint8_t FLASH_OB_GetUser(void)
+ 830:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 376              		.loc 1 830 0
+ 377              		.cfi_startproc
+ 378              		@ args = 0, pretend = 0, frame = 0
+ 379              		@ frame_needed = 0, uses_anonymous_args = 0
+ 380              		@ link register save eliminated.
+ 831:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the User Option Byte */
+ 832:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return (uint8_t)(FLASH->OPTCR >> 5);
+ 381              		.loc 1 832 0
+ 382 0000 024B     		ldr	r3, .L50
+ 383 0002 5869     		ldr	r0, [r3, #20]
+ 833:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 384              		.loc 1 833 0
+ 385 0004 C0F34710 		ubfx	r0, r0, #5, #8
+ 386 0008 7047     		bx	lr
+ 387              	.L51:
+ 388 000a 00BF     		.align	2
+ 389              	.L50:
+ 390 000c 003C0240 		.word	1073888256
+ 391              		.cfi_endproc
+ 392              	.LFE77:
+ 394              		.section	.text.FLASH_OB_GetWRP,"ax",%progbits
+ 395              		.align	1
+ 396              		.global	FLASH_OB_GetWRP
+ 397              		.thumb
+ 398              		.thumb_func
+ 400              	FLASH_OB_GetWRP:
+ 401              	.LFB78:
+ 834:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 835:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 836:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Returns the FLASH Write Protection Option Bytes value.
+ 837:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 838:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval The FLASH Write Protection  Option Bytes value
+ 839:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 840:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** uint16_t FLASH_OB_GetWRP(void)
+ 841:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 402              		.loc 1 841 0
+ 403              		.cfi_startproc
+ 404              		@ args = 0, pretend = 0, frame = 0
+ 405              		@ frame_needed = 0, uses_anonymous_args = 0
+ 406              		@ link register save eliminated.
+ 842:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the FLASH write protection Register value */
+ 843:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return (*(__IO uint16_t *)(OPTCR_BYTE2_ADDRESS));
+ 407              		.loc 1 843 0
+ 408 0000 014B     		ldr	r3, .L53
+ 409 0002 1888     		ldrh	r0, [r3, #0]
+ 844:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 410              		.loc 1 844 0
+ 411 0004 80B2     		uxth	r0, r0
+ 412 0006 7047     		bx	lr
+ 413              	.L54:
+ 414              		.align	2
+ 415              	.L53:
+ 416 0008 163C0240 		.word	1073888278
+ 417              		.cfi_endproc
+ 418              	.LFE78:
+ 420              		.section	.text.FLASH_OB_GetRDP,"ax",%progbits
+ 421              		.align	1
+ 422              		.global	FLASH_OB_GetRDP
+ 423              		.thumb
+ 424              		.thumb_func
+ 426              	FLASH_OB_GetRDP:
+ 427              	.LFB79:
+ 845:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 846:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 847:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Returns the FLASH Read Protection level.
+ 848:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 849:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH ReadOut Protection Status:
+ 850:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           - SET, when OB_RDP_Level_1 or OB_RDP_Level_2 is set
+ 851:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           - RESET, when OB_RDP_Level_0 is set
+ 852:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 853:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FlagStatus FLASH_OB_GetRDP(void)
+ 854:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 428              		.loc 1 854 0
+ 429              		.cfi_startproc
+ 430              		@ args = 0, pretend = 0, frame = 0
+ 431              		@ frame_needed = 0, uses_anonymous_args = 0
+ 432              		@ link register save eliminated.
+ 433              	.LVL16:
+ 855:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FlagStatus readstatus = RESET;
+ 856:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 857:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if ((*(__IO uint8_t*)(OPTCR_BYTE1_ADDRESS) != (uint8_t)OB_RDP_Level_0))
+ 434              		.loc 1 857 0
+ 435 0000 024B     		ldr	r3, .L56
+ 436 0002 1878     		ldrb	r0, [r3, #0]	@ zero_extendqisi2
+ 437              	.LVL17:
+ 858:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 859:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     readstatus = SET;
+ 860:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 861:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 862:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 863:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     readstatus = RESET;
+ 864:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 865:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return readstatus;
+ 866:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 438              		.loc 1 866 0
+ 439 0004 AA38     		subs	r0, r0, #170
+ 440              	.LVL18:
+ 441 0006 18BF     		it	ne
+ 442 0008 0120     		movne	r0, #1
+ 443              	.LVL19:
+ 444 000a 7047     		bx	lr
+ 445              	.L57:
+ 446              		.align	2
+ 447              	.L56:
+ 448 000c 153C0240 		.word	1073888277
+ 449              		.cfi_endproc
+ 450              	.LFE79:
+ 452              		.section	.text.FLASH_OB_GetBOR,"ax",%progbits
+ 453              		.align	1
+ 454              		.global	FLASH_OB_GetBOR
+ 455              		.thumb
+ 456              		.thumb_func
+ 458              	FLASH_OB_GetBOR:
+ 459              	.LFB80:
+ 867:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 868:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 869:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Returns the FLASH BOR level.
+ 870:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 871:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval The FLASH BOR level:
+ 872:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           - OB_BOR_LEVEL3: Supply voltage ranges from 2.7 to 3.6 V
+ 873:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           - OB_BOR_LEVEL2: Supply voltage ranges from 2.4 to 2.7 V
+ 874:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           - OB_BOR_LEVEL1: Supply voltage ranges from 2.1 to 2.4 V
+ 875:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *           - OB_BOR_OFF   : Supply voltage ranges from 1.62 to 2.1 V  
+ 876:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 877:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** uint8_t FLASH_OB_GetBOR(void)
+ 878:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 460              		.loc 1 878 0
+ 461              		.cfi_startproc
+ 462              		@ args = 0, pretend = 0, frame = 0
+ 463              		@ frame_needed = 0, uses_anonymous_args = 0
+ 464              		@ link register save eliminated.
+ 879:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the FLASH BOR level */
+ 880:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return (uint8_t)(*(__IO uint8_t *)(OPTCR_BYTE0_ADDRESS) & (uint8_t)0x0C);
+ 465              		.loc 1 880 0
+ 466 0000 024B     		ldr	r3, .L59
+ 467 0002 1878     		ldrb	r0, [r3, #0]	@ zero_extendqisi2
+ 881:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 468              		.loc 1 881 0
+ 469 0004 00F00C00 		and	r0, r0, #12
+ 470 0008 7047     		bx	lr
+ 471              	.L60:
+ 472 000a 00BF     		.align	2
+ 473              	.L59:
+ 474 000c 143C0240 		.word	1073888276
+ 475              		.cfi_endproc
+ 476              	.LFE80:
+ 478              		.section	.text.FLASH_ITConfig,"ax",%progbits
+ 479              		.align	1
+ 480              		.global	FLASH_ITConfig
+ 481              		.thumb
+ 482              		.thumb_func
+ 484              	FLASH_ITConfig:
+ 485              	.LFB81:
+ 882:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 883:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 884:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @}
+ 885:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 886:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 887:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /** @defgroup FLASH_Group4 Interrupts and flags management functions
+ 888:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  *  @brief   Interrupts and flags management functions
+ 889:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  *
+ 890:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @verbatim   
+ 891:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================
+ 892:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****                   Interrupts and flags management functions
+ 893:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****  ===============================================================================  
+ 894:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 895:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** @endverbatim
+ 896:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @{
+ 897:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 898:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 899:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 900:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Enables or disables the specified FLASH interrupts.
+ 901:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  FLASH_IT: specifies the FLASH interrupt sources to be enabled or disabled.
+ 902:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be any combination of the following values:
+ 903:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_IT_ERR: FLASH Error Interrupt
+ 904:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_IT_EOP: FLASH end of operation Interrupt
+ 905:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None 
+ 906:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 907:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_ITConfig(uint32_t FLASH_IT, FunctionalState NewState)
+ 908:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 486              		.loc 1 908 0
+ 487              		.cfi_startproc
+ 488              		@ args = 0, pretend = 0, frame = 0
+ 489              		@ frame_needed = 0, uses_anonymous_args = 0
+ 490              		@ link register save eliminated.
+ 491              	.LVL20:
+ 492 0000 044B     		ldr	r3, .L65
+ 909:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 910:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_IT(FLASH_IT)); 
+ 911:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 912:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 913:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+ 914:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 915:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Enable the interrupt sources */
+ 916:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_IT;
+ 493              		.loc 1 916 0
+ 494 0002 1A69     		ldr	r2, [r3, #16]
+ 913:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(NewState != DISABLE)
+ 495              		.loc 1 913 0
+ 496 0004 09B1     		cbz	r1, .L62
+ 497              		.loc 1 916 0
+ 498 0006 1043     		orrs	r0, r0, r2
+ 499              	.LVL21:
+ 500 0008 01E0     		b	.L64
+ 501              	.LVL22:
+ 502              	.L62:
+ 917:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 918:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 919:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 920:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     /* Disable the interrupt sources */
+ 921:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= ~(uint32_t)FLASH_IT;
+ 503              		.loc 1 921 0
+ 504 000a 22EA0000 		bic	r0, r2, r0
+ 505              	.LVL23:
+ 506              	.L64:
+ 507 000e 1861     		str	r0, [r3, #16]
+ 508 0010 7047     		bx	lr
+ 509              	.L66:
+ 510 0012 00BF     		.align	2
+ 511              	.L65:
+ 512 0014 003C0240 		.word	1073888256
+ 513              		.cfi_endproc
+ 514              	.LFE81:
+ 516              		.section	.text.FLASH_GetFlagStatus,"ax",%progbits
+ 517              		.align	1
+ 518              		.global	FLASH_GetFlagStatus
+ 519              		.thumb
+ 520              		.thumb_func
+ 522              	FLASH_GetFlagStatus:
+ 523              	.LFB82:
+ 922:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 923:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 924:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 925:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 926:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Checks whether the specified FLASH flag is set or not.
+ 927:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  FLASH_FLAG: specifies the FLASH flag to check.
+ 928:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be one of the following values:
+ 929:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_EOP: FLASH End of Operation flag 
+ 930:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_OPERR: FLASH operation Error flag 
+ 931:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_WRPERR: FLASH Write protected error flag 
+ 932:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_PGAERR: FLASH Programming Alignment error flag
+ 933:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_PGPERR: FLASH Programming Parallelism error flag
+ 934:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_PGSERR: FLASH Programming Sequence error flag
+ 935:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_BSY: FLASH Busy flag
+ 936:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval The new state of FLASH_FLAG (SET or RESET).
+ 937:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 938:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FlagStatus FLASH_GetFlagStatus(uint32_t FLASH_FLAG)
+ 939:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 524              		.loc 1 939 0
+ 525              		.cfi_startproc
+ 526              		@ args = 0, pretend = 0, frame = 0
+ 527              		@ frame_needed = 0, uses_anonymous_args = 0
+ 528              		@ link register save eliminated.
+ 529              	.LVL24:
+ 940:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FlagStatus bitstatus = RESET;
+ 941:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 942:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_GET_FLAG(FLASH_FLAG));
+ 943:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 944:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if((FLASH->SR & FLASH_FLAG) != (uint32_t)RESET)
+ 530              		.loc 1 944 0
+ 531 0000 034B     		ldr	r3, .L68
+ 532 0002 D968     		ldr	r1, [r3, #12]
+ 533              	.LVL25:
+ 534 0004 0842     		tst	r0, r1
+ 945:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 946:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     bitstatus = SET;
+ 947:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 948:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else
+ 949:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 950:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     bitstatus = RESET;
+ 951:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 952:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the new state of FLASH_FLAG (SET or RESET) */
+ 953:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return bitstatus; 
+ 954:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 535              		.loc 1 954 0
+ 536 0006 0CBF     		ite	eq
+ 537 0008 0020     		moveq	r0, #0
+ 538 000a 0120     		movne	r0, #1
+ 539              	.LVL26:
+ 540 000c 7047     		bx	lr
+ 541              	.L69:
+ 542 000e 00BF     		.align	2
+ 543              	.L68:
+ 544 0010 003C0240 		.word	1073888256
+ 545              		.cfi_endproc
+ 546              	.LFE82:
+ 548              		.section	.text.FLASH_ClearFlag,"ax",%progbits
+ 549              		.align	1
+ 550              		.global	FLASH_ClearFlag
+ 551              		.thumb
+ 552              		.thumb_func
+ 554              	FLASH_ClearFlag:
+ 555              	.LFB83:
+ 955:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 956:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 957:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Clears the FLASH's pending flags.
+ 958:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  FLASH_FLAG: specifies the FLASH flags to clear.
+ 959:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *          This parameter can be any combination of the following values:
+ 960:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_EOP: FLASH End of Operation flag 
+ 961:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_OPERR: FLASH operation Error flag 
+ 962:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_WRPERR: FLASH Write protected error flag 
+ 963:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_PGAERR: FLASH Programming Alignment error flag 
+ 964:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_PGPERR: FLASH Programming Parallelism error flag
+ 965:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *            @arg FLASH_FLAG_PGSERR: FLASH Programming Sequence error flag
+ 966:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval None
+ 967:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 968:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** void FLASH_ClearFlag(uint32_t FLASH_FLAG)
+ 969:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 556              		.loc 1 969 0
+ 557              		.cfi_startproc
+ 558              		@ args = 0, pretend = 0, frame = 0
+ 559              		@ frame_needed = 0, uses_anonymous_args = 0
+ 560              		@ link register save eliminated.
+ 561              	.LVL27:
+ 970:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check the parameters */
+ 971:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   assert_param(IS_FLASH_CLEAR_FLAG(FLASH_FLAG));
+ 972:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 973:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Clear the flags */
+ 974:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH->SR = FLASH_FLAG;
+ 562              		.loc 1 974 0
+ 563 0000 014B     		ldr	r3, .L71
+ 564 0002 D860     		str	r0, [r3, #12]
+ 565 0004 7047     		bx	lr
+ 566              	.L72:
+ 567 0006 00BF     		.align	2
+ 568              	.L71:
+ 569 0008 003C0240 		.word	1073888256
+ 570              		.cfi_endproc
+ 571              	.LFE83:
+ 573              		.section	.text.FLASH_GetStatus,"ax",%progbits
+ 574              		.align	1
+ 575              		.global	FLASH_GetStatus
+ 576              		.thumb
+ 577              		.thumb_func
+ 579              	FLASH_GetStatus:
+ 580              	.LFB84:
+ 975:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 976:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+ 977:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+ 978:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Returns the FLASH Status.
+ 979:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+ 980:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+ 981:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+ 982:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+ 983:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_GetStatus(void)
+ 984:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 581              		.loc 1 984 0
+ 582              		.cfi_startproc
+ 583              		@ args = 0, pretend = 0, frame = 0
+ 584              		@ frame_needed = 0, uses_anonymous_args = 0
+ 585              		@ link register save eliminated.
+ 586              	.LVL28:
+ 985:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   FLASH_Status flashstatus = FLASH_COMPLETE;
+ 986:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   
+ 987:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if((FLASH->SR & FLASH_FLAG_BSY) == FLASH_FLAG_BSY) 
+ 587              		.loc 1 987 0
+ 588 0000 0B4B     		ldr	r3, .L80
+ 589 0002 DA68     		ldr	r2, [r3, #12]
+ 590 0004 D003     		lsls	r0, r2, #15
+ 591 0006 0DD4     		bmi	.L76
+ 988:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+ 989:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     flashstatus = FLASH_BUSY;
+ 990:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+ 991:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else 
+ 992:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {  
+ 993:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     if((FLASH->SR & FLASH_FLAG_WRPERR) != (uint32_t)0x00)
+ 592              		.loc 1 993 0
+ 593 0008 D868     		ldr	r0, [r3, #12]
+ 594 000a C106     		lsls	r1, r0, #27
+ 595 000c 0CD4     		bmi	.L77
+ 994:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     { 
+ 995:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       flashstatus = FLASH_ERROR_WRP;
+ 996:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     }
+ 997:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     else 
+ 998:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     {
+ 999:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       if((FLASH->SR & (uint32_t)0xEF) != (uint32_t)0x00)
+ 596              		.loc 1 999 0
+ 597 000e D968     		ldr	r1, [r3, #12]
+ 598 0010 11F0EF0F 		tst	r1, #239
+ 599 0014 0AD1     		bne	.L78
+ 600              	.LBB4:
+ 601              	.LBB5:
+1000:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       {
+1001:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         flashstatus = FLASH_ERROR_PROGRAM; 
+1002:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       }
+1003:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       else
+1004:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       {
+1005:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         if((FLASH->SR & FLASH_FLAG_OPERR) != (uint32_t)0x00)
+ 602              		.loc 1 1005 0
+ 603 0016 DB68     		ldr	r3, [r3, #12]
+ 604 0018 13F0020F 		tst	r3, #2
+1006:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         {
+1007:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****           flashstatus = FLASH_ERROR_OPERATION;
+ 605              		.loc 1 1007 0
+ 606 001c 0CBF     		ite	eq
+ 607 001e 0820     		moveq	r0, #8
+ 608 0020 0720     		movne	r0, #7
+ 609 0022 7047     		bx	lr
+ 610              	.L76:
+ 611              	.LBE5:
+ 612              	.LBE4:
+ 989:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     flashstatus = FLASH_BUSY;
+ 613              		.loc 1 989 0
+ 614 0024 0120     		movs	r0, #1
+ 615 0026 7047     		bx	lr
+ 616              	.L77:
+ 995:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       flashstatus = FLASH_ERROR_WRP;
+ 617              		.loc 1 995 0
+ 618 0028 0520     		movs	r0, #5
+ 619 002a 7047     		bx	lr
+ 620              	.L78:
+1001:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         flashstatus = FLASH_ERROR_PROGRAM; 
+ 621              		.loc 1 1001 0
+ 622 002c 0620     		movs	r0, #6
+ 623              	.LVL29:
+1008:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         }
+1009:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         else
+1010:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         {
+1011:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****           flashstatus = FLASH_COMPLETE;
+1012:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****         }
+1013:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       }
+1014:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     }
+1015:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+1016:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the FLASH Status */
+1017:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return flashstatus;
+1018:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 624              		.loc 1 1018 0
+ 625 002e 7047     		bx	lr
+ 626              	.L81:
+ 627              		.align	2
+ 628              	.L80:
+ 629 0030 003C0240 		.word	1073888256
+ 630              		.cfi_endproc
+ 631              	.LFE84:
+ 633              		.section	.text.FLASH_WaitForLastOperation,"ax",%progbits
+ 634              		.align	1
+ 635              		.global	FLASH_WaitForLastOperation
+ 636              		.thumb
+ 637              		.thumb_func
+ 639              	FLASH_WaitForLastOperation:
+ 640              	.LFB85:
+1019:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+1020:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** /**
+1021:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @brief  Waits for a FLASH operation to complete.
+1022:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @param  None
+1023:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   * @retval FLASH Status: The returned value can be: FLASH_BUSY, FLASH_ERROR_PROGRAM,
+1024:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *                       FLASH_ERROR_WRP, FLASH_ERROR_OPERATION or FLASH_COMPLETE.
+1025:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   */
+1026:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** FLASH_Status FLASH_WaitForLastOperation(void)
+1027:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** { 
+ 641              		.loc 1 1027 0
+ 642              		.cfi_startproc
+ 643              		@ args = 0, pretend = 0, frame = 8
+ 644              		@ frame_needed = 0, uses_anonymous_args = 0
+ 645 0000 07B5     		push	{r0, r1, r2, lr}
+ 646              	.LCFI0:
+ 647              		.cfi_def_cfa_offset 16
+ 648              		.cfi_offset 0, -16
+ 649              		.cfi_offset 1, -12
+ 650              		.cfi_offset 2, -8
+ 651              		.cfi_offset 14, -4
+1028:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   __IO FLASH_Status status = FLASH_COMPLETE;
+ 652              		.loc 1 1028 0
+ 653 0002 0823     		movs	r3, #8
+ 654 0004 8DF80730 		strb	r3, [sp, #7]
+ 655              	.LVL30:
+ 656              	.L84:
+1029:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****    
+1030:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Check for the FLASH Status */
+1031:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_GetStatus();
+1032:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** 
+1033:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Wait for the FLASH operation to complete by polling on BUSY flag to be reset.
+1034:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      Even if the FLASH operation fails, the BUSY flag will be reset and an error
+1035:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      flag will be set */
+1036:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   while(status == FLASH_BUSY)
+1037:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   {
+1038:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_GetStatus();
+ 657              		.loc 1 1038 0
+ 658 0008 FFF7FEFF 		bl	FLASH_GetStatus
+ 659              	.LVL31:
+ 660 000c 8DF80700 		strb	r0, [sp, #7]
+1036:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   while(status == FLASH_BUSY)
+ 661              		.loc 1 1036 0
+ 662 0010 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+ 663              	.LVL32:
+ 664 0014 0128     		cmp	r0, #1
+ 665 0016 F7D0     		beq	.L84
+1039:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   }
+1040:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   /* Return the operation status */
+1041:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   return status;
+ 666              		.loc 1 1041 0
+ 667 0018 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+ 668              	.LVL33:
+ 669              	.LVL34:
+1042:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 670              		.loc 1 1042 0
+ 671 001c 0EBD     		pop	{r1, r2, r3, pc}
+ 672              		.cfi_endproc
+ 673              	.LFE85:
+ 675              		.section	.text.FLASH_OB_Launch,"ax",%progbits
+ 676              		.align	1
+ 677              		.global	FLASH_OB_Launch
+ 678              		.thumb
+ 679              		.thumb_func
+ 681              	FLASH_OB_Launch:
+ 682              	.LFB76:
+ 811:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 683              		.loc 1 811 0
+ 684              		.cfi_startproc
+ 685              		@ args = 0, pretend = 0, frame = 0
+ 686              		@ frame_needed = 0, uses_anonymous_args = 0
+ 687              		@ link register save eliminated.
+ 688              	.LVL35:
+ 815:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   *(__IO uint8_t *)OPTCR_BYTE0_ADDRESS |= FLASH_OPTCR_OPTSTRT;
+ 689              		.loc 1 815 0
+ 690 0000 034B     		ldr	r3, .L86
+ 691 0002 1A78     		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 692 0004 42F00200 		orr	r0, r2, #2
+ 693 0008 1870     		strb	r0, [r3, #0]
+ 821:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 694              		.loc 1 821 0
+ 818:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 695              		.loc 1 818 0
+ 696 000a FFF7FEBF 		b	FLASH_WaitForLastOperation
+ 697              	.LVL36:
+ 698              	.L87:
+ 699 000e 00BF     		.align	2
+ 700              	.L86:
+ 701 0010 143C0240 		.word	1073888276
+ 702              		.cfi_endproc
+ 703              	.LFE76:
+ 705              		.section	.text.FLASH_OB_UserConfig,"ax",%progbits
+ 706              		.align	1
+ 707              		.global	FLASH_OB_UserConfig
+ 708              		.thumb
+ 709              		.thumb_func
+ 711              	FLASH_OB_UserConfig:
+ 712              	.LFB74:
+ 761:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 713              		.loc 1 761 0
+ 714              		.cfi_startproc
+ 715              		@ args = 0, pretend = 0, frame = 0
+ 716              		@ frame_needed = 0, uses_anonymous_args = 0
+ 717              	.LVL37:
+ 718 0000 70B5     		push	{r4, r5, r6, lr}
+ 719              	.LCFI1:
+ 720              		.cfi_def_cfa_offset 16
+ 721              		.cfi_offset 4, -16
+ 722              		.cfi_offset 5, -12
+ 723              		.cfi_offset 6, -8
+ 724              		.cfi_offset 14, -4
+ 761:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 725              		.loc 1 761 0
+ 726 0002 0446     		mov	r4, r0
+ 727 0004 0D46     		mov	r5, r1
+ 728 0006 1646     		mov	r6, r2
+ 771:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 729              		.loc 1 771 0
+ 730 0008 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 731              	.LVL38:
+ 773:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 732              		.loc 1 773 0
+ 733 000c 0828     		cmp	r0, #8
+ 734 000e 07D1     		bne	.L88
+ 776:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     optiontmp =  (uint8_t)((*(__IO uint8_t *)OPTCR_BYTE0_ADDRESS) & (uint8_t)0x0F); 
+ 735              		.loc 1 776 0
+ 736 0010 044B     		ldr	r3, .L90
+ 737 0012 1A78     		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 738              	.LVL39:
+ 739 0014 02F00F00 		and	r0, r2, #15
+ 740              	.LVL40:
+ 779:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint8_t *)OPTCR_BYTE0_ADDRESS = OB_IWDG | (uint8_t)(OB_STDBY | (uint8_t)(OB_STOP | ((uin
+ 741              		.loc 1 779 0
+ 742 0018 0443     		orrs	r4, r4, r0
+ 743 001a 2543     		orrs	r5, r5, r4
+ 744 001c 2E43     		orrs	r6, r6, r5
+ 745 001e 1E70     		strb	r6, [r3, #0]
+ 746              	.LVL41:
+ 747              	.L88:
+ 748 0020 70BD     		pop	{r4, r5, r6, pc}
+ 749              	.L91:
+ 750 0022 00BF     		.align	2
+ 751              	.L90:
+ 752 0024 143C0240 		.word	1073888276
+ 753              		.cfi_endproc
+ 754              	.LFE74:
+ 756              		.section	.text.FLASH_OB_RDPConfig,"ax",%progbits
+ 757              		.align	1
+ 758              		.global	FLASH_OB_RDPConfig
+ 759              		.thumb
+ 760              		.thumb_func
+ 762              	FLASH_OB_RDPConfig:
+ 763              	.LFB73:
+ 729:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 764              		.loc 1 729 0
+ 765              		.cfi_startproc
+ 766              		@ args = 0, pretend = 0, frame = 0
+ 767              		@ frame_needed = 0, uses_anonymous_args = 0
+ 768              	.LVL42:
+ 769 0000 10B5     		push	{r4, lr}
+ 770              	.LCFI2:
+ 771              		.cfi_def_cfa_offset 8
+ 772              		.cfi_offset 4, -8
+ 773              		.cfi_offset 14, -4
+ 729:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 774              		.loc 1 729 0
+ 775 0002 0446     		mov	r4, r0
+ 735:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 776              		.loc 1 735 0
+ 777 0004 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 778              	.LVL43:
+ 737:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 779              		.loc 1 737 0
+ 780 0008 0828     		cmp	r0, #8
+ 739:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint8_t*)OPTCR_BYTE1_ADDRESS = OB_RDP;
+ 781              		.loc 1 739 0
+ 782 000a 04BF     		itt	eq
+ 783 000c 014B     		ldreq	r3, .L94
+ 784 000e 1C70     		strbeq	r4, [r3, #0]
+ 785 0010 10BD     		pop	{r4, pc}
+ 786              	.L95:
+ 787 0012 00BF     		.align	2
+ 788              	.L94:
+ 789 0014 153C0240 		.word	1073888277
+ 790              		.cfi_endproc
+ 791              	.LFE73:
+ 793              		.section	.text.FLASH_OB_WRPConfig,"ax",%progbits
+ 794              		.align	1
+ 795              		.global	FLASH_OB_WRPConfig
+ 796              		.thumb
+ 797              		.thumb_func
+ 799              	FLASH_OB_WRPConfig:
+ 800              	.LFB72:
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** { 
+ 801              		.loc 1 694 0
+ 802              		.cfi_startproc
+ 803              		@ args = 0, pretend = 0, frame = 0
+ 804              		@ frame_needed = 0, uses_anonymous_args = 0
+ 805              	.LVL44:
+ 806 0000 38B5     		push	{r3, r4, r5, lr}
+ 807              	.LCFI3:
+ 808              		.cfi_def_cfa_offset 16
+ 809              		.cfi_offset 3, -16
+ 810              		.cfi_offset 4, -12
+ 811              		.cfi_offset 5, -8
+ 812              		.cfi_offset 14, -4
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** { 
+ 813              		.loc 1 694 0
+ 814 0002 0446     		mov	r4, r0
+ 815 0004 0D46     		mov	r5, r1
+ 701:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 816              		.loc 1 701 0
+ 817 0006 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 818              	.LVL45:
+ 703:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 819              		.loc 1 703 0
+ 820 000a 0828     		cmp	r0, #8
+ 821 000c 09D1     		bne	.L96
+ 822 000e 054B     		ldr	r3, .L100
+ 707:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       *(__IO uint16_t*)OPTCR_BYTE2_ADDRESS &= (~OB_WRP);
+ 823              		.loc 1 707 0
+ 824 0010 1A88     		ldrh	r2, [r3, #0]
+ 705:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     if(NewState != DISABLE)
+ 825              		.loc 1 705 0
+ 826 0012 1DB1     		cbz	r5, .L98
+ 707:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       *(__IO uint16_t*)OPTCR_BYTE2_ADDRESS &= (~OB_WRP);
+ 827              		.loc 1 707 0
+ 828 0014 90B2     		uxth	r0, r2
+ 829              	.LVL46:
+ 830 0016 20EA0404 		bic	r4, r0, r4
+ 831              	.LVL47:
+ 832 001a 01E0     		b	.L99
+ 833              	.LVL48:
+ 834              	.L98:
+ 711:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****       *(__IO uint16_t*)OPTCR_BYTE2_ADDRESS |= (uint16_t)OB_WRP;
+ 835              		.loc 1 711 0
+ 836 001c 1443     		orrs	r4, r4, r2
+ 837              	.LVL49:
+ 838 001e A4B2     		uxth	r4, r4
+ 839              	.LVL50:
+ 840              	.L99:
+ 841 0020 1C80     		strh	r4, [r3, #0]	@ movhi
+ 842              	.L96:
+ 843 0022 38BD     		pop	{r3, r4, r5, pc}
+ 844              	.L101:
+ 845              		.align	2
+ 846              	.L100:
+ 847 0024 163C0240 		.word	1073888278
+ 848              		.cfi_endproc
+ 849              	.LFE72:
+ 851              		.section	.text.FLASH_ProgramByte,"ax",%progbits
+ 852              		.align	1
+ 853              		.global	FLASH_ProgramByte
+ 854              		.thumb
+ 855              		.thumb_func
+ 857              	FLASH_ProgramByte:
+ 858              	.LFB69:
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 859              		.loc 1 578 0
+ 860              		.cfi_startproc
+ 861              		@ args = 0, pretend = 0, frame = 0
+ 862              		@ frame_needed = 0, uses_anonymous_args = 0
+ 863              	.LVL51:
+ 864 0000 70B5     		push	{r4, r5, r6, lr}
+ 865              	.LCFI4:
+ 866              		.cfi_def_cfa_offset 16
+ 867              		.cfi_offset 4, -16
+ 868              		.cfi_offset 5, -12
+ 869              		.cfi_offset 6, -8
+ 870              		.cfi_offset 14, -4
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 871              		.loc 1 578 0
+ 872 0002 0546     		mov	r5, r0
+ 873 0004 0E46     		mov	r6, r1
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 874              		.loc 1 585 0
+ 875 0006 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 876              	.LVL52:
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 877              		.loc 1 587 0
+ 878 000a 0828     		cmp	r0, #8
+ 879 000c 11D1     		bne	.L103
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 880              		.loc 1 590 0
+ 881 000e 094C     		ldr	r4, .L104
+ 882 0010 2369     		ldr	r3, [r4, #16]
+ 883 0012 23F44070 		bic	r0, r3, #768
+ 884              	.LVL53:
+ 885 0016 2061     		str	r0, [r4, #16]
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_BYTE;
+ 886              		.loc 1 591 0
+ 887 0018 2169     		ldr	r1, [r4, #16]
+ 888 001a 2161     		str	r1, [r4, #16]
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 889              		.loc 1 592 0
+ 890 001c 2269     		ldr	r2, [r4, #16]
+ 891 001e 42F00103 		orr	r3, r2, #1
+ 892 0022 2361     		str	r3, [r4, #16]
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint8_t*)Address = Data;
+ 893              		.loc 1 594 0
+ 894 0024 2E70     		strb	r6, [r5, #0]
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 895              		.loc 1 597 0
+ 896 0026 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 897              	.LVL54:
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 898              		.loc 1 600 0
+ 899 002a 2169     		ldr	r1, [r4, #16]
+ 900 002c 21F00102 		bic	r2, r1, #1
+ 901 0030 2261     		str	r2, [r4, #16]
+ 902              	.LVL55:
+ 903              	.L103:
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 904              		.loc 1 605 0
+ 905 0032 70BD     		pop	{r4, r5, r6, pc}
+ 906              	.L105:
+ 907              		.align	2
+ 908              	.L104:
+ 909 0034 003C0240 		.word	1073888256
+ 910              		.cfi_endproc
+ 911              	.LFE69:
+ 913              		.section	.text.FLASH_ProgramHalfWord,"ax",%progbits
+ 914              		.align	1
+ 915              		.global	FLASH_ProgramHalfWord
+ 916              		.thumb
+ 917              		.thumb_func
+ 919              	FLASH_ProgramHalfWord:
+ 920              	.LFB68:
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 921              		.loc 1 540 0
+ 922              		.cfi_startproc
+ 923              		@ args = 0, pretend = 0, frame = 0
+ 924              		@ frame_needed = 0, uses_anonymous_args = 0
+ 925              	.LVL56:
+ 926 0000 70B5     		push	{r4, r5, r6, lr}
+ 927              	.LCFI5:
+ 928              		.cfi_def_cfa_offset 16
+ 929              		.cfi_offset 4, -16
+ 930              		.cfi_offset 5, -12
+ 931              		.cfi_offset 6, -8
+ 932              		.cfi_offset 14, -4
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 933              		.loc 1 540 0
+ 934 0002 0546     		mov	r5, r0
+ 935 0004 0E46     		mov	r6, r1
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 936              		.loc 1 547 0
+ 937 0006 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 938              	.LVL57:
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 939              		.loc 1 549 0
+ 940 000a 0828     		cmp	r0, #8
+ 941 000c 13D1     		bne	.L107
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 942              		.loc 1 552 0
+ 943 000e 0A4C     		ldr	r4, .L108
+ 944 0010 2369     		ldr	r3, [r4, #16]
+ 945 0012 23F44070 		bic	r0, r3, #768
+ 946              	.LVL58:
+ 947 0016 2061     		str	r0, [r4, #16]
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_HALF_WORD;
+ 948              		.loc 1 553 0
+ 949 0018 2169     		ldr	r1, [r4, #16]
+ 950 001a 41F48072 		orr	r2, r1, #256
+ 951 001e 2261     		str	r2, [r4, #16]
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 952              		.loc 1 554 0
+ 953 0020 2369     		ldr	r3, [r4, #16]
+ 954 0022 43F00100 		orr	r0, r3, #1
+ 955 0026 2061     		str	r0, [r4, #16]
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint16_t*)Address = Data;
+ 956              		.loc 1 556 0
+ 957 0028 2E80     		strh	r6, [r5, #0]	@ movhi
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 958              		.loc 1 559 0
+ 959 002a FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 960              	.LVL59:
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 961              		.loc 1 562 0
+ 962 002e 2169     		ldr	r1, [r4, #16]
+ 963 0030 21F00102 		bic	r2, r1, #1
+ 964 0034 2261     		str	r2, [r4, #16]
+ 965              	.LVL60:
+ 966              	.L107:
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 967              		.loc 1 566 0
+ 968 0036 70BD     		pop	{r4, r5, r6, pc}
+ 969              	.L109:
+ 970              		.align	2
+ 971              	.L108:
+ 972 0038 003C0240 		.word	1073888256
+ 973              		.cfi_endproc
+ 974              	.LFE68:
+ 976              		.section	.text.FLASH_ProgramWord,"ax",%progbits
+ 977              		.align	1
+ 978              		.global	FLASH_ProgramWord
+ 979              		.thumb
+ 980              		.thumb_func
+ 982              	FLASH_ProgramWord:
+ 983              	.LFB67:
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 984              		.loc 1 502 0
+ 985              		.cfi_startproc
+ 986              		@ args = 0, pretend = 0, frame = 0
+ 987              		@ frame_needed = 0, uses_anonymous_args = 0
+ 988              	.LVL61:
+ 989 0000 70B5     		push	{r4, r5, r6, lr}
+ 990              	.LCFI6:
+ 991              		.cfi_def_cfa_offset 16
+ 992              		.cfi_offset 4, -16
+ 993              		.cfi_offset 5, -12
+ 994              		.cfi_offset 6, -8
+ 995              		.cfi_offset 14, -4
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 996              		.loc 1 502 0
+ 997 0002 0546     		mov	r5, r0
+ 998 0004 0E46     		mov	r6, r1
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 999              		.loc 1 509 0
+ 1000 0006 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1001              	.LVL62:
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 1002              		.loc 1 511 0
+ 1003 000a 0828     		cmp	r0, #8
+ 1004 000c 13D1     		bne	.L111
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 1005              		.loc 1 514 0
+ 1006 000e 0A4C     		ldr	r4, .L112
+ 1007 0010 2369     		ldr	r3, [r4, #16]
+ 1008 0012 23F44070 		bic	r0, r3, #768
+ 1009              	.LVL63:
+ 1010 0016 2061     		str	r0, [r4, #16]
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_WORD;
+ 1011              		.loc 1 515 0
+ 1012 0018 2169     		ldr	r1, [r4, #16]
+ 1013 001a 41F40072 		orr	r2, r1, #512
+ 1014 001e 2261     		str	r2, [r4, #16]
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 1015              		.loc 1 516 0
+ 1016 0020 2369     		ldr	r3, [r4, #16]
+ 1017 0022 43F00100 		orr	r0, r3, #1
+ 1018 0026 2061     		str	r0, [r4, #16]
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint32_t*)Address = Data;
+ 1019              		.loc 1 518 0
+ 1020 0028 2E60     		str	r6, [r5, #0]
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 1021              		.loc 1 521 0
+ 1022 002a FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1023              	.LVL64:
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 1024              		.loc 1 524 0
+ 1025 002e 2169     		ldr	r1, [r4, #16]
+ 1026 0030 21F00102 		bic	r2, r1, #1
+ 1027 0034 2261     		str	r2, [r4, #16]
+ 1028              	.LVL65:
+ 1029              	.L111:
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 1030              		.loc 1 528 0
+ 1031 0036 70BD     		pop	{r4, r5, r6, pc}
+ 1032              	.L113:
+ 1033              		.align	2
+ 1034              	.L112:
+ 1035 0038 003C0240 		.word	1073888256
+ 1036              		.cfi_endproc
+ 1037              	.LFE67:
+ 1039              		.section	.text.FLASH_ProgramDoubleWord,"ax",%progbits
+ 1040              		.align	1
+ 1041              		.global	FLASH_ProgramDoubleWord
+ 1042              		.thumb
+ 1043              		.thumb_func
+ 1045              	FLASH_ProgramDoubleWord:
+ 1046              	.LFB66:
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 1047              		.loc 1 464 0
+ 1048              		.cfi_startproc
+ 1049              		@ args = 0, pretend = 0, frame = 0
+ 1050              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1051              	.LVL66:
+ 1052 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1053              	.LCFI7:
+ 1054              		.cfi_def_cfa_offset 24
+ 1055              		.cfi_offset 3, -24
+ 1056              		.cfi_offset 4, -20
+ 1057              		.cfi_offset 5, -16
+ 1058              		.cfi_offset 6, -12
+ 1059              		.cfi_offset 7, -8
+ 1060              		.cfi_offset 14, -4
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 1061              		.loc 1 464 0
+ 1062 0002 0746     		mov	r7, r0
+ 1063 0004 1446     		mov	r4, r2
+ 1064 0006 1D46     		mov	r5, r3
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 1065              		.loc 1 471 0
+ 1066 0008 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1067              	.LVL67:
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 1068              		.loc 1 473 0
+ 1069 000c 0828     		cmp	r0, #8
+ 1070 000e 14D1     		bne	.L115
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 1071              		.loc 1 476 0
+ 1072 0010 0A4E     		ldr	r6, .L116
+ 1073 0012 3369     		ldr	r3, [r6, #16]
+ 1074 0014 23F44070 		bic	r0, r3, #768
+ 1075              	.LVL68:
+ 1076 0018 3061     		str	r0, [r6, #16]
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_PSIZE_DOUBLE_WORD;
+ 1077              		.loc 1 477 0
+ 1078 001a 3169     		ldr	r1, [r6, #16]
+ 1079 001c 41F44072 		orr	r2, r1, #768
+ 1080 0020 3261     		str	r2, [r6, #16]
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_PG;
+ 1081              		.loc 1 478 0
+ 1082 0022 3369     		ldr	r3, [r6, #16]
+ 1083 0024 43F00100 		orr	r0, r3, #1
+ 1084 0028 3061     		str	r0, [r6, #16]
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     *(__IO uint64_t*)Address = Data;
+ 1085              		.loc 1 480 0
+ 1086 002a C7E90045 		strd	r4, [r7]
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 1087              		.loc 1 483 0
+ 1088 002e FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1089              	.LVL69:
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_PG);
+ 1090              		.loc 1 486 0
+ 1091 0032 3169     		ldr	r1, [r6, #16]
+ 1092 0034 21F00102 		bic	r2, r1, #1
+ 1093 0038 3261     		str	r2, [r6, #16]
+ 1094              	.LVL70:
+ 1095              	.L115:
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 1096              		.loc 1 490 0
+ 1097 003a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1098              	.L117:
+ 1099              		.align	2
+ 1100              	.L116:
+ 1101 003c 003C0240 		.word	1073888256
+ 1102              		.cfi_endproc
+ 1103              	.LFE66:
+ 1105              		.section	.text.FLASH_EraseAllSectors,"ax",%progbits
+ 1106              		.align	1
+ 1107              		.global	FLASH_EraseAllSectors
+ 1108              		.thumb
+ 1109              		.thumb_func
+ 1111              	FLASH_EraseAllSectors:
+ 1112              	.LFB65:
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 1113              		.loc 1 411 0
+ 1114              		.cfi_startproc
+ 1115              		@ args = 0, pretend = 0, frame = 0
+ 1116              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1117              	.LVL71:
+ 1118 0000 10B5     		push	{r4, lr}
+ 1119              	.LCFI8:
+ 1120              		.cfi_def_cfa_offset 8
+ 1121              		.cfi_offset 4, -8
+ 1122              		.cfi_offset 14, -4
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 1123              		.loc 1 411 0
+ 1124 0002 0446     		mov	r4, r0
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 1125              		.loc 1 416 0
+ 1126 0004 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1127              	.LVL72:
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(VoltageRange == VoltageRange_1)
+ 1128              		.loc 1 419 0
+ 1129 0008 44B1     		cbz	r4, .L121
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else if(VoltageRange == VoltageRange_2)
+ 1130              		.loc 1 423 0
+ 1131 000a 012C     		cmp	r4, #1
+ 1132 000c 08D0     		beq	.L122
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_WORD;
+ 1133              		.loc 1 429 0
+ 1134 000e 022C     		cmp	r4, #2
+ 1135 0010 14BF     		ite	ne
+ 1136 0012 4FF44073 		movne	r3, #768
+ 1137 0016 4FF40073 		moveq	r3, #512
+ 1138 001a 03E0     		b	.L119
+ 1139              	.L121:
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      tmp_psize = FLASH_PSIZE_BYTE;
+ 1140              		.loc 1 421 0
+ 1141 001c 2346     		mov	r3, r4
+ 1142 001e 01E0     		b	.L119
+ 1143              	.L122:
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_HALF_WORD;
+ 1144              		.loc 1 425 0
+ 1145 0020 4FF48073 		mov	r3, #256
+ 1146              	.L119:
+ 1147              	.LVL73:
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 1148              		.loc 1 435 0
+ 1149 0024 0828     		cmp	r0, #8
+ 1150 0026 15D1     		bne	.L120
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR &= CR_PSIZE_MASK;
+ 1151              		.loc 1 438 0
+ 1152 0028 0B4C     		ldr	r4, .L124
+ 1153 002a 2269     		ldr	r2, [r4, #16]
+ 1154 002c 22F44070 		bic	r0, r2, #768
+ 1155              	.LVL74:
+ 1156 0030 2061     		str	r0, [r4, #16]
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR |= tmp_psize;
+ 1157              		.loc 1 439 0
+ 1158 0032 2169     		ldr	r1, [r4, #16]
+ 1159 0034 0B43     		orrs	r3, r3, r1
+ 1160              	.LVL75:
+ 1161 0036 2361     		str	r3, [r4, #16]
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR |= FLASH_CR_MER;
+ 1162              		.loc 1 440 0
+ 1163 0038 2369     		ldr	r3, [r4, #16]
+ 1164 003a 43F00402 		orr	r2, r3, #4
+ 1165 003e 2261     		str	r2, [r4, #16]
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      FLASH->CR |= FLASH_CR_STRT;
+ 1166              		.loc 1 441 0
+ 1167 0040 2069     		ldr	r0, [r4, #16]
+ 1168 0042 40F48031 		orr	r1, r0, #65536
+ 1169 0046 2161     		str	r1, [r4, #16]
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 1170              		.loc 1 444 0
+ 1171 0048 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1172              	.LVL76:
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_MER);
+ 1173              		.loc 1 447 0
+ 1174 004c 2369     		ldr	r3, [r4, #16]
+ 1175 004e 23F00402 		bic	r2, r3, #4
+ 1176 0052 2261     		str	r2, [r4, #16]
+ 1177              	.LVL77:
+ 1178              	.L120:
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 1179              		.loc 1 452 0
+ 1180 0054 10BD     		pop	{r4, pc}
+ 1181              	.L125:
+ 1182 0056 00BF     		.align	2
+ 1183              	.L124:
+ 1184 0058 003C0240 		.word	1073888256
+ 1185              		.cfi_endproc
+ 1186              	.LFE65:
+ 1188              		.section	.text.FLASH_EraseSector,"ax",%progbits
+ 1189              		.align	1
+ 1190              		.global	FLASH_EraseSector
+ 1191              		.thumb
+ 1192              		.thumb_func
+ 1194              	FLASH_EraseSector:
+ 1195              	.LFB64:
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 1196              		.loc 1 346 0
+ 1197              		.cfi_startproc
+ 1198              		@ args = 0, pretend = 0, frame = 0
+ 1199              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1200              	.LVL78:
+ 1201 0000 70B5     		push	{r4, r5, r6, lr}
+ 1202              	.LCFI9:
+ 1203              		.cfi_def_cfa_offset 16
+ 1204              		.cfi_offset 4, -16
+ 1205              		.cfi_offset 5, -12
+ 1206              		.cfi_offset 6, -8
+ 1207              		.cfi_offset 14, -4
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** {
+ 1208              		.loc 1 346 0
+ 1209 0002 0646     		mov	r6, r0
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(VoltageRange == VoltageRange_1)
+ 1210              		.loc 1 354 0
+ 1211 0004 41B1     		cbz	r1, .L129
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   else if(VoltageRange == VoltageRange_2)
+ 1212              		.loc 1 358 0
+ 1213 0006 0129     		cmp	r1, #1
+ 1214 0008 08D0     		beq	.L130
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_WORD;
+ 1215              		.loc 1 364 0
+ 1216 000a 0229     		cmp	r1, #2
+ 1217 000c 14BF     		ite	ne
+ 1218 000e 4FF44075 		movne	r5, #768
+ 1219 0012 4FF40075 		moveq	r5, #512
+ 1220 0016 03E0     		b	.L127
+ 1221              	.L129:
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****      tmp_psize = FLASH_PSIZE_BYTE;
+ 1222              		.loc 1 356 0
+ 1223 0018 0D46     		mov	r5, r1
+ 1224 001a 01E0     		b	.L127
+ 1225              	.L130:
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     tmp_psize = FLASH_PSIZE_HALF_WORD;
+ 1226              		.loc 1 360 0
+ 1227 001c 4FF48075 		mov	r5, #256
+ 1228              	.L127:
+ 1229              	.LVL79:
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   status = FLASH_WaitForLastOperation();
+ 1230              		.loc 1 371 0
+ 1231 0020 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1232              	.LVL80:
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****   if(status == FLASH_COMPLETE)
+ 1233              		.loc 1 373 0
+ 1234 0024 0828     		cmp	r0, #8
+ 1235 0026 1ED1     		bne	.L128
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= CR_PSIZE_MASK;
+ 1236              		.loc 1 376 0
+ 1237 0028 0F4C     		ldr	r4, .L132
+ 1238 002a 2369     		ldr	r3, [r4, #16]
+ 1239 002c 23F44070 		bic	r0, r3, #768
+ 1240              	.LVL81:
+ 1241 0030 2061     		str	r0, [r4, #16]
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= tmp_psize;
+ 1242              		.loc 1 377 0
+ 1243 0032 2169     		ldr	r1, [r4, #16]
+ 1244 0034 0D43     		orrs	r5, r5, r1
+ 1245              	.LVL82:
+ 1246 0036 2561     		str	r5, [r4, #16]
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= SECTOR_MASK;
+ 1247              		.loc 1 378 0
+ 1248 0038 2269     		ldr	r2, [r4, #16]
+ 1249 003a 22F0F803 		bic	r3, r2, #248
+ 1250 003e 2361     		str	r3, [r4, #16]
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_SER | FLASH_Sector;
+ 1251              		.loc 1 379 0
+ 1252 0040 2069     		ldr	r0, [r4, #16]
+ 1253 0042 40F00201 		orr	r1, r0, #2
+ 1254 0046 0E43     		orrs	r6, r6, r1
+ 1255              	.LVL83:
+ 1256 0048 2661     		str	r6, [r4, #16]
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR |= FLASH_CR_STRT;
+ 1257              		.loc 1 380 0
+ 1258 004a 2269     		ldr	r2, [r4, #16]
+ 1259 004c 42F48033 		orr	r3, r2, #65536
+ 1260 0050 2361     		str	r3, [r4, #16]
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     status = FLASH_WaitForLastOperation();
+ 1261              		.loc 1 383 0
+ 1262 0052 FFF7FEFF 		bl	FLASH_WaitForLastOperation
+ 1263              	.LVL84:
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= (~FLASH_CR_SER);
+ 1264              		.loc 1 386 0
+ 1265 0056 2169     		ldr	r1, [r4, #16]
+ 1266 0058 21F00202 		bic	r2, r1, #2
+ 1267 005c 2261     		str	r2, [r4, #16]
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c ****     FLASH->CR &= SECTOR_MASK; 
+ 1268              		.loc 1 387 0
+ 1269 005e 2369     		ldr	r3, [r4, #16]
+ 1270 0060 23F0F801 		bic	r1, r3, #248
+ 1271 0064 2161     		str	r1, [r4, #16]
+ 1272              	.LVL85:
+ 1273              	.L128:
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_flash.c **** }
+ 1274              		.loc 1 391 0
+ 1275 0066 70BD     		pop	{r4, r5, r6, pc}
+ 1276              	.L133:
+ 1277              		.align	2
+ 1278              	.L132:
+ 1279 0068 003C0240 		.word	1073888256
+ 1280              		.cfi_endproc
+ 1281              	.LFE64:
+ 1283              		.text
+ 1284              	.Letext0:
+ 1285              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 1286              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 1287              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_flash.h"
+ 1288              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_flash.c
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:19     .text.FLASH_SetLatency:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:24     .text.FLASH_SetLatency:00000000 FLASH_SetLatency
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:42     .text.FLASH_SetLatency:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:47     .text.FLASH_PrefetchBufferCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:52     .text.FLASH_PrefetchBufferCmd:00000000 FLASH_PrefetchBufferCmd
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:80     .text.FLASH_PrefetchBufferCmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:85     .text.FLASH_InstructionCacheCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:90     .text.FLASH_InstructionCacheCmd:00000000 FLASH_InstructionCacheCmd
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:118    .text.FLASH_InstructionCacheCmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:123    .text.FLASH_DataCacheCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:128    .text.FLASH_DataCacheCmd:00000000 FLASH_DataCacheCmd
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:156    .text.FLASH_DataCacheCmd:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:161    .text.FLASH_InstructionCacheReset:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:166    .text.FLASH_InstructionCacheReset:00000000 FLASH_InstructionCacheReset
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:182    .text.FLASH_InstructionCacheReset:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:187    .text.FLASH_DataCacheReset:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:192    .text.FLASH_DataCacheReset:00000000 FLASH_DataCacheReset
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:208    .text.FLASH_DataCacheReset:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:213    .text.FLASH_Unlock:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:218    .text.FLASH_Unlock:00000000 FLASH_Unlock
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:243    .text.FLASH_Unlock:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:249    .text.FLASH_Lock:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:254    .text.FLASH_Lock:00000000 FLASH_Lock
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:270    .text.FLASH_Lock:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:275    .text.FLASH_OB_Unlock:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:280    .text.FLASH_OB_Unlock:00000000 FLASH_OB_Unlock
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:305    .text.FLASH_OB_Unlock:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:311    .text.FLASH_OB_Lock:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:316    .text.FLASH_OB_Lock:00000000 FLASH_OB_Lock
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:332    .text.FLASH_OB_Lock:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:337    .text.FLASH_OB_BORConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:342    .text.FLASH_OB_BORConfig:00000000 FLASH_OB_BORConfig
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:364    .text.FLASH_OB_BORConfig:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:369    .text.FLASH_OB_GetUser:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:374    .text.FLASH_OB_GetUser:00000000 FLASH_OB_GetUser
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:390    .text.FLASH_OB_GetUser:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:395    .text.FLASH_OB_GetWRP:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:400    .text.FLASH_OB_GetWRP:00000000 FLASH_OB_GetWRP
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:416    .text.FLASH_OB_GetWRP:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:421    .text.FLASH_OB_GetRDP:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:426    .text.FLASH_OB_GetRDP:00000000 FLASH_OB_GetRDP
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:448    .text.FLASH_OB_GetRDP:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:453    .text.FLASH_OB_GetBOR:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:458    .text.FLASH_OB_GetBOR:00000000 FLASH_OB_GetBOR
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:474    .text.FLASH_OB_GetBOR:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:479    .text.FLASH_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:484    .text.FLASH_ITConfig:00000000 FLASH_ITConfig
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:512    .text.FLASH_ITConfig:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:517    .text.FLASH_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:522    .text.FLASH_GetFlagStatus:00000000 FLASH_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:544    .text.FLASH_GetFlagStatus:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:549    .text.FLASH_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:554    .text.FLASH_ClearFlag:00000000 FLASH_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:569    .text.FLASH_ClearFlag:00000008 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:574    .text.FLASH_GetStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:579    .text.FLASH_GetStatus:00000000 FLASH_GetStatus
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:629    .text.FLASH_GetStatus:00000030 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:634    .text.FLASH_WaitForLastOperation:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:639    .text.FLASH_WaitForLastOperation:00000000 FLASH_WaitForLastOperation
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:676    .text.FLASH_OB_Launch:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:681    .text.FLASH_OB_Launch:00000000 FLASH_OB_Launch
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:701    .text.FLASH_OB_Launch:00000010 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:706    .text.FLASH_OB_UserConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:711    .text.FLASH_OB_UserConfig:00000000 FLASH_OB_UserConfig
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:752    .text.FLASH_OB_UserConfig:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:757    .text.FLASH_OB_RDPConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:762    .text.FLASH_OB_RDPConfig:00000000 FLASH_OB_RDPConfig
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:789    .text.FLASH_OB_RDPConfig:00000014 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:794    .text.FLASH_OB_WRPConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:799    .text.FLASH_OB_WRPConfig:00000000 FLASH_OB_WRPConfig
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:847    .text.FLASH_OB_WRPConfig:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:852    .text.FLASH_ProgramByte:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:857    .text.FLASH_ProgramByte:00000000 FLASH_ProgramByte
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:909    .text.FLASH_ProgramByte:00000034 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:914    .text.FLASH_ProgramHalfWord:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:919    .text.FLASH_ProgramHalfWord:00000000 FLASH_ProgramHalfWord
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:972    .text.FLASH_ProgramHalfWord:00000038 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:977    .text.FLASH_ProgramWord:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:982    .text.FLASH_ProgramWord:00000000 FLASH_ProgramWord
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1035   .text.FLASH_ProgramWord:00000038 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1040   .text.FLASH_ProgramDoubleWord:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1045   .text.FLASH_ProgramDoubleWord:00000000 FLASH_ProgramDoubleWord
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1101   .text.FLASH_ProgramDoubleWord:0000003c $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1106   .text.FLASH_EraseAllSectors:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1111   .text.FLASH_EraseAllSectors:00000000 FLASH_EraseAllSectors
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1184   .text.FLASH_EraseAllSectors:00000058 $d
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1189   .text.FLASH_EraseSector:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1194   .text.FLASH_EraseSector:00000000 FLASH_EraseSector
+C:\Users\STINA\AppData\Local\Temp\ccRhJdmu.s:1279   .text.FLASH_EraseSector:00000068 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

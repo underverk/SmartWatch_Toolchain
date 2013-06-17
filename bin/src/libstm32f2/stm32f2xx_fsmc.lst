@@ -1,0 +1,2291 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm32f2xx_fsmc.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.FSMC_NORSRAMDeInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	FSMC_NORSRAMDeInit
+  21              		.thumb
+  22              		.thumb_func
+  24              	FSMC_NORSRAMDeInit:
+  25              	.LFB56:
+  26              		.file 1 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_fsmc.c"
+   1:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+   2:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   ******************************************************************************
+   3:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @file    stm32f2xx_fsmc.c
+   4:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @author  MCD Application Team
+   5:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @version V1.1.2
+   6:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @date    05-March-2012 
+   7:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  * @brief    This file provides firmware functions to manage the following 
+   8:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          functionalities of the FSMC peripheral:           
+   9:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *           - Interface with SRAM, PSRAM, NOR and OneNAND memories
+  10:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *           - Interface with NAND memories
+  11:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *           - Interface with 16-bit PC Card compatible memories  
+  12:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *           - Interrupts and flags management   
+  13:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *           
+  14:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   ******************************************************************************
+  15:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @attention
+  16:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *
+  17:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  18:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *
+  19:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  20:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * You may not use this file except in compliance with the License.
+  21:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * You may obtain a copy of the License at:
+  22:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *
+  23:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  24:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *
+  25:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * Unless required by applicable law or agreed to in writing, software 
+  26:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  27:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  28:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * See the License for the specific language governing permissions and
+  29:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * limitations under the License.
+  30:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *
+  31:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   ******************************************************************************
+  32:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+  33:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  34:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* Includes ------------------------------------------------------------------*/
+  35:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #include "stm32f2xx_fsmc.h"
+  36:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #include "stm32f2xx_rcc.h"
+  37:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  38:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /** @addtogroup STM32F2xx_StdPeriph_Driver
+  39:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @{
+  40:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+  41:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  42:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /** @defgroup FSMC 
+  43:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief FSMC driver modules
+  44:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @{
+  45:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */ 
+  46:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  47:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* Private typedef -----------------------------------------------------------*/
+  48:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* Private define ------------------------------------------------------------*/
+  49:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  50:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* --------------------- FSMC registers bit mask ---------------------------- */
+  51:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* FSMC BCRx Mask */
+  52:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define BCR_MBKEN_SET          ((uint32_t)0x00000001)
+  53:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define BCR_MBKEN_RESET        ((uint32_t)0x000FFFFE)
+  54:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define BCR_FACCEN_SET         ((uint32_t)0x00000040)
+  55:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  56:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* FSMC PCRx Mask */
+  57:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define PCR_PBKEN_SET          ((uint32_t)0x00000004)
+  58:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define PCR_PBKEN_RESET        ((uint32_t)0x000FFFFB)
+  59:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define PCR_ECCEN_SET          ((uint32_t)0x00000040)
+  60:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define PCR_ECCEN_RESET        ((uint32_t)0x000FFFBF)
+  61:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** #define PCR_MEMORYTYPE_NAND    ((uint32_t)0x00000008)
+  62:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  63:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* Private macro -------------------------------------------------------------*/
+  64:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* Private variables ---------------------------------------------------------*/
+  65:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* Private function prototypes -----------------------------------------------*/
+  66:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /* Private functions ---------------------------------------------------------*/
+  67:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  68:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /** @defgroup FSMC_Private_Functions
+  69:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @{
+  70:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+  71:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  72:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /** @defgroup FSMC_Group1 NOR/SRAM Controller functions
+  73:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *  @brief   NOR/SRAM Controller functions 
+  74:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *
+  75:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @verbatim   
+  76:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================
+  77:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                     NOR/SRAM Controller functions
+  78:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================  
+  79:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  80:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  The following sequence should be followed to configure the FSMC to interface with
+  81:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  SRAM, PSRAM, NOR or OneNAND memory connected to the NOR/SRAM Bank:
+  82:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  
+  83:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    1. Enable the clock for the FSMC and associated GPIOs using the following functions:
+  84:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
+  85:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+  86:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+  87:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    2. FSMC pins configuration 
+  88:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        - Connect the involved FSMC pins to AF12 using the following function 
+  89:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_FSMC); 
+  90:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        - Configure these FSMC pins in alternate function mode by calling the function
+  91:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           GPIO_Init();    
+  92:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        
+  93:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    3. Declare a FSMC_NORSRAMInitTypeDef structure, for example:
+  94:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
+  95:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       and fill the FSMC_NORSRAMInitStructure variable with the allowed values of
+  96:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       the structure member.
+  97:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       
+  98:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    4. Initialize the NOR/SRAM Controller by calling the function
+  99:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
+ 100:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 101:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    5. Then enable the NOR/SRAM Bank, for example:
+ 102:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM2, ENABLE);  
+ 103:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 104:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    6. At this stage you can read/write from/to the memory connected to the NOR/SRAM Bank. 
+ 105:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    
+ 106:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @endverbatim
+ 107:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @{
+ 108:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 109:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 110:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 111:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Deinitializes the FSMC NOR/SRAM Banks registers to their default 
+ 112:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *   reset values.
+ 113:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 114:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 115:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM1: FSMC Bank1 NOR/SRAM1  
+ 116:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM2: FSMC Bank1 NOR/SRAM2 
+ 117:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM3: FSMC Bank1 NOR/SRAM3 
+ 118:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM4: FSMC Bank1 NOR/SRAM4 
+ 119:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 120:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 121:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NORSRAMDeInit(uint32_t FSMC_Bank)
+ 122:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+  27              		.loc 1 122 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+  33 0000 4FF02043 		mov	r3, #-1610612736
+ 123:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameter */
+ 124:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_NORSRAM_BANK(FSMC_Bank));
+ 125:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 126:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* FSMC_Bank1_NORSRAM1 */
+ 127:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_Bank == FSMC_Bank1_NORSRAM1)
+  34              		.loc 1 127 0
+  35 0004 18B9     		cbnz	r0, .L2
+ 128:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 129:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank1->BTCR[FSMC_Bank] = 0x000030DB;    
+  36              		.loc 1 129 0
+  37 0006 43F2DB01 		movw	r1, #12507
+  38 000a 1960     		str	r1, [r3, #0]
+  39 000c 03E0     		b	.L3
+  40              	.L2:
+ 130:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 131:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* FSMC_Bank1_NORSRAM2,  FSMC_Bank1_NORSRAM3 or FSMC_Bank1_NORSRAM4 */
+ 132:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 133:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {   
+ 134:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank1->BTCR[FSMC_Bank] = 0x000030D2; 
+  41              		.loc 1 134 0
+  42 000e 43F2D202 		movw	r2, #12498
+  43 0012 43F82020 		str	r2, [r3, r0, lsl #2]
+  44              	.L3:
+ 135:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 136:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_Bank + 1] = 0x0FFFFFFF;
+  45              		.loc 1 136 0
+  46 0016 411C     		adds	r1, r0, #1
+  47 0018 6FF07043 		mvn	r3, #-268435456
+  48 001c 4FF02042 		mov	r2, #-1610612736
+  49 0020 42F82130 		str	r3, [r2, r1, lsl #2]
+ 137:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1E->BWTR[FSMC_Bank] = 0x0FFFFFFF;  
+  50              		.loc 1 137 0
+  51 0024 02F58271 		add	r1, r2, #260
+  52 0028 41F82030 		str	r3, [r1, r0, lsl #2]
+  53 002c 7047     		bx	lr
+  54              		.cfi_endproc
+  55              	.LFE56:
+  57              		.section	.text.FSMC_NORSRAMInit,"ax",%progbits
+  58              		.align	1
+  59              		.global	FSMC_NORSRAMInit
+  60              		.thumb
+  61              		.thumb_func
+  63              	FSMC_NORSRAMInit:
+  64              	.LFB57:
+ 138:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 139:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 140:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 141:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Initializes the FSMC NOR/SRAM Banks according to the specified
+ 142:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         parameters in the FSMC_NORSRAMInitStruct.
+ 143:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_NORSRAMInitStruct : pointer to a FSMC_NORSRAMInitTypeDef structure
+ 144:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         that contains the configuration information for the FSMC NOR/SRAM 
+ 145:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         specified Banks.                       
+ 146:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 147:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 148:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NORSRAMInit(FSMC_NORSRAMInitTypeDef* FSMC_NORSRAMInitStruct)
+ 149:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** { 
+  65              		.loc 1 149 0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69              	.LVL1:
+  70 0000 70B5     		push	{r4, r5, r6, lr}
+  71              	.LCFI0:
+  72              		.cfi_def_cfa_offset 16
+  73              		.cfi_offset 4, -16
+  74              		.cfi_offset 5, -12
+  75              		.cfi_offset 6, -8
+  76              		.cfi_offset 14, -4
+ 150:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameters */
+ 151:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_NORSRAM_BANK(FSMC_NORSRAMInitStruct->FSMC_Bank));
+ 152:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_MUX(FSMC_NORSRAMInitStruct->FSMC_DataAddressMux));
+ 153:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_MEMORY(FSMC_NORSRAMInitStruct->FSMC_MemoryType));
+ 154:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_MEMORY_WIDTH(FSMC_NORSRAMInitStruct->FSMC_MemoryDataWidth));
+ 155:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_BURSTMODE(FSMC_NORSRAMInitStruct->FSMC_BurstAccessMode));
+ 156:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_ASYNWAIT(FSMC_NORSRAMInitStruct->FSMC_AsynchronousWait));
+ 157:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_POLARITY(FSMC_NORSRAMInitStruct->FSMC_WaitSignalPolarity));
+ 158:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WRAP_MODE(FSMC_NORSRAMInitStruct->FSMC_WrapMode));
+ 159:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_SIGNAL_ACTIVE(FSMC_NORSRAMInitStruct->FSMC_WaitSignalActive));
+ 160:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WRITE_OPERATION(FSMC_NORSRAMInitStruct->FSMC_WriteOperation));
+ 161:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAITE_SIGNAL(FSMC_NORSRAMInitStruct->FSMC_WaitSignal));
+ 162:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_EXTENDED_MODE(FSMC_NORSRAMInitStruct->FSMC_ExtendedMode));
+ 163:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WRITE_BURST(FSMC_NORSRAMInitStruct->FSMC_WriteBurst));  
+ 164:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_ADDRESS_SETUP_TIME(FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_
+ 165:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_ADDRESS_HOLD_TIME(FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_A
+ 166:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_DATASETUP_TIME(FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_Data
+ 167:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_TURNAROUND_TIME(FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_Bus
+ 168:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_CLK_DIV(FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_CLKDivision
+ 169:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_DATA_LATENCY(FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataLa
+ 170:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_ACCESS_MODE(FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AccessM
+ 171:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 172:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Bank1 NOR/SRAM control register configuration */ 
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank] = 
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (uint32_t)FSMC_NORSRAMInitStruct->FSMC_DataAddressMux |
+  77              		.loc 1 174 0
+  78 0002 4368     		ldr	r3, [r0, #4]
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_MemoryType |
+  79              		.loc 1 175 0
+  80 0004 8468     		ldr	r4, [r0, #8]
+  81 0006 C668     		ldr	r6, [r0, #12]
+ 174:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (uint32_t)FSMC_NORSRAMInitStruct->FSMC_DataAddressMux |
+  82              		.loc 1 174 0
+  83 0008 44EA0305 		orr	r5, r4, r3
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_MemoryDataWidth |
+  84              		.loc 1 176 0
+  85 000c 0369     		ldr	r3, [r0, #16]
+ 175:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_MemoryType |
+  86              		.loc 1 175 0
+  87 000e 3543     		orrs	r5, r5, r6
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_BurstAccessMode |
+  88              		.loc 1 177 0
+  89 0010 4669     		ldr	r6, [r0, #20]
+ 176:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_MemoryDataWidth |
+  90              		.loc 1 176 0
+  91 0012 1D43     		orrs	r5, r5, r3
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_AsynchronousWait |
+  92              		.loc 1 178 0
+  93 0014 8369     		ldr	r3, [r0, #24]
+ 177:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_BurstAccessMode |
+  94              		.loc 1 177 0
+  95 0016 3543     		orrs	r5, r5, r6
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WaitSignalPolarity |
+  96              		.loc 1 179 0
+  97 0018 C669     		ldr	r6, [r0, #28]
+ 178:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_AsynchronousWait |
+  98              		.loc 1 178 0
+  99 001a 1D43     		orrs	r5, r5, r3
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WrapMode |
+ 100              		.loc 1 180 0
+ 101 001c 036A     		ldr	r3, [r0, #32]
+ 179:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WaitSignalPolarity |
+ 102              		.loc 1 179 0
+ 103 001e 3543     		orrs	r5, r5, r6
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WaitSignalActive |
+ 104              		.loc 1 181 0
+ 105 0020 466A     		ldr	r6, [r0, #36]
+ 180:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WrapMode |
+ 106              		.loc 1 180 0
+ 107 0022 1D43     		orrs	r5, r5, r3
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WriteOperation |
+ 108              		.loc 1 182 0
+ 109 0024 836A     		ldr	r3, [r0, #40]
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WaitSignal |
+ 184:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_ExtendedMode |
+ 110              		.loc 1 184 0
+ 111 0026 C16A     		ldr	r1, [r0, #44]
+ 181:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WaitSignalActive |
+ 112              		.loc 1 181 0
+ 113 0028 3543     		orrs	r5, r5, r6
+ 182:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WriteOperation |
+ 114              		.loc 1 182 0
+ 115 002a 1D43     		orrs	r5, r5, r3
+ 116              		.loc 1 184 0
+ 117 002c 036B     		ldr	r3, [r0, #48]
+ 183:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WaitSignal |
+ 118              		.loc 1 183 0
+ 119 002e 45EA0106 		orr	r6, r5, r1
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank] = 
+ 120              		.loc 1 173 0
+ 121 0032 0268     		ldr	r2, [r0, #0]
+ 122              		.loc 1 184 0
+ 123 0034 1E43     		orrs	r6, r6, r3
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank] = 
+ 124              		.loc 1 173 0
+ 125 0036 4FF02045 		mov	r5, #-1610612736
+ 185:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NORSRAMInitStruct->FSMC_WriteBurst;
+ 186:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_NORSRAMInitStruct->FSMC_MemoryType == FSMC_MemoryType_NOR)
+ 126              		.loc 1 186 0
+ 127 003a 082C     		cmp	r4, #8
+ 173:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank] = 
+ 128              		.loc 1 173 0
+ 129 003c 45F82260 		str	r6, [r5, r2, lsl #2]
+ 130              		.loc 1 186 0
+ 131 0040 05D1     		bne	.L6
+ 187:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 188:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank] |= (uint32_t)BCR_FACCEN_SET;
+ 132              		.loc 1 188 0
+ 133 0042 55F82240 		ldr	r4, [r5, r2, lsl #2]
+ 134 0046 44F04006 		orr	r6, r4, #64
+ 135 004a 45F82260 		str	r6, [r5, r2, lsl #2]
+ 136              	.L6:
+ 189:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 190:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Bank1 NOR/SRAM timing register configuration */
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank+1] = 
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (uint32_t)FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressSetupTime |
+ 137              		.loc 1 192 0
+ 138 004e 436B     		ldr	r3, [r0, #52]
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank+1] = 
+ 139              		.loc 1 191 0
+ 140 0050 561C     		adds	r6, r2, #1
+ 141              		.loc 1 192 0
+ 142 0052 1C68     		ldr	r4, [r3, #0]
+ 143 0054 9D69     		ldr	r5, [r3, #24]
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressHoldTime << 4) |
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataSetupTime << 8) |
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_BusTurnAroundDuration << 16) 
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_CLKDivision << 20) |
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataLatency << 24) |
+ 198:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****              FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AccessMode;
+ 199:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             
+ 200:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     
+ 201:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Bank1 NOR/SRAM timing register for write configuration, if extended mode is used */
+ 202:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_NORSRAMInitStruct->FSMC_ExtendedMode == FSMC_ExtendedMode_Enable)
+ 144              		.loc 1 202 0
+ 145 0056 B1F5804F 		cmp	r1, #16384
+ 192:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (uint32_t)FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressSetupTime |
+ 146              		.loc 1 192 0
+ 147 005a 45EA0405 		orr	r5, r5, r4
+ 193:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressHoldTime << 4) |
+ 148              		.loc 1 193 0
+ 149 005e 5C68     		ldr	r4, [r3, #4]
+ 150 0060 45EA0415 		orr	r5, r5, r4, lsl #4
+ 194:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataSetupTime << 8) |
+ 151              		.loc 1 194 0
+ 152 0064 9C68     		ldr	r4, [r3, #8]
+ 153 0066 45EA0425 		orr	r5, r5, r4, lsl #8
+ 195:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_BusTurnAroundDuration << 16) 
+ 154              		.loc 1 195 0
+ 155 006a DC68     		ldr	r4, [r3, #12]
+ 156 006c 45EA0445 		orr	r5, r5, r4, lsl #16
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_CLKDivision << 20) |
+ 157              		.loc 1 196 0
+ 158 0070 1C69     		ldr	r4, [r3, #16]
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataLatency << 24) |
+ 159              		.loc 1 197 0
+ 160 0072 5B69     		ldr	r3, [r3, #20]
+ 196:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_CLKDivision << 20) |
+ 161              		.loc 1 196 0
+ 162 0074 45EA0454 		orr	r4, r5, r4, lsl #20
+ 197:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataLatency << 24) |
+ 163              		.loc 1 197 0
+ 164 0078 44EA0364 		orr	r4, r4, r3, lsl #24
+ 191:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank1->BTCR[FSMC_NORSRAMInitStruct->FSMC_Bank+1] = 
+ 165              		.loc 1 191 0
+ 166 007c 4FF02043 		mov	r3, #-1610612736
+ 167 0080 43F82640 		str	r4, [r3, r6, lsl #2]
+ 168              		.loc 1 202 0
+ 169 0084 10D1     		bne	.L7
+ 203:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 204:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     assert_param(IS_FSMC_ADDRESS_SETUP_TIME(FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_Ad
+ 205:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     assert_param(IS_FSMC_ADDRESS_HOLD_TIME(FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_Add
+ 206:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     assert_param(IS_FSMC_DATASETUP_TIME(FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_DataSe
+ 207:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     assert_param(IS_FSMC_CLK_DIV(FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_CLKDivision))
+ 208:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     assert_param(IS_FSMC_DATA_LATENCY(FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_DataLate
+ 209:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     assert_param(IS_FSMC_ACCESS_MODE(FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_AccessMod
+ 210:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank1E->BWTR[FSMC_NORSRAMInitStruct->FSMC_Bank] = 
+ 211:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****               (uint32_t)FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_AddressSetupTime |
+ 170              		.loc 1 211 0
+ 171 0086 836B     		ldr	r3, [r0, #56]
+ 172 0088 1968     		ldr	r1, [r3, #0]
+ 173 008a 9869     		ldr	r0, [r3, #24]
+ 174              	.LVL2:
+ 175 008c 0843     		orrs	r0, r0, r1
+ 212:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****               (FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_AddressHoldTime << 4 )|
+ 176              		.loc 1 212 0
+ 177 008e 5968     		ldr	r1, [r3, #4]
+ 178 0090 40EA0110 		orr	r0, r0, r1, lsl #4
+ 213:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****               (FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_DataSetupTime << 8) |
+ 179              		.loc 1 213 0
+ 180 0094 9968     		ldr	r1, [r3, #8]
+ 181 0096 40EA0120 		orr	r0, r0, r1, lsl #8
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****               (FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_CLKDivision << 20) |
+ 182              		.loc 1 214 0
+ 183 009a 1969     		ldr	r1, [r3, #16]
+ 215:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****               (FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_DataLatency << 24) |
+ 184              		.loc 1 215 0
+ 185 009c 5B69     		ldr	r3, [r3, #20]
+ 214:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****               (FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_CLKDivision << 20) |
+ 186              		.loc 1 214 0
+ 187 009e 40EA0150 		orr	r0, r0, r1, lsl #20
+ 188              		.loc 1 215 0
+ 189 00a2 40EA0360 		orr	r0, r0, r3, lsl #24
+ 190 00a6 01E0     		b	.L9
+ 191              	.LVL3:
+ 192              	.L7:
+ 216:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_AccessMode;
+ 217:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 218:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 219:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 220:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank1E->BWTR[FSMC_NORSRAMInitStruct->FSMC_Bank] = 0x0FFFFFFF;
+ 193              		.loc 1 220 0
+ 194 00a8 6FF07040 		mvn	r0, #-268435456
+ 195              	.LVL4:
+ 196              	.L9:
+ 197 00ac 0149     		ldr	r1, .L10
+ 198 00ae 41F82200 		str	r0, [r1, r2, lsl #2]
+ 199 00b2 70BD     		pop	{r4, r5, r6, pc}
+ 200              	.L11:
+ 201              		.align	2
+ 202              	.L10:
+ 203 00b4 040100A0 		.word	-1610612476
+ 204              		.cfi_endproc
+ 205              	.LFE57:
+ 207              		.section	.text.FSMC_NORSRAMStructInit,"ax",%progbits
+ 208              		.align	1
+ 209              		.global	FSMC_NORSRAMStructInit
+ 210              		.thumb
+ 211              		.thumb_func
+ 213              	FSMC_NORSRAMStructInit:
+ 214              	.LFB58:
+ 221:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 222:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 223:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 224:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 225:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Fills each FSMC_NORSRAMInitStruct member with its default value.
+ 226:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_NORSRAMInitStruct: pointer to a FSMC_NORSRAMInitTypeDef structure 
+ 227:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         which will be initialized.
+ 228:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 229:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 230:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NORSRAMStructInit(FSMC_NORSRAMInitTypeDef* FSMC_NORSRAMInitStruct)
+ 231:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {  
+ 215              		.loc 1 231 0
+ 216              		.cfi_startproc
+ 217              		@ args = 0, pretend = 0, frame = 0
+ 218              		@ frame_needed = 0, uses_anonymous_args = 0
+ 219              	.LVL5:
+ 220 0000 10B5     		push	{r4, lr}
+ 221              	.LCFI1:
+ 222              		.cfi_def_cfa_offset 8
+ 223              		.cfi_offset 4, -8
+ 224              		.cfi_offset 14, -4
+ 232:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Reset NOR/SRAM Init structure parameters values */
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_Bank = FSMC_Bank1_NORSRAM1;
+ 225              		.loc 1 233 0
+ 226 0002 0023     		movs	r3, #0
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_DataAddressMux = FSMC_DataAddressMux_Enable;
+ 227              		.loc 1 234 0
+ 228 0004 0222     		movs	r2, #2
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_MemoryType = FSMC_MemoryType_SRAM;
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_8b;
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WrapMode = FSMC_WrapMode_Disable;
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteOperation = FSMC_WriteOperation_Enable;
+ 229              		.loc 1 242 0
+ 230 0006 4FF48051 		mov	r1, #4096
+ 243:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WaitSignal = FSMC_WaitSignal_Enable;
+ 231              		.loc 1 243 0
+ 232 000a 4FF40054 		mov	r4, #8192
+ 234:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_DataAddressMux = FSMC_DataAddressMux_Enable;
+ 233              		.loc 1 234 0
+ 234 000e 4260     		str	r2, [r0, #4]
+ 233:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_Bank = FSMC_Bank1_NORSRAM1;
+ 235              		.loc 1 233 0
+ 236 0010 0360     		str	r3, [r0, #0]
+ 235:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_MemoryType = FSMC_MemoryType_SRAM;
+ 237              		.loc 1 235 0
+ 238 0012 8360     		str	r3, [r0, #8]
+ 236:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_8b;
+ 239              		.loc 1 236 0
+ 240 0014 C360     		str	r3, [r0, #12]
+ 237:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
+ 241              		.loc 1 237 0
+ 242 0016 0361     		str	r3, [r0, #16]
+ 238:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
+ 243              		.loc 1 238 0
+ 244 0018 4361     		str	r3, [r0, #20]
+ 239:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
+ 245              		.loc 1 239 0
+ 246 001a 8361     		str	r3, [r0, #24]
+ 242:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteOperation = FSMC_WriteOperation_Enable;
+ 247              		.loc 1 242 0
+ 248 001c 4162     		str	r1, [r0, #36]
+ 249              		.loc 1 243 0
+ 250 001e 8462     		str	r4, [r0, #40]
+ 240:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WrapMode = FSMC_WrapMode_Disable;
+ 251              		.loc 1 240 0
+ 252 0020 C361     		str	r3, [r0, #28]
+ 241:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
+ 253              		.loc 1 241 0
+ 254 0022 0362     		str	r3, [r0, #32]
+ 244:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
+ 255              		.loc 1 244 0
+ 256 0024 C362     		str	r3, [r0, #44]
+ 245:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteBurst = FSMC_WriteBurst_Disable;
+ 257              		.loc 1 245 0
+ 258 0026 0363     		str	r3, [r0, #48]
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressSetupTime = 0xF;
+ 259              		.loc 1 246 0
+ 260 0028 416B     		ldr	r1, [r0, #52]
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressHoldTime = 0xF;
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataSetupTime = 0xFF;
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_BusTurnAroundDuration = 0xF;
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_CLKDivision = 0xF;
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataLatency = 0xF;
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AccessMode = FSMC_AccessMode_A; 
+ 253:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_AddressSetupTime = 0xF;
+ 261              		.loc 1 253 0
+ 262 002a 806B     		ldr	r0, [r0, #56]
+ 263              	.LVL6:
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressSetupTime = 0xF;
+ 264              		.loc 1 246 0
+ 265 002c 0F22     		movs	r2, #15
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataSetupTime = 0xFF;
+ 266              		.loc 1 248 0
+ 267 002e FF24     		movs	r4, #255
+ 246:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressSetupTime = 0xF;
+ 268              		.loc 1 246 0
+ 269 0030 0A60     		str	r2, [r1, #0]
+ 247:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AddressHoldTime = 0xF;
+ 270              		.loc 1 247 0
+ 271 0032 4A60     		str	r2, [r1, #4]
+ 248:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataSetupTime = 0xFF;
+ 272              		.loc 1 248 0
+ 273 0034 8C60     		str	r4, [r1, #8]
+ 249:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_BusTurnAroundDuration = 0xF;
+ 274              		.loc 1 249 0
+ 275 0036 CA60     		str	r2, [r1, #12]
+ 250:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_CLKDivision = 0xF;
+ 276              		.loc 1 250 0
+ 277 0038 0A61     		str	r2, [r1, #16]
+ 251:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_DataLatency = 0xF;
+ 278              		.loc 1 251 0
+ 279 003a 4A61     		str	r2, [r1, #20]
+ 252:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_ReadWriteTimingStruct->FSMC_AccessMode = FSMC_AccessMode_A; 
+ 280              		.loc 1 252 0
+ 281 003c 8B61     		str	r3, [r1, #24]
+ 282              		.loc 1 253 0
+ 283 003e 0260     		str	r2, [r0, #0]
+ 254:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_AddressHoldTime = 0xF;
+ 284              		.loc 1 254 0
+ 285 0040 4260     		str	r2, [r0, #4]
+ 255:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_DataSetupTime = 0xFF;
+ 286              		.loc 1 255 0
+ 287 0042 8460     		str	r4, [r0, #8]
+ 256:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_BusTurnAroundDuration = 0xF;
+ 288              		.loc 1 256 0
+ 289 0044 C260     		str	r2, [r0, #12]
+ 257:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_CLKDivision = 0xF;
+ 290              		.loc 1 257 0
+ 291 0046 0261     		str	r2, [r0, #16]
+ 258:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_DataLatency = 0xF;
+ 292              		.loc 1 258 0
+ 293 0048 4261     		str	r2, [r0, #20]
+ 259:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NORSRAMInitStruct->FSMC_WriteTimingStruct->FSMC_AccessMode = FSMC_AccessMode_A;
+ 294              		.loc 1 259 0
+ 295 004a 8361     		str	r3, [r0, #24]
+ 296 004c 10BD     		pop	{r4, pc}
+ 297              		.cfi_endproc
+ 298              	.LFE58:
+ 300              		.section	.text.FSMC_NORSRAMCmd,"ax",%progbits
+ 301              		.align	1
+ 302              		.global	FSMC_NORSRAMCmd
+ 303              		.thumb
+ 304              		.thumb_func
+ 306              	FSMC_NORSRAMCmd:
+ 307              	.LFB59:
+ 260:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 261:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 262:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 263:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Enables or disables the specified NOR/SRAM Memory Bank.
+ 264:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 265:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 266:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM1: FSMC Bank1 NOR/SRAM1  
+ 267:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM2: FSMC Bank1 NOR/SRAM2 
+ 268:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM3: FSMC Bank1 NOR/SRAM3 
+ 269:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank1_NORSRAM4: FSMC Bank1 NOR/SRAM4 
+ 270:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  NewState: new state of the FSMC_Bank. This parameter can be: ENABLE or DISABLE.
+ 271:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 272:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 273:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)
+ 274:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 308              		.loc 1 274 0
+ 309              		.cfi_startproc
+ 310              		@ args = 0, pretend = 0, frame = 0
+ 311              		@ frame_needed = 0, uses_anonymous_args = 0
+ 312              		@ link register save eliminated.
+ 313              	.LVL7:
+ 314 0000 4FF02043 		mov	r3, #-1610612736
+ 275:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_NORSRAM_BANK(FSMC_Bank));
+ 276:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 277:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 278:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if (NewState != DISABLE)
+ 315              		.loc 1 278 0
+ 316 0004 21B1     		cbz	r1, .L14
+ 279:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 280:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Enable the selected NOR/SRAM Bank by setting the PBKEN bit in the BCRx register */
+ 281:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank1->BTCR[FSMC_Bank] |= BCR_MBKEN_SET;
+ 317              		.loc 1 281 0
+ 318 0006 53F82010 		ldr	r1, [r3, r0, lsl #2]
+ 319              	.LVL8:
+ 320 000a 41F00102 		orr	r2, r1, #1
+ 321 000e 03E0     		b	.L16
+ 322              	.LVL9:
+ 323              	.L14:
+ 282:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 283:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 284:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 285:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Disable the selected NOR/SRAM Bank by clearing the PBKEN bit in the BCRx register */
+ 286:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank1->BTCR[FSMC_Bank] &= BCR_MBKEN_RESET;
+ 324              		.loc 1 286 0
+ 325 0010 53F82010 		ldr	r1, [r3, r0, lsl #2]
+ 326              	.LVL10:
+ 327 0014 024A     		ldr	r2, .L17
+ 328 0016 0A40     		ands	r2, r2, r1
+ 329              	.L16:
+ 330 0018 43F82020 		str	r2, [r3, r0, lsl #2]
+ 331 001c 7047     		bx	lr
+ 332              	.L18:
+ 333 001e 00BF     		.align	2
+ 334              	.L17:
+ 335 0020 FEFF0F00 		.word	1048574
+ 336              		.cfi_endproc
+ 337              	.LFE59:
+ 339              		.section	.text.FSMC_NANDDeInit,"ax",%progbits
+ 340              		.align	1
+ 341              		.global	FSMC_NANDDeInit
+ 342              		.thumb
+ 343              		.thumb_func
+ 345              	FSMC_NANDDeInit:
+ 346              	.LFB60:
+ 287:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 288:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 289:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 290:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @}
+ 291:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 292:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 293:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /** @defgroup FSMC_Group2 NAND Controller functions
+ 294:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *  @brief   NAND Controller functions 
+ 295:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *
+ 296:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @verbatim   
+ 297:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================
+ 298:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                     NAND Controller functions
+ 299:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================  
+ 300:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 301:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  The following sequence should be followed to configure the FSMC to interface with
+ 302:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  8-bit or 16-bit NAND memory connected to the NAND Bank:
+ 303:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  
+ 304:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    1. Enable the clock for the FSMC and associated GPIOs using the following functions:
+ 305:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
+ 306:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+ 307:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 308:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    2. FSMC pins configuration 
+ 309:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        - Connect the involved FSMC pins to AF12 using the following function 
+ 310:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_FSMC); 
+ 311:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        - Configure these FSMC pins in alternate function mode by calling the function
+ 312:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           GPIO_Init();    
+ 313:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        
+ 314:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    3. Declare a FSMC_NANDInitTypeDef structure, for example:
+ 315:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_NANDInitTypeDef  FSMC_NANDInitStructure;
+ 316:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       and fill the FSMC_NANDInitStructure variable with the allowed values of
+ 317:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       the structure member.
+ 318:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       
+ 319:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    4. Initialize the NAND Controller by calling the function
+ 320:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_NANDInit(&FSMC_NANDInitStructure); 
+ 321:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 322:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    5. Then enable the NAND Bank, for example:
+ 323:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_NANDCmd(FSMC_Bank3_NAND, ENABLE);  
+ 324:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 325:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    6. At this stage you can read/write from/to the memory connected to the NAND Bank. 
+ 326:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    
+ 327:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @note To enable the Error Correction Code (ECC), you have to use the function
+ 328:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_NANDECCCmd(FSMC_Bank3_NAND, ENABLE);  
+ 329:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       and to get the current ECC value you have to use the function
+ 330:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           ECCval = FSMC_GetECC(FSMC_Bank3_NAND); 
+ 331:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 332:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @endverbatim
+ 333:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @{
+ 334:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 335:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 336:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 337:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Deinitializes the FSMC NAND Banks registers to their default reset values.
+ 338:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 339:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 340:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 341:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND 
+ 342:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 343:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 344:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NANDDeInit(uint32_t FSMC_Bank)
+ 345:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 347              		.loc 1 345 0
+ 348              		.cfi_startproc
+ 349              		@ args = 0, pretend = 0, frame = 0
+ 350              		@ frame_needed = 0, uses_anonymous_args = 0
+ 351              		@ link register save eliminated.
+ 352              	.LVL11:
+ 346:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameter */
+ 347:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_NAND_BANK(FSMC_Bank));
+ 348:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 349:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_Bank == FSMC_Bank2_NAND)
+ 353              		.loc 1 349 0
+ 354 0000 1028     		cmp	r0, #16
+ 350:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 351:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Set the FSMC_Bank2 registers to their reset values */
+ 352:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->PCR2 = 0x00000018;
+ 355              		.loc 1 352 0
+ 356 0002 0CBF     		ite	eq
+ 357 0004 064B     		ldreq	r3, .L23
+ 353:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->SR2 = 0x00000040;
+ 354:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->PMEM2 = 0xFCFCFCFC;
+ 355:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->PATT2 = 0xFCFCFCFC;  
+ 356:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 357:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* FSMC_Bank3_NAND */  
+ 358:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 359:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 360:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Set the FSMC_Bank3 registers to their reset values */
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->PCR3 = 0x00000018;
+ 358              		.loc 1 361 0
+ 359 0006 074B     		ldrne	r3, .L23+4
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->SR3 = 0x00000040;
+ 363:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->PMEM3 = 0xFCFCFCFC;
+ 360              		.loc 1 363 0
+ 361 0008 4FF0FC30 		mov	r0, #-50529028
+ 362              	.LVL12:
+ 363 000c 4FF01801 		mov	r1, #24
+ 364 0010 4FF04002 		mov	r2, #64
+ 361:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->PCR3 = 0x00000018;
+ 365              		.loc 1 361 0
+ 366 0014 1960     		str	r1, [r3, #0]
+ 362:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->SR3 = 0x00000040;
+ 367              		.loc 1 362 0
+ 368 0016 5A60     		str	r2, [r3, #4]
+ 369              		.loc 1 363 0
+ 370 0018 9860     		str	r0, [r3, #8]
+ 364:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->PATT3 = 0xFCFCFCFC; 
+ 371              		.loc 1 364 0
+ 372 001a D860     		str	r0, [r3, #12]
+ 373 001c 7047     		bx	lr
+ 374              	.L24:
+ 375 001e 00BF     		.align	2
+ 376              	.L23:
+ 377 0020 600000A0 		.word	-1610612640
+ 378 0024 800000A0 		.word	-1610612608
+ 379              		.cfi_endproc
+ 380              	.LFE60:
+ 382              		.section	.text.FSMC_NANDInit,"ax",%progbits
+ 383              		.align	1
+ 384              		.global	FSMC_NANDInit
+ 385              		.thumb
+ 386              		.thumb_func
+ 388              	FSMC_NANDInit:
+ 389              	.LFB61:
+ 365:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }  
+ 366:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 367:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 368:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 369:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Initializes the FSMC NAND Banks according to the specified parameters
+ 370:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         in the FSMC_NANDInitStruct.
+ 371:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_NANDInitStruct : pointer to a FSMC_NANDInitTypeDef structure that
+ 372:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         contains the configuration information for the FSMC NAND specified Banks.              
+ 373:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 374:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 375:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NANDInit(FSMC_NANDInitTypeDef* FSMC_NANDInitStruct)
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 390              		.loc 1 376 0
+ 391              		.cfi_startproc
+ 392              		@ args = 0, pretend = 0, frame = 0
+ 393              		@ frame_needed = 0, uses_anonymous_args = 0
+ 394              	.LVL13:
+ 377:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   uint32_t tmppcr = 0x00000000, tmppmem = 0x00000000, tmppatt = 0x00000000; 
+ 378:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     
+ 379:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameters */
+ 380:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param( IS_FSMC_NAND_BANK(FSMC_NANDInitStruct->FSMC_Bank));
+ 381:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param( IS_FSMC_WAIT_FEATURE(FSMC_NANDInitStruct->FSMC_Waitfeature));
+ 382:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param( IS_FSMC_MEMORY_WIDTH(FSMC_NANDInitStruct->FSMC_MemoryDataWidth));
+ 383:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param( IS_FSMC_ECC_STATE(FSMC_NANDInitStruct->FSMC_ECC));
+ 384:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param( IS_FSMC_ECCPAGE_SIZE(FSMC_NANDInitStruct->FSMC_ECCPageSize));
+ 385:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param( IS_FSMC_TCLR_TIME(FSMC_NANDInitStruct->FSMC_TCLRSetupTime));
+ 386:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param( IS_FSMC_TAR_TIME(FSMC_NANDInitStruct->FSMC_TARSetupTime));
+ 387:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_SETUP_TIME(FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime
+ 388:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_TIME(FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupT
+ 389:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HOLD_TIME(FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupT
+ 390:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HIZ_TIME(FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupTim
+ 391:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_SETUP_TIME(FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupT
+ 392:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_TIME(FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSet
+ 393:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HOLD_TIME(FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSet
+ 394:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HIZ_TIME(FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSetup
+ 395:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 396:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set the tmppcr value according to FSMC_NANDInitStruct parameters */
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppcr = (uint32_t)FSMC_NANDInitStruct->FSMC_Waitfeature |
+ 398:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             PCR_MEMORYTYPE_NAND |
+ 395              		.loc 1 398 0
+ 396 0000 8368     		ldr	r3, [r0, #8]
+ 397 0002 4268     		ldr	r2, [r0, #4]
+ 376:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 398              		.loc 1 376 0
+ 399 0004 70B5     		push	{r4, r5, r6, lr}
+ 400              	.LCFI2:
+ 401              		.cfi_def_cfa_offset 16
+ 402              		.cfi_offset 4, -16
+ 403              		.cfi_offset 5, -12
+ 404              		.cfi_offset 6, -8
+ 405              		.cfi_offset 14, -4
+ 406              		.loc 1 398 0
+ 407 0006 42EA0304 		orr	r4, r2, r3
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NANDInitStruct->FSMC_MemoryDataWidth |
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NANDInitStruct->FSMC_ECC |
+ 408              		.loc 1 400 0
+ 409 000a C568     		ldr	r5, [r0, #12]
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NANDInitStruct->FSMC_ECCPageSize |
+ 410              		.loc 1 401 0
+ 411 000c 0669     		ldr	r6, [r0, #16]
+ 399:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NANDInitStruct->FSMC_MemoryDataWidth |
+ 412              		.loc 1 399 0
+ 413 000e 44F00801 		orr	r1, r4, #8
+ 402:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_TCLRSetupTime << 9 )|
+ 414              		.loc 1 402 0
+ 415 0012 4269     		ldr	r2, [r0, #20]
+ 400:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NANDInitStruct->FSMC_ECC |
+ 416              		.loc 1 400 0
+ 417 0014 2943     		orrs	r1, r1, r5
+ 401:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             FSMC_NANDInitStruct->FSMC_ECCPageSize |
+ 418              		.loc 1 401 0
+ 419 0016 3143     		orrs	r1, r1, r6
+ 420              		.loc 1 402 0
+ 421 0018 41EA4224 		orr	r4, r1, r2, lsl #9
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_TARSetupTime << 13);
+ 404:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             
+ 405:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set tmppmem value according to FSMC_CommonSpaceTimingStructure parameters */
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppmem = (uint32_t)FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime |
+ 422              		.loc 1 406 0
+ 423 001c C169     		ldr	r1, [r0, #28]
+ 403:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_TARSetupTime << 13);
+ 424              		.loc 1 403 0
+ 425 001e 8369     		ldr	r3, [r0, #24]
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 408:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupTime << 16)|
+ 426              		.loc 1 408 0
+ 427 0020 8E68     		ldr	r6, [r1, #8]
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 428              		.loc 1 407 0
+ 429 0022 4D68     		ldr	r5, [r1, #4]
+ 430              		.loc 1 408 0
+ 431 0024 3204     		lsls	r2, r6, #16
+ 397:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppcr = (uint32_t)FSMC_NANDInitStruct->FSMC_Waitfeature |
+ 432              		.loc 1 397 0
+ 433 0026 44EA4334 		orr	r4, r4, r3, lsl #13
+ 434              	.LVL14:
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppmem = (uint32_t)FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime |
+ 435              		.loc 1 406 0
+ 436 002a 42EA0523 		orr	r3, r2, r5, lsl #8
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 437              		.loc 1 407 0
+ 438 002e 0D68     		ldr	r5, [r1, #0]
+ 409:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupTime << 24); 
+ 439              		.loc 1 409 0
+ 440 0030 C968     		ldr	r1, [r1, #12]
+ 407:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 441              		.loc 1 407 0
+ 442 0032 43EA0506 		orr	r6, r3, r5
+ 410:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             
+ 411:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set tmppatt value according to FSMC_AttributeSpaceTimingStructure parameters */
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppatt = (uint32_t)FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupTime |
+ 443              		.loc 1 412 0
+ 444 0036 036A     		ldr	r3, [r0, #32]
+ 406:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppmem = (uint32_t)FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime |
+ 445              		.loc 1 406 0
+ 446 0038 46EA0161 		orr	r1, r6, r1, lsl #24
+ 447              	.LVL15:
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSetupTime << 16)|
+ 448              		.loc 1 414 0
+ 449 003c 9A68     		ldr	r2, [r3, #8]
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 450              		.loc 1 413 0
+ 451 003e 5D68     		ldr	r5, [r3, #4]
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSetupTime << 24);
+ 416:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 417:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_NANDInitStruct->FSMC_Bank == FSMC_Bank2_NAND)
+ 452              		.loc 1 417 0
+ 453 0040 0068     		ldr	r0, [r0, #0]
+ 454              	.LVL16:
+ 414:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSetupTime << 16)|
+ 455              		.loc 1 414 0
+ 456 0042 1604     		lsls	r6, r2, #16
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppatt = (uint32_t)FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupTime |
+ 457              		.loc 1 412 0
+ 458 0044 46EA0526 		orr	r6, r6, r5, lsl #8
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 459              		.loc 1 413 0
+ 460 0048 1D68     		ldr	r5, [r3, #0]
+ 461              		.loc 1 417 0
+ 462 004a 1028     		cmp	r0, #16
+ 415:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSetupTime << 24);
+ 463              		.loc 1 415 0
+ 464 004c DB68     		ldr	r3, [r3, #12]
+ 418:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 419:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* FSMC_Bank2_NAND registers configuration */
+ 420:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->PCR2 = tmppcr;
+ 465              		.loc 1 420 0
+ 466 004e 0CBF     		ite	eq
+ 467 0050 0448     		ldreq	r0, .L29
+ 421:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->PMEM2 = tmppmem;
+ 422:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->PATT2 = tmppatt;
+ 423:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 424:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 425:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 426:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* FSMC_Bank3_NAND registers configuration */
+ 427:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->PCR3 = tmppcr;
+ 468              		.loc 1 427 0
+ 469 0052 0548     		ldrne	r0, .L29+4
+ 413:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             (FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 470              		.loc 1 413 0
+ 471 0054 3543     		orrs	r5, r5, r6
+ 412:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   tmppatt = (uint32_t)FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupTime |
+ 472              		.loc 1 412 0
+ 473 0056 45EA0362 		orr	r2, r5, r3, lsl #24
+ 474              	.LVL17:
+ 475              		.loc 1 427 0
+ 476 005a 0460     		str	r4, [r0, #0]
+ 428:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->PMEM3 = tmppmem;
+ 477              		.loc 1 428 0
+ 478 005c 8160     		str	r1, [r0, #8]
+ 429:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->PATT3 = tmppatt;
+ 479              		.loc 1 429 0
+ 480 005e C260     		str	r2, [r0, #12]
+ 481 0060 70BD     		pop	{r4, r5, r6, pc}
+ 482              	.L30:
+ 483 0062 00BF     		.align	2
+ 484              	.L29:
+ 485 0064 600000A0 		.word	-1610612640
+ 486 0068 800000A0 		.word	-1610612608
+ 487              		.cfi_endproc
+ 488              	.LFE61:
+ 490              		.section	.text.FSMC_NANDStructInit,"ax",%progbits
+ 491              		.align	1
+ 492              		.global	FSMC_NANDStructInit
+ 493              		.thumb
+ 494              		.thumb_func
+ 496              	FSMC_NANDStructInit:
+ 497              	.LFB62:
+ 430:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 431:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 432:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 433:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 434:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 435:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Fills each FSMC_NANDInitStruct member with its default value.
+ 436:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_NANDInitStruct: pointer to a FSMC_NANDInitTypeDef structure which
+ 437:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         will be initialized.
+ 438:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 439:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 440:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NANDStructInit(FSMC_NANDInitTypeDef* FSMC_NANDInitStruct)
+ 441:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** { 
+ 498              		.loc 1 441 0
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 0
+ 501              		@ frame_needed = 0, uses_anonymous_args = 0
+ 502              		@ link register save eliminated.
+ 503              	.LVL18:
+ 442:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Reset NAND Init structure parameters values */
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_Bank = FSMC_Bank2_NAND;
+ 444:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_Waitfeature = FSMC_Waitfeature_Disable;
+ 504              		.loc 1 444 0
+ 505 0000 0021     		movs	r1, #0
+ 443:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_Bank = FSMC_Bank2_NAND;
+ 506              		.loc 1 443 0
+ 507 0002 1023     		movs	r3, #16
+ 508 0004 0360     		str	r3, [r0, #0]
+ 509              		.loc 1 444 0
+ 510 0006 4160     		str	r1, [r0, #4]
+ 445:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_8b;
+ 511              		.loc 1 445 0
+ 512 0008 8160     		str	r1, [r0, #8]
+ 446:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_ECC = FSMC_ECC_Disable;
+ 513              		.loc 1 446 0
+ 514 000a C160     		str	r1, [r0, #12]
+ 447:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_ECCPageSize = FSMC_ECCPageSize_256Bytes;
+ 515              		.loc 1 447 0
+ 516 000c 0161     		str	r1, [r0, #16]
+ 448:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_TCLRSetupTime = 0x0;
+ 517              		.loc 1 448 0
+ 518 000e 4161     		str	r1, [r0, #20]
+ 449:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_TARSetupTime = 0x0;
+ 519              		.loc 1 449 0
+ 520 0010 8161     		str	r1, [r0, #24]
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 521              		.loc 1 450 0
+ 522 0012 C269     		ldr	r2, [r0, #28]
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;
+ 454:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 523              		.loc 1 454 0
+ 524 0014 006A     		ldr	r0, [r0, #32]
+ 525              	.LVL19:
+ 450:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 526              		.loc 1 450 0
+ 527 0016 FC23     		movs	r3, #252
+ 528 0018 1360     		str	r3, [r2, #0]
+ 451:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 529              		.loc 1 451 0
+ 530 001a 5360     		str	r3, [r2, #4]
+ 452:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 531              		.loc 1 452 0
+ 532 001c 9360     		str	r3, [r2, #8]
+ 453:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;
+ 533              		.loc 1 453 0
+ 534 001e D360     		str	r3, [r2, #12]
+ 535              		.loc 1 454 0
+ 536 0020 0360     		str	r3, [r0, #0]
+ 455:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 537              		.loc 1 455 0
+ 538 0022 4360     		str	r3, [r0, #4]
+ 456:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 539              		.loc 1 456 0
+ 540 0024 8360     		str	r3, [r0, #8]
+ 457:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_NANDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;	  
+ 541              		.loc 1 457 0
+ 542 0026 C360     		str	r3, [r0, #12]
+ 543 0028 7047     		bx	lr
+ 544              		.cfi_endproc
+ 545              	.LFE62:
+ 547              		.section	.text.FSMC_NANDCmd,"ax",%progbits
+ 548              		.align	1
+ 549              		.global	FSMC_NANDCmd
+ 550              		.thumb
+ 551              		.thumb_func
+ 553              	FSMC_NANDCmd:
+ 554              	.LFB63:
+ 458:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 459:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 460:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 461:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Enables or disables the specified NAND Memory Bank.
+ 462:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 463:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 464:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 465:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 466:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  NewState: new state of the FSMC_Bank. This parameter can be: ENABLE or DISABLE.
+ 467:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 468:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 469:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NANDCmd(uint32_t FSMC_Bank, FunctionalState NewState)
+ 470:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 555              		.loc 1 470 0
+ 556              		.cfi_startproc
+ 557              		@ args = 0, pretend = 0, frame = 0
+ 558              		@ frame_needed = 0, uses_anonymous_args = 0
+ 559              		@ link register save eliminated.
+ 560              	.LVL20:
+ 471:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_NAND_BANK(FSMC_Bank));
+ 472:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 473:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 474:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if (NewState != DISABLE)
+ 561              		.loc 1 474 0
+ 562 0000 41B1     		cbz	r1, .L33
+ 475:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 476:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Enable the selected NAND Bank by setting the PBKEN bit in the PCRx register */
+ 477:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     if(FSMC_Bank == FSMC_Bank2_NAND)
+ 563              		.loc 1 477 0
+ 564 0002 1028     		cmp	r0, #16
+ 478:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 479:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank2->PCR2 |= PCR_PBKEN_SET;
+ 565              		.loc 1 479 0
+ 566 0004 0CBF     		ite	eq
+ 567 0006 084B     		ldreq	r3, .L39
+ 480:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 481:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else
+ 482:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 483:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank3->PCR3 |= PCR_PBKEN_SET;
+ 568              		.loc 1 483 0
+ 569 0008 084B     		ldrne	r3, .L39+4
+ 570 000a 1A68     		ldr	r2, [r3, #0]
+ 571 000c 42F00400 		orr	r0, r2, #4
+ 572              	.LVL21:
+ 573 0010 1860     		str	r0, [r3, #0]
+ 574 0012 7047     		bx	lr
+ 575              	.LVL22:
+ 576              	.L33:
+ 484:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 485:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 486:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 487:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 488:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Disable the selected NAND Bank by clearing the PBKEN bit in the PCRx register */
+ 489:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     if(FSMC_Bank == FSMC_Bank2_NAND)
+ 577              		.loc 1 489 0
+ 578 0014 1028     		cmp	r0, #16
+ 490:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 491:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank2->PCR2 &= PCR_PBKEN_RESET;
+ 579              		.loc 1 491 0
+ 580 0016 0CBF     		ite	eq
+ 581 0018 034A     		ldreq	r2, .L39
+ 492:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 493:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else
+ 494:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 495:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank3->PCR3 &= PCR_PBKEN_RESET;
+ 582              		.loc 1 495 0
+ 583 001a 044A     		ldrne	r2, .L39+4
+ 584 001c 044B     		ldr	r3, .L39+8
+ 585 001e 1168     		ldr	r1, [r2, #0]
+ 586              	.LVL23:
+ 587 0020 0B40     		ands	r3, r3, r1
+ 588 0022 1360     		str	r3, [r2, #0]
+ 589 0024 7047     		bx	lr
+ 590              	.L40:
+ 591 0026 00BF     		.align	2
+ 592              	.L39:
+ 593 0028 600000A0 		.word	-1610612640
+ 594 002c 800000A0 		.word	-1610612608
+ 595 0030 FBFF0F00 		.word	1048571
+ 596              		.cfi_endproc
+ 597              	.LFE63:
+ 599              		.section	.text.FSMC_NANDECCCmd,"ax",%progbits
+ 600              		.align	1
+ 601              		.global	FSMC_NANDECCCmd
+ 602              		.thumb
+ 603              		.thumb_func
+ 605              	FSMC_NANDECCCmd:
+ 606              	.LFB64:
+ 496:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 497:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 498:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 499:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 500:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Enables or disables the FSMC NAND ECC feature.
+ 501:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 502:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 503:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 504:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 505:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  NewState: new state of the FSMC NAND ECC feature.  
+ 506:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 507:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 508:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 509:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_NANDECCCmd(uint32_t FSMC_Bank, FunctionalState NewState)
+ 510:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 607              		.loc 1 510 0
+ 608              		.cfi_startproc
+ 609              		@ args = 0, pretend = 0, frame = 0
+ 610              		@ frame_needed = 0, uses_anonymous_args = 0
+ 611              		@ link register save eliminated.
+ 612              	.LVL24:
+ 511:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_NAND_BANK(FSMC_Bank));
+ 512:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 513:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 514:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if (NewState != DISABLE)
+ 613              		.loc 1 514 0
+ 614 0000 41B1     		cbz	r1, .L42
+ 515:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 516:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Enable the selected NAND Bank ECC function by setting the ECCEN bit in the PCRx register */
+ 517:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     if(FSMC_Bank == FSMC_Bank2_NAND)
+ 615              		.loc 1 517 0
+ 616 0002 1028     		cmp	r0, #16
+ 518:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 519:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank2->PCR2 |= PCR_ECCEN_SET;
+ 617              		.loc 1 519 0
+ 618 0004 0CBF     		ite	eq
+ 619 0006 084B     		ldreq	r3, .L48
+ 520:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 521:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else
+ 522:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 523:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank3->PCR3 |= PCR_ECCEN_SET;
+ 620              		.loc 1 523 0
+ 621 0008 084B     		ldrne	r3, .L48+4
+ 622 000a 1A68     		ldr	r2, [r3, #0]
+ 623 000c 42F04000 		orr	r0, r2, #64
+ 624              	.LVL25:
+ 625 0010 1860     		str	r0, [r3, #0]
+ 626 0012 7047     		bx	lr
+ 627              	.LVL26:
+ 628              	.L42:
+ 524:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 525:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 526:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 527:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 528:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Disable the selected NAND Bank ECC function by clearing the ECCEN bit in the PCRx register *
+ 529:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     if(FSMC_Bank == FSMC_Bank2_NAND)
+ 629              		.loc 1 529 0
+ 630 0014 1028     		cmp	r0, #16
+ 530:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 531:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank2->PCR2 &= PCR_ECCEN_RESET;
+ 631              		.loc 1 531 0
+ 632 0016 0CBF     		ite	eq
+ 633 0018 034A     		ldreq	r2, .L48
+ 532:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 533:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else
+ 534:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 535:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank3->PCR3 &= PCR_ECCEN_RESET;
+ 634              		.loc 1 535 0
+ 635 001a 044A     		ldrne	r2, .L48+4
+ 636 001c 044B     		ldr	r3, .L48+8
+ 637 001e 1168     		ldr	r1, [r2, #0]
+ 638              	.LVL27:
+ 639 0020 0B40     		ands	r3, r3, r1
+ 640 0022 1360     		str	r3, [r2, #0]
+ 641 0024 7047     		bx	lr
+ 642              	.L49:
+ 643 0026 00BF     		.align	2
+ 644              	.L48:
+ 645 0028 600000A0 		.word	-1610612640
+ 646 002c 800000A0 		.word	-1610612608
+ 647 0030 BFFF0F00 		.word	1048511
+ 648              		.cfi_endproc
+ 649              	.LFE64:
+ 651              		.section	.text.FSMC_GetECC,"ax",%progbits
+ 652              		.align	1
+ 653              		.global	FSMC_GetECC
+ 654              		.thumb
+ 655              		.thumb_func
+ 657              	FSMC_GetECC:
+ 658              	.LFB65:
+ 536:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 537:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 538:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 539:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 540:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 541:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Returns the error correction code register value.
+ 542:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 543:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 544:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 545:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 546:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval The Error Correction Code (ECC) value.
+ 547:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 548:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** uint32_t FSMC_GetECC(uint32_t FSMC_Bank)
+ 549:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 659              		.loc 1 549 0
+ 660              		.cfi_startproc
+ 661              		@ args = 0, pretend = 0, frame = 0
+ 662              		@ frame_needed = 0, uses_anonymous_args = 0
+ 663              		@ link register save eliminated.
+ 664              	.LVL28:
+ 550:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   uint32_t eccval = 0x00000000;
+ 551:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 552:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_Bank == FSMC_Bank2_NAND)
+ 665              		.loc 1 552 0
+ 666 0000 1028     		cmp	r0, #16
+ 553:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 554:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Get the ECCR2 register value */
+ 555:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     eccval = FSMC_Bank2->ECCR2;
+ 667              		.loc 1 555 0
+ 668 0002 0CBF     		ite	eq
+ 669 0004 014B     		ldreq	r3, .L54
+ 556:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 557:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 558:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 559:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Get the ECCR3 register value */
+ 560:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     eccval = FSMC_Bank3->ECCR3;
+ 670              		.loc 1 560 0
+ 671 0006 024B     		ldrne	r3, .L54+4
+ 672 0008 5869     		ldr	r0, [r3, #20]
+ 673              	.LVL29:
+ 561:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 562:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Return the error correction code value */
+ 563:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   return(eccval);
+ 564:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 674              		.loc 1 564 0
+ 675 000a 7047     		bx	lr
+ 676              	.L55:
+ 677              		.align	2
+ 678              	.L54:
+ 679 000c 600000A0 		.word	-1610612640
+ 680 0010 800000A0 		.word	-1610612608
+ 681              		.cfi_endproc
+ 682              	.LFE65:
+ 684              		.section	.text.FSMC_PCCARDDeInit,"ax",%progbits
+ 685              		.align	1
+ 686              		.global	FSMC_PCCARDDeInit
+ 687              		.thumb
+ 688              		.thumb_func
+ 690              	FSMC_PCCARDDeInit:
+ 691              	.LFB66:
+ 565:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 566:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @}
+ 567:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 568:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 569:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /** @defgroup FSMC_Group3 PCCARD Controller functions
+ 570:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *  @brief   PCCARD Controller functions 
+ 571:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *
+ 572:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @verbatim   
+ 573:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================
+ 574:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                     PCCARD Controller functions
+ 575:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================  
+ 576:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 577:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  The following sequence should be followed to configure the FSMC to interface with
+ 578:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  16-bit PC Card compatible memory connected to the PCCARD Bank:
+ 579:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  
+ 580:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    1. Enable the clock for the FSMC and associated GPIOs using the following functions:
+ 581:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
+ 582:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+ 583:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 584:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    2. FSMC pins configuration 
+ 585:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        - Connect the involved FSMC pins to AF12 using the following function 
+ 586:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_FSMC); 
+ 587:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        - Configure these FSMC pins in alternate function mode by calling the function
+ 588:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           GPIO_Init();    
+ 589:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****        
+ 590:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    3. Declare a FSMC_PCCARDInitTypeDef structure, for example:
+ 591:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_PCCARDInitTypeDef  FSMC_PCCARDInitStructure;
+ 592:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       and fill the FSMC_PCCARDInitStructure variable with the allowed values of
+ 593:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       the structure member.
+ 594:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       
+ 595:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    4. Initialize the PCCARD Controller by calling the function
+ 596:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_PCCARDInit(&FSMC_PCCARDInitStructure); 
+ 597:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 598:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    5. Then enable the PCCARD Bank:
+ 599:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****           FSMC_PCCARDCmd(ENABLE);  
+ 600:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 601:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****    6. At this stage you can read/write from/to the memory connected to the PCCARD Bank. 
+ 602:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  
+ 603:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @endverbatim
+ 604:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @{
+ 605:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 606:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 607:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 608:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Deinitializes the FSMC PCCARD Bank registers to their default reset values.
+ 609:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  None                       
+ 610:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 611:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 612:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_PCCARDDeInit(void)
+ 613:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 692              		.loc 1 613 0
+ 693              		.cfi_startproc
+ 694              		@ args = 0, pretend = 0, frame = 0
+ 695              		@ frame_needed = 0, uses_anonymous_args = 0
+ 696              		@ link register save eliminated.
+ 614:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set the FSMC_Bank4 registers to their reset values */
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PCR4 = 0x00000018; 
+ 697              		.loc 1 615 0
+ 698 0000 054B     		ldr	r3, .L57
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->SR4 = 0x00000000;	
+ 617:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PMEM4 = 0xFCFCFCFC;
+ 699              		.loc 1 617 0
+ 700 0002 4FF0FC31 		mov	r1, #-50529028
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PCR4 = 0x00000018; 
+ 701              		.loc 1 615 0
+ 702 0006 1822     		movs	r2, #24
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->SR4 = 0x00000000;	
+ 703              		.loc 1 616 0
+ 704 0008 0020     		movs	r0, #0
+ 615:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PCR4 = 0x00000018; 
+ 705              		.loc 1 615 0
+ 706 000a 1A60     		str	r2, [r3, #0]
+ 616:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->SR4 = 0x00000000;	
+ 707              		.loc 1 616 0
+ 708 000c 5860     		str	r0, [r3, #4]
+ 709              		.loc 1 617 0
+ 710 000e 9960     		str	r1, [r3, #8]
+ 618:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PATT4 = 0xFCFCFCFC;
+ 711              		.loc 1 618 0
+ 712 0010 D960     		str	r1, [r3, #12]
+ 619:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PIO4 = 0xFCFCFCFC;
+ 713              		.loc 1 619 0
+ 714 0012 1961     		str	r1, [r3, #16]
+ 715 0014 7047     		bx	lr
+ 716              	.L58:
+ 717 0016 00BF     		.align	2
+ 718              	.L57:
+ 719 0018 A00000A0 		.word	-1610612576
+ 720              		.cfi_endproc
+ 721              	.LFE66:
+ 723              		.section	.text.FSMC_PCCARDInit,"ax",%progbits
+ 724              		.align	1
+ 725              		.global	FSMC_PCCARDInit
+ 726              		.thumb
+ 727              		.thumb_func
+ 729              	FSMC_PCCARDInit:
+ 730              	.LFB67:
+ 620:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 621:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 622:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 623:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Initializes the FSMC PCCARD Bank according to the specified parameters
+ 624:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         in the FSMC_PCCARDInitStruct.
+ 625:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_PCCARDInitStruct : pointer to a FSMC_PCCARDInitTypeDef structure
+ 626:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         that contains the configuration information for the FSMC PCCARD Bank.                  
+ 627:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 628:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 629:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_PCCARDInit(FSMC_PCCARDInitTypeDef* FSMC_PCCARDInitStruct)
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 731              		.loc 1 630 0
+ 732              		.cfi_startproc
+ 733              		@ args = 0, pretend = 0, frame = 0
+ 734              		@ frame_needed = 0, uses_anonymous_args = 0
+ 735              	.LVL30:
+ 631:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameters */
+ 632:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_FEATURE(FSMC_PCCARDInitStruct->FSMC_Waitfeature));
+ 633:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_TCLR_TIME(FSMC_PCCARDInitStruct->FSMC_TCLRSetupTime));
+ 634:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_TAR_TIME(FSMC_PCCARDInitStruct->FSMC_TARSetupTime));
+ 635:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  
+ 636:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_SETUP_TIME(FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTi
+ 637:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_TIME(FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetu
+ 638:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HOLD_TIME(FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetu
+ 639:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HIZ_TIME(FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupT
+ 640:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 641:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_SETUP_TIME(FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_Setu
+ 642:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_TIME(FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitS
+ 643:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HOLD_TIME(FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldS
+ 644:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HIZ_TIME(FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSet
+ 645:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_SETUP_TIME(FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_SetupTime))
+ 646:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_WAIT_TIME(FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_WaitSetupTim
+ 647:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HOLD_TIME(FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_HoldSetupTim
+ 648:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_HIZ_TIME(FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_HiZSetupTime)
+ 649:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 650:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set the PCR4 register value according to FSMC_PCCARDInitStruct parameters */
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PCR4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_Waitfeature |
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      FSMC_MemoryDataWidth_16b |  
+ 736              		.loc 1 652 0
+ 737 0000 0368     		ldr	r3, [r0, #0]
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_TCLRSetupTime << 9) |
+ 738              		.loc 1 653 0
+ 739 0002 4168     		ldr	r1, [r0, #4]
+ 652:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      FSMC_MemoryDataWidth_16b |  
+ 740              		.loc 1 652 0
+ 741 0004 43F01002 		orr	r2, r3, #16
+ 654:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_TARSetupTime << 13);
+ 742              		.loc 1 654 0
+ 743 0008 8368     		ldr	r3, [r0, #8]
+ 630:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 744              		.loc 1 630 0
+ 745 000a 10B5     		push	{r4, lr}
+ 746              	.LCFI3:
+ 747              		.cfi_def_cfa_offset 8
+ 748              		.cfi_offset 4, -8
+ 749              		.cfi_offset 14, -4
+ 653:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_TCLRSetupTime << 9) |
+ 750              		.loc 1 653 0
+ 751 000c 42EA4124 		orr	r4, r2, r1, lsl #9
+ 752 0010 44EA4332 		orr	r2, r4, r3, lsl #13
+ 651:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PCR4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_Waitfeature |
+ 753              		.loc 1 651 0
+ 754 0014 134B     		ldr	r3, .L60
+ 755 0016 1A60     		str	r2, [r3, #0]
+ 655:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             
+ 656:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set PMEM4 register value according to FSMC_CommonSpaceTimingStructure parameters */
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PMEM4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime
+ 756              		.loc 1 657 0
+ 757 0018 C268     		ldr	r2, [r0, #12]
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupTime << 1
+ 758              		.loc 1 659 0
+ 759 001a 9168     		ldr	r1, [r2, #8]
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8
+ 760              		.loc 1 658 0
+ 761 001c 5468     		ldr	r4, [r2, #4]
+ 762              		.loc 1 659 0
+ 763 001e 0904     		lsls	r1, r1, #16
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PMEM4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime
+ 764              		.loc 1 657 0
+ 765 0020 41EA0424 		orr	r4, r1, r4, lsl #8
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8
+ 766              		.loc 1 658 0
+ 767 0024 1168     		ldr	r1, [r2, #0]
+ 660:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupTime << 24
+ 768              		.loc 1 660 0
+ 769 0026 D268     		ldr	r2, [r2, #12]
+ 658:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime << 8
+ 770              		.loc 1 658 0
+ 771 0028 2143     		orrs	r1, r1, r4
+ 659:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupTime << 1
+ 772              		.loc 1 659 0
+ 773 002a 41EA0264 		orr	r4, r1, r2, lsl #24
+ 661:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             
+ 662:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set PATT4 register value according to FSMC_AttributeSpaceTimingStructure parameters */
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PATT4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupT
+ 774              		.loc 1 663 0
+ 775 002e 0269     		ldr	r2, [r0, #16]
+ 657:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PMEM4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime
+ 776              		.loc 1 657 0
+ 777 0030 9C60     		str	r4, [r3, #8]
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime <
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSetupTime <
+ 778              		.loc 1 665 0
+ 779 0032 9168     		ldr	r1, [r2, #8]
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime <
+ 780              		.loc 1 664 0
+ 781 0034 5468     		ldr	r4, [r2, #4]
+ 782              		.loc 1 665 0
+ 783 0036 0904     		lsls	r1, r1, #16
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PATT4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupT
+ 784              		.loc 1 663 0
+ 785 0038 41EA0424 		orr	r4, r1, r4, lsl #8
+ 664:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime <
+ 786              		.loc 1 664 0
+ 787 003c 1168     		ldr	r1, [r2, #0]
+ 788 003e 2143     		orrs	r1, r1, r4
+ 666:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSetupTime <<
+ 789              		.loc 1 666 0
+ 790 0040 D468     		ldr	r4, [r2, #12]
+ 665:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                       (FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSetupTime <
+ 791              		.loc 1 665 0
+ 792 0042 41EA0462 		orr	r2, r1, r4, lsl #24
+ 663:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PATT4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupT
+ 793              		.loc 1 663 0
+ 794 0046 DA60     		str	r2, [r3, #12]
+ 667:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****             
+ 668:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Set PIO4 register value according to FSMC_IOSpaceTimingStructure parameters */
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PIO4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_SetupTime |
+ 795              		.loc 1 669 0
+ 796 0048 4269     		ldr	r2, [r0, #20]
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_HoldSetupTime << 16)|
+ 797              		.loc 1 671 0
+ 798 004a 9168     		ldr	r1, [r2, #8]
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 799              		.loc 1 670 0
+ 800 004c 5068     		ldr	r0, [r2, #4]
+ 801              	.LVL31:
+ 802              		.loc 1 671 0
+ 803 004e 0904     		lsls	r1, r1, #16
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PIO4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_SetupTime |
+ 804              		.loc 1 669 0
+ 805 0050 41EA0020 		orr	r0, r1, r0, lsl #8
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 806              		.loc 1 670 0
+ 807 0054 1168     		ldr	r1, [r2, #0]
+ 672:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_HiZSetupTime << 24);   
+ 808              		.loc 1 672 0
+ 809 0056 D268     		ldr	r2, [r2, #12]
+ 670:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_WaitSetupTime << 8) |
+ 810              		.loc 1 670 0
+ 811 0058 0143     		orrs	r1, r1, r0
+ 671:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      (FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_HoldSetupTime << 16)|
+ 812              		.loc 1 671 0
+ 813 005a 41EA0260 		orr	r0, r1, r2, lsl #24
+ 669:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_Bank4->PIO4 = (uint32_t)FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_SetupTime |
+ 814              		.loc 1 669 0
+ 815 005e 1861     		str	r0, [r3, #16]
+ 816 0060 10BD     		pop	{r4, pc}
+ 817              	.L61:
+ 818 0062 00BF     		.align	2
+ 819              	.L60:
+ 820 0064 A00000A0 		.word	-1610612576
+ 821              		.cfi_endproc
+ 822              	.LFE67:
+ 824              		.section	.text.FSMC_PCCARDStructInit,"ax",%progbits
+ 825              		.align	1
+ 826              		.global	FSMC_PCCARDStructInit
+ 827              		.thumb
+ 828              		.thumb_func
+ 830              	FSMC_PCCARDStructInit:
+ 831              	.LFB68:
+ 673:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 674:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 675:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 676:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Fills each FSMC_PCCARDInitStruct member with its default value.
+ 677:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_PCCARDInitStruct: pointer to a FSMC_PCCARDInitTypeDef structure
+ 678:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *         which will be initialized.
+ 679:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 680:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 681:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_PCCARDStructInit(FSMC_PCCARDInitTypeDef* FSMC_PCCARDInitStruct)
+ 682:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 832              		.loc 1 682 0
+ 833              		.cfi_startproc
+ 834              		@ args = 0, pretend = 0, frame = 0
+ 835              		@ frame_needed = 0, uses_anonymous_args = 0
+ 836              		@ link register save eliminated.
+ 837              	.LVL32:
+ 683:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Reset PCCARD Init structure parameters values */
+ 684:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_Waitfeature = FSMC_Waitfeature_Disable;
+ 838              		.loc 1 684 0
+ 839 0000 0023     		movs	r3, #0
+ 840 0002 0360     		str	r3, [r0, #0]
+ 685:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_TCLRSetupTime = 0x0;
+ 841              		.loc 1 685 0
+ 842 0004 4360     		str	r3, [r0, #4]
+ 686:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_TARSetupTime = 0x0;
+ 843              		.loc 1 686 0
+ 844 0006 8360     		str	r3, [r0, #8]
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 845              		.loc 1 687 0
+ 846 0008 C268     		ldr	r2, [r0, #12]
+ 688:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 689:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 690:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;
+ 691:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 847              		.loc 1 691 0
+ 848 000a 0369     		ldr	r3, [r0, #16]
+ 692:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 693:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;	
+ 695:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 849              		.loc 1 695 0
+ 850 000c 4069     		ldr	r0, [r0, #20]
+ 851              	.LVL33:
+ 687:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 852              		.loc 1 687 0
+ 853 000e FC21     		movs	r1, #252
+ 854 0010 1160     		str	r1, [r2, #0]
+ 688:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 855              		.loc 1 688 0
+ 856 0012 5160     		str	r1, [r2, #4]
+ 689:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 857              		.loc 1 689 0
+ 858 0014 9160     		str	r1, [r2, #8]
+ 690:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_CommonSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;
+ 859              		.loc 1 690 0
+ 860 0016 D160     		str	r1, [r2, #12]
+ 691:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_SetupTime = 0xFC;
+ 861              		.loc 1 691 0
+ 862 0018 1960     		str	r1, [r3, #0]
+ 692:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 863              		.loc 1 692 0
+ 864 001a 5960     		str	r1, [r3, #4]
+ 693:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 865              		.loc 1 693 0
+ 866 001c 9960     		str	r1, [r3, #8]
+ 694:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_AttributeSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;	
+ 867              		.loc 1 694 0
+ 868 001e D960     		str	r1, [r3, #12]
+ 869              		.loc 1 695 0
+ 870 0020 0160     		str	r1, [r0, #0]
+ 696:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_WaitSetupTime = 0xFC;
+ 871              		.loc 1 696 0
+ 872 0022 4160     		str	r1, [r0, #4]
+ 697:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_HoldSetupTime = 0xFC;
+ 873              		.loc 1 697 0
+ 874 0024 8160     		str	r1, [r0, #8]
+ 698:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FSMC_PCCARDInitStruct->FSMC_IOSpaceTimingStruct->FSMC_HiZSetupTime = 0xFC;
+ 875              		.loc 1 698 0
+ 876 0026 C160     		str	r1, [r0, #12]
+ 877 0028 7047     		bx	lr
+ 878              		.cfi_endproc
+ 879              	.LFE68:
+ 881              		.section	.text.FSMC_PCCARDCmd,"ax",%progbits
+ 882              		.align	1
+ 883              		.global	FSMC_PCCARDCmd
+ 884              		.thumb
+ 885              		.thumb_func
+ 887              	FSMC_PCCARDCmd:
+ 888              	.LFB69:
+ 699:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 700:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 701:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 702:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Enables or disables the PCCARD Memory Bank.
+ 703:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  NewState: new state of the PCCARD Memory Bank.  
+ 704:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 705:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 706:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 707:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_PCCARDCmd(FunctionalState NewState)
+ 708:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 889              		.loc 1 708 0
+ 890              		.cfi_startproc
+ 891              		@ args = 0, pretend = 0, frame = 0
+ 892              		@ frame_needed = 0, uses_anonymous_args = 0
+ 893              		@ link register save eliminated.
+ 894              	.LVL34:
+ 895 0000 054B     		ldr	r3, .L67
+ 709:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 710:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 711:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if (NewState != DISABLE)
+ 896              		.loc 1 711 0
+ 897 0002 18B1     		cbz	r0, .L64
+ 712:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 713:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Enable the PCCARD Bank by setting the PBKEN bit in the PCR4 register */
+ 714:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank4->PCR4 |= PCR_PBKEN_SET;
+ 898              		.loc 1 714 0
+ 899 0004 1868     		ldr	r0, [r3, #0]
+ 900              	.LVL35:
+ 901 0006 40F00402 		orr	r2, r0, #4
+ 902 000a 02E0     		b	.L66
+ 903              	.LVL36:
+ 904              	.L64:
+ 715:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 716:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 717:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 718:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Disable the PCCARD Bank by clearing the PBKEN bit in the PCR4 register */
+ 719:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank4->PCR4 &= PCR_PBKEN_RESET;
+ 905              		.loc 1 719 0
+ 906 000c 1968     		ldr	r1, [r3, #0]
+ 907 000e 034A     		ldr	r2, .L67+4
+ 908 0010 0A40     		ands	r2, r2, r1
+ 909              	.LVL37:
+ 910              	.L66:
+ 911 0012 1A60     		str	r2, [r3, #0]
+ 912 0014 7047     		bx	lr
+ 913              	.L68:
+ 914 0016 00BF     		.align	2
+ 915              	.L67:
+ 916 0018 A00000A0 		.word	-1610612576
+ 917 001c FBFF0F00 		.word	1048571
+ 918              		.cfi_endproc
+ 919              	.LFE69:
+ 921              		.section	.text.FSMC_ITConfig,"ax",%progbits
+ 922              		.align	1
+ 923              		.global	FSMC_ITConfig
+ 924              		.thumb
+ 925              		.thumb_func
+ 927              	FSMC_ITConfig:
+ 928              	.LFB70:
+ 720:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 721:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 722:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 723:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @}
+ 724:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 725:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 726:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /** @defgroup FSMC_Group4  Interrupts and flags management functions
+ 727:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *  @brief    Interrupts and flags management functions
+ 728:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  *
+ 729:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @verbatim   
+ 730:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================
+ 731:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****                      Interrupts and flags management functions
+ 732:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  ===============================================================================  
+ 733:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 734:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** @endverbatim
+ 735:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @{
+ 736:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 737:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 738:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 739:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Enables or disables the specified FSMC interrupts.
+ 740:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 741:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 742:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 743:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 744:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank4_PCCARD: FSMC Bank4 PCCARD
+ 745:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_IT: specifies the FSMC interrupt sources to be enabled or disabled.
+ 746:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be any combination of the following values:
+ 747:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_RisingEdge: Rising edge detection interrupt. 
+ 748:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_Level: Level edge detection interrupt.
+ 749:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_FallingEdge: Falling edge detection interrupt.
+ 750:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  NewState: new state of the specified FSMC interrupts.
+ 751:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be: ENABLE or DISABLE.
+ 752:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 753:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 754:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_ITConfig(uint32_t FSMC_Bank, uint32_t FSMC_IT, FunctionalState NewState)
+ 755:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 929              		.loc 1 755 0
+ 930              		.cfi_startproc
+ 931              		@ args = 0, pretend = 0, frame = 0
+ 932              		@ frame_needed = 0, uses_anonymous_args = 0
+ 933              		@ link register save eliminated.
+ 934              	.LVL38:
+ 756:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_IT_BANK(FSMC_Bank));
+ 757:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_IT(FSMC_IT));	
+ 758:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));
+ 759:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 760:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if (NewState != DISABLE)
+ 935              		.loc 1 760 0
+ 936 0000 5AB1     		cbz	r2, .L70
+ 761:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 762:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Enable the selected FSMC_Bank2 interrupts */
+ 763:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     if(FSMC_Bank == FSMC_Bank2_NAND)
+ 937              		.loc 1 763 0
+ 938 0002 1028     		cmp	r0, #16
+ 939 0004 01D1     		bne	.L71
+ 764:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 765:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank2->SR2 |= FSMC_IT;
+ 940              		.loc 1 765 0
+ 941 0006 0E4B     		ldr	r3, .L79
+ 942 0008 04E0     		b	.L78
+ 943              	.L71:
+ 766:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 767:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Enable the selected FSMC_Bank3 interrupts */
+ 768:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else if (FSMC_Bank == FSMC_Bank3_NAND)
+ 944              		.loc 1 768 0
+ 945 000a B0F5807F 		cmp	r0, #256
+ 769:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 770:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank3->SR3 |= FSMC_IT;
+ 946              		.loc 1 770 0
+ 947 000e 0CBF     		ite	eq
+ 948 0010 0C4B     		ldreq	r3, .L79+4
+ 771:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 772:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Enable the selected FSMC_Bank4 interrupts */
+ 773:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else
+ 774:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 775:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank4->SR4 |= FSMC_IT;    
+ 949              		.loc 1 775 0
+ 950 0012 0D4B     		ldrne	r3, .L79+8
+ 951              	.L78:
+ 952 0014 5A68     		ldr	r2, [r3, #4]
+ 953              	.LVL39:
+ 954 0016 1143     		orrs	r1, r1, r2
+ 955              	.LVL40:
+ 956 0018 0FE0     		b	.L76
+ 957              	.LVL41:
+ 958              	.L70:
+ 776:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 777:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 778:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 779:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 780:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Disable the selected FSMC_Bank2 interrupts */
+ 781:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     if(FSMC_Bank == FSMC_Bank2_NAND)
+ 959              		.loc 1 781 0
+ 960 001a 1028     		cmp	r0, #16
+ 961 001c 04D1     		bne	.L74
+ 782:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 783:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       
+ 784:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank2->SR2 &= (uint32_t)~FSMC_IT;
+ 962              		.loc 1 784 0
+ 963 001e 084B     		ldr	r3, .L79
+ 964 0020 5868     		ldr	r0, [r3, #4]
+ 965              	.LVL42:
+ 966 0022 20EA0101 		bic	r1, r0, r1
+ 967              	.LVL43:
+ 968 0026 08E0     		b	.L76
+ 969              	.LVL44:
+ 970              	.L74:
+ 785:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 786:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Disable the selected FSMC_Bank3 interrupts */
+ 787:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else if (FSMC_Bank == FSMC_Bank3_NAND)
+ 971              		.loc 1 787 0
+ 972 0028 B0F5807F 		cmp	r0, #256
+ 788:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 789:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank3->SR3 &= (uint32_t)~FSMC_IT;
+ 973              		.loc 1 789 0
+ 974 002c 0CBF     		ite	eq
+ 975 002e 054B     		ldreq	r3, .L79+4
+ 790:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 791:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     /* Disable the selected FSMC_Bank4 interrupts */
+ 792:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     else
+ 793:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     {
+ 794:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****       FSMC_Bank4->SR4 &= (uint32_t)~FSMC_IT;    
+ 976              		.loc 1 794 0
+ 977 0030 054B     		ldrne	r3, .L79+8
+ 978 0032 6FEA0101 		mvn	r1, r1
+ 979              	.LVL45:
+ 980 0036 5A68     		ldr	r2, [r3, #4]
+ 981              	.LVL46:
+ 982 0038 1140     		ands	r1, r1, r2
+ 983              	.LVL47:
+ 984              	.L76:
+ 985 003a 5960     		str	r1, [r3, #4]
+ 986 003c 7047     		bx	lr
+ 987              	.L80:
+ 988 003e 00BF     		.align	2
+ 989              	.L79:
+ 990 0040 600000A0 		.word	-1610612640
+ 991 0044 800000A0 		.word	-1610612608
+ 992 0048 A00000A0 		.word	-1610612576
+ 993              		.cfi_endproc
+ 994              	.LFE70:
+ 996              		.section	.text.FSMC_GetFlagStatus,"ax",%progbits
+ 997              		.align	1
+ 998              		.global	FSMC_GetFlagStatus
+ 999              		.thumb
+ 1000              		.thumb_func
+ 1002              	FSMC_GetFlagStatus:
+ 1003              	.LFB71:
+ 795:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     }
+ 796:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 797:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 798:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 799:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 800:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Checks whether the specified FSMC flag is set or not.
+ 801:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 802:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 803:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 804:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 805:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank4_PCCARD: FSMC Bank4 PCCARD
+ 806:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_FLAG: specifies the flag to check.
+ 807:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 808:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_FLAG_RisingEdge: Rising edge detection Flag.
+ 809:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_FLAG_Level: Level detection Flag.
+ 810:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_FLAG_FallingEdge: Falling edge detection Flag.
+ 811:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_FLAG_FEMPT: Fifo empty Flag. 
+ 812:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval The new state of FSMC_FLAG (SET or RESET).
+ 813:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 814:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** FlagStatus FSMC_GetFlagStatus(uint32_t FSMC_Bank, uint32_t FSMC_FLAG)
+ 815:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 1004              		.loc 1 815 0
+ 1005              		.cfi_startproc
+ 1006              		@ args = 0, pretend = 0, frame = 0
+ 1007              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1008              		@ link register save eliminated.
+ 1009              	.LVL48:
+ 816:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   FlagStatus bitstatus = RESET;
+ 817:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   uint32_t tmpsr = 0x00000000;
+ 818:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 819:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameters */
+ 820:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_GETFLAG_BANK(FSMC_Bank));
+ 821:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_GET_FLAG(FSMC_FLAG));
+ 822:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 823:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_Bank == FSMC_Bank2_NAND)
+ 1010              		.loc 1 823 0
+ 1011 0000 1028     		cmp	r0, #16
+ 1012 0002 01D1     		bne	.L82
+ 824:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 825:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     tmpsr = FSMC_Bank2->SR2;
+ 1013              		.loc 1 825 0
+ 1014 0004 064B     		ldr	r3, .L86
+ 1015 0006 04E0     		b	.L85
+ 1016              	.L82:
+ 826:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }  
+ 827:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else if(FSMC_Bank == FSMC_Bank3_NAND)
+ 1017              		.loc 1 827 0
+ 1018 0008 B0F5807F 		cmp	r0, #256
+ 828:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 829:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     tmpsr = FSMC_Bank3->SR3;
+ 1019              		.loc 1 829 0
+ 1020 000c 0CBF     		ite	eq
+ 1021 000e 054B     		ldreq	r3, .L86+4
+ 830:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 831:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* FSMC_Bank4_PCCARD*/
+ 832:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 833:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 834:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     tmpsr = FSMC_Bank4->SR4;
+ 1022              		.loc 1 834 0
+ 1023 0010 054B     		ldrne	r3, .L86+8
+ 1024              	.L85:
+ 1025 0012 5B68     		ldr	r3, [r3, #4]
+ 1026              	.LVL49:
+ 835:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   } 
+ 836:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 837:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Get the flag status */
+ 838:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if ((tmpsr & FSMC_FLAG) != (uint16_t)RESET )
+ 1027              		.loc 1 838 0
+ 1028 0014 0B42     		tst	r3, r1
+ 839:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 840:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     bitstatus = SET;
+ 841:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 842:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 843:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 844:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     bitstatus = RESET;
+ 845:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 846:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Return the flag status */
+ 847:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   return bitstatus;
+ 848:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 1029              		.loc 1 848 0
+ 1030 0016 0CBF     		ite	eq
+ 1031 0018 0020     		moveq	r0, #0
+ 1032 001a 0120     		movne	r0, #1
+ 1033              	.LVL50:
+ 1034 001c 7047     		bx	lr
+ 1035              	.L87:
+ 1036 001e 00BF     		.align	2
+ 1037              	.L86:
+ 1038 0020 600000A0 		.word	-1610612640
+ 1039 0024 800000A0 		.word	-1610612608
+ 1040 0028 A00000A0 		.word	-1610612576
+ 1041              		.cfi_endproc
+ 1042              	.LFE71:
+ 1044              		.section	.text.FSMC_ClearFlag,"ax",%progbits
+ 1045              		.align	1
+ 1046              		.global	FSMC_ClearFlag
+ 1047              		.thumb
+ 1048              		.thumb_func
+ 1050              	FSMC_ClearFlag:
+ 1051              	.LFB72:
+ 849:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 850:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 851:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Clears the FSMC's pending flags.
+ 852:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 853:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 854:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 855:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 856:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank4_PCCARD: FSMC Bank4 PCCARD
+ 857:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_FLAG: specifies the flag to clear.
+ 858:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be any combination of the following values:
+ 859:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_FLAG_RisingEdge: Rising edge detection Flag.
+ 860:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_FLAG_Level: Level detection Flag.
+ 861:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_FLAG_FallingEdge: Falling edge detection Flag.
+ 862:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 863:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 864:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_ClearFlag(uint32_t FSMC_Bank, uint32_t FSMC_FLAG)
+ 865:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 1052              		.loc 1 865 0
+ 1053              		.cfi_startproc
+ 1054              		@ args = 0, pretend = 0, frame = 0
+ 1055              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1056              		@ link register save eliminated.
+ 1057              	.LVL51:
+ 866:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****  /* Check the parameters */
+ 867:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_GETFLAG_BANK(FSMC_Bank));
+ 868:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_CLEAR_FLAG(FSMC_FLAG)) ;
+ 869:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     
+ 870:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_Bank == FSMC_Bank2_NAND)
+ 1058              		.loc 1 870 0
+ 1059 0000 1028     		cmp	r0, #16
+ 1060 0002 04D1     		bne	.L89
+ 871:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 872:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->SR2 &= ~FSMC_FLAG; 
+ 1061              		.loc 1 872 0
+ 1062 0004 074B     		ldr	r3, .L94
+ 1063 0006 5868     		ldr	r0, [r3, #4]
+ 1064              	.LVL52:
+ 1065 0008 20EA0101 		bic	r1, r0, r1
+ 1066              	.LVL53:
+ 1067 000c 08E0     		b	.L92
+ 1068              	.LVL54:
+ 1069              	.L89:
+ 873:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }  
+ 874:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else if(FSMC_Bank == FSMC_Bank3_NAND)
+ 1070              		.loc 1 874 0
+ 1071 000e B0F5807F 		cmp	r0, #256
+ 875:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 876:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->SR3 &= ~FSMC_FLAG;
+ 1072              		.loc 1 876 0
+ 1073 0012 0CBF     		ite	eq
+ 1074 0014 044B     		ldreq	r3, .L94+4
+ 877:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 878:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* FSMC_Bank4_PCCARD*/
+ 879:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 880:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 881:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank4->SR4 &= ~FSMC_FLAG;
+ 1075              		.loc 1 881 0
+ 1076 0016 054B     		ldrne	r3, .L94+8
+ 1077 0018 6FEA0101 		mvn	r1, r1
+ 1078              	.LVL55:
+ 1079 001c 5A68     		ldr	r2, [r3, #4]
+ 1080 001e 1140     		ands	r1, r1, r2
+ 1081              	.LVL56:
+ 1082              	.L92:
+ 1083 0020 5960     		str	r1, [r3, #4]
+ 1084 0022 7047     		bx	lr
+ 1085              	.L95:
+ 1086              		.align	2
+ 1087              	.L94:
+ 1088 0024 600000A0 		.word	-1610612640
+ 1089 0028 800000A0 		.word	-1610612608
+ 1090 002c A00000A0 		.word	-1610612576
+ 1091              		.cfi_endproc
+ 1092              	.LFE72:
+ 1094              		.section	.text.FSMC_GetITStatus,"ax",%progbits
+ 1095              		.align	1
+ 1096              		.global	FSMC_GetITStatus
+ 1097              		.thumb
+ 1098              		.thumb_func
+ 1100              	FSMC_GetITStatus:
+ 1101              	.LFB73:
+ 882:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 883:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 884:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 885:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 886:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Checks whether the specified FSMC interrupt has occurred or not.
+ 887:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 888:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 889:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 890:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 891:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank4_PCCARD: FSMC Bank4 PCCARD
+ 892:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_IT: specifies the FSMC interrupt source to check.
+ 893:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 894:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_RisingEdge: Rising edge detection interrupt. 
+ 895:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_Level: Level edge detection interrupt.
+ 896:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_FallingEdge: Falling edge detection interrupt. 
+ 897:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval The new state of FSMC_IT (SET or RESET).
+ 898:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 899:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** ITStatus FSMC_GetITStatus(uint32_t FSMC_Bank, uint32_t FSMC_IT)
+ 900:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 1102              		.loc 1 900 0
+ 1103              		.cfi_startproc
+ 1104              		@ args = 0, pretend = 0, frame = 0
+ 1105              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1106              		@ link register save eliminated.
+ 1107              	.LVL57:
+ 901:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   ITStatus bitstatus = RESET;
+ 902:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   uint32_t tmpsr = 0x0, itstatus = 0x0, itenable = 0x0; 
+ 903:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 904:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameters */
+ 905:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_IT_BANK(FSMC_Bank));
+ 906:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_GET_IT(FSMC_IT));
+ 907:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 908:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_Bank == FSMC_Bank2_NAND)
+ 1108              		.loc 1 908 0
+ 1109 0000 1028     		cmp	r0, #16
+ 1110 0002 01D1     		bne	.L97
+ 909:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 910:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     tmpsr = FSMC_Bank2->SR2;
+ 1111              		.loc 1 910 0
+ 1112 0004 084B     		ldr	r3, .L103
+ 1113 0006 04E0     		b	.L102
+ 1114              	.L97:
+ 911:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }  
+ 912:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else if(FSMC_Bank == FSMC_Bank3_NAND)
+ 1115              		.loc 1 912 0
+ 1116 0008 B0F5807F 		cmp	r0, #256
+ 913:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 914:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     tmpsr = FSMC_Bank3->SR3;
+ 1117              		.loc 1 914 0
+ 1118 000c 0CBF     		ite	eq
+ 1119 000e 074B     		ldreq	r3, .L103+4
+ 915:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 916:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* FSMC_Bank4_PCCARD*/
+ 917:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 918:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 919:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     tmpsr = FSMC_Bank4->SR4;
+ 1120              		.loc 1 919 0
+ 1121 0010 074B     		ldrne	r3, .L103+8
+ 1122              	.L102:
+ 1123 0012 5B68     		ldr	r3, [r3, #4]
+ 1124              	.LVL58:
+ 920:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   } 
+ 921:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 922:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   itstatus = tmpsr & FSMC_IT;
+ 923:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   
+ 924:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   itenable = tmpsr & (FSMC_IT >> 3);
+ 925:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if ((itstatus != (uint32_t)RESET)  && (itenable != (uint32_t)RESET))
+ 1125              		.loc 1 925 0
+ 1126 0014 13EA0100 		ands	r0, r3, r1
+ 1127              	.LVL59:
+ 1128 0018 04D0     		beq	.L100
+ 1129              		.loc 1 925 0 is_stmt 0 discriminator 1
+ 1130 001a 13EAD101 		ands	r1, r3, r1, lsr #3
+ 1131              	.LVL60:
+ 926:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 927:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     bitstatus = SET;
+ 1132              		.loc 1 927 0 is_stmt 1 discriminator 1
+ 1133 001e 0CBF     		ite	eq
+ 1134 0020 0020     		moveq	r0, #0
+ 1135 0022 0120     		movne	r0, #1
+ 1136              	.LVL61:
+ 1137              	.L100:
+ 928:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 929:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 930:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 931:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     bitstatus = RESET;
+ 932:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 933:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   return bitstatus; 
+ 934:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** }
+ 1138              		.loc 1 934 0
+ 1139 0024 7047     		bx	lr
+ 1140              	.L104:
+ 1141 0026 00BF     		.align	2
+ 1142              	.L103:
+ 1143 0028 600000A0 		.word	-1610612640
+ 1144 002c 800000A0 		.word	-1610612608
+ 1145 0030 A00000A0 		.word	-1610612576
+ 1146              		.cfi_endproc
+ 1147              	.LFE73:
+ 1149              		.section	.text.FSMC_ClearITPendingBit,"ax",%progbits
+ 1150              		.align	1
+ 1151              		.global	FSMC_ClearITPendingBit
+ 1152              		.thumb
+ 1153              		.thumb_func
+ 1155              	FSMC_ClearITPendingBit:
+ 1156              	.LFB74:
+ 935:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** 
+ 936:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** /**
+ 937:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @brief  Clears the FSMC's interrupt pending bits.
+ 938:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_Bank: specifies the FSMC Bank to be used
+ 939:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be one of the following values:
+ 940:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
+ 941:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
+ 942:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_Bank4_PCCARD: FSMC Bank4 PCCARD
+ 943:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @param  FSMC_IT: specifies the interrupt pending bit to clear.
+ 944:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *          This parameter can be any combination of the following values:
+ 945:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_RisingEdge: Rising edge detection interrupt. 
+ 946:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_Level: Level edge detection interrupt.
+ 947:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   *            @arg FSMC_IT_FallingEdge: Falling edge detection interrupt.
+ 948:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   * @retval None
+ 949:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   */
+ 950:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** void FSMC_ClearITPendingBit(uint32_t FSMC_Bank, uint32_t FSMC_IT)
+ 951:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c **** {
+ 1157              		.loc 1 951 0
+ 1158              		.cfi_startproc
+ 1159              		@ args = 0, pretend = 0, frame = 0
+ 1160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1161              		@ link register save eliminated.
+ 1162              	.LVL62:
+ 952:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* Check the parameters */
+ 953:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_IT_BANK(FSMC_Bank));
+ 954:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   assert_param(IS_FSMC_IT(FSMC_IT));
+ 955:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     
+ 956:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   if(FSMC_Bank == FSMC_Bank2_NAND)
+ 1163              		.loc 1 956 0
+ 1164 0000 1028     		cmp	r0, #16
+ 1165 0002 04D1     		bne	.L106
+ 957:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 958:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank2->SR2 &= ~(FSMC_IT >> 3); 
+ 1166              		.loc 1 958 0
+ 1167 0004 084B     		ldr	r3, .L111
+ 1168 0006 5A68     		ldr	r2, [r3, #4]
+ 1169 0008 22EAD100 		bic	r0, r2, r1, lsr #3
+ 1170              	.LVL63:
+ 1171 000c 09E0     		b	.L109
+ 1172              	.LVL64:
+ 1173              	.L106:
+ 959:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }  
+ 960:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else if(FSMC_Bank == FSMC_Bank3_NAND)
+ 1174              		.loc 1 960 0
+ 1175 000e B0F5807F 		cmp	r0, #256
+ 961:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 962:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank3->SR3 &= ~(FSMC_IT >> 3);
+ 1176              		.loc 1 962 0
+ 1177 0012 0CBF     		ite	eq
+ 1178 0014 054B     		ldreq	r3, .L111+4
+ 963:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   }
+ 964:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   /* FSMC_Bank4_PCCARD*/
+ 965:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   else
+ 966:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****   {
+ 967:c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2\stm32f2xx_fsmc.c ****     FSMC_Bank4->SR4 &= ~(FSMC_IT >> 3);
+ 1179              		.loc 1 967 0
+ 1180 0016 064B     		ldrne	r3, .L111+8
+ 1181 0018 4FEAD101 		lsr	r1, r1, #3
+ 1182              	.LVL65:
+ 1183 001c 5A68     		ldr	r2, [r3, #4]
+ 1184 001e 22EA0100 		bic	r0, r2, r1
+ 1185              	.LVL66:
+ 1186              	.L109:
+ 1187 0022 5860     		str	r0, [r3, #4]
+ 1188 0024 7047     		bx	lr
+ 1189              	.L112:
+ 1190 0026 00BF     		.align	2
+ 1191              	.L111:
+ 1192 0028 600000A0 		.word	-1610612640
+ 1193 002c 800000A0 		.word	-1610612608
+ 1194 0030 A00000A0 		.word	-1610612576
+ 1195              		.cfi_endproc
+ 1196              	.LFE74:
+ 1198              		.text
+ 1199              	.Letext0:
+ 1200              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\4.7 2013q1\\bin\\../lib/gcc/arm-none-eab
+ 1201              		.file 3 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx.h"
+ 1202              		.file 4 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/stm32f2xx_fsmc.h"
+ 1203              		.file 5 "c:/Dropbox/AV_SmartWatch/toolchain_v3/src/libstm32f2/core_cm3.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f2xx_fsmc.c
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:19     .text.FSMC_NORSRAMDeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:24     .text.FSMC_NORSRAMDeInit:00000000 FSMC_NORSRAMDeInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:58     .text.FSMC_NORSRAMInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:63     .text.FSMC_NORSRAMInit:00000000 FSMC_NORSRAMInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:203    .text.FSMC_NORSRAMInit:000000b4 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:208    .text.FSMC_NORSRAMStructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:213    .text.FSMC_NORSRAMStructInit:00000000 FSMC_NORSRAMStructInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:301    .text.FSMC_NORSRAMCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:306    .text.FSMC_NORSRAMCmd:00000000 FSMC_NORSRAMCmd
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:335    .text.FSMC_NORSRAMCmd:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:340    .text.FSMC_NANDDeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:345    .text.FSMC_NANDDeInit:00000000 FSMC_NANDDeInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:377    .text.FSMC_NANDDeInit:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:383    .text.FSMC_NANDInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:388    .text.FSMC_NANDInit:00000000 FSMC_NANDInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:485    .text.FSMC_NANDInit:00000064 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:491    .text.FSMC_NANDStructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:496    .text.FSMC_NANDStructInit:00000000 FSMC_NANDStructInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:548    .text.FSMC_NANDCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:553    .text.FSMC_NANDCmd:00000000 FSMC_NANDCmd
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:593    .text.FSMC_NANDCmd:00000028 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:600    .text.FSMC_NANDECCCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:605    .text.FSMC_NANDECCCmd:00000000 FSMC_NANDECCCmd
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:645    .text.FSMC_NANDECCCmd:00000028 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:652    .text.FSMC_GetECC:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:657    .text.FSMC_GetECC:00000000 FSMC_GetECC
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:679    .text.FSMC_GetECC:0000000c $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:685    .text.FSMC_PCCARDDeInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:690    .text.FSMC_PCCARDDeInit:00000000 FSMC_PCCARDDeInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:719    .text.FSMC_PCCARDDeInit:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:724    .text.FSMC_PCCARDInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:729    .text.FSMC_PCCARDInit:00000000 FSMC_PCCARDInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:820    .text.FSMC_PCCARDInit:00000064 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:825    .text.FSMC_PCCARDStructInit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:830    .text.FSMC_PCCARDStructInit:00000000 FSMC_PCCARDStructInit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:882    .text.FSMC_PCCARDCmd:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:887    .text.FSMC_PCCARDCmd:00000000 FSMC_PCCARDCmd
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:916    .text.FSMC_PCCARDCmd:00000018 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:922    .text.FSMC_ITConfig:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:927    .text.FSMC_ITConfig:00000000 FSMC_ITConfig
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:990    .text.FSMC_ITConfig:00000040 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:997    .text.FSMC_GetFlagStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1002   .text.FSMC_GetFlagStatus:00000000 FSMC_GetFlagStatus
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1038   .text.FSMC_GetFlagStatus:00000020 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1045   .text.FSMC_ClearFlag:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1050   .text.FSMC_ClearFlag:00000000 FSMC_ClearFlag
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1088   .text.FSMC_ClearFlag:00000024 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1095   .text.FSMC_GetITStatus:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1100   .text.FSMC_GetITStatus:00000000 FSMC_GetITStatus
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1143   .text.FSMC_GetITStatus:00000028 $d
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1150   .text.FSMC_ClearITPendingBit:00000000 $t
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1155   .text.FSMC_ClearITPendingBit:00000000 FSMC_ClearITPendingBit
+C:\Users\STINA\AppData\Local\Temp\ccWRpC2b.s:1192   .text.FSMC_ClearITPendingBit:00000028 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS
