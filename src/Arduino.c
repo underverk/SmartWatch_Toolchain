@@ -8,6 +8,8 @@
 
 #define NO_CHANGE -1
 
+static int8_t analog_shift = 2;
+
 // Common pin modes
 //             NAME              MODE           SPEED             OUTPUT TYPE    PULL-UP/DOWN      ALTERNATE     SET STATE
 const PinCfg_t pincfg_in       = {GPIO_Mode_IN,  GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_NOPULL, 0,            NO_CHANGE};
@@ -108,17 +110,34 @@ uint8_t digitalRead(const PinDef_t *pin) {
 
 // Reads analog input
 uint16_t analogRead(const PinDef_t *pin) {
+  uint16_t value;
   if(pin == LIGHT_SENSOR) {
-    return adc_lightsensor();
+    value = adc_lightsensor();
   } else if(pin == BATTERY_VOLTAGE) {
-    return adc_battery();
+    value = adc_battery();
+  } else {
+    value = 0;
   }
-  return 0;
+  if(analog_shift < 0) {
+    value <<= -analog_shift;
+  } else {
+    value >>= analog_shift;
+  }
+  return value;
+}
+
+// Set analogRead resolution
+void analogReadResolution(int8_t bits) {
+  analog_shift = 12 - bits;
 }
 
 // Writes analog output
 void analogWrite(const PinDef_t *pin, uint16_t value) {
-  // No such thing on this platform
+  // Dummy
+}
+// Set analogWrite resolution
+void analogWriteResolution(int8_t bits) {
+  // Dummy
 }
 
 static volatile uint32_t ticks;
