@@ -3,7 +3,7 @@
 
 #ifndef _DRIVER_POWER_HPP_
 #define _DRIVER_POWER_HPP_
-#include "pins.h"
+#include "Arduino.h"
 #include "driver_power.h"
 #include "driver_adc.h"
 

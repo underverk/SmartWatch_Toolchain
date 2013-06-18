@@ -29,11 +29,13 @@ OBJDIR = $(OBJDIRBASE)
 TARGET = $(OBJDIR)/firmware
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(SRCDIR)/driver_display.c \
+SRC = $(SRCDIR)/Arduino.c \
+      $(SRCDIR)/driver_display.c \
       $(SRCDIR)/driver_i2c.c \
       $(SRCDIR)/driver_power.c \
       $(SRCDIR)/driver_adc.c \
-      $(SRCDIR)/pins.c \
+      $(SRCDIR)/driver_rtc.c \
+      $(SRCDIR)/driver_touch.c \
       $(SRCDIR)/libstm32f2/stm32f2xx_adc.c       \
       $(SRCDIR)/libstm32f2/stm32f2xx_can.c       \
       $(SRCDIR)/libstm32f2/stm32f2xx_crc.c       \

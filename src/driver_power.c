@@ -4,7 +4,7 @@
 #include <stm32f2xx_rcc.h>
 #include <stm32f2xx_pwr.h>
 #include <stm32f2xx_flash.h>
-#include "pins.h"
+#include "Arduino.h"
 #include "driver_power.h"
 #include "driver_i2c.h"
 #include "pmu_defines.h"

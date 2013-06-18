@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stm32f2xx_rtc.h>
 
 static const char hex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -24,14 +25,24 @@ void setup() {
   if(Battery.begin()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
   OLED.print((char*)"PMU enable... ");
   if(Battery.enableCharging()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
+  OLED.print((char*)"Touch init... ");
+  if(touch_init()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
+  
+  DateTime.begin();
+  if(!DateTime.isRunning()) {
+    // RTC has lost power, we need to set a new time
+    DateTime.setDateTime(13, 05, 03, 6, 20, 41, 00);
+  }
+  
   
 }
+
 
 void loop() {
   char text[32];
 
-  OLED.fillRect(0, 24, 128, 40, 0x5555);
-  OLED.setCursor(0, 24);
+  OLED.fillRect(0, 32, 128, 72, 0x5555);
+  OLED.setCursor(0, 32);
   
   OLED.print("USB connected: ");
   OLED.println((char*)(Battery.canCharge() ? "YES" : "NO"));
@@ -39,13 +50,33 @@ void loop() {
   OLED.print("PMU charging:  ");
   OLED.println((char*)(Battery.isCharging() ? "YES" : "NO"));
   
-  OLED.setCursor(0, 48);
+  OLED.setCursor(0, 56);
 
   sprintf(text, "Battery: %.2fV", ((float)Battery.readMilliVolts()) / 1000.0);
   OLED.println(text);
   
   sprintf(text, "Sensor:  %u%%", (LightSensor.readRaw()*100)/4095);
   OLED.println(text);
+  
+  DateTime.update();
+  sprintf(text, "Time: %02u:%02u:%02u", DateTime.hour(), DateTime.minute(), DateTime.second());
+  OLED.println(text);
+
+  OLED.setCursor(0, 88);
+  uint8_t x, y;
+  bool t;
+  OLED.print("Touch: ");
+  if(touch_read(&t, &x, &y)) {
+    if(t) {
+      sprintf(text, "%u, %u", 127 - x, 127 - y);
+    } else {
+      sprintf(text, "NO");
+    }
+  } else {
+    sprintf(text, "FAIL");
+  }
+  OLED.println(text);
+
 
   // Delay in low speed mode
   CPU.setSpeed(CPU_LS);
@@ -68,7 +99,11 @@ void loop() {
     digitalWrite(BUZZER, LOW);
     while(digitalRead(BUTTON));
     digitalWrite(POWER, LOW);
-    while(1);
+    delay(500);
+    while(!digitalRead(BUTTON));
+    digitalWrite(POWER, HIGH);
+    setup();
+    return;
   }
   
 }

@@ -3,6 +3,9 @@
 
 #ifndef _DRIVER_POWER_H_
 #define _DRIVER_POWER_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <stm32f2xx_rcc.h>
 #include <stm32f2xx_pwr.h>
 #include <stdbool.h>
@@ -51,4 +54,7 @@ bool pmu_init(void);                     // Initialize Power Management Unit
 bool pmu_charge(bool enable);            // Enable (allow) battery charging
 bool pmu_charging(bool *charging);       // Check if charging is actually active
 
+#ifdef __cplusplus
+}
+#endif
 #endif
