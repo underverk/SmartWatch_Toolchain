@@ -20,6 +20,6 @@ http://www.mingw.org/ and make sure your PATH environment variable has both the 
 
 
 Then simply, from the root of this repo:  
-* `> make´  will build bin/firmware.bin  
-* `> make program´  will download to the device  
-* `> make clean´ will clean it all up  
+* `> make`  will build bin/firmware.bin  
+* `> make program`  will download to the device  
+* `> make clean` will clean it all up  
