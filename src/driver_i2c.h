@@ -3,7 +3,10 @@
 
 #ifndef _DRIVER_I2C_H_
 #define _DRIVER_I2C_H_
-#include "pins.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "Arduino.h"
 
 /***
  EXAMPLE here subversion.assembla.com/svn/freertos/STM32F2xx_StdPeriph_Lib_V1.0.0/Project/STM32F2xx_StdPeriph_Examples/I2C/I2C_TwoBoards/DataExchangeDMA/
@@ -22,4 +25,7 @@
 void i2c_init(void);
 uint8_t i2c_write(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes);
 uint8_t i2c_read(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes);
+#ifdef __cplusplus
+}
+#endif
 #endif

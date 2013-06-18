@@ -3,12 +3,13 @@
 
 // Include our drivers and libs
 extern "C" {
-  #include "pins.h"
+  #include "Arduino.h"
   #include "driver_i2c.h"
   #include "driver_adc.h"
   #include "driver_rtc.h"
   #include "driver_display.h"
   #include "driver_power.h"
+  #include "driver_touch.h"
 }
  
 // Include our Arduino style C++ objects
@@ -16,6 +17,10 @@ extern "C" {
 #include "driver_display.cpp"
 #include "driver_power.cpp"
 #include "driver_rtc.cpp"
+
+// USB pins
+#define USB_DP        (&PIN_PA12)
+#define USB_DM        (&PIN_PA11)
 
 // System initialization
 void init() {
