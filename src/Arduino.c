@@ -143,6 +143,7 @@ void analogWriteResolution(int8_t bits) {
 static volatile uint32_t ticks;
 volatile uint16_t int_ctr;
 
+// Uptime in milliseconds
 uint32_t millis() {
   uint32_t copy;
   cli();
@@ -151,15 +152,35 @@ uint32_t millis() {
   return copy;
 }
 
+// Uptime in microseconds (worthless hack)
+uint32_t micros() {  
+  return (millis() & 0x3FFFFF) * 1000;
+}
+
+// Reads devices unique ID
+// TODO: Verify if working!
+// id = 0: Low    32-bits of 96-bit uID
+// id = 1: Middle 32-bits of 96-bit uID
+// id = 2: High   32-bits of 96-bit uID
+uint32_t uinqueId(uint8_t id) {
+  if(id > 2) return 0;
+  return *((uint32_t*)(0x1FFF7A10L + (4L << id)));
+}
+
 // Soft loop, cpu speed dependent
 void delay_loop(uint32_t volatile n) {
   while(n--);  
 }
 
-// Delay
-void delay(uint32_t us) {
+// Delay milliseconds
+void delay(uint32_t ms) {
   uint32_t start = millis();
-  while((millis() - start) < us);
+  while((millis() - start) < ms);
+}
+
+// Delay microseconds (worthless hack)
+void delayMicroseconds(uint32_t us) {
+  delay((us + 999) / 1000);
 }
 
 __attribute__ ((interrupt ("IRQ")))

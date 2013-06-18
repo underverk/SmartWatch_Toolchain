@@ -6,6 +6,7 @@
 #include <stm32f2xx_gpio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <math.h>
 #include "driver_adc.h"
 
 // Pin configuration (platform specific)
@@ -121,31 +122,51 @@ typedef uint16_t word;
 typedef uint8_t  byte;
 
 // Arduino basic functions
-void     pinMode(const PinDef_t *pin, const PinCfg_t *cfg); // Set pin mode
-void     digitalWrite(const PinDef_t *pin, uint8_t value);  // Write digital output
-uint8_t  digitalRead(const PinDef_t *pin);                  // Read digital input
-uint16_t analogRead(const PinDef_t *pin);                   // Read analog input
-void     analogWrite(const PinDef_t *pin, uint16_t value);  // Write analog output
-void     delay(uint32_t);                                   // Millisecond delay
-uint32_t millis(void);                                      // Get system up-time (ms)
+void     pinMode(const PinDef_t *, const PinCfg_t *); // Set pin mode
+void     digitalWrite(const PinDef_t *, uint8_t);     // Write digital output
+uint8_t  digitalRead(const PinDef_t *);               // Read digital input
+uint16_t analogRead(const PinDef_t *);                // Read analog input
+void     analogWrite(const PinDef_t *, uint16_t);     // Write analog output
+void     delay(uint32_t);                             // Millisecond delay
+void     delayMicroseconds(uint32_t);                 // Microsecond delay
+uint32_t millis(void);                                // Get system up-time (ms)
+uint32_t micros(void);                                // Get system up-time (µs)
+// TODO: randomSeed()
+// TODO: random()
 
 // Other system wide functions not strictly part of the Arduino model...
-void delay_loop(uint32_t); // Delay by looping
-void initializePins(void); // Initializes all pins to their defaults
+void     delay_loop(uint32_t); // Delay by looping
+void     initializePins(void); // Initializes all pins to their defaults
+uint32_t uinqueId(uint8_t id); // Gets the devices unique identifier (id=0 to 2, each with its own 32-bit id)
+// TODO: randomSource(PRNG/TRNG) - To enable the analog True Random Number Generator for random()
 
 // Just good to have around, even though not strictly part of the Arduino model...
 #define htons(a) ({ __typeof__ (a) _a = (a); ((_a>>8) & 0xff) | ((_a<<8) & 0xff00); })
 #define ntohs(a) ({ __typeof__ (a) _a = (a); ((_a>>8) & 0xff) | ((_a<<8) & 0xff00); })
 #define htonl(a) ({ __typeof__ (a) _a = (a); ((_a>>24) & 0xffL) | ((_a>>8) & 0xff00L) | ((_a<<8) & 0xff0000L) | ((_a<<24) & 0xff000000L); })
 #define ntohl(a) ({ __typeof__ (a) _a = (a); ((_a>>24) & 0xffL) | ((_a>>8) & 0xff00L) | ((_a<<8) & 0xff0000L) | ((_a<<24) & 0xff000000L); })
+
+// Arduino-style data manipulation
+// TODO: should probably be forced inline functions instead (or some_object.max will fail for example)
+// TODO: test all of these!
 #define max(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
 #define min(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a < _b ? _a : _b; })
+//#define abs(a)   ({ __typeof__ (a) _a = (a); (_a < 0 ? -_a : _a); }) // TODO: this breaks stdlib.h
+#define constrain(a, b, c) (min(max(a, b), c)) 
+#define map(a, b, c, d, e) (((((a)-(b))*((e)-(d)))/((c)-(b)))+(d)) // TODO: should go via __typeof__
+#define lowByte(a) ((byte)((a) & 0xFF))
+#define highByte(a) ((byte)(((a) >> 8) & 0xFF))
+#define bitRead(a, b) ((a) & (1 << (b)))
+#define bitWrite(a, b, c) ((a) = ((c) ? ((a) | (1 << (b))) : ((a) & ~(1 << (b)))))
+#define bitSet(a, b) ((a) |= (1 << (b)))
+#define bitClear(a, b) ((a) &= ~(1 << (b)))
 
-// Arduino-style enable and disable interrupts (Atmel style cli/sei)
+
+// Atmel-style (because alot of Arduino code uses them!) and Arduino-style enable and disable interrupts 
 //
 // Looks kinda crazy but basically just defines:
-// cli() - disable interrupts
-// sei() - enable interrupts
+// cli() and noInterrupts() - disable interrupts
+// sei() and interrupts() - enable interrupts
 //
 // Also adds a counter for nesting - ie two calls to cli()
 // requires two calls to sei(), which is really good
@@ -158,8 +179,16 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void cli(void) {
   __ASM volatile ("cpsid i");
   int_ctr++;
 }
+__attribute__( ( always_inline ) ) __STATIC_INLINE void noInterrupts(void) {
+  __ASM volatile ("cpsid i");
+  int_ctr++;
+}
 // Nested interrupt disable
 __attribute__( ( always_inline ) ) __STATIC_INLINE void sei(void) {
+  __ASM volatile ("cpsid i");
+  if(!--int_ctr) {__ASM volatile ("cpsie i");}
+}
+__attribute__( ( always_inline ) ) __STATIC_INLINE void interrupts(void) {
   __ASM volatile ("cpsid i");
   if(!--int_ctr) {__ASM volatile ("cpsie i");}
 }
