@@ -4,7 +4,7 @@
 #ifndef _DRIVER_DISPLAY_H_
 #define _DRIVER_DISPLAY_H_
 #include <stdint.h>
-#include "pins.h"
+#include "Arduino.h"
 
 // OLED SPI
 #define OLED_SPI         SPI1

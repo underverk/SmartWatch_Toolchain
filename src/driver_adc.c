@@ -2,7 +2,7 @@
 // ADC driver
 
 #include <stm32f2xx_rcc.h>
-#include "pins.h"
+#include "Arduino.h"
 #include "driver_adc.h"
   
 void adc_init(void) {

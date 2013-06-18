@@ -4,7 +4,7 @@
 #include <stm32f2xx_gpio.h>
 #include <stm32f2xx_rcc.h>
 
-#include "pins.h"
+#include "Arduino.h"
 
 // Common pin modes
 //             NAME              MODE           SPEED             OUTPUT TYPE    PULL-UP/DOWN      ALTERNATE     SET STATE

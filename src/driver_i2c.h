@@ -3,7 +3,7 @@
 
 #ifndef _DRIVER_I2C_H_
 #define _DRIVER_I2C_H_
-#include "pins.h"
+#include "Arduino.h"
 
 /***
  EXAMPLE here subversion.assembla.com/svn/freertos/STM32F2xx_StdPeriph_Lib_V1.0.0/Project/STM32F2xx_StdPeriph_Examples/I2C/I2C_TwoBoards/DataExchangeDMA/
