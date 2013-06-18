@@ -30,8 +30,7 @@ static bool ex_en;
 
 
 static bool     wd_first;
-static uint16_t wd_mask;
-static uint16_t wd_time[9];
+static uint32_t wd_time[9];
 
 #define MAX_RETRY 10
 
@@ -57,6 +56,7 @@ static bool regs_write(bool ex) {
 
 // Initialize touch controller (aka read its version)
 bool touch_init(void) {
+  wd_first = true;
   // Reset touch controller
   digitalWrite(TOUCH_RESET, HIGH);
   delay(50);
@@ -79,7 +79,6 @@ bool touch_init(void) {
   if(ex_en) touch_mode_clear(TOUCH_MODE_CYPRESS); // Disable cypress mode
   touch_mode_set(TOUCH_MODE_POLLED_ONLY); // Disables interrupt
   touch_mode_clear(TOUCH_MODE_IRQ); // Clear interrupt flag
-  wd_first = true;
   return true;
 }
 
@@ -102,6 +101,29 @@ bool touch_mode_clear(TouchMode_e mode) {
 bool touch_read(bool *touch, uint8_t *x, uint8_t *y) {
   if(!regs_read(true)) return false;
 
+  // Tip from sony:
+  // Sensor may lock up, so we need to watchdog each individual sensor and
+  // re-init the controller if any of them stay "active" for too long.
+  {
+    uint32_t now = millis();
+    uint16_t mask = regs.mask = ntohs(regs.mask);
+    if(wd_first) {
+      wd_first = false;
+      for(uint8_t n = 0; n < 9; n++) wd_time[n] = now; // Reset timeouts
+    } else {
+      for(uint8_t n = 0; n < 9; n++) {
+        if(!(mask & 1)) wd_time[n] = now;    // Sensor inactive - reset timeout
+        else if(((uint32_t)now - wd_time[n]) > TOUCH_WATCHDOG_TIME) {
+          if(!touch_init()) return false;    // Sensor was active for too long
+          if(!regs_read(true)) return false; // Read again
+          break;
+        }
+        mask >>= 1; // Next sensor
+      }
+    }
+  }
+
+
   // Convert to little-endian
   for(uint8_t n = 0; n < 9; n++) {
     regs.data[n] = ntohs(regs.data[n]);
@@ -111,41 +133,10 @@ bool touch_read(bool *touch, uint8_t *x, uint8_t *y) {
     }
   }
 
-  // Tip from sony:
-  // Sensor may freeze, so we need to watchdog each individual sensor
-  {
-    regs.mask = ntohs(regs.mask);
-    if(!wd_first) {
-      // Get activity mask
-      uint16_t activity = wd_mask ^ regs.mask;
-      uint32_t now = millis();
-      for(uint8_t n = 0; n < 9; n++) {
-        // Sensor activity?
-        if(activity & 1) {
-          // Reset watchdog
-          wd_time[n] = now;
-        } else {
-          // No activity, check time since last activity
-          if(((uint32_t)now - wd_time[n]) > TOUCH_WATCHDOG_TIME) {
-            // Idle for too long, reset
-            touch_init();
-            return false; // TODO: should probably return last data and true
-          }
-        }
-        // Next in mask
-        activity >>= 1;
-      }
-    } else {
-      wd_first = false;
-      // Reset watchdog timers
-      uint32_t now = millis();
-      for(uint8_t n = 0; n < 9; n++) wd_time[n] = now;
-   }
-    wd_mask = regs.mask;
-  }
-
+  // Return some data
   *x = regs.x;
   *y = regs.y;
   *touch = regs.mask != 0;
+
   return true;
 }
