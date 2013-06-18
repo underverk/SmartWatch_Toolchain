@@ -1,4 +1,4 @@
-SmartWatch_Toolchain
+SmartWatch toolchain
 ====================
 
 Open source toolchain to compile code for the Sony SmartWatch the "Arduino" way.  
