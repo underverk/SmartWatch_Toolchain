@@ -6,6 +6,8 @@
 
 #include "Arduino.h"
 
+#define NO_CHANGE -1
+
 // Common pin modes
 //             NAME              MODE           SPEED             OUTPUT TYPE    PULL-UP/DOWN      ALTERNATE     SET STATE
 const PinCfg_t pincfg_in       = {GPIO_Mode_IN,  GPIO_Speed_50MHz, GPIO_OType_OD, GPIO_PuPd_NOPULL, 0,            NO_CHANGE};
@@ -102,6 +104,21 @@ void digitalWrite(const PinDef_t *pin, uint8_t value) {
 // Reads digital input
 uint8_t digitalRead(const PinDef_t *pin) {
   return GPIO_ReadInputDataBit(pin->port, pin->pin) ? HIGH : LOW;
+}
+
+// Reads analog input
+uint16_t analogRead(const PinDef_t *pin) {
+  if(pin == LIGHT_SENSOR) {
+    return adc_lightsensor();
+  } else if(pin == BATTERY_VOLTAGE) {
+    return adc_battery();
+  }
+  return 0;
+}
+
+// Writes analog output
+void analogWrite(const PinDef_t *pin, uint16_t value) {
+  // No such thing on this platform
 }
 
 static volatile uint32_t ticks;

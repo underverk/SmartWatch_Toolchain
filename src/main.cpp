@@ -18,6 +18,10 @@ extern "C" {
 #include "driver_power.cpp"
 #include "driver_rtc.cpp"
 
+// USB pins
+#define USB_DP        (&PIN_PA12)
+#define USB_DM        (&PIN_PA11)
+
 // System initialization
 void init() {
   // Tip from Sony:
