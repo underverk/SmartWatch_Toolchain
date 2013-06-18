@@ -15,7 +15,7 @@ You will need some tools:
 GNU Tools for ARM - https://launchpad.net/gcc-arm-embedded/+download  
 dfu-util (for downloading to device) - http://dfu-util.gnumonks.org/releases/  
 
-Windows users additionally need to download MinGW or some other GNU development environment.  
+Windows users additionally need to download and configure MinGW or some other GNU development environment.  
 MinGW provides a step-by-step quide here: http://www.mingw.org/wiki/Getting_Started  
 
 Then simply, from the root of this repo:  
