@@ -4,7 +4,7 @@
 #include "driver_display.hpp"
 #include <stdlib.h>
 
-uint8_t font[] = {
+static const uint8_t font[] = {
   0x00, 0x00, 0x00, 0x00, 0x00,   
 	0x3E, 0x5B, 0x4F, 0x5B, 0x3E, 	
 	0x3E, 0x6B, 0x4F, 0x6B, 0x3E, 	
@@ -731,6 +731,10 @@ void Arduino_OLED::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t
 
 uint16_t Arduino_OLED::Color565(uint8_t r, uint8_t g, uint8_t b) {
   return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+}
+
+void Arduino_OLED::drawSprite(uint8_t x, uint8_t y, uint8_t w, uint8_t h, void *buffer) {
+  oled_blit(x, y, w, h, buffer);
 }
 
 Arduino_OLED OLED;

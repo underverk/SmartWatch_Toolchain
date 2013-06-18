@@ -123,7 +123,6 @@ bool touch_read(bool *touch, uint8_t *x, uint8_t *y) {
     }
   }
 
-
   // Convert to little-endian
   for(uint8_t n = 0; n < 9; n++) {
     regs.data[n] = ntohs(regs.data[n]);

@@ -7,6 +7,9 @@
 #include <stm32f2xx_spi.h>
 #include <string.h>
 
+uint32_t stream_cr, repeat_cr;
+bool dma_wait;
+
 // Waits for DMA transfer to complete
 static void oled_wait_dma(void) {
   while(!DMA_GetFlagStatus(DMA2_Stream3, DMA_FLAG_TCIF3)) {
@@ -25,6 +28,7 @@ static void oled_wait_spi(void) {
 
 // Starts a DMA transfer to OLED
 static void oled_dma(uint8_t *data, uint32_t count) {
+  DMA2_Stream3->CR = stream_cr;
   DMA2_Stream3->NDTR = count;
   DMA2_Stream3->M0AR = (uint32_t)data;
   DMA_Cmd(DMA2_Stream3, ENABLE);
@@ -116,8 +120,9 @@ void oled_init(void) {
     ConfigDMA.DMA_FIFOThreshold = DMA_FIFOThreshold_1QuarterFull;
     ConfigDMA.DMA_MemoryBurst = DMA_MemoryBurst_Single;
     ConfigDMA.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
-
-    DMA_Init(DMA2_Stream3, &ConfigDMA);    
+    DMA_Init(DMA2_Stream3, &ConfigDMA);
+    stream_cr = DMA2_Stream3->CR;
+    repeat_cr = DMA2_Stream3->CR ^ (DMA_MemoryInc_Enable | DMA_MemoryDataSize_HalfWord);
   }
 
   // Cycle reset
@@ -203,12 +208,15 @@ void oled_push(uint16_t pixel, uint16_t count) {
   SPI_I2S_SendData(OLED_SPI, 0xC);
   oled_wait_spi();
   digitalWrite(OLED_A0, HIGH);
-  for(uint16_t n = 0; n < count; n++) {
-    SPI_I2S_SendData(OLED_SPI, pixel >> 8);
-    oled_wait_spi();
-    SPI_I2S_SendData(OLED_SPI, pixel & 255);
-    oled_wait_spi();
-  }
+  pixel = ntohs(pixel); // Convert to big-endian
+  DMA2_Stream3->CR = repeat_cr; // Have DMA repeat word over and over
+  DMA2_Stream3->M0AR = (uint32_t)&pixel;
+  DMA2_Stream3->NDTR = count * 2;
+  DMA_Cmd(DMA2_Stream3, ENABLE); // Begin transfer
+  SPI_I2S_DMACmd(OLED_SPI, SPI_I2S_DMAReq_Tx, ENABLE);
+  oled_wait_dma(); // Wait for transfer to finish
+  oled_wait_spi();
+  DMA2_Stream3->CR = stream_cr; // Restore streaming DMA
   digitalWrite(OLED_NCS, HIGH);
 }
 

@@ -67,6 +67,7 @@ class Arduino_OLED : public Arduino_GFX {
              drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color),
              fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
     uint16_t Color565(uint8_t r, uint8_t g, uint8_t b);
+    void drawSprite(uint8_t x, uint8_t y, uint8_t w, uint8_t h, void *buffer);
 
   private:
 };
