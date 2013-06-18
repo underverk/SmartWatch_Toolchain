@@ -3,6 +3,9 @@
 
 #ifndef _DRIVER_I2C_H_
 #define _DRIVER_I2C_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "Arduino.h"
 
 /***
@@ -22,4 +25,7 @@
 void i2c_init(void);
 uint8_t i2c_write(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes);
 uint8_t i2c_read(uint8_t device, uint8_t reg, void *buffer, uint32_t bytes);
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -3,6 +3,9 @@
 
 #ifndef _DRIVER_DISPLAY_H_
 #define _DRIVER_DISPLAY_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <stdint.h>
 #include "Arduino.h"
 
@@ -37,4 +40,7 @@ void oled_push(uint16_t pixel, uint16_t count);
 // Blits a sprite to screen, buffer is w*h uint16_t's
 void oled_blit(uint8_t x, uint8_t y, uint8_t w, uint8_t h, void *buffer);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -1,9 +1,10 @@
 // Davey Taylor, Arduino Verkstad AB
 // Platform configuration and Arduino internals
 
+#include <stdlib.h>
+#include <stdarg.h>
 #include <stm32f2xx_gpio.h>
 #include <stm32f2xx_rcc.h>
-
 #include "Arduino.h"
 
 #define NO_CHANGE -1
@@ -66,6 +67,15 @@ const PinDef_t PIN_PC10 = {GPIOC, GPIO_Pin_10, GPIO_PinSource10, RCC_AHB1Periph_
 const PinDef_t PIN_PC11 = {GPIOC, GPIO_Pin_11, GPIO_PinSource11, RCC_AHB1Periph_GPIOC, INPUT_PULLDOWN}; // SPI3_MISO_Pin
 const PinDef_t PIN_PC12 = {GPIOC, GPIO_Pin_12, GPIO_PinSource12, RCC_AHB1Periph_GPIOC, OUTPUT_LOW};     // SPI3_MOSI_Pin
 const PinDef_t PIN_PC13 = {GPIOC, GPIO_Pin_13, GPIO_PinSource13, RCC_AHB1Periph_GPIOC, INPUT};          // HOST_WAKE_UP_Pin
+
+static volatile uint32_t ticks; // System tick count
+volatile uint16_t int_ctr;      // Interrupt nesting count
+
+// The Arduino system tick
+__attribute__ ((interrupt ("IRQ")))
+void SysTick_Handler(void) {
+  ticks++;
+}
 
 // Changes the "mode"/configuration of a pin
 void pinMode(const PinDef_t *pin, const PinCfg_t *cfg) {
@@ -140,9 +150,6 @@ void analogWriteResolution(int8_t bits) {
   // Dummy
 }
 
-static volatile uint32_t ticks;
-volatile uint16_t int_ctr;
-
 // Uptime in milliseconds
 uint32_t millis() {
   uint32_t copy;
@@ -183,8 +190,29 @@ void delayMicroseconds(uint32_t us) {
   delay((us + 999) / 1000);
 }
 
-__attribute__ ((interrupt ("IRQ")))
-void SysTick_Handler(void) {
-  ticks++;
+// Seeds the random number generator
+void randomSeed(unsigned int seed) {
+  if(seed != 0) srand(seed); // should be srandom when moved to C++
 }
 
+// Return random number between 0 and howbig
+long random(long howbig) {
+  if(howbig == 0) return 0;
+  return rand() % howbig; // should be random when moved to C++
+}
+
+// TODO: We're in C-mode here, so I had to rename this with the Range suffix
+// Return random number between howsmall and howbig
+long randomRange(long howsmall, long howbig) {
+  if (howsmall >= howbig) return howsmall;
+  long diff = howbig - howsmall;
+  return random(diff) + howsmall;
+}
+
+// Maps a value from range:in to range:out
+long map(long x, long in_min, long in_max, long out_min, long out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+// TODO: We're in C-mode here, so I had to remove the makeWord(int)
+unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }

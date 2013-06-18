@@ -3,6 +3,9 @@
 
 #ifndef _ARDUINO_H_
 #define _ARDUINO_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <stm32f2xx_gpio.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -69,44 +72,11 @@ extern const PinCfg_t pincfg_af_mco1;
 // given that most pins should only be used by their corresponding drivers.
 // If a user knows what he/she's doing, there will be no problem slapping
 // an ampersand prefix onto these when you want to fiddle with them.
-extern const PinDef_t PIN_PA0;
-extern const PinDef_t PIN_PA1;
-extern const PinDef_t PIN_PA2;
-extern const PinDef_t PIN_PA4;
-extern const PinDef_t PIN_PA5;
-extern const PinDef_t PIN_PA7;
-extern const PinDef_t PIN_PA8;
-extern const PinDef_t PIN_PA9;
-extern const PinDef_t PIN_PA11;
-extern const PinDef_t PIN_PA12;
-extern const PinDef_t PIN_PA15;
-extern const PinDef_t PIN_PB0;
-extern const PinDef_t PIN_PB1;
-extern const PinDef_t PIN_PB2;
-extern const PinDef_t PIN_PB3;
-extern const PinDef_t PIN_PB4;
-extern const PinDef_t PIN_PB5;
-extern const PinDef_t PIN_PB6;
-extern const PinDef_t PIN_PB7;
-extern const PinDef_t PIN_PB8;
-extern const PinDef_t PIN_PB9;
-extern const PinDef_t PIN_PB10;
-extern const PinDef_t PIN_PB11;
-extern const PinDef_t PIN_PB12;
-extern const PinDef_t PIN_PB13;
-extern const PinDef_t PIN_PB14;
-extern const PinDef_t PIN_PB15; 
-extern const PinDef_t PIN_PC0;
-extern const PinDef_t PIN_PC1;
-extern const PinDef_t PIN_PC3;
-extern const PinDef_t PIN_PC4;
-extern const PinDef_t PIN_PC6;
-extern const PinDef_t PIN_PC7;
-extern const PinDef_t PIN_PC9;
-extern const PinDef_t PIN_PC10;
-extern const PinDef_t PIN_PC11;
-extern const PinDef_t PIN_PC12;
-extern const PinDef_t PIN_PC13;
+extern const PinDef_t PIN_PA0,  PIN_PA1,  PIN_PA2,  PIN_PA4,  PIN_PA5,  PIN_PA7,  PIN_PA8,  PIN_PA9,
+                      PIN_PA11, PIN_PA12, PIN_PA15, PIN_PB0,  PIN_PB1,  PIN_PB2,  PIN_PB3,  PIN_PB4,
+                      PIN_PB5,  PIN_PB6,  PIN_PB7,  PIN_PB8,  PIN_PB9,  PIN_PB10, PIN_PB11, PIN_PB12,
+                      PIN_PB13, PIN_PB14, PIN_PB15, PIN_PC0,  PIN_PC1,  PIN_PC3,  PIN_PC4,  PIN_PC6,  
+                      PIN_PC7,  PIN_PC9,  PIN_PC10, PIN_PC11, PIN_PC12, PIN_PC13;
 
 // Arduino-style pin names
 #define BUZZER          (&PIN_PB8 )
@@ -131,8 +101,12 @@ void     delay(uint32_t);                             // Millisecond delay
 void     delayMicroseconds(uint32_t);                 // Microsecond delay
 uint32_t millis(void);                                // Get system up-time (ms)
 uint32_t micros(void);                                // Get system up-time (µs)
-// TODO: randomSeed()
-// TODO: random()
+void     randomSeed(unsigned int seed);               // Seed PRNG
+long     random(long howbig);                         // Get random number
+long     randomRange(long howsmall, long howbig);     // Get random number
+long     map(long x, long in_min, long in_max, long out_min, long out_max);
+
+
 
 // Other system wide functions not strictly part of the Arduino model...
 void     delay_loop(uint32_t); // Delay by looping
@@ -153,16 +127,16 @@ uint32_t uinqueId(uint8_t id); // Gets the devices unique identifier (id=0 to 2,
 #define min(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a < _b ? _a : _b; })
 //#define abs(a)   ({ __typeof__ (a) _a = (a); (_a < 0 ? -_a : _a); }) // TODO: this breaks stdlib.h
 #define constrain(a, b, c) (min(max(a, b), c)) 
-#define map(a, b, c, d, e) (((((a)-(b))*((e)-(d)))/((c)-(b)))+(d)) // TODO: should go via __typeof__
 #define lowByte(a) ((byte)((a) & 0xFF))
 #define highByte(a) ((byte)(((a) >> 8) & 0xFF))
 #define bitRead(a, b) ((a) & (1 << (b)))
 #define bitWrite(a, b, c) ((a) = ((c) ? ((a) | (1 << (b))) : ((a) & ~(1 << (b)))))
 #define bitSet(a, b) ((a) |= (1 << (b)))
 #define bitClear(a, b) ((a) &= ~(1 << (b)))
+#define bit(a) (1 << (a))
 
 
-// Atmel-style (because alot of Arduino code uses them!) and Arduino-style enable and disable interrupts 
+// Arduino-style and Atmel-style (because alot of Arduino code uses them!) enable and disable interrupts 
 //
 // Looks kinda crazy but basically just defines:
 // cli() and noInterrupts() - disable interrupts
@@ -192,5 +166,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void interrupts(void) {
   __ASM volatile ("cpsid i");
   if(!--int_ctr) {__ASM volatile ("cpsie i");}
 }
-
+#ifdef __cplusplus
+}
+#endif
 #endif

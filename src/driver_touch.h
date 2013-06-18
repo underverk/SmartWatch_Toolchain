@@ -2,6 +2,9 @@
 // Touch driver
 #ifndef _DRIVER_TOUCH_H_
 #define _DRIVER_TOUCH_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "Arduino.h"
 
@@ -22,4 +25,7 @@ bool touch_mode_set(TouchMode_e mode);
 bool touch_mode_clear(TouchMode_e mode);
 bool touch_read(bool *touch, uint8_t *x, uint8_t *y);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
