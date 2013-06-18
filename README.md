@@ -15,8 +15,11 @@ You will need some tools:
 GNU Tools for ARM - https://launchpad.net/gcc-arm-embedded/+download  
 dfu-util (for downloading to device) - http://dfu-util.gnumonks.org/releases/  
 
-Windows users additionally need to download and configure MinGW or some other GNU development environment.  
-MinGW provides a step-by-step quide here: http://www.mingw.org/wiki/Getting_Started  
+Windows users additionally need to:
+* Download and configure MinGW or some other GNU development environment.  
+  MinGW provides a step-by-step quide here: http://www.mingw.org/wiki/Getting_Started
+* Manually update the driver for the device (after connecting).  
+  See `driver_windows.zip` for the `Sony SmartWatch DFU driver` for Windows.
 
 Then simply, from the root of this repo:  
 * `> make`  will build bin/firmware.bin  
