@@ -8,8 +8,7 @@ Download the Sony SmartWatch edition of the Arduino IDE to compile and run sketc
 link-is-coming-don't-panic
 
 
-To build from the command line:
--------------------
+### To build from the command line:
 
 GNU Tools for ARM: https://launchpad.net/gcc-arm-embedded/+download  
 dfu-util (for downloading to device): http://dfu-util.gnumonks.org/releases/  
