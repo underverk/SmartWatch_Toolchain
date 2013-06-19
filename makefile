@@ -29,7 +29,7 @@ OBJDIR = $(OBJDIRBASE)
 TARGET = $(OBJDIR)/firmware
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(SRCDIR)/Arduino.c \
+SRC = $(SRCDIR)/system.c \
       $(SRCDIR)/driver_display.c \
       $(SRCDIR)/driver_i2c.c \
       $(SRCDIR)/driver_power.c \
@@ -75,7 +75,7 @@ LIBDIR     = libraries
 SRCDIR = src
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = $(SRCDIR)/main.cpp
+CPPSRC = $(SRCDIR)/Arduino/main.cpp
 
 # List Assembler source files here.
 #     Make them always end in a capital .S.  Files ending in a lowercase .s
@@ -325,6 +325,7 @@ clean_list :
 # Create object files directory
 $(shell mkdir -p $(OBJDIR)/$(SRCDIR) 2>/dev/null)
 $(shell mkdir -p $(OBJDIR)/$(SRCDIR)/libstm32f2 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/Arduino 2>/dev/null)
 
 # Listing of phony targets.
 .PHONY : all begin finish end sizebefore sizeafter build elf hex eep lss sym clean clean_list program touchmain happen

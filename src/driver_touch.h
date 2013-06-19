@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#include "Arduino.h"
+#include "system.h"
 
 typedef enum {
   TOUCH_MODE_NONE          = 0x00,

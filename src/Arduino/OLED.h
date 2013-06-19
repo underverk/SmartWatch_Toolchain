@@ -1,9 +1,9 @@
 // Davey Taylor, Arduino Verkstad AB
 // OLED & LightSensor Arduino Objects
 
-#ifndef _DRIVER_DISPLAY_HPP_
-#define _DRIVER_DISPLAY_HPP_
-#include "driver_display.h"
+#ifndef _OLED_H_
+#define _OLED_H_
+#include "../driver_display.h"
 
 class Arduino_GFX {
   public:

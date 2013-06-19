@@ -1,7 +1,7 @@
 // Davey Taylor, Arduino Verkstad AB
 // Accelerometer driver
 
-#include "Arduino.h"
+#include "system.h"
 
 #define ACCEL_ADDRESS 0x30
 

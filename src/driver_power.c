@@ -4,7 +4,7 @@
 #include <stm32f2xx_rcc.h>
 #include <stm32f2xx_pwr.h>
 #include <stm32f2xx_flash.h>
-#include "Arduino.h"
+#include "system.h"
 #include "driver_power.h"
 #include "driver_i2c.h"
 #include "pmu_defines.h"
@@ -18,7 +18,7 @@ const ClockDef_t sysclock_120m = {120000000, MHZ, 240, 2, 5, 7, RCC_SYSCLK_Div1,
 
 void cpu_reclock(const ClockDef_t *clk) {
   // Disable interrupts
-  cli();
+  di();
   
   // Switch to HSE (as changing PLL while using it is asking for trouble)
   RCC_SYSCLKConfig(RCC_SYSCLKSource_HSE);
@@ -52,7 +52,7 @@ void cpu_reclock(const ClockDef_t *clk) {
   SystemCoreClockUpdate();
   SysTick_Config(SystemCoreClock / 1000);
 
-  sei();
+  ei();
 }
 
 void cpu_init(void) {

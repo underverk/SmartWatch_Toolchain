@@ -37,39 +37,39 @@ static void oled_dma(uint8_t *data, uint32_t count) {
 
 // Sends a command to OLED
 static void oled_cmd(uint8_t cmd, uint32_t count, uint8_t *data) {
-  digitalWrite(OLED_NCS, LOW);
-  digitalWrite(OLED_A0, LOW);
+  pin_clear(OLED_NCS);
+  pin_clear(OLED_A0);
   SPI_I2S_SendData(OLED_SPI, cmd);
   oled_wait_spi();
-  digitalWrite(OLED_A0, HIGH);
+  pin_set(OLED_A0);
   if(count) {
     oled_dma(data, count);
     oled_wait_dma();
     oled_wait_spi();
   }
-  digitalWrite(OLED_NCS, HIGH);
+  pin_set(OLED_NCS);
 }
 
 // Ramps up the 1.8V (directly on = unstable behaviour)
 static void oled_vramp(void) {
   const uint32_t count = 2000; // Sony says minimum 500
   for(uint32_t outer = 0; outer < count; outer++) {
-    digitalWrite(OLED_VEN, HIGH);
+    pin_set(OLED_VEN);
     for(uint32_t inner = 0; inner < count; inner++) {
-      if(inner == outer) digitalWrite(OLED_VEN, LOW);
+      if(inner == outer) pin_clear(OLED_VEN);
     }
   }
-  digitalWrite(OLED_VEN, HIGH);
+  pin_set(OLED_VEN);
 }
 
 // Initializes and turns on screen
 void oled_init(void) {
 
   // Set initial pin states
-  digitalWrite(OLED_VEN, LOW);
-  digitalWrite(ENABLE_2V8, HIGH);
-  digitalWrite(OLED_RESET, HIGH);
-  digitalWrite(OLED_A0, HIGH);
+  pin_clear(OLED_VEN);
+  pin_set(ENABLE_2V8);
+  pin_set(OLED_RESET);
+  pin_set(OLED_A0);
   
   // SPI config
   {
@@ -126,9 +126,9 @@ void oled_init(void) {
   }
 
   // Cycle reset
-  digitalWrite(OLED_RESET, LOW);
+  pin_clear(OLED_RESET);
   delay(10);
-  digitalWrite(OLED_RESET, HIGH);
+  pin_set(OLED_RESET);
   delay(10);
 
   // Do software reset
@@ -184,9 +184,9 @@ void oled_init(void) {
 // Shut down display completely (lowest power mode)
 void oled_deinit(void) {
   oled_power(0);
-  digitalWrite(OLED_VEN, LOW);
-  digitalWrite(ENABLE_2V8, LOW);
-  digitalWrite(OLED_RESET, LOW);
+  pin_clear(OLED_VEN);
+  pin_clear(ENABLE_2V8);
+  pin_clear(OLED_RESET);
 }
 
 // Sets the memory window
@@ -203,11 +203,11 @@ void oled_window(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
 // Pushes n pixels of specific color (to the window)
 void oled_push(uint16_t pixel, uint16_t count) {
-  digitalWrite(OLED_NCS, LOW);
-  digitalWrite(OLED_A0, LOW);
+  pin_clear(OLED_NCS);
+  pin_clear(OLED_A0);
   SPI_I2S_SendData(OLED_SPI, 0xC);
   oled_wait_spi();
-  digitalWrite(OLED_A0, HIGH);
+  pin_set(OLED_A0);
   pixel = ntohs(pixel); // Convert to big-endian
   DMA2_Stream3->CR = repeat_cr; // Have DMA repeat word over and over
   DMA2_Stream3->M0AR = (uint32_t)&pixel;
@@ -217,25 +217,25 @@ void oled_push(uint16_t pixel, uint16_t count) {
   oled_wait_dma(); // Wait for transfer to finish
   oled_wait_spi();
   DMA2_Stream3->CR = stream_cr; // Restore streaming DMA
-  digitalWrite(OLED_NCS, HIGH);
+  pin_set(OLED_NCS);
 }
 
 // Blit a sprite to screen
 void oled_blit(uint8_t x, uint8_t y, uint8_t w, uint8_t h, void *buffer) {
   oled_window(x, y, x + w - 1, y + h - 1);
 
-  digitalWrite(OLED_NCS, LOW);
+  pin_clear(OLED_NCS);
 
-  digitalWrite(OLED_A0, LOW);
+  pin_clear(OLED_A0);
   SPI_I2S_SendData(OLED_SPI, 0xC);
   oled_wait_spi();
-  digitalWrite(OLED_A0, HIGH);
+  pin_set(OLED_A0);
 
   oled_dma((uint8_t*)buffer, (w * h) << 1);
   oled_wait_dma();
   oled_wait_spi();
 
-  digitalWrite(OLED_NCS, HIGH);
+  pin_set(OLED_NCS);
 }
 
 // Changes OLED power (brightness)

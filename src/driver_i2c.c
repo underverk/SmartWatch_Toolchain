@@ -36,10 +36,10 @@ void i2c_init(void) {
   uint8_t timeout; \
 
 #define timeout(TIME, CONDITION) \
-  timer = millis(); \
+  timer = ticks(); \
   timeout = 0; \
   while(CONDITION) { \
-    if(((uint32_t)(millis() - timer)) >= (TIME)) { \
+    if(((uint32_t)(ticks() - timer)) >= (TIME)) { \
       timeout = 1; \
       break; \
     } \

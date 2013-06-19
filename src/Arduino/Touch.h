@@ -1,10 +1,10 @@
 // Davey Taylor, Arduino Verkstad AB
 // Touch Arduino object
-#ifndef _DRIVER_TOUCH_HPP_
-#define _DRIVER_TOUCH_HPP_
+#ifndef _TOUCH_H_
+#define _TOUCH_H_
 #include <stdint.h>
 #include <stdbool.h>
-#include "driver_touch.h"
+#include "../driver_touch.h"
 
 class Arduino_Touch {
   public:

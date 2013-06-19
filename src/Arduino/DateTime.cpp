@@ -1,7 +1,7 @@
 // Davey Taylor, Arduino Verkstad AB
 // RTC Arduino Object
-#include "driver_rtc.hpp"
-#include "driver_rtc.h"
+#include "DateTime.h"
+#include "../driver_rtc.h"
 
 void Arduino_DateTime::update(void) {
   rtc_read();
@@ -24,6 +24,5 @@ void Arduino_DateTime::setDateTime(byte year, byte month, byte date, byte day, b
   rtc_second = second;
   rtc_write();
 }
-
 
 Arduino_DateTime DateTime;

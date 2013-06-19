@@ -2,7 +2,7 @@
 // ADC driver
 
 #include <stm32f2xx_rcc.h>
-#include "Arduino.h"
+#include "system.h"
 #include "driver_adc.h"
   
 void adc_init(void) {
@@ -33,19 +33,19 @@ void adc_init(void) {
 }
 
 uint16_t adc_battery(void) {
-  digitalWrite(ADC_BATTERY_ENABLE, HIGH);
+  pin_set(ADC_BATTERY_ENABLE);
   ADC_SoftwareStartConv(ADC1);
   while(ADC_GetSoftwareStartConvStatus(ADC1));
   return ADC_GetConversionValue(ADC1);
-  digitalWrite(ADC_BATTERY_ENABLE, LOW);
+  pin_clear(ADC_BATTERY_ENABLE);
 }
 
 uint16_t adc_lightsensor(void) {
-  digitalWrite(ADC_LIGHTSENSOR_ENABLE, HIGH);
+  pin_set(ADC_LIGHTSENSOR_ENABLE);
   ADC_SoftwareStartConv(ADC2);
   while(ADC_GetSoftwareStartConvStatus(ADC2));
   return ADC_GetConversionValue(ADC2);
-  digitalWrite(ADC_LIGHTSENSOR_ENABLE, LOW);
+  pin_clear(ADC_LIGHTSENSOR_ENABLE);
 }
 
 void adc_deinit(void) {

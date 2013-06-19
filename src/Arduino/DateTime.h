@@ -1,7 +1,7 @@
 // Davey Taylor, Arduino Verkstad AB
 // RTC Arduino Object
-#ifndef _DRIVER_RTC_HPP_
-#define _DRIVER_RTC_HPP_
+#ifndef _DATETIME_H_
+#define _DATETIME_H_
 
 class Arduino_DateTime {
   public:

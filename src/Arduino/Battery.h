@@ -1,19 +1,11 @@
 // Davey Taylor, Arduino Verkstad AB
 // Power Management Arduino Objects
 
-#ifndef _DRIVER_POWER_HPP_
-#define _DRIVER_POWER_HPP_
-#include "Arduino.h"
-#include "driver_power.h"
-#include "driver_adc.h"
-
-class Arduino_CPU {
-  public:
-    // Change CPU speed
-    inline void setSpeed(const ClockDef_t *clk) { cpu_reclock(clk); };
-};
-
-extern Arduino_CPU CPU;
+#ifndef _BATTERY_H_
+#define _BATTERY_H_
+#include "../Arduino.h"
+#include "../driver_power.h"
+#include "../driver_adc.h"
 
 class Arduino_Battery {
   public:

@@ -5,7 +5,7 @@
 //       But at least we have a starting point, yeah?
 
 #include <stm32f2xx_rtc.h>
-#include "Arduino.h"
+#include "system.h"
 #include "driver_rtc.h"
 
 static bool rtc_ok;

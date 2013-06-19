@@ -1,6 +1,6 @@
 // Davey Taylor, Arduino Verkstad AB
 // Touch Arduino object
 
-#include "driver_touch.hpp"
+#include "Touch.h"
 
 Arduino_Touch Touch;

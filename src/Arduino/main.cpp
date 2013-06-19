@@ -1,32 +1,24 @@
 // Davey Taylor, Arduino Verkstad AB
-// Sony SmartWatch startup procedure
-
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
+// Sony SmartWatch startup procedure for Arduino-type build (make sketch)
 
 // Include our drivers and libs
-#include "Arduino.h"
-#include "driver_i2c.h"
-#include "driver_adc.h"
-#include "driver_rtc.h"
-#include "driver_display.h"
-#include "driver_power.h"
-#include "driver_touch.h"
+#include <stdarg.h>
+#include "../Arduino.h"
+#include "../driver_i2c.h"
+#include "../driver_adc.h"
+#include "../driver_rtc.h"
+#include "../driver_display.h"
+#include "../driver_power.h"
+#include "../driver_touch.h"
  
 // Include our Arduino style C++ objects
 // This should eventually be moved to the makefile
-#include "driver_display.cpp"
-#include "driver_power.cpp"
-#include "driver_rtc.cpp"
-#include "driver_touch.cpp"
-#include "driver_accel.cpp"
-
-// USB pins
-#define USB_DP        (&PIN_PA12)
-#define USB_DM        (&PIN_PA11)
+#include "OLED.cpp"
+#include "Battery.cpp"
+#include "CPU.cpp"
+#include "DateTime.cpp"
+#include "Touch.cpp"
+#include "Movement.cpp"
 
 /*
 // This can be called from anywhere and is good to use as a test
@@ -44,34 +36,6 @@ void buzztest(void) {
 
 static const char uHex[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
-// System initialization
-void init() {
-  // Initializes all pins to their default settings (see pins.c)
-  initializePins();
-
-  // Initialize system clocks
-  cpu_init();
-
-  // Start system tick (used for timing, delay, etc)
-  SystemCoreClockUpdate();
-  SysTick_Config(SystemCoreClock / 1000);
-    
-  // Tip from Sony:
-  // Prevents hard-faults when booting from USB
-  delay(50);
-  
-  // Tip from Sony:
-  // Not quite sure, but I believe a pullup on DP enables charging of a device even if
-  // it does not do USB any communication by removing the pre-enum current limit
-  if(digitalRead(USB_CONNECTED)) pinMode(USB_DP, INPUT_PULLUP);
-  
-  // Initialize ADC
-  adc_init();
-
-  // Initialize I2C
-  i2c_init();
-}
-
 // Found in sketch (.ino file)
 void setup();
 void loop();
@@ -79,7 +43,7 @@ void loop();
 int main(void) {
 
   // System initialization
-  init();
+  sys_init();
   
   // User initialization
   setup();

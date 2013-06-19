@@ -1,7 +1,7 @@
 // Davey Taylor, Arduino Verkstad AB
 // OLED & LightSensor Arduino Objects
 
-#include "driver_display.hpp"
+#include "OLED.h"
 #include <stdlib.h>
 
 static const uint8_t font[] = {

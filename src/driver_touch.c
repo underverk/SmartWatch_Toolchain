@@ -2,8 +2,8 @@
 // Touch driver
 
 #include <stm32f2xx_rtc.h>
+#include "system.h"
 #include "driver_i2c.h"
-#include "Arduino.h"
 #include "touch_defines.h"
 #include "driver_touch.h"
 
@@ -58,9 +58,9 @@ static bool regs_write(bool ex) {
 bool touch_init(void) {
   wd_first = true;
   // Reset touch controller
-  digitalWrite(TOUCH_RESET, HIGH);
+  pin_set(TOUCH_RESET);
   delay(50);
-  digitalWrite(TOUCH_RESET, LOW);
+  pin_clear(TOUCH_RESET);
   delay(50);
   // Read device
   if(!regs_read(false)) return false;
@@ -111,7 +111,7 @@ bool touch_read(bool *touch, uint8_t *x, uint8_t *y) {
   // Sensor may lock up, so we need to watchdog each individual sensor and
   // re-init the controller if any of them stay "active" for too long.
   {
-    uint32_t now = millis();
+    uint32_t now = ticks();
     uint16_t mask = regs.mask = ntohs(regs.mask);
     if(wd_first) {
       wd_first = false;
