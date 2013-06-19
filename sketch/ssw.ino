@@ -129,7 +129,7 @@ void setup() {
   OLED.print((char*)"PMU enable... ");
   if(Battery.enableCharging()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
   OLED.print((char*)"Touch init... ");
-  if(touch_init()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
+  if(Touch.begin()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
 
   DateTime.begin();
   if(!DateTime.isRunning()) {
@@ -174,12 +174,10 @@ void loop() {
 
   // Touch information
   OLED.setCursor(0, 88);
-  uint8_t x, y;
-  bool t;
   OLED.print("Touch: ");
-  if(touch_read(&t, &x, &y)) {
-    if(t) {
-      sprintf(text, "%u, %u    ", 127 - x, 127 - y);
+  if(Touch.read()) {
+    if(Touch.isTouched()) {
+      sprintf(text, "%u, %u    ", Touch.getX(), Touch.getY());
     } else {
       sprintf(text, "NO      ");
     }

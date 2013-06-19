@@ -17,6 +17,7 @@ extern "C" {
 #include "driver_display.cpp"
 #include "driver_power.cpp"
 #include "driver_rtc.cpp"
+#include "driver_touch.cpp"
 
 // USB pins
 #define USB_DP        (&PIN_PA12)

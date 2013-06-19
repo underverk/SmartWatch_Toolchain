@@ -133,8 +133,8 @@ bool touch_read(bool *touch, uint8_t *x, uint8_t *y) {
   }
 
   // Return some data
-  *x = regs.x;
-  *y = regs.y;
+  *x = 127 - regs.x;
+  *y = 127 - regs.y;
   *touch = regs.mask != 0;
 
   return true;
