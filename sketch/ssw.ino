@@ -175,6 +175,7 @@ void loop() {
   // Touch information
   OLED.setCursor(0, 88);
   OLED.print("Touch: ");
+ 
   if(Touch.read()) {
     if(Touch.isTouched()) {
       sprintf(text, "%u, %u    ", Touch.getX(), Touch.getY());
