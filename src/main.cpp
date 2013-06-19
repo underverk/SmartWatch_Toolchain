@@ -24,39 +24,39 @@ extern "C" {
 #define USB_DP        (&PIN_PA12)
 #define USB_DM        (&PIN_PA11)
 
+extern "C" {
+void buztest(void) {
+  pinMode(BUZZER, BUZZER->cfg);
+  digitalWrite(BUZZER, HIGH);  
+}
+}
+
 // System initialization
 void init() {
-  // Tip from Sony:
-  // Prevents hard-faults when booting from USB
-  delay_loop(200000);
-  
   // Initializes all pins to their default settings (see pins.c)
   initializePins();
+
+  // Initialize system clocks
+  cpu_init();
+
+  // Start system tick (used for timing, delay, etc)
+  SystemCoreClockUpdate();
+  SysTick_Config(SystemCoreClock / 1000);
+    
+  // Tip from Sony:
+  // Prevents hard-faults when booting from USB
+  delay(50);
   
   // Tip from Sony:
   // Not quite sure, but I believe a pullup on DP enables charging of a device even if
   // it does not do USB any communication by removing the pre-enum current limit
   if(digitalRead(USB_CONNECTED)) pinMode(USB_DP, INPUT_PULLUP);
   
-  // Initialize system clocks
-  cpu_init();
-
-  // Disable interrupts until we are done setting everything up
-  cli();
-
-  // Start system tick (used for timing, delay, etc)
-  SystemCoreClockUpdate();
-  SysTick_Config(SystemCoreClock / 1000);
-  
   // Initialize ADC
   adc_init();
 
-  // Enable interrupts
-  sei();
-
   // Initialize I2C
   i2c_init();
-
 }
 
 // Found in sketch (.ino file)

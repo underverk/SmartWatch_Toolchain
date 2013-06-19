@@ -89,6 +89,7 @@ LoopCopyDataInit:
   bcc  CopyDataInit
   ldr  r2, =_sbss
   b  LoopFillZerobss
+
 /* Zero fill the bss segment. */  
 FillZerobss:
   movs  r3, #0

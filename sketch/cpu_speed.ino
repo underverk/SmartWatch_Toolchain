@@ -1,7 +1,42 @@
 #include <stdio.h>
 uint32_t time;
 
+// Performs tidy shutdown if user presses button
+void checkShutdown() {
+  // User requests shutdown?
+  if(digitalRead(BUTTON)) {
+    // Turn off screen
+    OLED.shutdown();
+    // Buzz to indicate shutdown
+    digitalWrite(BUZZER, HIGH);
+    delay(250);
+    digitalWrite(BUZZER, LOW);
+    // Don't turn off until button is released
+    while(digitalRead(BUTTON));
+    // Turn off power
+    digitalWrite(POWER, LOW);
+    // Device won't turn off if USB powered
+    delay(500);
+    // So, wait for another button press
+    while(!digitalRead(BUTTON));
+    // Power up again
+    digitalWrite(POWER, HIGH);
+    // Run setup again
+    setup();
+    // Reboot
+    ((void(*)())(((uint32_t*)SCB->VTOR)[1]))();
+    return;
+  }
+}
+
 void setup() {
+  // Buzz to indicate start
+  digitalWrite(BUZZER, HIGH);
+  delay(250);
+  digitalWrite(BUZZER, LOW);
+  // Don't start until button is released
+  while(digitalRead(BUTTON));
+
   OLED.begin();
 
   OLED.fillScreen(0x5555);
@@ -48,7 +83,5 @@ void loop() {
   
   delay(1000);
   
-  if(digitalRead(BUTTON)) {
-   digitalWrite(POWER, LOW);
-  }
+  checkShutdown();
 }

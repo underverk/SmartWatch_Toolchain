@@ -3,6 +3,7 @@
 // This example does not work very well
 // TODO: investigate problems with the touch driver, when polling too often?
 
+// Performs tidy shutdown if user presses button
 void checkShutdown() {
   // User requests shutdown?
   if(digitalRead(BUTTON)) {
@@ -24,6 +25,8 @@ void checkShutdown() {
     digitalWrite(POWER, HIGH);
     // Run setup again
     setup();
+    // Reboot
+    ((void(*)())(((uint32_t*)SCB->VTOR)[1]))();
     return;
   }
 }

@@ -176,7 +176,7 @@ uint32_t uinqueId(uint8_t id) {
 
 // Soft loop, cpu speed dependent
 void delay_loop(uint32_t volatile n) {
-  while(n--);  
+  while(n--);
 }
 
 // Delay milliseconds
