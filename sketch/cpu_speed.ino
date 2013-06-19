@@ -1,6 +1,3 @@
-#include <stdio.h>
-uint32_t time;
-
 void setup() {
   // Run standard startup procedure
   standardStartup();
@@ -9,9 +6,7 @@ void setup() {
   OLED.begin();
   OLED.fillScreen(0x5555);
   OLED.setTextColor(0xFFFF);
-  OLED.setTextSize(1);
-  
-  time = millis();
+  OLED.setTextSize(1);  
 }
 
 uint8_t state = 0;

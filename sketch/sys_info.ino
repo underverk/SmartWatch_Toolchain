@@ -1,8 +1,91 @@
-#include <stdio.h>
+// Define some graphics, see contents later in file
+extern const word graphic[];
 
-static const char hex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+void setup() {
+  // Run standard startup procedure
+  standardStartup();
+  
+  // Init display
+  OLED.begin();
+  OLED.fillScreen(0x5555);
+  OLED.setTextColor(0xFFFF, 0x5555);
+  OLED.setTextSize(1);
+  OLED.drawSprite(92, 102, 34, 24, (void*)graphic);
 
-static const word graphic[] = {
+  // Init stuff, show status
+  OLED.setCursor(0, 0);
+  OLED.print((char*)"PMU init...   ");
+  if(Battery.begin()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
+  OLED.print((char*)"PMU enable... ");
+  if(Battery.enableCharging()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
+  OLED.print((char*)"Touch init... ");
+  if(Touch.begin()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
+
+  DateTime.begin();
+  if(!DateTime.isRunning()) {
+    // RTC has lost power, we need to set a new time
+    DateTime.setDateTime(13, 05, 03, 6, 20, 41, 00);
+  }
+}
+
+
+void loop() {
+  char text[32];
+
+  // Clear before printing
+  OLED.setCursor(0, 32);
+
+  // USB connected status
+  OLED.print("USB connected: ");
+  OLED.println((char*)(Battery.canCharge() ? "YES" : "NO "));
+
+  digitalWrite(&PIN_PB1, Battery.canCharge());
+
+  // PMU charging status
+  OLED.print("PMU charging:  ");
+  OLED.println((char*)(Battery.isCharging() ? "YES" : "NO "));
+
+  OLED.setCursor(0, 56);
+
+  // Battery level as volts
+  sprintf(text, "Battery: %.2fV", ((float)Battery.readMilliVolts()) / 1000.0);
+  OLED.println(text);
+
+  // Light sensor level as %
+  sprintf(text, "Sensor:  %u%%  ", (LightSensor.readRaw() * 100) / 4095);
+  OLED.println(text);
+
+  // Clock
+  DateTime.update();
+  sprintf(text, "Time: %02u:%02u:%02u", DateTime.hour(), DateTime.minute(), DateTime.second());
+  OLED.println(text);
+
+  // Touch information
+  OLED.setCursor(0, 88);
+  OLED.print("Touch: ");
+ 
+  if(Touch.read()) {
+    if(Touch.isTouched()) {
+      sprintf(text, "%u, %u    ", Touch.getX(), Touch.getY());
+    } else {
+      sprintf(text, "NO      ");
+    }
+  } else {
+    sprintf(text, "FAIL    ");
+  }
+  OLED.println(text);
+
+  // Delay in low speed mode
+  CPU.setSpeed(CPU_LS);
+  delay(100);
+  CPU.setSpeed(CPU_HS);
+
+  // Shut down if button is pressed
+  if(digitalRead(BUTTON)) standardShutdown();
+
+}
+
+const word graphic[] = {
   0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555,
   0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555,
   0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555,
@@ -106,86 +189,3 @@ static const word graphic[] = {
   0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555,
   0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555, 0x5555,
 };
-
-void setup() {
-  // Run standard startup procedure
-  standardStartup();
-
-  // Init display
-  OLED.begin();
-  OLED.fillScreen(0x5555);
-  OLED.setTextColor(0xFFFF, 0x5555);
-  OLED.setTextSize(1);
-  OLED.drawSprite(92, 102, 34, 24, (void*)graphic);
-
-  // Init stuff, show status
-  OLED.setCursor(0, 0);
-  OLED.print((char*)"PMU init...   ");
-  if(Battery.begin()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
-  OLED.print((char*)"PMU enable... ");
-  if(Battery.enableCharging()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
-  OLED.print((char*)"Touch init... ");
-  if(Touch.begin()) OLED.println((char*)"OK"); else OLED.println((char*)"FAIL");
-
-  DateTime.begin();
-  if(!DateTime.isRunning()) {
-    // RTC has lost power, we need to set a new time
-    DateTime.setDateTime(13, 05, 03, 6, 20, 41, 00);
-  }
-}
-
-
-void loop() {
-  char text[32];
-
-  // Clear before printing
-  OLED.setCursor(0, 32);
-
-  // USB connected status
-  OLED.print("USB connected: ");
-  OLED.println((char*)(Battery.canCharge() ? "YES" : "NO "));
-
-  digitalWrite(&PIN_PB1, Battery.canCharge());
-
-  // PMU charging status
-  OLED.print("PMU charging:  ");
-  OLED.println((char*)(Battery.isCharging() ? "YES" : "NO "));
-
-  OLED.setCursor(0, 56);
-
-  // Battery level as volts
-  sprintf(text, "Battery: %.2fV", ((float)Battery.readMilliVolts()) / 1000.0);
-  OLED.println(text);
-
-  // Light sensor level as %
-  sprintf(text, "Sensor:  %u%%  ", (LightSensor.readRaw() * 100) / 4095);
-  OLED.println(text);
-
-  // Clock
-  DateTime.update();
-  sprintf(text, "Time: %02u:%02u:%02u", DateTime.hour(), DateTime.minute(), DateTime.second());
-  OLED.println(text);
-
-  // Touch information
-  OLED.setCursor(0, 88);
-  OLED.print("Touch: ");
- 
-  if(Touch.read()) {
-    if(Touch.isTouched()) {
-      sprintf(text, "%u, %u    ", Touch.getX(), Touch.getY());
-    } else {
-      sprintf(text, "NO      ");
-    }
-  } else {
-    sprintf(text, "FAIL    ");
-  }
-  OLED.println(text);
-
-  // Delay in low speed mode
-  CPU.setSpeed(CPU_LS);
-  delay(100);
-  CPU.setSpeed(CPU_HS);
-
-  // Shut down if button is pressed
-  if(digitalRead(BUTTON)) standardShutdown();
-}

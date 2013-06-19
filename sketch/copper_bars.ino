@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 void setup() {
   // Run standard startup procedure
   standardStartup();

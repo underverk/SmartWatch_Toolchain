@@ -137,6 +137,8 @@ void standardShutdown(void);   // Perform a standard shutdown
 #define bitClear(a, b) ((a) &= ~(1 << (b)))
 #define bit(a) (1 << (a))
 
+// Arduino constants
+#define PI 3.14159
 
 // Arduino-style and Atmel-style (because alot of Arduino code uses them!) enable and disable interrupts 
 //

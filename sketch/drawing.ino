@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 // This example does not work very well
 // TODO: investigate problems with the touch driver, when polling too often?
 
