@@ -36,6 +36,8 @@ void buzztest(void) {
 
 static const char uHex[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
+static int8_t analog_shift = 2; 
+
 // Found in sketch (.ino file)
 void setup();
 void loop();
@@ -144,6 +146,74 @@ void fatalError(char *error, ...) {
   }
 }
 
+// Reads analog input
+uint16_t analogRead(const PinDef_t *pin) {
+  uint16_t value;
+  if(pin == LIGHT_SENSOR) {
+    value = adc_lightsensor();
+  } else if(pin == BATTERY_VOLTAGE) {
+    value = adc_battery();
+  } else {
+    value = 0;
+  }
+  if(analog_shift < 0) {
+    value <<= -analog_shift;
+  } else {
+    value >>= analog_shift;
+  }
+  return value;
+}
+
+// Set analogRead resolution
+void analogReadResolution(int8_t bits) {
+  analog_shift = 12 - bits;
+}
+
+// Writes analog output
+void analogWrite(const PinDef_t *pin, uint16_t value) {
+  // Dummy
+}
+// Set analogWrite resolution
+void analogWriteResolution(int8_t bits) {
+  // Dummy
+}
+
+// Uptime in microseconds (worthless hack)
+uint32_t micros() {  
+  return (millis() & 0x3FFFFF) * 1000;
+}
+
+// Delay microseconds (worthless hack)
+void delayMicroseconds(uint32_t us) {
+  delay((us + 999) / 1000);
+}
+
+// Seeds the random number generator
+void randomSeed(unsigned int seed) {
+  if(seed != 0) srand(seed);
+}
+
+// Return random number between 0 and howbig
+long random(long howbig) {
+  if(howbig == 0) return 0;
+  return rand() % howbig;
+}
+
+// Return random number between howsmall and howbig
+long random(long howsmall, long howbig) {
+  if (howsmall >= howbig) return howsmall;
+  long diff = howbig - howsmall;
+  return random(diff) + howsmall;
+}
+
+// Maps a value from range:in to range:out
+long map(long x, long in_min, long in_max, long out_min, long out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+// TODO: We're in C-mode here, so I had to remove the makeWord(int)
+unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
+
 // Include the sketch
 #pragma GCC diagnostic ignored "-Wwrite-strings"
-#include "../sketch/ssw.ino"
+#include "../../sketch/ssw.ino"

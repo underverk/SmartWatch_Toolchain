@@ -75,7 +75,7 @@ LIBDIR     = libraries
 SRCDIR = src
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = $(SRCDIR)/Arduino/main.cpp
+CPPSRC = $(SRCDIR)/Arduino/Arduino.cpp
 
 # List Assembler source files here.
 #     Make them always end in a capital .S.  Files ending in a lowercase .s
@@ -242,9 +242,9 @@ sketch: all
 
 happen: program
 
-# Force recompile of src/main.cpp
+# Force recompile of src/Arduino/Arduino.cpp
 touchmain:
-	@$(REMOVE) $(OBJDIR)/src/main.o $@
+	@$(REMOVE) $(OBJDIR)/src/Arduino/Arduino.o $@
 	@$(REMOVE) $(OBJDIR)/*.* $@
 
 build: elf bin hex lss sym
