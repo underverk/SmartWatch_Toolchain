@@ -113,6 +113,8 @@ void     delay_loop(uint32_t); // Delay by looping
 void     initializePins(void); // Initializes all pins to their defaults
 uint32_t uinqueId(uint8_t id); // Gets the devices unique identifier (id=0 to 2, each with its own 32-bit id)
 // TODO: randomSource(PRNG/TRNG) - To enable the analog True Random Number Generator for random()
+void standardStartup(void);    // Perform standard startup stuff
+void standardShutdown(void);   // Perform a standard shutdown
 
 // Just good to have around, even though not strictly part of the Arduino model...
 #define htons(a) ({ __typeof__ (a) _a = (a); ((_a>>8) & 0xff) | ((_a<<8) & 0xff00); })

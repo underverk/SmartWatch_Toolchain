@@ -240,6 +240,8 @@ all: sizebefore touchmain build sizeafter
 
 sketch: all
 
+happen: program
+
 # Force recompile of src/main.cpp
 touchmain:
 	@$(REMOVE) $(OBJDIR)/src/main.o $@
@@ -325,6 +327,6 @@ $(shell mkdir -p $(OBJDIR)/$(SRCDIR) 2>/dev/null)
 $(shell mkdir -p $(OBJDIR)/$(SRCDIR)/libstm32f2 2>/dev/null)
 
 # Listing of phony targets.
-.PHONY : all begin finish end sizebefore sizeafter build elf hex eep lss sym clean clean_list program touchmain
+.PHONY : all begin finish end sizebefore sizeafter build elf hex eep lss sym clean clean_list program touchmain happen
 
 

@@ -3,61 +3,9 @@
 // This example does not work very well
 // TODO: investigate problems with the touch driver, when polling too often?
 
-// Performs tidy shutdown if user presses button
-void checkShutdown() {
-  // User requests shutdown?
-  if(digitalRead(BUTTON)) {
-    // Turn off screen
-    OLED.shutdown();
-    // Buzz to indicate shutdown
-    digitalWrite(BUZZER, HIGH);
-    delay(250);
-    digitalWrite(BUZZER, LOW);
-    // Don't turn off until button is released
-    while(digitalRead(BUTTON));
-    // Turn off power
-    digitalWrite(POWER, LOW);
-    // Device won't turn off if USB powered
-    delay(500);
-    // So, wait for another button press
-    while(!digitalRead(BUTTON));
-    // Power up again
-    digitalWrite(POWER, HIGH);
-    // Run setup again
-    setup();
-    // Reboot
-    ((void(*)())(((uint32_t*)SCB->VTOR)[1]))();
-    return;
-  }
-}
-
-// Shows error to user and goes into infiniloop with buzzing
-void fatalError(const char *error) {
-  OLED.fillScreen(0x0000);
-  OLED.setCursor(0, 0);
-  OLED.setTextColor(0xFFFF);
-  OLED.setTextSize(1);
-  OLED.println((char*)error);
-  while(1) {
-    digitalWrite(BUZZER, HIGH);
-    delay(50);
-    digitalWrite(BUZZER, LOW);
-    delay(100);
-    delay(50);
-    digitalWrite(BUZZER, LOW);
-    delay(800);
-    checkShutdown();
-  }
-}
-
-
 void setup() {
-  // Buzz to indicate start
-  digitalWrite(BUZZER, HIGH);
-  delay(250);
-  digitalWrite(BUZZER, LOW);
-  // Don't start until button is released
-  while(digitalRead(BUTTON));
+  // Run standard startup procedure
+  standardStartup();
 
   // Init display
   OLED.begin();
