@@ -54,7 +54,7 @@ static bool regs_write(bool ex) {
   return false;
 }
 
-// Initialize touch controller (aka read its version)
+// Initialize touch controller
 bool touch_init(void) {
   wd_first = true;
   // Reset touch controller
@@ -80,6 +80,12 @@ bool touch_init(void) {
   touch_mode_set(TOUCH_MODE_POLLED_ONLY); // Disables interrupt
   touch_mode_clear(TOUCH_MODE_IRQ); // Clear interrupt flag
   return true;
+}
+
+// Shut down the touch controller
+bool touch_deinit(void) {
+  // TODO: implement this!
+  return false; // failure
 }
 
 bool touch_mode_set(TouchMode_e mode) {

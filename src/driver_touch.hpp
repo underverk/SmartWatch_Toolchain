@@ -8,10 +8,11 @@
 
 class Arduino_Touch {
   public:
-    boolean        begin();
-    boolean        read();
-    inline byte    getX() { return _x; }
-    inline byte    getY() { return _y; }
+    inline boolean begin()     { return touch_init(); }
+    inline boolean shutdown()  { return touch_deinit(); }
+    inline boolean read()      { return touch_read(&_touch, &_x, &_y); }
+    inline byte    getX()      { return _x; }
+    inline byte    getY()      { return _y; }
     inline boolean isTouched() { return _touch; }
   private:
     bool _touch;

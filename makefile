@@ -36,6 +36,7 @@ SRC = $(SRCDIR)/Arduino.c \
       $(SRCDIR)/driver_adc.c \
       $(SRCDIR)/driver_rtc.c \
       $(SRCDIR)/driver_touch.c \
+      $(SRCDIR)/driver_accel.c \
       $(SRCDIR)/libstm32f2/stm32f2xx_adc.c       \
       $(SRCDIR)/libstm32f2/stm32f2xx_can.c       \
       $(SRCDIR)/libstm32f2/stm32f2xx_crc.c       \

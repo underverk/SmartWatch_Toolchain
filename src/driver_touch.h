@@ -21,6 +21,7 @@ typedef enum {
 } TouchMode_e;
 
 bool touch_init(void);
+bool touch_deinit(void);
 bool touch_mode_set(TouchMode_e mode);
 bool touch_mode_clear(TouchMode_e mode);
 bool touch_read(bool *touch, uint8_t *x, uint8_t *y);
