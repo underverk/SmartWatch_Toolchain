@@ -71,6 +71,8 @@ defined in linker script */
   .type  Reset_Handler, %function
 Reset_Handler:  
 
+  cpsid i
+
 /* Copy the data segment initializers from flash to SRAM */  
   movs  r1, #0
   b  LoopCopyDataInit
@@ -100,7 +102,9 @@ LoopFillZerobss:
   cmp  r2, r3
   bcc  FillZerobss
 /* Call the clock system intitialization function.*/
+
   bl  SystemInit   
+
 /* Initialize C++ objects */
   bl __libc_init_array
 /* Call the application's entry point.*/

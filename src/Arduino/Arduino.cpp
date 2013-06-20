@@ -20,20 +20,6 @@
 #include "Touch.cpp"
 #include "Movement.cpp"
 
-/*
-// This can be called from anywhere and is good to use as a test
-// if your clock does not boot, to find out exactly how far the
-// startup procedure reaches. The startup procedure begins in
-// libstm32f2/startup_stm32f2xx.S at Reset_Handler:
-// To call this function from assembly, use "bl buzztest"
-extern "C" {
-void buzztest(void) {
-  pinMode(BUZZER, BUZZER->cfg);
-  digitalWrite(BUZZER, HIGH);  
-}
-}
-*/
-
 static const char uHex[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
 static int8_t analog_shift = 2; 

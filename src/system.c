@@ -155,8 +155,20 @@ void delay(uint32_t ms) {
 #define USB_DP        (&PIN_PA12)
 #define USB_DM        (&PIN_PA11)
 
+
+// This can be called from anywhere and is good to use as a test
+// if your clock does not boot, to find out exactly how far the
+// startup procedure reaches. The startup procedure begins in
+// libstm32f2/startup_stm32f2xx.S at Reset_Handler:
+// To call this function from assembly, use "bl buzztest"
+void buzztest(void) {
+  pin_mode(BUZZER, BUZZER->cfg);
+  pin_set(BUZZER);  
+}
+
 // System initialization
 void sys_init(void) {
+  
   // Initializes all pins to their default settings (see pins.c)
   pins_init();
 
