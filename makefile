@@ -14,7 +14,7 @@ LDFLAGS = -Tflash.ld -Xlinker --gc-sections -lc -lm -nostartfiles
 DEFINECPU = $(MCU_OPTIONS) -DMCU_$(MCU) -D$(MCU_FAMILY) -fno-exceptions 
 EXTRACPPFLAGS = -fno-rtti
 RUNTIMELIB = 
-EXTRAINCDIRS = $(SRCDIR) $(SRCDIR)/libstm32f2
+EXTRAINCDIRS = $(SRCDIR) $(SRCDIR)/target $(SRCDIR)/STM32F2xx_StdPeriph_Driver/inc
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -29,47 +29,47 @@ OBJDIR = $(OBJDIRBASE)
 TARGET = $(OBJDIR)/firmware
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(SRCDIR)/system.c \
+SRC = $(SRCDIR)/system.c         \
       $(SRCDIR)/driver_display.c \
-      $(SRCDIR)/driver_i2c.c \
-      $(SRCDIR)/driver_power.c \
-      $(SRCDIR)/driver_adc.c \
-      $(SRCDIR)/driver_rtc.c \
-      $(SRCDIR)/driver_touch.c \
-      $(SRCDIR)/driver_accel.c \
-      $(SRCDIR)/libstm32f2/stm32f2xx_adc.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_can.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_crc.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_cryp.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_cryp_aes.c  \
-      $(SRCDIR)/libstm32f2/stm32f2xx_cryp_des.c  \
-      $(SRCDIR)/libstm32f2/stm32f2xx_cryp_tdes.c \
-      $(SRCDIR)/libstm32f2/stm32f2xx_dac.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_dbgmcu.c    \
-      $(SRCDIR)/libstm32f2/stm32f2xx_dcmi.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_dma.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_exti.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_flash.c     \
-      $(SRCDIR)/libstm32f2/stm32f2xx_fsmc.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_gpio.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_hash.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_hash_md5.c  \
-      $(SRCDIR)/libstm32f2/stm32f2xx_hash_sha1.c \
-      $(SRCDIR)/libstm32f2/stm32f2xx_i2c.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_iwdg.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_misc.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_pwr.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_rcc.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_rng.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_rtc.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_sdio.c      \
-      $(SRCDIR)/libstm32f2/stm32f2xx_spi.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_syscfg.c    \
-      $(SRCDIR)/libstm32f2/stm32f2xx_tim.c       \
-      $(SRCDIR)/libstm32f2/stm32f2xx_usart.c     \
-      $(SRCDIR)/libstm32f2/stm32f2xx_wwdg.c      \
-      $(SRCDIR)/libstm32f2/system_stm32f2xx.c    \
-      $(SRCDIR)/libstm32f2/syscalls.c
+      $(SRCDIR)/driver_i2c.c     \
+      $(SRCDIR)/driver_power.c   \
+      $(SRCDIR)/driver_adc.c     \
+      $(SRCDIR)/driver_rtc.c     \
+      $(SRCDIR)/driver_touch.c   \
+      $(SRCDIR)/driver_accel.c   \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_adc.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_can.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_crc.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_cryp.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_cryp_aes.c  \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_cryp_des.c  \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_cryp_tdes.c \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_dac.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_dbgmcu.c    \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_dcmi.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_dma.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_exti.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_flash.c     \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_fsmc.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_gpio.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_hash.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_hash_md5.c  \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_hash_sha1.c \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_i2c.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_iwdg.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_pwr.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_rcc.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_rng.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_rtc.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_sdio.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_spi.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_syscfg.c    \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_tim.c       \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_usart.c     \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_wwdg.c      \
+      $(SRCDIR)/STM32F2xx_StdPeriph_Driver/src/misc.c      \
+      $(SRCDIR)/target/system_stm32f2xx.c    \
+      $(SRCDIR)/target/syscalls.c
 
 LIBDIR     = libraries
 SRCDIR = src
@@ -84,7 +84,7 @@ CPPSRC = $(SRCDIR)/Arduino/Arduino.cpp
 #     Even though the DOS/Win* filesystem matches both .s and .S the same,
 #     it will preserve the spelling of the filenames, and gcc itself does
 #     care about how the name is spelled on its command-line.
-ASRC =  $(SRCDIR)/libstm32f2/startup_stm32f2xx.S
+ASRC =  $(SRCDIR)/target/startup_stm32f2xx.S
 
 
 # Optimization level, can be [0, 1, 2, 3, s]. 
@@ -324,7 +324,19 @@ clean_list :
 
 # Create object files directory
 $(shell mkdir -p $(OBJDIR)/$(SRCDIR) 2>/dev/null)
-$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/libstm32f2 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/target 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/FreeRTOS 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32F2xx_StdPeriph_Driver 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32F2xx_StdPeriph_Driver/src 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/VCP 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_OTG_Driver 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_OTG_Driver/src 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_Device_Library 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_Device_Library/Core 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_Device_Library/Core/src 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_Device_Library/Class 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_Device_Library/Class/cdc 2>/dev/null)
+$(shell mkdir -p $(OBJDIR)/$(SRCDIR)/STM32_USB_Device_Library/Class/cdc/src 2>/dev/null)
 $(shell mkdir -p $(OBJDIR)/$(SRCDIR)/Arduino 2>/dev/null)
 
 # Listing of phony targets.
