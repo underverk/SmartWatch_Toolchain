@@ -9,7 +9,7 @@ MCU           := STM32F205RGY6
 HSE_FREQUENCY := 26000000
 MCU_OPTIONS   := -mcpu=cortex-m3 -mthumb
 
-LDFLAGS = -Tflash.ld -Xlinker --gc-sections -lc -nostartfiles
+LDFLAGS = -Tflash.ld -Xlinker --gc-sections -lc -lm -nostartfiles
 
 DEFINECPU = $(MCU_OPTIONS) -DMCU_$(MCU) -D$(MCU_FAMILY) -fno-exceptions 
 EXTRACPPFLAGS = -fno-rtti
