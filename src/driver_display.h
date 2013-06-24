@@ -12,6 +12,7 @@ extern "C" {
 // OLED SPI
 #define OLED_SPI         SPI1
 #define OLED_SPI_CLK     RCC_APB2Periph_SPI1
+#define OLED_SPI_handler SPI1_IRQHandler
 
 // OLED PINS
 #define OLED_SPI_SCK     (&PIN_PA5) // Clock

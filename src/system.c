@@ -4,6 +4,7 @@
 #include "driver_adc.h"
 #include "driver_i2c.h"
 #include "driver_power.h"
+#include "driver_vcp.h"
 
 #define SET 1
 #define CLEAR 0
@@ -70,7 +71,7 @@ static volatile uint32_t tick_ctr; // System tick count
 volatile uint16_t int_ctr;      // Interrupt nesting count
 
 // The Arduino system tick
-__attribute__ ((interrupt ("IRQ")))
+//__attribute__ ((interrupt ("IRQ")))
 void SysTick_Handler(void) {
   tick_ctr++;
 }
@@ -148,7 +149,7 @@ uint32_t sys_id(uint8_t id) {
 // Delay milliseconds
 void delay(uint32_t ms) {
   uint32_t start = ticks();
-  while((ticks() - start) < ms);
+  while(((uint32_t)(ticks() - start)) < ms);
 }
 
 // USB pins
@@ -161,9 +162,19 @@ void delay(uint32_t ms) {
 // startup procedure reaches. The startup procedure begins in
 // libstm32f2/startup_stm32f2xx.S at Reset_Handler:
 // To call this function from assembly, use "bl buzztest"
+/*
 void buzztest(void) {
   pin_mode(BUZZER, BUZZER->cfg);
   pin_set(BUZZER);  
+}
+*/
+
+void fault_default(void) {
+  pin_mode(BUZZER, BUZZER->cfg);
+  pin_set(BUZZER); 
+  pin_mode(POWER, POWER->cfg);
+  pin_clear(POWER); 
+  while(1);
 }
 
 // System initialization
@@ -178,19 +189,22 @@ void sys_init(void) {
   // Start system tick (used for timing, delay, etc)
   SystemCoreClockUpdate();
   SysTick_Config(SystemCoreClock / 1000);
-    
+
   // Tip from Sony:
   // Prevents hard-faults when booting from USB
   delay(50);
-  
+
   // Tip from Sony:
   // Not quite sure, but I believe a pullup on DP enables charging of a device even if
   // it does not do USB any communication by removing the pre-enum current limit
   if(pin_read(USB_CONNECTED)) pin_mode(USB_DP, &pincfg_in_pu);
-  
+
   // Initialize ADC
   adc_init();
 
   // Initialize I2C
   i2c_init();
+  
+  __asm volatile ("cpsie i");
+    
 }

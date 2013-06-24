@@ -3,13 +3,14 @@
 
 // Include our drivers and libs
 #include <stdarg.h>
-#include "../Arduino.h"
-#include "../driver_i2c.h"
-#include "../driver_adc.h"
-#include "../driver_rtc.h"
-#include "../driver_display.h"
-#include "../driver_power.h"
-#include "../driver_touch.h"
+#include "Arduino.h"
+#include "driver_i2c.h"
+#include "driver_adc.h"
+#include "driver_rtc.h"
+#include "driver_display.h"
+#include "driver_power.h"
+#include "driver_touch.h"
+#include "driver_vcp.h"
  
 // Include our Arduino style C++ objects
 // This should eventually be moved to the makefile

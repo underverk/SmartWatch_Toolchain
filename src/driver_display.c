@@ -6,9 +6,9 @@
 #include <stm32f2xx_dma.h>
 #include <stm32f2xx_spi.h>
 #include <string.h>
+#include <misc.h>
 
 uint32_t stream_cr, repeat_cr;
-bool dma_wait;
 
 // Waits for DMA transfer to complete
 static void oled_wait_dma(void) {
@@ -98,6 +98,11 @@ void oled_init(void) {
     SPI_Init(OLED_SPI, &ConfigSPI);
     
     SPI_Cmd(OLED_SPI, ENABLE);
+/*
+    SPI_I2S_ITConfig(OLED_SPI, SPI_I2S_IT_TXE, ENABLE);
+    NVIC_SetPriority(SPI1_IRQn, 0);
+    NVIC_EnableIRQ  (SPI1_IRQn);    
+*/
   }
   
   // DMA config
@@ -123,6 +128,11 @@ void oled_init(void) {
     DMA_Init(DMA2_Stream3, &ConfigDMA);
     stream_cr = DMA2_Stream3->CR;
     repeat_cr = DMA2_Stream3->CR ^ (DMA_MemoryInc_Enable | DMA_MemoryDataSize_HalfWord);
+/*
+    NVIC_SetPriority(DMA2_Stream3_IRQn, 0);
+    NVIC_EnableIRQ  (DMA2_Stream3_IRQn);
+    DMA_ITConfig    (DMA2_Stream3, DMA_IT_TC, ENABLE);
+*/
   }
 
   // Cycle reset
@@ -246,3 +256,23 @@ void oled_power(uint8_t level) {
   p[1] = p[3] = p[5] = level & 15;
   oled_cmd(0x0E, 6, p);
 }
+
+/*
+__attribute__ ((interrupt ("IRQ")))
+void DMA2_Stream3_IRQHandler(void) {
+  pin_set(BUZZER);
+  while(1);
+  //DMA_ClearITPendingBit(DMA2_Stream3, DMA_IT_TCIF3);
+  //dma_complete = true; 
+}
+*/
+
+/*
+__attribute__ ((interrupt ("IRQ")))
+void SPI1_IRQHandler(void) {
+  pin_set(BUZZER);
+  while(1);
+  //DMA_ClearITPendingBit(DMA2_Stream3, DMA_IT_TCIF3);
+  //dma_complete = true; 
+}
+*/

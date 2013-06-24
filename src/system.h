@@ -62,12 +62,12 @@ void     delay(uint32_t ms);                                 // Delay millisecon
 
 extern volatile uint16_t int_ctr;
 
-// Nested interrupt enable
+// Nested interrupt disable
 __attribute__( ( always_inline ) ) static __inline void di(void) {
   __asm volatile ("cpsid i");
   int_ctr++;
 }
-// Nested interrupt disable
+// Nested interrupt enable
 __attribute__( ( always_inline ) ) static __inline void ei(void) {
   __asm volatile ("cpsid i");
   if(!--int_ctr) {__asm volatile ("cpsie i");}
