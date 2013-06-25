@@ -7,6 +7,10 @@
 class Arduino_Accel {
   public:
     inline bool begin() { return accel_init(); }
+
+    // get the X Y and Z coordinates
+    inline boolean getXyz(float *x, float *y, float *z) { return accel_get_xyz(x, y, z); };
+
     inline bool shutdown() { return accel_deinit(); }
 };
 

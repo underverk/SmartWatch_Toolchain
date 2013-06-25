@@ -6,9 +6,11 @@
 extern "C" {
 #endif
 
-
 // Initialize accelerometer
 bool accel_init(void);
+
+// Get accelerometer Data
+bool accel_get_xyz(float *x, float *y, float *z);
 
 // Shut down accelerometer
 bool accel_deinit(void);
